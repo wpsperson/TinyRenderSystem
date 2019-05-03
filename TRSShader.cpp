@@ -62,12 +62,6 @@ void TRSShader::use()
     glUseProgram(program);
 }
 
-void TRSShader::setUniformi(const std::string uniformName, int value)
-{
-    int loc = glGetUniformLocation(program, uniformName.c_str());
-    glUniform1i(loc, value);
-}
-
 unsigned int TRSShader::createShader(const std::string vShaderFile, GLenum EnShaderType)
 {
     unsigned int shader = glCreateShader(EnShaderType);
@@ -85,4 +79,16 @@ unsigned int TRSShader::createShader(const std::string vShaderFile, GLenum EnSha
     }
     delete[] source;//ÊÍ·ÅÄÚ´æ
     return shader;
+}
+
+void TRSShader::setUniformi(const std::string uniformName, int value)
+{
+    int loc = glGetUniformLocation(program, uniformName.c_str());
+    glUniform1i(loc, value);
+}
+
+void TRSShader::setUniformMatrix4(const std::string& uniformName, glm::mat4 mat)
+{
+    int loc = glGetUniformLocation(program, uniformName.c_str());
+    glUniformMatrix4fv(loc, 1, GL_FALSE, &mat[0][0]);
 }

@@ -2,8 +2,10 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
+#include <glm/gtc/type_ptr.hpp>
 #include "TRSShader.h"
 #include "TRSTexture.h"
+#include "TRSCamera.h"
 
 
 TRSRender::TRSRender(GLFWwindow * window)
@@ -42,6 +44,11 @@ void TRSRender::setVAO(TRSVAO* vao)
     m_pVAO = vao;
 }
 
+void TRSRender::setCamera(TRSCamera* pCamera)
+{
+    m_pCamera = pCamera;
+}
+
 void TRSRender::setWindow(GLFWwindow * window)
 {
     m_pWindow = window;
@@ -75,11 +82,18 @@ void TRSRender::exec()
         glClearColor(m_BGColor.r, m_BGColor.g, m_BGColor.b, m_BGColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        m_pCamera->keyboardInput(m_pWindow);
+
         m_pVAO->bind();
         m_pTexture->activeAllTextures();
         m_pShader->use();
         m_pShader->setUniformi("texture0", 0);
         m_pShader->setUniformi("texture1", 1);
+        glm::mat4 viewMatrix = m_pCamera->getViewMatrix();
+        glm::mat4 projectMatrix = m_pCamera->getProjectMatrix();
+        m_pShader->setUniformMatrix4("model", glm::mat4());
+        m_pShader->setUniformMatrix4("view", viewMatrix);
+        m_pShader->setUniformMatrix4("projection", projectMatrix);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(m_pWindow);
@@ -94,4 +108,6 @@ void TRSRender::defaultSetting()
         glViewport(0, 0, w, h);
     };
     glfwSetFramebufferSizeCallback(m_pWindow, func);
+
+    glEnable(GL_DEPTH_TEST);
 }

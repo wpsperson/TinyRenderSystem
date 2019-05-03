@@ -8,6 +8,7 @@
 #include <string>
 #include <glad/glad.h>
 #include "TRSExport.h"
+#include "glm/glm.hpp"
 
 class TRS_EXPORT TRSShader
 {
@@ -26,6 +27,8 @@ public:
     void use();
 
     void setUniformi(const std::string uniformName, int value);
+
+    void setUniformMatrix4(const std::string& uniformName, glm::mat4 mat);
 
 private:
     //return 0 when failure

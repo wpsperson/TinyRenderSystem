@@ -6,6 +6,7 @@
 #include "TRSVAO.h"
 #include "TRSResource.h"
 #include "TRSConst.h"
+#include "TRSCamera.h"
 
 
 
@@ -16,15 +17,17 @@ int main()
     {
         return -1;
     }
-    //äÖÈ¾×é¼þ£ºshader vao texture
+    //äÖÈ¾×é¼þ£ºshader vao texture camera
     TRSShader* pShader = new TRSShader;
     pShader->createProgram("vertex.glsl", "fragment.glsl");
     TRSVAO* pVAO = new TRSVAO;
     pVAO->createVAO(BoxVertices, sizeof(BoxVertices) / sizeof(float), TRSVAO::EnVertexTextureColor);
     TRSTexture* pTexture = new TRSTexture(2, std::string("container.jpg"), std::string("awesomeface.png"));
+    TRSCamera* pCamera = new TRSCamera;
     //äÖÈ¾Æ÷
-    TRSRender* render = new TRSRender(window, pVAO, pShader, pTexture);
-    render->exec();
+    TRSRender* pRender = new TRSRender(window, pVAO, pShader, pTexture);
+    pRender->setCamera(pCamera);
+    pRender->exec();
     return 0;
 }
 

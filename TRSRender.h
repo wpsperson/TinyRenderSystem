@@ -14,6 +14,7 @@ class GLFWwindow;
 class TRSShader;
 class TRSTexture;
 class TRSVAO;
+class TRSCamera;
 
 class TRS_EXPORT TRSRender
 {
@@ -29,6 +30,8 @@ public:
     void setShaders(TRSShader* pShader);
 
     void setVAO(TRSVAO* vao);
+
+    void setCamera(TRSCamera* pCamera);
 
     void setWindow(GLFWwindow* window);
 
@@ -48,6 +51,6 @@ protected:
     TRSShader* m_pShader;
     TRSTexture* m_pTexture;
     TRSVAO* m_pVAO;
-
+    TRSCamera* m_pCamera;
 };
 
