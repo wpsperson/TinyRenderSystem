@@ -25,9 +25,6 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TinyRenderSystem.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="TRSConfig.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -52,12 +49,12 @@
     <ClCompile Include="TRSVAO.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TRSCallBackFunc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TinyRenderSystem.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TRSConfig.h">
@@ -88,6 +85,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TRSConst.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TRSCallBackFunc.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

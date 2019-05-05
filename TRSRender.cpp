@@ -6,6 +6,7 @@
 #include "TRSShader.h"
 #include "TRSTexture.h"
 #include "TRSCamera.h"
+#include "TRSCallBackFunc.h"
 
 
 TRSRender::TRSRender(GLFWwindow * window)
@@ -82,7 +83,7 @@ void TRSRender::exec()
         glClearColor(m_BGColor.r, m_BGColor.g, m_BGColor.b, m_BGColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        m_pCamera->keyboardInput(m_pWindow);
+        TRSKeyboardCallBack(m_pWindow);
 
         m_pVAO->bind();
         m_pTexture->activeAllTextures();

@@ -21,7 +21,12 @@ public:
 
     glm::mat4 getProjectMatrix();
 
-    void keyboardInput(GLFWwindow* pWindow);
+
+    void keyboardCallBack(GLFWwindow* pWindow);
+
+    void mouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos);
+
+    void mouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double yScroll);
 
 protected:
     glm::vec3 m_pos;        //相机当前位置
@@ -34,7 +39,9 @@ protected:
 
     float m_fPitch;         //鼠标上下移动产生的俯仰角 -89~89
     float m_fYaw;           //鼠标上下移动产生的偏航角 无限制
-    float m_fZoom;          //鼠标滚轮滚动产生的fov放大缩小 45-90
+    float m_fFov;          //鼠标滚轮滚动产生的fov放大缩小 45-90
+    float m_fLastX;
+    float m_fLastY;
     GLFWwindow* m_pWindow;
 };
 

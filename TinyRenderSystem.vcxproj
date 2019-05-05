@@ -151,7 +151,7 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TinyRenderSystem.cpp" />
+    <ClCompile Include="TRSCallBackFunc.cpp" />
     <ClCompile Include="TRSCamera.cpp" />
     <ClCompile Include="TRSConfig.cpp" />
     <ClCompile Include="TRSRender.cpp" />
@@ -163,7 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="TinyRenderSystem.h" />
+    <ClInclude Include="TRSCallBackFunc.h" />
     <ClInclude Include="TRSCamera.h" />
     <ClInclude Include="TRSConfig.h" />
     <ClInclude Include="TRSConst.h" />

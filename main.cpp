@@ -8,7 +8,7 @@
 #include "TRSConst.h"
 #include "TRSCamera.h"
 
-
+TRSCamera* g_pCamera;
 
 int main()
 {
@@ -24,6 +24,8 @@ int main()
     pVAO->createVAO(BoxVertices, sizeof(BoxVertices) / sizeof(float), TRSVAO::EnVertexTextureColor);
     TRSTexture* pTexture = new TRSTexture(2, std::string("container.jpg"), std::string("awesomeface.png"));
     TRSCamera* pCamera = new TRSCamera;
+    g_pCamera = pCamera;
+    TRSConfig::registerUserInputFunc(window);//reg user input callback
     //äÖÈ¾Æ÷
     TRSRender* pRender = new TRSRender(window, pVAO, pShader, pTexture);
     pRender->setCamera(pCamera);

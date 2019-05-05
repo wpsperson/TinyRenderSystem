@@ -16,6 +16,7 @@ public:
     ~TRSConfig();
     static bool initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window);
 
+    static bool registerUserInputFunc(GLFWwindow *window);
 
 };
 
