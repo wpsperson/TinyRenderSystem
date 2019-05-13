@@ -16,7 +16,7 @@ public:
     TRSGroup();
     ~TRSGroup();
 
-    void addChild(TRSNode* ptr);
+    void addChild(std::shared_ptr<TRSNode> ptr);
 
     size_t childNum() const;
 
@@ -25,7 +25,7 @@ public:
     virtual void traverse(NodeVisitor& visitor) override;
 
 protected:
-    void insertChild(int idx, TRSNode*);
+    void insertChild(int idx, std::shared_ptr<TRSNode>);
 
 protected:
     std::vector<std::shared_ptr<TRSNode>> m_pChildren;

@@ -98,7 +98,7 @@ void TRSViewer::drawScene()
             pVao->bind();
             glm::mat4 viewMatrix = m_pCamera->getViewMatrix();
             glm::mat4 projectMatrix = m_pCamera->getProjectMatrix();
-            pShader->setUniformMatrix4("model", glm::mat4());
+            pShader->setUniformMatrix4("model", pGeode->getMatrix());
             pShader->setUniformMatrix4("view", viewMatrix);
             pShader->setUniformMatrix4("projection", projectMatrix);
             pShader->setTexUniform(pTexture->count());

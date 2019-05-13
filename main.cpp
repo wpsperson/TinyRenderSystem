@@ -9,6 +9,8 @@
 #include "TRSCamera.h"
 #include "TRSViewer.h"
 #include "TRSGeode.h"
+#include "TRSGroup.h"
+#include "glm\gtc\matrix_transform.hpp"
 TRSCamera* g_pCamera;
 
 //int main()
@@ -37,9 +39,17 @@ TRSCamera* g_pCamera;
 int main()
 {
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
     pGeode->readFromVertex(BoxVerticesAndTex, sizeof(BoxVerticesAndTex) / sizeof(float), EnVertexTexture);
-    viewer->setSecenNode(pGeode);
+
+    std::shared_ptr<TRSGeode> pSecond = std::make_shared<TRSGeode>();
+    pSecond->readFromVertex(BoxVerticesAndTex, sizeof(BoxVerticesAndTex) / sizeof(float), EnVertexTexture);
+    pSecond->setMatrix(glm::translate(glm::mat4(), glm::vec3(-1.5f, 0, 0)));
+
+    pGroup->addChild(pGeode);
+    pGroup->addChild(pSecond);
+    viewer->setSecenNode(pGroup);
     viewer->run();
     return 0;
 }

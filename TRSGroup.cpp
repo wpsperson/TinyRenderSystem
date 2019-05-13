@@ -15,7 +15,7 @@ TRSGroup::~TRSGroup()
 
 }
 
-void TRSGroup::addChild(TRSNode* ptr)
+void TRSGroup::addChild(std::shared_ptr<TRSNode> ptr)
 {
     TRSGroup::insertChild(m_pChildren.size(), ptr);
 }
@@ -44,14 +44,14 @@ void TRSGroup::traverse(NodeVisitor& visitor)
     }
 }
 
-void TRSGroup::insertChild(int idx, TRSNode* pChildNode)
+void TRSGroup::insertChild(int idx, std::shared_ptr<TRSNode> pChildNode)
 {
     if (idx >= m_pChildren.size())
     {
-        m_pChildren.push_back(std::shared_ptr<TRSNode>(pChildNode));
+        m_pChildren.push_back(pChildNode);
     }
     else
     {
-        m_pChildren.insert(m_pChildren.begin() + idx, std::shared_ptr<TRSNode>(pChildNode));
+        m_pChildren.insert(m_pChildren.begin() + idx, pChildNode);
     }
 }
