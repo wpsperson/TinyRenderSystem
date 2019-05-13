@@ -11,6 +11,7 @@
 #include "TRSGeode.h"
 #include "TRSGroup.h"
 #include "glm\gtc\matrix_transform.hpp"
+#include "TRSStateset.h"
 TRSCamera* g_pCamera;
 
 //int main()
@@ -47,8 +48,17 @@ int main()
     pSecond->readFromVertex(BoxVerticesAndTex, sizeof(BoxVerticesAndTex) / sizeof(float), EnVertexTexture);
     pSecond->setMatrix(glm::translate(glm::mat4(), glm::vec3(-1.5f, 0, 0)));
 
+    std::shared_ptr<TRSGeode> pThird = std::make_shared<TRSGeode>();
+    pThird->readFromVertex(BoxVerticesAndTex, sizeof(BoxVerticesAndTex) / sizeof(float), EnVertexTexture);
+    pThird->setMatrix(glm::translate(glm::mat4(), glm::vec3(0, 1.5f, 0)));
+    std::shared_ptr<TRSStateSet> pSS = pThird->getOrCreateStateSet();
+    pSS->getTexture()->createTexture("container.jpg");
+    pSS->getTexture()->createTexture("awesomeface.png");
+    pSS->getShader()->createProgram("vertex.glsl", "fragment.glsl");
+
     pGroup->addChild(pGeode);
     pGroup->addChild(pSecond);
+    pGroup->addChild(pThird);
     viewer->setSecenNode(pGroup);
     viewer->run();
     return 0;
