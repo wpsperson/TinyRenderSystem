@@ -42,10 +42,13 @@ bool TRSConfig::initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window)
 
 bool TRSConfig::registerUserInputFunc(GLFWwindow *window)
 {
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     //注册用户鼠标位置回调
     glfwSetCursorPosCallback(window, TRSMouseMoveCallBack);
     //鼠标滚轮滚动回调
     glfwSetScrollCallback(window, TRSMouseScrollCallBack);
+    //
+    glfwSetFramebufferSizeCallback(window, TRSWindowChangeCallBack);
+    
     return true;
 }

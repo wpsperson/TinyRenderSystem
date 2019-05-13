@@ -104,11 +104,5 @@ void TRSRender::exec()
 
 void TRSRender::defaultSetting()
 {
-    auto func = [](GLFWwindow* window, int w, int h)
-    {
-        glViewport(0, 0, w, h);
-    };
-    glfwSetFramebufferSizeCallback(m_pWindow, func);
-
     glEnable(GL_DEPTH_TEST);
 }

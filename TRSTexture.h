@@ -5,7 +5,6 @@
  */
 
 #pragma once
-#pragma warning( disable: 4251 )
 #include <vector>
 #include "TRSExport.h"
 
@@ -22,8 +21,10 @@ public:
 
     void activeAllTextures();
 
+    int count();
+
 protected:
-    std::vector<unsigned int> textures;
+    std::vector<unsigned int> m_nTextures;
 
 };
 

@@ -1,6 +1,6 @@
 #include "TRSVAO.h"
 #include <glad/glad.h>
-
+#include "TRSConst.h"
 
 
 TRSVAO::TRSVAO()
@@ -40,12 +40,14 @@ void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertTy
     case EnVertex:          // vvv;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
+        m_nDrawCount = verticeSize / 3;
         break;
     case EnVertexTexture:          // vvvtt;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
+        m_nDrawCount = verticeSize / 5;
         break;
     case EnVertexColorTexture:          // vvvccctt;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -54,6 +56,7 @@ void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertTy
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));//Color
         glEnableVertexAttribArray(2);
+        m_nDrawCount = verticeSize / 8;
         break;
     case EnVertexTextureColor:          // vvvttccc;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -62,6 +65,7 @@ void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertTy
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));//Color
         glEnableVertexAttribArray(2);
+        m_nDrawCount = verticeSize / 8;
         break;
     default:
         break;
@@ -73,4 +77,9 @@ void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertTy
 void TRSVAO::bind()
 {
     glBindVertexArray(VAO);
+}
+
+int TRSVAO::getDrawCount()
+{
+    return m_nDrawCount;
 }

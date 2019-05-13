@@ -33,11 +33,11 @@ TRSTexture::~TRSTexture()
 
 void TRSTexture::createTexture(const std::string& imageFile)
 {
-    size_t index = textures.size();
-    textures.push_back(0);
+    size_t index = m_nTextures.size();
+    m_nTextures.push_back(0);
     glActiveTexture(GL_TEXTURE0 + index);//active index Texture Unit;
-    glGenTextures(1, &(textures[index]));
-    glBindTexture(GL_TEXTURE_2D, textures[index]);
+    glGenTextures(1, &(m_nTextures[index]));
+    glBindTexture(GL_TEXTURE_2D, m_nTextures[index]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -56,21 +56,26 @@ void TRSTexture::activeTexutres(std::vector<unsigned int> idxs)
 {
     for (std::vector<unsigned int>::iterator itr = idxs.begin(); itr != idxs.end(); itr++)
     {
-        if (*itr >= textures.size())
+        if (*itr >= m_nTextures.size())
         {
             std::cout << "Texture Index out of range" << std::endl;
         }
         glActiveTexture(GL_TEXTURE0 + *itr);
-        glBindTexture(GL_TEXTURE_2D, textures[*itr]);
+        glBindTexture(GL_TEXTURE_2D, m_nTextures[*itr]);
     }
 }
 
 void TRSTexture::activeAllTextures()
 {
-    size_t nCount = textures.size();
+    size_t nCount = m_nTextures.size();
     for (size_t i=0; i<nCount; i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glBindTexture(GL_TEXTURE_2D, m_nTextures[i]);
     }
+}
+
+int TRSTexture::count()
+{
+    return m_nTextures.size();
 }

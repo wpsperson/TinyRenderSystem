@@ -5,7 +5,6 @@
  */
 
 #pragma once
-#pragma warning( disable: 4251 )
 #include <vector>
 #include <glm/glm.hpp>
 #include "TRSExport.h"

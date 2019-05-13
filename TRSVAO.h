@@ -6,17 +6,11 @@
 
 #pragma once
 #include "TRSExport.h"
+#include "TRSConst.h"
 
 class TRS_EXPORT TRSVAO
 {
 public:
-    enum EnVertexStruct
-    {
-        EnVertex,
-        EnVertexTexture,
-        EnVertexTextureColor,
-        EnVertexColorTexture
-    };
     TRSVAO();
     ~TRSVAO();
     //rule: 0 aVert 1 aTexture 2 Color
@@ -24,12 +18,15 @@ public:
 
     void bind();
 
+    int getDrawCount();
+
 protected:
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
 
 
+    int m_nDrawCount;
 };
 
 

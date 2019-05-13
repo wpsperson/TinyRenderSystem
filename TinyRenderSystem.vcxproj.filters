@@ -17,6 +17,12 @@
   <ItemGroup>
     <None Include="fragment.glsl" />
     <None Include="vertex.glsl" />
+    <None Include="DefaultFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="DefaultVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -50,6 +56,27 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TRSCallBackFunc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TRSNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TRSGroup.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TRSGeode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TRSStateSet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TRSViewer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeVisitor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CullVisitor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -88,6 +115,27 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TRSCallBackFunc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TRSNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TRSGroup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TRSGeode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TRSStateSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TRSViewer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeVisitor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CullVisitor.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

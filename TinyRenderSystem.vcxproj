@@ -145,35 +145,51 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="DefaultFragment.glsl" />
+    <None Include="DefaultVertex.glsl" />
     <None Include="fragment.glsl" />
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CullVisitor.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NodeVisitor.cpp" />
     <ClCompile Include="TRSCallBackFunc.cpp" />
     <ClCompile Include="TRSCamera.cpp" />
     <ClCompile Include="TRSConfig.cpp" />
+    <ClCompile Include="TRSGeode.cpp" />
+    <ClCompile Include="TRSGroup.cpp" />
+    <ClCompile Include="TRSNode.cpp" />
     <ClCompile Include="TRSRender.cpp" />
     <ClCompile Include="TRSResource.cpp" />
     <ClCompile Include="TRSShader.cpp" />
+    <ClCompile Include="TRSStateSet.cpp" />
     <ClCompile Include="TRSTexture.cpp" />
     <ClCompile Include="TRSUtils.cpp" />
     <ClCompile Include="TRSVAO.cpp" />
+    <ClCompile Include="TRSViewer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CullVisitor.h" />
+    <ClInclude Include="NodeVisitor.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TRSCallBackFunc.h" />
     <ClInclude Include="TRSCamera.h" />
     <ClInclude Include="TRSConfig.h" />
     <ClInclude Include="TRSConst.h" />
     <ClInclude Include="TRSExport.h" />
+    <ClInclude Include="TRSGeode.h" />
+    <ClInclude Include="TRSGroup.h" />
+    <ClInclude Include="TRSNode.h" />
     <ClInclude Include="TRSRender.h" />
     <ClInclude Include="TRSResource.h" />
     <ClInclude Include="TRSShader.h" />
+    <ClInclude Include="TRSStateSet.h" />
     <ClInclude Include="TRSTexture.h" />
     <ClInclude Include="TRSUtils.h" />
     <ClInclude Include="TRSVAO.h" />
+    <ClInclude Include="TRSViewer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

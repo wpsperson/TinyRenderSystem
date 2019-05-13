@@ -1,5 +1,6 @@
 #include "TRSShader.h"
 #include "TRSUtils.h"
+#include "TRSConst.h"
 
 
 TRSShader::TRSShader()
@@ -62,6 +63,15 @@ void TRSShader::use()
     glUseProgram(program);
 }
 
+void TRSShader::setTexUniform(int nTexCount)
+{
+    for (int i=0; i<nTexCount; i++)
+    {
+        std::string strUniformName = std::string(s_TextUnitPrefix) + std::to_string(i);
+        setUniformi(strUniformName, i);
+    }
+}
+
 unsigned int TRSShader::createShader(const std::string vShaderFile, GLenum EnShaderType)
 {
     unsigned int shader = glCreateShader(EnShaderType);
@@ -85,6 +95,12 @@ void TRSShader::setUniformi(const std::string uniformName, int value)
 {
     int loc = glGetUniformLocation(program, uniformName.c_str());
     glUniform1i(loc, value);
+}
+
+void TRSShader::setUniform4v(const std::string uniformName, glm::vec4 vec4Color)
+{
+    int loc = glGetUniformLocation(program, uniformName.c_str());
+    glUniform4f(loc, vec4Color.r, vec4Color.g, vec4Color.b, vec4Color.a);
 }
 
 void TRSShader::setUniformMatrix4(const std::string& uniformName, glm::mat4 mat)

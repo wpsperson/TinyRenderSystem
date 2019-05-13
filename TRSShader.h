@@ -26,7 +26,11 @@ public:
 
     void use();
 
+    void setTexUniform(int nTexCount);
+
     void setUniformi(const std::string uniformName, int value);
+
+    void setUniform4v(const std::string uniformName, glm::vec4 vec4Color);
 
     void setUniformMatrix4(const std::string& uniformName, glm::mat4 mat);
 

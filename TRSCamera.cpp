@@ -22,13 +22,13 @@ void TRSCamera::initMember()
     m_right = glm::vec3(1.0f, 0, 0);
     m_up = glm::vec3(0, 1.0f, 0);
 
-    m_fMoveSpeed = 0.05;
-    m_fMouseSensity = 0.05;
+    m_fMoveSpeed = 0.05f;
+    m_fMouseSensity = 0.05f;
 
     //pitch yaw 角度初值的含义是通过满足 m_front = glm::vec3(0, 0, -1.0f)反算出来的
-    m_fPitch = 0;
-    m_fYaw = -90;
-    m_fFov = 45;
+    m_fPitch = 0.0f;
+    m_fYaw = -90.0f;
+    m_fFov = 45.0f;
 
     m_fLastX = DefaultWindowWidth / 2;
     m_fLastY = DefaultWindowHeight / 2;
@@ -85,14 +85,14 @@ void TRSCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos)
     if (s_bFirst)
     {
         s_bFirst = false;
-        m_fLastX = xpos;
-        m_fLastY = ypos;
+        m_fLastX = float(xpos);
+        m_fLastY = float(ypos);
         return;
     }
-    float xOffset = xpos - m_fLastX;
-    float yOffset = -(ypos - m_fLastY);
-    m_fLastX = xpos;
-    m_fLastY = ypos;
+    float xOffset = float(xpos) - m_fLastX;
+    float yOffset = -(float(ypos) - m_fLastY);
+    m_fLastX = float(xpos);
+    m_fLastY = float(ypos);
     m_fYaw += m_fMouseSensity * xOffset;
     m_fPitch += m_fMouseSensity * yOffset;
     if (m_fPitch > 89.0f)
@@ -115,7 +115,7 @@ void TRSCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos)
 void TRSCamera::mouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double yScroll)
 {
     if (m_fFov >= 1.0f && m_fFov <= 45.0f)
-        m_fFov -= yScroll;//yScroll increase, fov decrease, then scene looks bigger;
+        m_fFov -= float(yScroll);//yScroll increase, fov decrease, then scene looks bigger;
     if (m_fFov <= 1.0f)
         m_fFov = 1.0f;
     if (m_fFov >= 45.0f)
