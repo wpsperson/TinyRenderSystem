@@ -14,6 +14,9 @@ class TRS_EXPORT TRSGeode : public TRSNode
 public:
     TRSGeode();
 
+    //拷贝构造函数就是共享VBO
+    TRSGeode(const TRSGeode& refObj);
+
     TRSGeode(std::wstring& strObjFile);
 
     TRSGeode(float* vertices, int verticeSize, EnVertexStruct EnVertType);

@@ -15,12 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment.glsl" />
-    <None Include="vertex.glsl" />
     <None Include="DefaultFragment.glsl">
       <Filter>资源文件</Filter>
     </None>
     <None Include="DefaultVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="fragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="vertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="LightFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="LightNodeFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="LightNodeVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="LightVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>

@@ -63,6 +63,38 @@ void TRSShader::use()
     glUseProgram(program);
 }
 
+void TRSShader::addUniformi(const std::string uniformName, int value)
+{
+    UniformData oData;
+    oData.enType = EnInt;
+    oData.nValue = value;
+    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+}
+
+void TRSShader::addUniform3v(const std::string uniformName, glm::vec3 vec3Color)
+{
+    UniformData oData;
+    oData.enType = EnVec3;
+    oData.vec3Value = vec3Color;
+    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+}
+
+void TRSShader::addUniform4v(const std::string uniformName, glm::vec4 vec4Color)
+{
+    UniformData oData;
+    oData.enType = EnVec4;
+    oData.vec4Value = vec4Color;
+    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+}
+
+void TRSShader::addUniformMatrix4(const std::string& uniformName, glm::mat4 mat)
+{
+    UniformData oData;
+    oData.enType = EnMat4;
+    oData.mat4Value = mat;
+    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+}
+
 void TRSShader::setTexUniform(int nTexCount)
 {
     for (int i=0; i<nTexCount; i++)
@@ -97,6 +129,12 @@ void TRSShader::setUniformi(const std::string uniformName, int value)
     glUniform1i(loc, value);
 }
 
+void TRSShader::setUniform3v(const std::string uniformName, glm::vec3 vec3)
+{
+    int loc = glGetUniformLocation(program, uniformName.c_str());
+    glUniform3f(loc, vec3.x, vec3.y, vec3.z);
+}
+
 void TRSShader::setUniform4v(const std::string uniformName, glm::vec4 vec4Color)
 {
     int loc = glGetUniformLocation(program, uniformName.c_str());
@@ -107,4 +145,39 @@ void TRSShader::setUniformMatrix4(const std::string& uniformName, glm::mat4 mat)
 {
     int loc = glGetUniformLocation(program, uniformName.c_str());
     glUniformMatrix4fv(loc, 1, GL_FALSE, &mat[0][0]);
+}
+
+void TRSShader::applayAllStaticUniform()
+{
+    std::map<std::string, UniformData>::iterator itr = m_mapUniformValue.begin();
+    for (; itr!=m_mapUniformValue.end(); itr++)
+    {
+        std::string strName = itr->first;
+        int loc = glGetUniformLocation(program, strName.c_str());
+        EnUniformType oType = itr->second.enType;
+        UniformData& oData = itr->second;
+        switch (oType)
+        {
+        case EnFloat:
+            glUniform1f(loc, oData.fValue);
+            break;
+        case EnInt:
+            glUniform1i(loc, oData.nValue);
+            break;
+        case EnVec2:
+            glUniform2f(loc, oData.vec2Value.x, oData.vec2Value.y);
+            break;
+        case EnVec3:
+            glUniform3f(loc, oData.vec3Value.x, oData.vec3Value.y, oData.vec3Value.z);
+            break;
+        case EnVec4:
+            glUniform4f(loc, oData.vec4Value.x, oData.vec4Value.y, oData.vec4Value.z, oData.vec4Value.w);
+            break;
+        case EnMat4:
+            glUniformMatrix4fv(loc, 1, GL_FALSE, &(oData.mat4Value[0][0]));
+            break;
+        default:
+            break;
+        }
+    }
 }

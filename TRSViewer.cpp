@@ -96,13 +96,16 @@ void TRSViewer::drawScene()
             TRSGeode* pGeode = dynamic_cast<TRSGeode*>(*itrNode);
             std::shared_ptr<TRSVAO> pVao = pGeode->getVAO();
             pVao->bind();
+            glm::mat4 modelMatrix = pGeode->getMatrix();
             glm::mat4 viewMatrix = m_pCamera->getViewMatrix();
             glm::mat4 projectMatrix = m_pCamera->getProjectMatrix();
-            pShader->setUniformMatrix4("model", pGeode->getMatrix());
+            pShader->setUniformMatrix4("model", modelMatrix);
             pShader->setUniformMatrix4("view", viewMatrix);
             pShader->setUniformMatrix4("projection", projectMatrix);
+            pShader->setUniform3v("viewPos", m_pCamera->getCameraPos());
             pShader->setTexUniform(pTexture->count());
             pShader->setUniform4v("baseColor", pGeode->getColor());
+            pShader->applayAllStaticUniform();//Apply Uniform
             glDrawArrays(GL_TRIANGLES, 0, pGeode->getVAO()->getDrawCount());
         }
 

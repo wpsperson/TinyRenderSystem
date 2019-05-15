@@ -1,5 +1,5 @@
 /*!  
- *@brief    渲染器
+ *@brief    注意，这个渲染器,已经废弃，现在使用Viewer来进行渲染循环
  *@author   wangps
  *@date     2019年5月3日
  */

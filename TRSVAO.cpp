@@ -29,25 +29,34 @@ TRSVAO::~TRSVAO()
 //rule: 0 aVert 1 aTexture 2 Color
 void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType)
 {
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    genVAO(true);
+    createVBO(vertices, verticeSize);
+    setVertexAttrib(EnVertType);
+    calcDrawCount(EnVertType, verticeSize);
+    unBind();
+}
 
+void TRSVAO::createVBO(float* vertices, int verticeSize)
+{
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, verticeSize * sizeof(float), vertices, GL_STATIC_DRAW);
+}
+
+void TRSVAO::setVertexAttrib(EnVertexStruct EnVertType)
+{
+    m_EnVertType = EnVertType;
     switch (EnVertType)
     {
     case EnVertex:          // vvv;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
-        m_nDrawCount = verticeSize / 3;
         break;
     case EnVertexTexture:          // vvvtt;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
-        m_nDrawCount = verticeSize / 5;
         break;
     case EnVertexColorTexture:          // vvvccctt;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -56,7 +65,6 @@ void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertTy
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));//Color
         glEnableVertexAttribArray(2);
-        m_nDrawCount = verticeSize / 8;
         break;
     case EnVertexTextureColor:          // vvvttccc;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -65,13 +73,62 @@ void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertTy
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));//Color
         glEnableVertexAttribArray(2);
-        m_nDrawCount = verticeSize / 8;
+        break;
+    case EnVertexNormal:          // vvvnnn;
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
         break;
     default:
         break;
     }
+}
 
-    glBindVertexArray(0);
+void TRSVAO::calcDrawCount(EnVertexStruct EnVertType, int verticeSize)
+{
+    switch (EnVertType)
+    {
+    case EnVertex:          // vvv;
+        m_nDrawCount = verticeSize / 3;
+        break;
+    case EnVertexTexture:          // vvvtt;
+        m_nDrawCount = verticeSize / 5;
+        break;
+    case EnVertexColorTexture:          // vvvccctt;
+        m_nDrawCount = verticeSize / 8;
+        break;
+    case EnVertexTextureColor:          // vvvttccc;
+        m_nDrawCount = verticeSize / 8;
+        break;
+    case EnVertexNormal:          // vvvnnn;
+        m_nDrawCount = verticeSize / 6;
+        break;
+    default:
+        break;
+    }
+}
+
+unsigned int TRSVAO::getVBO() const
+{
+    return VBO;
+}
+
+EnVertexStruct TRSVAO::getBufferType() const
+{
+    return m_EnVertType;
+}
+
+void TRSVAO::setBuffType(EnVertexStruct buffType)
+{
+    m_EnVertType = buffType;
+    setVertexAttrib(m_EnVertType);
+}
+
+void TRSVAO::setVBO(unsigned int vbo)
+{
+    VBO = vbo;
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
 }
 
 void TRSVAO::bind()
@@ -79,7 +136,26 @@ void TRSVAO::bind()
     glBindVertexArray(VAO);
 }
 
-int TRSVAO::getDrawCount()
+void TRSVAO::unBind()
+{
+    glBindVertexArray(0);
+}
+
+int TRSVAO::getDrawCount() const
 {
     return m_nDrawCount;
+}
+
+void TRSVAO::setDrawCount(int nCount)
+{
+    m_nDrawCount = nCount;
+}
+
+void TRSVAO::genVAO(bool bBind /*= true*/)
+{
+    glGenVertexArrays(1, &VAO);
+    if (bBind)
+    {
+        glBindVertexArray(VAO);
+    }
 }

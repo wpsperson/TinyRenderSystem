@@ -1,3 +1,4 @@
+//两个纹理与顶点颜色混合着色器
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTex;

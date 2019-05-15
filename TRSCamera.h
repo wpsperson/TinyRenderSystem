@@ -21,6 +21,7 @@ public:
 
     glm::mat4 getProjectMatrix();
 
+    glm::vec3 getCameraPos() const;
 
     void keyboardCallBack(GLFWwindow* pWindow);
 

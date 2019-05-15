@@ -46,6 +46,11 @@ glm::mat4 TRSCamera::getProjectMatrix()
     return projectMatrix;
 }
 
+glm::vec3 TRSCamera::getCameraPos() const
+{
+    return m_pos;
+}
+
 void TRSCamera::keyboardCallBack(GLFWwindow* pWindow)
 {
     if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)

@@ -148,6 +148,10 @@
     <None Include="DefaultFragment.glsl" />
     <None Include="DefaultVertex.glsl" />
     <None Include="fragment.glsl" />
+    <None Include="LightFragment.glsl" />
+    <None Include="LightNodeFragment.glsl" />
+    <None Include="LightNodeVertex.glsl" />
+    <None Include="LightVertex.glsl" />
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>

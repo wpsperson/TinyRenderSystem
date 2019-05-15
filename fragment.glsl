@@ -1,3 +1,4 @@
+//两个纹理与顶点颜色混合着色器
 #version 330 core
 out vec4 FragColor;
 in vec3 ourColor;

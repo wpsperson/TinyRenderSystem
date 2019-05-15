@@ -12,7 +12,8 @@ enum EnVertexStruct
     EnVertex,
     EnVertexTexture,
     EnVertexTextureColor,
-    EnVertexColorTexture
+    EnVertexColorTexture,
+    EnVertexNormal
 };
 
 

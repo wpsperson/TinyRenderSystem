@@ -9,7 +9,18 @@ TRSGeode::TRSGeode()
     m_pVAO = std::make_shared<TRSVAO>();
 }
 
+TRSGeode::TRSGeode(const TRSGeode& refObj)
+{
+    m_pVAO = std::make_shared<TRSVAO>();
+    m_pVAO->genVAO(true);
+    m_pVAO->setVBO(refObj.getVAO()->getVBO());
+    m_pVAO->setBuffType(refObj.getVAO()->getBufferType());
+    m_pVAO->setDrawCount(refObj.getVAO()->getDrawCount());
+    m_pVAO->unBind();
+}
+
 TRSGeode::TRSGeode(std::wstring& strObjFile)
+    :TRSNode(), m_matColor(s_DefaultNodeColor)
 {
     readFromOBJ(strObjFile);
 }

@@ -13,20 +13,40 @@ class TRS_EXPORT TRSVAO
 public:
     TRSVAO();
     ~TRSVAO();
-    //rule: 0 aVert 1 aTexture 2 Color
+
     void createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType);
+
+    //获取VBO
+    unsigned int getVBO() const;
+    //设置VBO
+    void setVBO(unsigned int vbo);
+    //Buff的类型
+    EnVertexStruct getBufferType() const;
+    //设置Buff的类型
+    void setBuffType(EnVertexStruct buffType);
+    //绘制数组的数量
+    int getDrawCount() const;
+    void setDrawCount(int nCount);
+
+    void genVAO(bool bBind = true);
 
     void bind();
 
-    int getDrawCount();
+    void unBind();
+
+protected:
+    void createVBO(float* vertices, int verticeSize);
+
+    void setVertexAttrib(EnVertexStruct EnVertType);
+
+    void calcDrawCount(EnVertexStruct EnVertType, int verticeSize);
 
 protected:
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
-
-
-    int m_nDrawCount;
+    EnVertexStruct m_EnVertType;///<顶点数组的格式类型
+    int m_nDrawCount;           ///<顶点数组绘制数量
 };
 
 

@@ -35,7 +35,6 @@ void TRSTexture::createTexture(const std::string& imageFile)
 {
     size_t index = m_nTextures.size();
     m_nTextures.push_back(0);
-    glActiveTexture(GL_TEXTURE0 + index);//active index Texture Unit;
     glGenTextures(1, &(m_nTextures[index]));
     glBindTexture(GL_TEXTURE_2D, m_nTextures[index]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
