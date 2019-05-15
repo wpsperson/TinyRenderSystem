@@ -106,6 +106,10 @@ void TRSViewer::drawScene()
             pShader->setTexUniform(pTexture->count());
             pShader->setUniform4v("baseColor", pGeode->getColor());
             pShader->applayAllStaticUniform();//Apply Uniform
+            if (pGeode->getUpdateCallBack())
+            {
+                pGeode->getUpdateCallBack()(pGeode);
+            }
             glDrawArrays(GL_TRIANGLES, 0, pGeode->getVAO()->getDrawCount());
         }
 

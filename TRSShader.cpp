@@ -71,6 +71,14 @@ void TRSShader::addUniformi(const std::string uniformName, int value)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
+void TRSShader::addUniformf(const std::string uniformName, float value)
+{
+    UniformData oData;
+    oData.enType = EnFloat;
+    oData.fValue = value;
+    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+}
+
 void TRSShader::addUniform3v(const std::string uniformName, glm::vec3 vec3Color)
 {
     UniformData oData;

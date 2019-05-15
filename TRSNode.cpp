@@ -4,7 +4,7 @@
 
 
 TRSNode::TRSNode()
-    : m_mat(glm::mat4(1.0f))
+    : m_mat(glm::mat4(1.0f)), m_UpdateFunc(nullptr)
 {
 
 }
@@ -46,4 +46,14 @@ std::shared_ptr<TRSStateSet> TRSNode::getOrCreateStateSet()
 void TRSNode::setStateSet(std::shared_ptr<TRSStateSet> pStateSet)
 {
     m_pStateSet = pStateSet;
+}
+
+void TRSNode::setUpdateCallBack(NodeUpdateFunc func)
+{
+    m_UpdateFunc = func;
+}
+
+NodeUpdateFunc TRSNode::getUpdateCallBack()
+{
+    return m_UpdateFunc;
 }

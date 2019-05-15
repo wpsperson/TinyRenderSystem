@@ -11,6 +11,7 @@
 #include "TRSGroup.h"
 #include "glm\gtc\matrix_transform.hpp"
 #include "TRSStateset.h"
+#include "glfw\glfw3.h"
 TRSCamera* g_pCamera;
 
 
@@ -67,9 +68,22 @@ TRSCamera* g_pCamera;
 //    return 0;
 //}
 
+void updateFunc(TRSNode* pNode)
+{
+    glm::vec3 lightColor;
+    lightColor.x = sin(glfwGetTime() * 2.0f);
+    lightColor.y = sin(glfwGetTime() * 0.7f);
+    lightColor.z = sin(glfwGetTime() * 1.3f);
+
+    glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // 降低影响
+    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // 很低的影响
+    pNode->getStateSet()->getShader()->setUniform3v("light.ambient", ambientColor);
+    pNode->getStateSet()->getShader()->setUniform3v("light.diffuse", diffuseColor);
+}
+
 int main()
 {
-    glm::vec3 lightPos = glm::vec3(1.2f, 0.0f, 0.0f);
+    glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
 
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
@@ -77,10 +91,20 @@ int main()
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
     pGeode->readFromVertex(BoxVerticesAndNorm, sizeof(BoxVerticesAndNorm) / sizeof(float), EnVertexNormal);
     std::shared_ptr<TRSStateSet> pGeodeStateSet = pGeode->getOrCreateStateSet();
-    pGeodeStateSet->getShader()->createProgram("LightVertex.glsl", "LightFragment.glsl");
+    pGeodeStateSet->getShader()->createProgram("MaterialVertex.glsl", "MaterialFragment.glsl");
     pGeodeStateSet->getShader()->addUniform3v("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
     pGeodeStateSet->getShader()->addUniform3v("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    pGeodeStateSet->getShader()->addUniform3v("lightPos", lightPos);
+    //pGeodeStateSet->getShader()->addUniform3v("lightPos", lightPos);
+    
+    pGeodeStateSet->getShader()->addUniform3v("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+    pGeodeStateSet->getShader()->addUniform3v("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+    pGeodeStateSet->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    pGeodeStateSet->getShader()->addUniformf("material.shininess", 32.0f);
+    pGeodeStateSet->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    pGeodeStateSet->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // 将光照调暗了一些以搭配场景
+    pGeodeStateSet->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    pGeodeStateSet->getShader()->addUniform3v("light.position", lightPos);
+    pGeode->setUpdateCallBack(updateFunc);
 
 
     std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(* pGeode.get() );

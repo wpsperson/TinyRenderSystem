@@ -39,6 +39,12 @@
     <None Include="LightVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="MaterialFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="MaterialVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">

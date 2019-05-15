@@ -10,10 +10,14 @@
 #include "glm/glm.hpp"
 #include <memory>
 #include <string>
+#include <functional>
 
 class NodeVisitor;
 class TRSStateSet;
 class TRSVAO;
+class TRSNode;
+
+typedef std::tr1::function<void(TRSNode*)> NodeUpdateFunc;
 
 class TRS_EXPORT TRSNode
 {
@@ -34,9 +38,15 @@ public:
 
     void setStateSet(std::shared_ptr<TRSStateSet> pStateSet);
 
+    void setUpdateCallBack(NodeUpdateFunc);
+
+    NodeUpdateFunc getUpdateCallBack();
+
+
 protected:
     glm::mat4 m_mat;
     std::shared_ptr<TRSStateSet> m_pStateSet;
+    NodeUpdateFunc m_UpdateFunc;
 };
 
 
