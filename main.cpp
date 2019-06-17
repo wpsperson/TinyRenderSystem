@@ -83,8 +83,7 @@ void updateFunc(TRSNode* pNode)
 
 int main()
 {
-    glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
-
+    glm::vec3 lightPos = glm::vec3(0.8f, 0.8f, 2.0f);
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();

@@ -17,7 +17,10 @@
 extern TRSCamera* g_pCamera;
 
 TRSViewer::TRSViewer()
-    :m_pWindow(nullptr), m_BGColor(s_DefaultBGColor)
+    :m_pWindow(nullptr)
+    , m_BGColor(s_DefaultBGColor)
+    , m_fLastTime(0.0f)
+    , m_fCurTime(0.0f)
 {
     if (!TRSConfig::initGlfwWindowAndGLAD(DefaultWindowWidth, DefaultWindowHeight, &m_pWindow))
     {
@@ -40,6 +43,7 @@ void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
 
 void TRSViewer::defaultSetting()
 {
+    m_fCurTime = m_fLastTime = glfwGetTime();
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -59,7 +63,7 @@ void TRSViewer::run()
         }
         glClearColor(m_BGColor.r, m_BGColor.g, m_BGColor.b, m_BGColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+        calcFrameTime();
         TRSKeyboardCallBack(m_pWindow);
         updateScene();
         drawScene();
@@ -114,4 +118,15 @@ void TRSViewer::drawScene()
         }
 
     }
+}
+
+void TRSViewer::calcFrameTime()
+{
+    m_fCurTime = glfwGetTime();
+    float timeDiff = m_fCurTime - m_fLastTime;
+    if (timeDiff < 15)
+    {
+        Sleep(15 - timeDiff);
+    }
+    m_fLastTime = m_fCurTime;
 }

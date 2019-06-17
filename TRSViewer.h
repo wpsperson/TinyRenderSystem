@@ -31,6 +31,7 @@ public:
 
 protected:
     virtual void defaultSetting();
+    void calcFrameTime();
 
 protected:
     std::shared_ptr<TRSNode> m_pSceneNode;
@@ -39,5 +40,6 @@ protected:
     TRSCamera* m_pCamera;
 
     std::map<int, std::vector<TRSNode*>> m_mapState2Node;
-
+    float m_fLastTime;
+    float m_fCurTime;
 };
