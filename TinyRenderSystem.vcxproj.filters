@@ -65,9 +65,6 @@
     <ClCompile Include="TRSCamera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TRSRender.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="TRSResource.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -116,9 +113,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TRSCamera.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TRSRender.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TRSResource.h">

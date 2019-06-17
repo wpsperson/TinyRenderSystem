@@ -170,7 +170,6 @@
     <ClCompile Include="TRSGeode.cpp" />
     <ClCompile Include="TRSGroup.cpp" />
     <ClCompile Include="TRSNode.cpp" />
-    <ClCompile Include="TRSRender.cpp" />
     <ClCompile Include="TRSResource.cpp" />
     <ClCompile Include="TRSShader.cpp" />
     <ClCompile Include="TRSStateSet.cpp" />
@@ -191,7 +190,6 @@
     <ClInclude Include="TRSGeode.h" />
     <ClInclude Include="TRSGroup.h" />
     <ClInclude Include="TRSNode.h" />
-    <ClInclude Include="TRSRender.h" />
     <ClInclude Include="TRSResource.h" />
     <ClInclude Include="TRSShader.h" />
     <ClInclude Include="TRSStateSet.h" />
