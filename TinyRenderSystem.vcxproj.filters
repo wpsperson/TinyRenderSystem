@@ -45,6 +45,12 @@
     <None Include="MaterialVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="DiffNormMaterialFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="DiffNormMaterialVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -96,6 +102,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CullVisitor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AllDemoCodes.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -152,6 +161,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CullVisitor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AllDemoCodes.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

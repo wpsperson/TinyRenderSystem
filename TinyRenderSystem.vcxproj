@@ -150,6 +150,8 @@
   <ItemGroup>
     <None Include="DefaultFragment.glsl" />
     <None Include="DefaultVertex.glsl" />
+    <None Include="DiffNormMaterialFragment.glsl" />
+    <None Include="DiffNormMaterialVertex.glsl" />
     <None Include="fragment.glsl" />
     <None Include="LightFragment.glsl" />
     <None Include="LightNodeFragment.glsl" />
@@ -160,6 +162,7 @@
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AllDemoCodes.cpp" />
     <ClCompile Include="CullVisitor.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
@@ -179,6 +182,7 @@
     <ClCompile Include="TRSViewer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllDemoCodes.h" />
     <ClInclude Include="CullVisitor.h" />
     <ClInclude Include="NodeVisitor.h" />
     <ClInclude Include="stb_image.h" />
