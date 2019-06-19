@@ -51,6 +51,12 @@
     <None Include="DiffNormMaterialVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="1_1fragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="1_1vertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">

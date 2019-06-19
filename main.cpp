@@ -5,6 +5,6 @@
 
 int main()
 {
-    CaseMaterial_DiffuseNormal();
+    CaseFirstTriangle();
     return 0;
 }
