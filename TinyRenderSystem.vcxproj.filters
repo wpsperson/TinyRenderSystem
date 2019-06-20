@@ -51,10 +51,28 @@
     <None Include="DiffNormMaterialVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="1_1fragment.glsl">
+    <None Include="1_1BasicFragment.glsl">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="1_1vertex.glsl">
+    <None Include="1_1BasicVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="1_2ColorAnimationFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="1_2ColorAnimationVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="1_3EachVertexColorFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="1_3EachVertexColorVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="1_4TextureColorVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="1_4TextureColorFragment.glsl">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>

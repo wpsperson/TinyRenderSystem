@@ -5,6 +5,6 @@
 
 int main()
 {
-    CaseFirstTriangle();
+    CaseTextureColorBasic();
     return 0;
 }

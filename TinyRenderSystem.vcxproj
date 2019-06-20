@@ -148,8 +148,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="1_1fragment.glsl" />
-    <None Include="1_1vertex.glsl" />
+    <None Include="1_1BasicFragment.glsl" />
+    <None Include="1_1BasicVertex.glsl" />
+    <None Include="1_2ColorAnimationFragment.glsl" />
+    <None Include="1_2ColorAnimationVertex.glsl" />
+    <None Include="1_3EachVertexColorFragment.glsl" />
+    <None Include="1_3EachVertexColorVertex.glsl" />
+    <None Include="1_4TextureColorFragment.glsl" />
+    <None Include="1_4TextureColorVertex.glsl" />
     <None Include="DefaultFragment.glsl" />
     <None Include="DefaultVertex.glsl" />
     <None Include="DiffNormMaterialFragment.glsl" />
