@@ -156,6 +156,8 @@
     <None Include="1_3EachVertexColorVertex.glsl" />
     <None Include="1_4TextureColorFragment.glsl" />
     <None Include="1_4TextureColorVertex.glsl" />
+    <None Include="1_5MultiTextureFragment.glsl" />
+    <None Include="1_5MultiTextureVertex.glsl" />
     <None Include="DefaultFragment.glsl" />
     <None Include="DefaultVertex.glsl" />
     <None Include="DiffNormMaterialFragment.glsl" />
