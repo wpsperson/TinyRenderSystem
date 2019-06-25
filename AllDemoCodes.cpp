@@ -812,20 +812,20 @@ void CaseMaterial_DiffuseNormal()
     glm::vec3 lightPos = glm::vec3(0.8f, 0.8f, 2.0f);
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
-    std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
-    pGeode->readFromVertex(BoxVerticesAndTex, sizeof(BoxVerticesAndTex) / sizeof(float), EnVertexTexture);
-    std::shared_ptr<TRSStateSet> pBoxSS = pGeode->getOrCreateStateSet();
+    std::shared_ptr<TRSGeode> pBoxNode = std::make_shared<TRSGeode>();
+    pBoxNode->readFromVertex(BoxVerticesAndTex, sizeof(BoxVerticesAndTex) / sizeof(float), EnVertexTexture);
+    std::shared_ptr<TRSStateSet> pBoxSS = pBoxNode->getOrCreateStateSet();
 
 
 
-    std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pGeode.get(), false);
+    std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pBoxNode.get(), false);
     glm::mat4 lightMat = glm::translate(glm::mat4(), lightPos);
     lightMat = glm::scale(lightMat, glm::vec3(0.2f));
     pLightNode->setMatrix(lightMat);
     std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
     pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
 
-    pGroup->addChild(pGeode);
+    pGroup->addChild(pBoxNode);
     pGroup->addChild(pLightNode);
     viewer->setSecenNode(pGroup);
     viewer->run();
