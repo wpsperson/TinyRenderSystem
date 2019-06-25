@@ -701,7 +701,7 @@ int CaseMultiTexture()
 
 //----------- 使用TRS渲染引擎 ----------------------
 
-//开心盒子 默认相机系统
+//开心盒子 默认摄像机系统
 void CaseTextureColorArray()
 {
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
@@ -717,6 +717,7 @@ void CaseTextureColorArray()
     viewer->run();
 }
 
+//多个开心盒子场景，默认摄像机系统
 void CaseManyFunnyBoxRotate()
 {
     glm::vec3 cubePositions[] = {
