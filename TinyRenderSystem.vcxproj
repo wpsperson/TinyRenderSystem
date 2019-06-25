@@ -160,16 +160,12 @@
     <None Include="1_5MultiTextureVertex.glsl" />
     <None Include="DefaultFragment.glsl" />
     <None Include="DefaultVertex.glsl" />
-    <None Include="DiffNormMaterialFragment.glsl" />
-    <None Include="DiffNormMaterialVertex.glsl" />
-    <None Include="fragment.glsl" />
     <None Include="LightFragment.glsl" />
     <None Include="LightNodeFragment.glsl" />
     <None Include="LightNodeVertex.glsl" />
     <None Include="LightVertex.glsl" />
     <None Include="MaterialFragment.glsl" />
     <None Include="MaterialVertex.glsl" />
-    <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AllDemoCodes.cpp" />

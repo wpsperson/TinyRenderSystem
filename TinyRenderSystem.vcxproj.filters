@@ -21,12 +21,6 @@
     <None Include="DefaultVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="fragment.glsl">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="vertex.glsl">
-      <Filter>资源文件</Filter>
-    </None>
     <None Include="LightFragment.glsl">
       <Filter>资源文件</Filter>
     </None>
@@ -43,12 +37,6 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="MaterialVertex.glsl">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="DiffNormMaterialFragment.glsl">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="DiffNormMaterialVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
     <None Include="1_1BasicFragment.glsl">

@@ -5,6 +5,6 @@
 
 int main()
 {
-    CaseManyFunnyBoxRotate();
+    CaseTextureColorArray();
     return 0;
 }

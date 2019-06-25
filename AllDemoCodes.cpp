@@ -705,15 +705,15 @@ int CaseMultiTexture()
 void CaseTextureColorArray()
 {
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
-    std::shared_ptr<TRSGeode> pThird = std::make_shared<TRSGeode>();
-    pThird->readFromVertex(BoxVertices, sizeof(BoxVertices) / sizeof(float), EnVertexTextureColor);
-    pThird->setMatrix(glm::translate(glm::mat4(), glm::vec3(0, 1.5f, 0)));
-    std::shared_ptr<TRSStateSet> pSS = pThird->getOrCreateStateSet();
+    std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
+    pNode->readFromVertex(BoxVerticesAndColorAndTex, sizeof(BoxVerticesAndColorAndTex) / sizeof(float), EnVertexColorTexture);
+    pNode->setMatrix(glm::translate(glm::mat4(), glm::vec3(0, 1.5f, 0)));
+    std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
     pSS->getTexture()->createTexture("container.jpg");
     pSS->getTexture()->createTexture("awesomeface.png");
-    pSS->getShader()->createProgram("vertex.glsl", "fragment.glsl");
+    pSS->getShader()->createProgram("1_5MultiTextureVertex.glsl", "1_5MultiTextureFragment.glsl");
 
-    viewer->setSecenNode(pThird);
+    viewer->setSecenNode(pNode);
     viewer->run();
 }
 
@@ -740,7 +740,7 @@ void CaseManyFunnyBoxRotate()
     pSS->getTexture()->createTexture("container.jpg");
     pSS->getTexture()->createTexture("awesomeface.png");
     pSS->getShader()->createProgram("vertex.glsl", "fragment.glsl");
-    pTemplateNode->readFromVertex(BoxVertices, sizeof(BoxVertices) / sizeof(float), EnVertexTextureColor);
+    pTemplateNode->readFromVertex(BoxVerticesAndTexAndColor, sizeof(BoxVerticesAndTexAndColor) / sizeof(float), EnVertexTextureColor);
     int nBoxCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
     for (int i=0; i<nBoxCount; i++)
     {
