@@ -99,7 +99,7 @@ void TRSCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos)
     m_fLastX = float(xpos);
     m_fLastY = float(ypos);
     m_fYaw += m_fMouseSensity * xOffset;
-    m_fPitch += m_fMouseSensity * yOffset;
+    m_fPitch += m_fMouseSensity * yOffset * 5;
     if (m_fPitch > 89.0f)
     {
         m_fPitch = 89.0f;

@@ -15,7 +15,7 @@ public:
     TRSGeode();
 
     //拷贝构造函数就是共享VBO
-    TRSGeode(const TRSGeode& refObj);
+    TRSGeode(const TRSGeode& refObj, bool bSameStateset = true);
 
     TRSGeode(std::wstring& strObjFile);
 

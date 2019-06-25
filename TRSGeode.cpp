@@ -9,7 +9,7 @@ TRSGeode::TRSGeode()
     m_pVAO = std::make_shared<TRSVAO>();
 }
 
-TRSGeode::TRSGeode(const TRSGeode& refObj)
+TRSGeode::TRSGeode(const TRSGeode& refObj, bool bSameStateset/* = true*/)
 {
     m_pVAO = std::make_shared<TRSVAO>();
     m_pVAO->genVAO(true);
@@ -18,8 +18,11 @@ TRSGeode::TRSGeode(const TRSGeode& refObj)
     m_pVAO->setDrawCount(refObj.getVAO()->getDrawCount());
     m_pVAO->unBind();
 
-    m_pStateSet = refObj.m_pStateSet;
-    m_UpdateFunc = refObj.m_UpdateFunc;
+    if (bSameStateset)
+    {
+        m_pStateSet = refObj.m_pStateSet;
+        m_UpdateFunc = refObj.m_UpdateFunc;
+    }
 }
 
 TRSGeode::TRSGeode(std::wstring& strObjFile)

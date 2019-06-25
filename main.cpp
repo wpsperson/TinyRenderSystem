@@ -5,6 +5,6 @@
 
 int main()
 {
-    CaseTextureColorArray();
+    CaseMaterial_DiffuseNormal();
     return 0;
 }

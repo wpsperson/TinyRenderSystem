@@ -701,7 +701,7 @@ int CaseMultiTexture()
 
 //----------- 使用TRS渲染引擎 ----------------------
 
-//开心盒子 默认摄像机系统
+//开心盒子 shader未开启默认摄像机系统
 void CaseTextureColorArray()
 {
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
@@ -717,7 +717,7 @@ void CaseTextureColorArray()
     viewer->run();
 }
 
-//多个开心盒子场景，默认摄像机系统
+//多个开心盒子场景，shader未开启默认摄像机系统
 void CaseManyFunnyBoxRotate()
 {
     glm::vec3 cubePositions[] = {
@@ -739,8 +739,8 @@ void CaseManyFunnyBoxRotate()
     std::shared_ptr<TRSStateSet> pSS = pTemplateNode->getOrCreateStateSet();
     pSS->getTexture()->createTexture("container.jpg");
     pSS->getTexture()->createTexture("awesomeface.png");
-    pSS->getShader()->createProgram("vertex.glsl", "fragment.glsl");
-    pTemplateNode->readFromVertex(BoxVerticesAndTexAndColor, sizeof(BoxVerticesAndTexAndColor) / sizeof(float), EnVertexTextureColor);
+    pSS->getShader()->createProgram("1_5MultiTextureVertex.glsl", "1_5MultiTextureFragment.glsl");
+    pTemplateNode->readFromVertex(BoxVerticesAndColorAndTex, sizeof(BoxVerticesAndColorAndTex) / sizeof(float), EnVertexColorTexture);
     int nBoxCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
     for (int i=0; i<nBoxCount; i++)
     {
@@ -782,10 +782,7 @@ void CaseMaterial_AmbientDiffuseSpecular()
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
     pGeode->readFromVertex(BoxVerticesAndNorm, sizeof(BoxVerticesAndNorm) / sizeof(float), EnVertexNormal);
     std::shared_ptr<TRSStateSet> pGeodeStateSet = pGeode->getOrCreateStateSet();
-    pGeodeStateSet->getShader()->createProgram("MaterialVertex.glsl", "MaterialFragment.glsl");
-    pGeodeStateSet->getShader()->addUniform3v("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-    pGeodeStateSet->getShader()->addUniform3v("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    //pGeodeStateSet->getShader()->addUniform3v("lightPos", lightPos);
+    pGeodeStateSet->getShader()->createProgram("2_1MaterialVertex.glsl", "2_1MaterialFragment.glsl");
 
     pGeodeStateSet->getShader()->addUniform3v("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
     pGeodeStateSet->getShader()->addUniform3v("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
@@ -797,12 +794,12 @@ void CaseMaterial_AmbientDiffuseSpecular()
     pGeodeStateSet->getShader()->addUniform3v("light.position", lightPos);
     pGeode->setUpdateCallBack(updateFunc);
 
-    std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pGeode.get());
+    std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pGeode.get(), false);
     glm::mat4 lightMat = glm::translate(glm::mat4(), lightPos);
     lightMat = glm::scale(lightMat, glm::vec3(0.2f));
     pLightNode->setMatrix(lightMat);
     std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
-    pLightStateSet->getShader()->createProgram("LightNodeVertex.glsl", "LightNodeFragment.glsl");
+    pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
     pGroup->addChild(pGeode);
     pGroup->addChild(pLightNode);
     viewer->setSecenNode(pGroup);
@@ -817,13 +814,16 @@ void CaseMaterial_DiffuseNormal()
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
     pGeode->readFromVertex(BoxVerticesAndTex, sizeof(BoxVerticesAndTex) / sizeof(float), EnVertexTexture);
+    std::shared_ptr<TRSStateSet> pBoxSS = pGeode->getOrCreateStateSet();
 
-    std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pGeode.get());
+
+
+    std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pGeode.get(), false);
     glm::mat4 lightMat = glm::translate(glm::mat4(), lightPos);
     lightMat = glm::scale(lightMat, glm::vec3(0.2f));
     pLightNode->setMatrix(lightMat);
     std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
-    pLightStateSet->getShader()->createProgram("LightNodeVertex.glsl", "LightNodeFragment.glsl");
+    pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
 
     pGroup->addChild(pGeode);
     pGroup->addChild(pLightNode);
