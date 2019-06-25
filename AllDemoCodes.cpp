@@ -699,8 +699,9 @@ int CaseMultiTexture()
     return 0;
 }
 
+//----------- 使用TRS渲染引擎 ----------------------
 
-
+//开心盒子 默认相机系统
 void CaseTextureColorArray()
 {
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
@@ -715,6 +716,47 @@ void CaseTextureColorArray()
     viewer->setSecenNode(pThird);
     viewer->run();
 }
+
+void CaseManyFunnyBoxRotate()
+{
+    glm::vec3 cubePositions[] = {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
+    std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
+    std::shared_ptr<TRSStateSet> pSS = pTemplateNode->getOrCreateStateSet();
+    pSS->getTexture()->createTexture("container.jpg");
+    pSS->getTexture()->createTexture("awesomeface.png");
+    pSS->getShader()->createProgram("vertex.glsl", "fragment.glsl");
+    pTemplateNode->readFromVertex(BoxVertices, sizeof(BoxVertices) / sizeof(float), EnVertexTextureColor);
+    int nBoxCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
+    for (int i=0; i<nBoxCount; i++)
+    {
+        std::shared_ptr<TRSGeode> pTemp = std::make_shared<TRSGeode>(*pTemplateNode);
+        glm::vec3 vecPos = cubePositions[i];
+        glm::mat4 modelMatrix = glm::translate(glm::mat4(), vecPos);
+        float angle = 20.0f * i;
+        modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        pTemp->setMatrix(modelMatrix);
+        pGroup->addChild(pTemp);
+    }
+
+    viewer->setSecenNode(pGroup);
+    viewer->run();
+}
+
+
 
 //第二章 基本光照
 void updateFunc(TRSNode* pNode)

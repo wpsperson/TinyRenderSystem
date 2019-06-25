@@ -17,6 +17,9 @@ TRSGeode::TRSGeode(const TRSGeode& refObj)
     m_pVAO->setBuffType(refObj.getVAO()->getBufferType());
     m_pVAO->setDrawCount(refObj.getVAO()->getDrawCount());
     m_pVAO->unBind();
+
+    m_pStateSet = refObj.m_pStateSet;
+    m_UpdateFunc = refObj.m_UpdateFunc;
 }
 
 TRSGeode::TRSGeode(std::wstring& strObjFile)
