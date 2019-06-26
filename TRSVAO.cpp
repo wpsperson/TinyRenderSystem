@@ -59,6 +59,7 @@ void TRSVAO::setVertexAttrib(EnVertexStruct EnVertType)
         glEnableVertexAttribArray(1);
         break;
     case EnVertexColorTexture:          // vvvccctt;
+    case EnVertexNormTexture:       //vvvnnntt;
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));//Texture
@@ -96,6 +97,7 @@ void TRSVAO::calcDrawCount(EnVertexStruct EnVertType, int verticeSize)
         m_nDrawCount = verticeSize / 5;
         break;
     case EnVertexColorTexture:          // vvvccctt;
+    case EnVertexNormTexture:           //vvvnnntt;
         m_nDrawCount = verticeSize / 8;
         break;
     case EnVertexTextureColor:          // vvvttccc;

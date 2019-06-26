@@ -63,6 +63,12 @@
     <None Include="2_1LightNodeVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="2_2DiffuseNormFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="2_2DiffuseNormVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">

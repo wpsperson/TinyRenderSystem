@@ -813,7 +813,7 @@ void CaseMaterial_DiffuseNormal()
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pBoxNode = std::make_shared<TRSGeode>();
-    pBoxNode->readFromVertex(BoxVerticesAndTex, sizeof(BoxVerticesAndTex) / sizeof(float), EnVertexTexture);
+    pBoxNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pBoxNode->getOrCreateStateSet();
 
 
