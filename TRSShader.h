@@ -6,6 +6,7 @@
 
 #pragma once
 #include <string>
+#include <vector>
 #include <glad/glad.h>
 #include "TRSExport.h"
 #include "glm/glm.hpp"
@@ -89,7 +90,7 @@ public:
 
 
 
-    void setTexUniform(int nTexCount);
+    void setTexUniform(const std::vector<std::string> sampleNames);
 
     void setUniformi(const std::string uniformName, int value);
 

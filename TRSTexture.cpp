@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "TRSConst.h"
 
 
 using namespace std;
@@ -31,10 +32,16 @@ TRSTexture::~TRSTexture()
 
 }
 
-void TRSTexture::createTexture(const std::string& imageFile)
+void TRSTexture::createTexture(const std::string& imageFile, const std::string& sampleName/* = ""*/)
 {
     size_t index = m_nTextures.size();
     m_nTextures.push_back(0);
+    std::string strSampleName = sampleName;
+    if (strSampleName.empty())
+    {
+        strSampleName = std::string(s_TextUnitPrefix) + std::to_string(index);
+    }
+    m_sSampleNames.push_back(strSampleName);
     glGenTextures(1, &(m_nTextures[index]));
     glBindTexture(GL_TEXTURE_2D, m_nTextures[index]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -51,19 +58,6 @@ void TRSTexture::createTexture(const std::string& imageFile)
     stbi_image_free(source);
 }
 
-void TRSTexture::activeTexutres(std::vector<unsigned int> idxs)
-{
-    for (std::vector<unsigned int>::iterator itr = idxs.begin(); itr != idxs.end(); itr++)
-    {
-        if (*itr >= m_nTextures.size())
-        {
-            std::cout << "Texture Index out of range" << std::endl;
-        }
-        glActiveTexture(GL_TEXTURE0 + *itr);
-        glBindTexture(GL_TEXTURE_2D, m_nTextures[*itr]);
-    }
-}
-
 void TRSTexture::activeAllTextures()
 {
     size_t nCount = m_nTextures.size();
@@ -77,4 +71,9 @@ void TRSTexture::activeAllTextures()
 int TRSTexture::count()
 {
     return m_nTextures.size();
+}
+
+std::vector<std::string> TRSTexture::getSampleNames()
+{
+    return m_sSampleNames;
 }

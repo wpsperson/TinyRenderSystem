@@ -5,6 +5,7 @@
 
 int main()
 {
+    //CaseManyFunnyBoxRotate();
     CaseMaterial_DiffuseNormal();
     return 0;
 }

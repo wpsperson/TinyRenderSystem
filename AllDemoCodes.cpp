@@ -707,7 +707,6 @@ void CaseTextureColorArray()
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     pNode->readFromVertex(BoxVerticesAndColorAndTex, sizeof(BoxVerticesAndColorAndTex) / sizeof(float), EnVertexColorTexture);
-    pNode->setMatrix(glm::translate(glm::mat4(), glm::vec3(0, 1.5f, 0)));
     std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
     pSS->getTexture()->createTexture("container.jpg");
     pSS->getTexture()->createTexture("awesomeface.png");
@@ -737,7 +736,7 @@ void CaseManyFunnyBoxRotate()
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
     std::shared_ptr<TRSStateSet> pSS = pTemplateNode->getOrCreateStateSet();
-    pSS->getTexture()->createTexture("container.jpg");
+    pSS->getTexture()->createTexture("container.jpg");//container.jpg
     pSS->getTexture()->createTexture("awesomeface.png");
     pSS->getShader()->createProgram("1_5MultiTextureVertex.glsl", "1_5MultiTextureFragment.glsl");
     pTemplateNode->readFromVertex(BoxVerticesAndColorAndTex, sizeof(BoxVerticesAndColorAndTex) / sizeof(float), EnVertexColorTexture);
@@ -815,8 +814,15 @@ void CaseMaterial_DiffuseNormal()
     std::shared_ptr<TRSGeode> pBoxNode = std::make_shared<TRSGeode>();
     pBoxNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pBoxNode->getOrCreateStateSet();
-
-
+    pBoxSS->getShader()->createProgram("2_2DiffuseNormVertex.glsl", "2_2DiffuseNormFragment.glsl");
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
+    pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // 将光照调暗了一些以搭配场景
+    pBoxSS->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    pBoxSS->getShader()->addUniform3v("light.position", lightPos);
 
     std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pBoxNode.get(), false);
     glm::mat4 lightMat = glm::translate(glm::mat4(), lightPos);

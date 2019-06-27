@@ -103,11 +103,12 @@ void TRSShader::addUniformMatrix4(const std::string& uniformName, glm::mat4 mat)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-void TRSShader::setTexUniform(int nTexCount)
+void TRSShader::setTexUniform(const std::vector<std::string> sampleNames)
 {
+    int nTexCount = sampleNames.size();
     for (int i=0; i<nTexCount; i++)
     {
-        std::string strUniformName = std::string(s_TextUnitPrefix) + std::to_string(i);
+        std::string strUniformName = sampleNames[i];
         setUniformi(strUniformName, i);
     }
 }

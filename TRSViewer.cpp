@@ -93,6 +93,7 @@ void TRSViewer::drawScene()
         //äÖÈ¾×é¼þ£ºshader vao texture camera
         TRSShader* pShader = pStateSet->getShader();
         pShader->use();
+        pShader->setTexUniform(pTexture->getSampleNames());
 
         std::vector<TRSNode*>& nodeList = itr->second;
         for (std::vector<TRSNode*>::iterator itrNode = nodeList.begin(); itrNode!=nodeList.end(); itrNode++)
@@ -107,7 +108,6 @@ void TRSViewer::drawScene()
             pShader->setUniformMatrix4("view", viewMatrix);
             pShader->setUniformMatrix4("projection", projectMatrix);
             pShader->setUniform3v("viewPos", m_pCamera->getCameraPos());
-            pShader->setTexUniform(pTexture->count());
             pShader->setUniform4v("baseColor", pGeode->getColor());
             pShader->applayAllStaticUniform();//Apply Uniform
             if (pGeode->getUpdateCallBack())
