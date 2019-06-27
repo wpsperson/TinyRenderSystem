@@ -837,3 +837,114 @@ void CaseMaterial_DiffuseNormal()
     viewer->run();
 }
 
+
+void CaseDirectionLight()
+{
+    glm::vec3 cubePositions[] = {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
+    std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
+
+    glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
+    pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
+    pBoxSS->getShader()->createProgram("2_3DirectionLightNormVertex.glsl", "2_3DirectionLightNormFragment.glsl");
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
+    pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // 将光照调暗了一些以搭配场景
+    pBoxSS->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    pBoxSS->getShader()->addUniform3v("light.direction", lightDirection);
+
+    int nBoxCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
+    for (int i = 0; i < nBoxCount; i++)
+    {
+        std::shared_ptr<TRSGeode> pTemp = std::make_shared<TRSGeode>(*pTemplateNode);
+        glm::vec3 vecPos = cubePositions[i];
+        glm::mat4 modelMatrix = glm::translate(glm::mat4(), vecPos);
+        float angle = 20.0f * i;
+        modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        pTemp->setMatrix(modelMatrix);
+        pGroup->addChild(pTemp);
+    }
+
+    viewer->setSecenNode(pGroup);
+    viewer->run();
+}
+
+
+void CasePointAttenuationLight()
+{
+    glm::vec3 cubePositions[] = {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
+    std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
+
+    glm::vec3 lightPos = glm::vec3(0.8f, 0.8f, 2.0f);
+    pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
+    pBoxSS->getShader()->createProgram("2_4PointAttenuationLightVertex.glsl", "2_4PointAttenuationLightFragment.glsl");
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
+    pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // 将光照调暗了一些以搭配场景
+    pBoxSS->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    pBoxSS->getShader()->addUniform3v("light.position", lightPos);
+    //对于衰减的点光源的公式中的三个项  光强度 = 1/(Kc + Kl*d + Kq * d*d)
+    pBoxSS->getShader()->addUniformf("light.constant", 1.0f);
+    pBoxSS->getShader()->addUniformf("light.linear", 0.09f);
+    pBoxSS->getShader()->addUniformf("light.quadratic", 0.032f);
+
+    int nBoxCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
+    for (int i = 0; i < nBoxCount; i++)
+    {
+        std::shared_ptr<TRSGeode> pTemp = std::make_shared<TRSGeode>(*pTemplateNode);
+        glm::vec3 vecPos = cubePositions[i];
+        glm::mat4 modelMatrix = glm::translate(glm::mat4(), vecPos);
+        float angle = 20.0f * i;
+        modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        pTemp->setMatrix(modelMatrix);
+        pGroup->addChild(pTemp);
+    }
+
+    std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pTemplateNode.get(), false);
+    glm::mat4 lightMat = glm::translate(glm::mat4(), lightPos);
+    lightMat = glm::scale(lightMat, glm::vec3(0.2f));
+    pLightNode->setMatrix(lightMat);
+    std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
+    pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
+    pGroup->addChild(pLightNode);
+
+    viewer->setSecenNode(pGroup);
+    viewer->run();
+}
+
+

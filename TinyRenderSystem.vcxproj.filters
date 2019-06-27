@@ -69,6 +69,18 @@
     <None Include="2_2DiffuseNormVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="2_3DirectionLightNormFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="2_3DirectionLightNormVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="2_4PointAttenuationLightFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="2_4PointAttenuationLightVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">

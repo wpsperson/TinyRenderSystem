@@ -5,7 +5,6 @@
 
 int main()
 {
-    //CaseManyFunnyBoxRotate();
-    CaseMaterial_DiffuseNormal();
+    CasePointAttenuationLight();
     return 0;
 }

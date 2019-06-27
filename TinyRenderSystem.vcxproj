@@ -160,6 +160,10 @@
     <None Include="1_5MultiTextureVertex.glsl" />
     <None Include="2_2DiffuseNormFragment.glsl" />
     <None Include="2_2DiffuseNormVertex.glsl" />
+    <None Include="2_3DirectionLightNormFragment.glsl" />
+    <None Include="2_3DirectionLightNormVertex.glsl" />
+    <None Include="2_4PointAttenuationLightFragment.glsl" />
+    <None Include="2_4PointAttenuationLightVertex.glsl" />
     <None Include="DefaultFragment.glsl" />
     <None Include="DefaultVertex.glsl" />
     <None Include="2_1LightNodeFragment.glsl" />

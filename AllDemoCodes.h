@@ -12,3 +12,5 @@ void CaseTextureColorArray();
 void CaseManyFunnyBoxRotate();
 void CaseMaterial_AmbientDiffuseSpecular();
 void CaseMaterial_DiffuseNormal();
+void CaseDirectionLight();
+void CasePointAttenuationLight();
