@@ -953,6 +953,7 @@ void SpotlightUpdateFunc(TRSNode* pNode)
     pNode->getStateSet()->getShader()->addUniform3v("light.position", g_pCamera->getCameraPos());
     pNode->getStateSet()->getShader()->addUniform3v("light.direction", g_pCamera->getCameraFront());
     pNode->getStateSet()->getShader()->addUniformf("light.cutOff", glm::cos(glm::radians(12.5f)));
+    pNode->getStateSet()->getShader()->addUniformf("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 }
 void CaseSpotlight()
 {

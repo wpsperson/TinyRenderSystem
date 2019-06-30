@@ -16,6 +16,7 @@ struct Light {
     vec3  position;
     vec3  direction;
     float cutOff;
+    float outerCutOff;
 
     vec3 ambient;
     vec3 diffuse;
@@ -34,7 +35,7 @@ void main()
 
     //2 diffuse
     vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(light.position - FragPos);
+    vec3 lightDir = normalize(light.position - FragPos);//从片段指向光源的向量
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = light.diffuse * (diff * texture(material.diffuse, TexCoord).rgb);
 
@@ -47,18 +48,20 @@ void main()
     vec3 specular = light.specular * (spec * average);
 
     float theta = dot(lightDir, normalize(-light.direction));
-    if (theta > light.cutOff)
-    {
-        // 执行光照计算
-        vec3 result = ambient + diffuse + specular;
-        FragColor = vec4(result, 1.0);
-    }
-    else
-    {
-        vec3 result = ambient;
-        FragColor = vec4(result, 1.0);
-    }
-
-
+    float epsilon = light.cutOff - light.outerCutOff;
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+    //if (theta > light.cutOff)
+    //{
+    //    // 执行光照计算
+    //    vec3 result = ambient + diffuse + specular;
+    //    FragColor = vec4(result, 1.0);
+    //}
+    //else
+    //{
+    //    vec3 result = ambient;
+    //    FragColor = vec4(result, 1.0);
+    //}
+    vec3 result = ambient + diffuse*intensity + specular*intensity;
+    FragColor = vec4(result, 1.0);
 
 }
