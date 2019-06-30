@@ -15,3 +15,4 @@ void CaseMaterial_DiffuseNormal();
 void CaseDirectionLight();
 void CasePointAttenuationLight();
 void CaseSpotlight();
+void CaseMultiLightSource();

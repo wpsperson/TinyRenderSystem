@@ -87,6 +87,12 @@
     <None Include="2_5SpotLightVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="2_6MultiLightSourceFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="2_6MultiLightSourceVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">

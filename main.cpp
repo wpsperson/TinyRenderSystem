@@ -5,6 +5,6 @@
 
 int main()
 {
-    CaseSpotlight();
+    CaseMultiLightSource();
     return 0;
 }

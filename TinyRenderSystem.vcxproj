@@ -166,6 +166,8 @@
     <None Include="2_4PointAttenuationLightVertex.glsl" />
     <None Include="2_5SpotLightFragment.glsl" />
     <None Include="2_5SpotLightVertex.glsl" />
+    <None Include="2_6MultiLightSourceFragment.glsl" />
+    <None Include="2_6MultiLightSourceVertex.glsl" />
     <None Include="DefaultFragment.glsl" />
     <None Include="DefaultVertex.glsl" />
     <None Include="2_1LightNodeFragment.glsl" />

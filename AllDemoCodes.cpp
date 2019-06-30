@@ -1001,3 +1001,93 @@ void CaseSpotlight()
     viewer->setSecenNode(pGroup);
     viewer->run();
 }
+
+void MultiLightSpotlightUpdateFunc(TRSNode* pNode)
+{
+    pNode->getStateSet()->getShader()->addUniform3v("spotLight.position", g_pCamera->getCameraPos());
+    pNode->getStateSet()->getShader()->addUniform3v("spotLight.direction", g_pCamera->getCameraFront());
+    pNode->getStateSet()->getShader()->addUniformf("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+    pNode->getStateSet()->getShader()->addUniformf("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
+}
+
+void CaseMultiLightSource()
+{
+    glm::vec3 cubePositions[] = {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
+    std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
+
+    pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
+    pBoxSS->getShader()->createProgram("2_6MultiLightSourceVertex.glsl", "2_6MultiLightSourceFragment.glsl");
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
+    //一个平行光
+    glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
+    pBoxSS->getShader()->addUniform3v("dirLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    pBoxSS->getShader()->addUniform3v("dirLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // 将光照调暗了一些以搭配场景
+    pBoxSS->getShader()->addUniform3v("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    pBoxSS->getShader()->addUniform3v("dirLight.direction", lightDirection);
+    //四个点光源
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3(0.7f,  0.2f,  2.0f),
+        glm::vec3(2.3f, -3.3f, -4.0f),
+        glm::vec3(-4.0f,  2.0f, -12.0f),
+        glm::vec3(0.0f,  0.0f, -3.0f)
+    };
+    int nPointLightNum = sizeof(pointLightPositions) / sizeof(pointLightPositions[0]);
+    for (int i=0; i<nPointLightNum; i++)
+    {
+        std::string strLightName = "pointLights[" + std::to_string(i)+"]";
+        pBoxSS->getShader()->addUniform3v(strLightName + ".ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+        pBoxSS->getShader()->addUniform3v(strLightName + ".diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // 将光照调暗了一些以搭配场景
+        pBoxSS->getShader()->addUniform3v(strLightName + ".specular", glm::vec3(1.0f, 1.0f, 1.0f));
+        pBoxSS->getShader()->addUniform3v(strLightName + ".position", pointLightPositions[i]);
+        //对于衰减的点光源的公式中的三个项  光强度 = 1/(Kc + Kl*d + Kq * d*d)
+        pBoxSS->getShader()->addUniformf(strLightName + ".constant", 1.0f);
+        pBoxSS->getShader()->addUniformf(strLightName + ".linear", 0.09f);
+        pBoxSS->getShader()->addUniformf(strLightName + ".quadratic", 0.032f);
+
+        //顺便添加灯光的节点
+        std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pTemplateNode.get(), false);
+        glm::mat4 lightMat = glm::translate(glm::mat4(), pointLightPositions[i]);
+        lightMat = glm::scale(lightMat, glm::vec3(0.2f));
+        pLightNode->setMatrix(lightMat);
+        std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
+        pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
+        pGroup->addChild(pLightNode);
+    }
+    // 聚光灯
+    pBoxSS->getShader()->addUniform3v("spotLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    pBoxSS->getShader()->addUniform3v("spotLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // 将光照调暗了一些以搭配场景
+    pBoxSS->getShader()->addUniform3v("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    pTemplateNode->setUpdateCallBack(MultiLightSpotlightUpdateFunc);
+
+
+    int nBoxCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
+    for (int i = 0; i < nBoxCount; i++)
+    {
+        std::shared_ptr<TRSGeode> pTemp = std::make_shared<TRSGeode>(*pTemplateNode);
+        glm::vec3 vecPos = cubePositions[i];
+        glm::mat4 modelMatrix = glm::translate(glm::mat4(), vecPos);
+        float angle = 20.0f * i;
+        modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        pTemp->setMatrix(modelMatrix);
+        pGroup->addChild(pTemp);
+    }
+    viewer->setSecenNode(pGroup);
+    viewer->run();
+}
