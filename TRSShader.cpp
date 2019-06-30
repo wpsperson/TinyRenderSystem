@@ -109,7 +109,7 @@ void TRSShader::setTexUniform(const std::vector<std::string> sampleNames)
     for (int i=0; i<nTexCount; i++)
     {
         std::string strUniformName = sampleNames[i];
-        setUniformi(strUniformName, i);
+        addUniformi(strUniformName, i);
     }
 }
 
@@ -130,30 +130,6 @@ unsigned int TRSShader::createShader(const std::string vShaderFile, GLenum EnSha
     }
     delete[] source;//ÊÍ·ÅÄÚ´æ
     return shader;
-}
-
-void TRSShader::setUniformi(const std::string uniformName, int value)
-{
-    int loc = glGetUniformLocation(program, uniformName.c_str());
-    glUniform1i(loc, value);
-}
-
-void TRSShader::setUniform3v(const std::string uniformName, glm::vec3 vec3)
-{
-    int loc = glGetUniformLocation(program, uniformName.c_str());
-    glUniform3f(loc, vec3.x, vec3.y, vec3.z);
-}
-
-void TRSShader::setUniform4v(const std::string uniformName, glm::vec4 vec4Color)
-{
-    int loc = glGetUniformLocation(program, uniformName.c_str());
-    glUniform4f(loc, vec4Color.r, vec4Color.g, vec4Color.b, vec4Color.a);
-}
-
-void TRSShader::setUniformMatrix4(const std::string& uniformName, glm::mat4 mat)
-{
-    int loc = glGetUniformLocation(program, uniformName.c_str());
-    glUniformMatrix4fv(loc, 1, GL_FALSE, &mat[0][0]);
 }
 
 void TRSShader::applayAllStaticUniform()
@@ -189,4 +165,5 @@ void TRSShader::applayAllStaticUniform()
             break;
         }
     }
+    m_mapUniformValue.clear();
 }

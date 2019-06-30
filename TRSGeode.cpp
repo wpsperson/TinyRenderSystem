@@ -10,6 +10,7 @@ TRSGeode::TRSGeode()
 }
 
 TRSGeode::TRSGeode(const TRSGeode& refObj, bool bSameStateset/* = true*/)
+    : TRSNode(), m_matColor(s_DefaultNodeColor)
 {
     m_pVAO = std::make_shared<TRSVAO>();
     m_pVAO->genVAO(true);

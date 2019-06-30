@@ -23,6 +23,8 @@ public:
 
     glm::vec3 getCameraPos() const;
 
+    glm::vec3 getCameraFront() const;
+
     void keyboardCallBack(GLFWwindow* pWindow);
 
     void mouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos);

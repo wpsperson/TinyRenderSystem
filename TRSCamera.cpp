@@ -51,6 +51,11 @@ glm::vec3 TRSCamera::getCameraPos() const
     return m_pos;
 }
 
+glm::vec3 TRSCamera::getCameraFront() const
+{
+    return m_front;
+}
+
 void TRSCamera::keyboardCallBack(GLFWwindow* pWindow)
 {
     if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)

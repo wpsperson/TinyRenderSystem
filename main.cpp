@@ -5,6 +5,6 @@
 
 int main()
 {
-    CasePointAttenuationLight();
+    CaseSpotlight();
     return 0;
 }

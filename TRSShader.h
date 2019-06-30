@@ -87,25 +87,13 @@ public:
 
     void use();
 
-
-
-
     void setTexUniform(const std::vector<std::string> sampleNames);
-
-    void setUniformi(const std::string uniformName, int value);
-
-    void setUniform3v(const std::string uniformName, glm::vec3 vec3);
-
-    void setUniform4v(const std::string uniformName, glm::vec4 vec4Color);
-
-    void setUniformMatrix4(const std::string& uniformName, glm::mat4 mat);
-
-    void applayAllStaticUniform();
     void addUniformi(const std::string uniformName, int value);
     void addUniformf(const std::string uniformName, float value);
     void addUniform3v(const std::string uniformName, glm::vec3 vec3Color);
     void addUniform4v(const std::string uniformName, glm::vec4 vec4Color);
     void addUniformMatrix4(const std::string& uniformName, glm::mat4 mat);
+    void applayAllStaticUniform();
 
 private:
     //return 0 when failure
