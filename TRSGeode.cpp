@@ -26,12 +26,6 @@ TRSGeode::TRSGeode(const TRSGeode& refObj, bool bSameStateset/* = true*/)
     }
 }
 
-TRSGeode::TRSGeode(std::wstring& strObjFile)
-    :TRSNode(), m_matColor(s_DefaultNodeColor)
-{
-    readFromOBJ(strObjFile);
-}
-
 TRSGeode::TRSGeode(float* vertices, int verticeSize, EnVertexStruct EnVertType)
 {
     readFromVertex(vertices, verticeSize, EnVertType);
@@ -42,14 +36,14 @@ TRSGeode::~TRSGeode()
 
 }
 
-void TRSGeode::readFromOBJ(std::wstring& strObjFile)
-{
-
-}
-
 void TRSGeode::readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType)
 {
     m_pVAO->createVAO(vertices, verticeSize, EnVertType);
+}
+
+void TRSGeode::readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount)
+{
+    m_pVAO->createVAO(vertices, verticeSize, EnVertType, indice, indexCount);
 }
 
 std::shared_ptr<TRSVAO> TRSGeode::getVAO() const

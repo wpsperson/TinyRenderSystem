@@ -1091,3 +1091,12 @@ void CaseMultiLightSource()
     viewer->setSecenNode(pGroup);
     viewer->run();
 }
+
+void CaseElementArrayTRS()
+{
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
+    pNode->readFromVertex(Rectangle4Vertices, sizeof(Rectangle4Vertices) / sizeof(float), EnVertex, Rectangle6Indices, sizeof(Rectangle6Indices) / sizeof(unsigned int));
+    viewer->setSecenNode(pNode);
+    viewer->run();
+}

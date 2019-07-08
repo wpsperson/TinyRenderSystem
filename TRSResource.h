@@ -6,6 +6,18 @@
 
 #pragma once
 
+static float Rectangle4Vertices[] = {
+    0.5f, 0.5f, -0.5f,   // 右上角
+    0.5f, -0.5f, -0.5f,  // 右下角
+    -0.5f, -0.5f, -0.5f, // 左下角
+    -0.5f, 0.5f, -0.5f   // 左上角
+};
+
+static unsigned int Rectangle6Indices[] = { // 注意索引从0开始! 
+    0, 1, 3, // 第一个三角形
+    1, 2, 3  // 第二个三角形
+};
+
 //Vertex Tex Color, vvvttccc;
 static float BoxVerticesAndTexAndColor[] = 
 {

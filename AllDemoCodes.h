@@ -16,3 +16,5 @@ void CaseDirectionLight();
 void CasePointAttenuationLight();
 void CaseSpotlight();
 void CaseMultiLightSource();
+
+void CaseElementArrayTRS();

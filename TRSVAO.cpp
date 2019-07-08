@@ -4,7 +4,7 @@
 
 
 TRSVAO::TRSVAO()
-    :VAO(0), VBO(0), EBO(0)
+    :VAO(0), VBO(0), EBO(0), m_nDrawCount(0), m_nElementCount(0)
 {
 
 }
@@ -36,11 +36,28 @@ void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertTy
     unBind();
 }
 
+void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount)
+{
+    genVAO(true);
+    createVBO(vertices, verticeSize);
+    createEBO(indice, indexCount);
+    setVertexAttrib(EnVertType);
+    m_nElementCount = indexCount;
+    unBind();
+}
+
 void TRSVAO::createVBO(float* vertices, int verticeSize)
 {
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, verticeSize * sizeof(float), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, verticeSize * sizeof(float), vertices, GL_STATIC_DRAW);//注意这里数量的大小就是vertices的内存大小
+}
+
+void TRSVAO::createEBO(unsigned int* indice, int indexCount)
+{
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount*sizeof(unsigned int), indice, GL_STATIC_DRAW);//注意这里数量的大小就是indice的内存大小
 }
 
 void TRSVAO::setVertexAttrib(EnVertexStruct EnVertType)
@@ -81,6 +98,22 @@ void TRSVAO::setVertexAttrib(EnVertexStruct EnVertType)
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
         break;
+    case EnAssimpFormat:        // vvvnnnttt't't'bbb
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)0);
+        // vertex normals
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(3 * sizeof(float)));
+        // vertex texture coords
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(6 * sizeof(float)));
+        // vertex tangent
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(8 * sizeof(float)));
+        // vertex bitangent
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(11 * sizeof(float)));
+        break;
     default:
         break;
     }
@@ -105,6 +138,9 @@ void TRSVAO::calcDrawCount(EnVertexStruct EnVertType, int verticeSize)
         break;
     case EnVertexNormal:          // vvvnnn;
         m_nDrawCount = verticeSize / 6;
+        break;
+    case EnAssimpFormat:        // vvvnnnttt't't'bbb
+        m_nDrawCount = verticeSize / 14;
         break;
     default:
         break;
@@ -146,6 +182,11 @@ void TRSVAO::unBind()
 int TRSVAO::getDrawCount() const
 {
     return m_nDrawCount;
+}
+
+int TRSVAO::getElementCount() const
+{
+    return m_nElementCount;
 }
 
 void TRSVAO::setDrawCount(int nCount)

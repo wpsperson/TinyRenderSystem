@@ -5,6 +5,6 @@
 
 int main()
 {
-    CaseMultiLightSource();
+    CaseElementArrayTRS();
     return 0;
 }

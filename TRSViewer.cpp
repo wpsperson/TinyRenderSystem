@@ -114,7 +114,14 @@ void TRSViewer::drawScene()
                 pGeode->getUpdateCallBack()(pGeode);
             }
             pShader->applayAllStaticUniform();//Apply Uniform
-            glDrawArrays(GL_TRIANGLES, 0, pGeode->getVAO()->getDrawCount());
+            if (pGeode->getVAO()->getElementCount() > 0)
+            {
+                glDrawElements(GL_TRIANGLES, pGeode->getVAO()->getElementCount(), GL_UNSIGNED_INT, 0);
+            }
+            else
+            {
+                glDrawArrays(GL_TRIANGLES, 0, pGeode->getVAO()->getDrawCount());
+            }
         }
 
     }
