@@ -149,6 +149,9 @@
     <ClCompile Include="AllDemoCodes.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TRSAssimpLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -206,6 +209,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="AllDemoCodes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TRSAssimpLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

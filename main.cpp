@@ -5,6 +5,6 @@
 
 int main()
 {
-    CaseElementArrayTRS();
+    CaseLoadModelByAssimp();
     return 0;
 }

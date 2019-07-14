@@ -18,3 +18,5 @@ void CaseSpotlight();
 void CaseMultiLightSource();
 
 void CaseElementArrayTRS();
+
+void CaseLoadModelByAssimp();

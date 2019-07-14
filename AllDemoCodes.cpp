@@ -8,14 +8,18 @@
 #include "TRSGeode.h"
 #include "TRSGroup.h"
 #include "TRSShader.h"
+#include "TRSAssimpLoader.h"
 #include "glm\gtc\matrix_transform.hpp"
 #include "TRSStateset.h"
 #include "glfw\glfw3.h"
-TRSCamera* g_pCamera;
 
 #include <iostream>
 #include "TRSUtils.h"
 #include "stb_image.h"
+
+
+TRSCamera* g_pCamera;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
@@ -1098,5 +1102,15 @@ void CaseElementArrayTRS()
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     pNode->readFromVertex(Rectangle4Vertices, sizeof(Rectangle4Vertices) / sizeof(float), EnVertex, Rectangle6Indices, sizeof(Rectangle6Indices) / sizeof(unsigned int));
     viewer->setSecenNode(pNode);
+    viewer->run();
+}
+
+void CaseLoadModelByAssimp()
+{
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    TRSAssimpLoader* pLoader = new TRSAssimpLoader();
+    TRSGroup* pGroup = pLoader->loadByAssimp(std::string("resources/objects/nanosuit/nanosuit.obj"));
+    std::shared_ptr<TRSGroup> pSharedGroup = std::shared_ptr<TRSGroup>(pGroup);
+    viewer->setSecenNode(pSharedGroup);
     viewer->run();
 }

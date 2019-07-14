@@ -32,10 +32,11 @@ TRSTexture::~TRSTexture()
 
 }
 
-void TRSTexture::createTexture(const std::string& imageFile, const std::string& sampleName/* = ""*/)
+int TRSTexture::createTexture(const std::string& imageFile, const std::string& sampleName/* = ""*/)
 {
     size_t index = m_nTextures.size();
     m_nTextures.push_back(0);
+    m_sImageFileNames.push_back(imageFile);
     std::string strSampleName = sampleName;
     if (strSampleName.empty())
     {
@@ -56,6 +57,7 @@ void TRSTexture::createTexture(const std::string& imageFile, const std::string& 
 
     //最后释放图片内存
     stbi_image_free(source);
+    return m_nTextures[index];
 }
 
 void TRSTexture::activeAllTextures()
@@ -66,6 +68,28 @@ void TRSTexture::activeAllTextures()
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, m_nTextures[i]);
     }
+}
+
+void TRSTexture::addSharedTexture(const TextureData& textureData)
+{
+    m_nTextures.push_back(textureData.id);
+    m_sImageFileNames.push_back(textureData.strImageFile);
+    m_sSampleNames.push_back(textureData.strSampleName);
+}
+
+bool TRSTexture::getTextureDataByName(const std::string& imageFile, TextureData& outData)
+{
+    for (int i=0;i<m_nTextures.size(); i++)
+    {
+        if (m_sImageFileNames[i] == imageFile)
+        {
+            outData.id = m_nTextures[i];
+            outData.strImageFile = m_sImageFileNames[i];
+            outData.strSampleName = m_sSampleNames[i];
+            return true;
+        }
+    }
+    return false;
 }
 
 int TRSTexture::count()

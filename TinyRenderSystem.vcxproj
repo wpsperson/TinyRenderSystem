@@ -181,6 +181,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NodeVisitor.cpp" />
+    <ClCompile Include="TRSAssimpLoader.cpp" />
     <ClCompile Include="TRSCallBackFunc.cpp" />
     <ClCompile Include="TRSCamera.cpp" />
     <ClCompile Include="TRSConfig.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="CullVisitor.h" />
     <ClInclude Include="NodeVisitor.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TRSAssimpLoader.h" />
     <ClInclude Include="TRSCallBackFunc.h" />
     <ClInclude Include="TRSCamera.h" />
     <ClInclude Include="TRSConfig.h" />
