@@ -673,6 +673,15 @@ int CaseMultiTexture()
     }
     stbi_image_free(data2);
 
+    //这部分本来用不到，但因为后面使用TRS渲染引擎，修改了共同的shader，所以此处适配一下
+    int nPosModelMatrix = glGetUniformLocation(shaderProgram, "model");
+    int nPosViewMatrix = glGetUniformLocation(shaderProgram, "view");
+    int nPosProjectMatrix = glGetUniformLocation(shaderProgram, "projection");
+    glm::mat4 IdentityMatrix;
+    glUniformMatrix4fv(nPosModelMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
+    glUniformMatrix4fv(nPosViewMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
+    glUniformMatrix4fv(nPosProjectMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
+
     //glUniform1i设置每个采样器的方式告诉OpenGL每个着色器采样器属于哪个纹理单元。我们只需要设置一次即可，所以这个会放在渲染循环的前面：
     //着色器中texture0对应GL_TEXTURE0（BoxTexture）
     //着色器中texture1对应GL_TEXTURE1（FaceTexture）
