@@ -72,9 +72,13 @@ void TRSTexture::activeAllTextures()
 
 void TRSTexture::addSharedTexture(const TextureData& textureData)
 {
-    m_nTextures.push_back(textureData.id);
-    m_sImageFileNames.push_back(textureData.strImageFile);
-    m_sSampleNames.push_back(textureData.strSampleName);
+    std::string textureFile = textureData.strImageFile;
+    if ( std::find(m_sImageFileNames.begin(), m_sImageFileNames.end(), textureFile) == m_sImageFileNames.end() )
+    {
+        m_nTextures.push_back(textureData.id);
+        m_sImageFileNames.push_back(textureData.strImageFile);
+        m_sSampleNames.push_back(textureData.strSampleName);
+    }
 }
 
 bool TRSTexture::getTextureDataByName(const std::string& imageFile, TextureData& outData)

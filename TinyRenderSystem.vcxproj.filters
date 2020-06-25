@@ -93,6 +93,12 @@
     <None Include="2_6MultiLightSourceVertex.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="3_1AssimpTextureFragment.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="3_1AssimpTextureVertex.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">

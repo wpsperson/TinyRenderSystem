@@ -12,6 +12,7 @@
 #include "TRSTexture.h"
 #include "TRSStateSet.h"
 #include "TRSNode.h"
+#include "TRSShader.h"
 
 using namespace std;
 
@@ -139,9 +140,10 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
     float* pData = (float*)(&vertices[0]);
     unsigned int* pIndice = &indices[0];
     //每个vertex顶点数据中有14个float
-    pGeode->readFromVertex(pData, vertices.size() * sizeof(14), EnAssimpFormat, pIndice, indices.size());
-    //TODO
+    pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnAssimpFormat, pIndice, indices.size());
+
     TRSTexture* pCurTexture = pGeode->getOrCreateStateSet()->getTexture();
+    pGeode->getOrCreateStateSet()->getShader()->createProgram("3_1AssimpTextureVertex.glsl", "3_1AssimpTextureFragment.glsl");
     // process materials
     aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
     // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
@@ -180,7 +182,7 @@ void TRSAssimpLoader::loadMaterialTextures(aiMaterial *mat, aiTextureType type, 
     {
         aiString str;
         mat->GetTexture(type, i, &str);
-        std::string strImageFile = std::string(str.C_Str());
+        std::string strImageFile = m_strDirectory+"/"+ std::string(str.C_Str());
         TextureData texData;
         if (m_pGlobalTexture->getTextureDataByName(strImageFile, texData))
         {

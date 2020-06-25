@@ -5,6 +5,21 @@
 
 int main()
 {
-    CaseLoadModelByAssimp();
+    //CaseFirstTriangle();
+    //CaseElementArray();
+    //CaseColorAnimation();
+    //CaseEachVertexColor();
+    //CaseTextureColorBasic();
+    //CaseMultiTexture();
+     //CaseTextureColorArray();
+//     CaseManyFunnyBoxRotate();
+//     CaseMaterial_AmbientDiffuseSpecular();
+//     CaseMaterial_DiffuseNormal();
+//     CaseDirectionLight();
+//     CasePointAttenuationLight();
+//     CaseSpotlight();
+//     CaseMultiLightSource();
+//     CaseElementArrayTRS();
+     CaseLoadModelByAssimp();
     return 0;
 }
