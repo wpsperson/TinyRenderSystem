@@ -168,12 +168,11 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
         "texture_height"
     };
     int nTexTypeCount = sizeof(arrTexTypes) / sizeof(arrTexTypes[0]);
-    //for (int i=0; i< nTexTypeCount; i++ )
-    //{
-    //    aiTextureType textype = arrTexTypes[i];
-    //    loadMaterialTextures(material, textype, arrTexSampleNames[i], pCurTexture);
-    //}
-    loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", pCurTexture);
+    for (int i = 0; i < nTexTypeCount; i++)
+    {
+        aiTextureType textype = arrTexTypes[i];
+        loadMaterialTextures(material, textype, arrTexSampleNames[i], pCurTexture);
+    }
     return pGeode;
 }
 
