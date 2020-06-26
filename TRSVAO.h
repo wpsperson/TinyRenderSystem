@@ -32,7 +32,7 @@ public:
     void setDrawCount(int nCount);
 
     void genVAO(bool bBind = true);
-
+    unsigned int getVAO();
     void bind();
 
     void unBind();

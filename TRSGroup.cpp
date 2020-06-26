@@ -44,6 +44,18 @@ void TRSGroup::traverse(NodeVisitor& visitor)
     }
 }
 
+std::string TRSGroup::debugInfo()
+{
+    std::string strDebugInfo;
+    std::vector<std::shared_ptr<TRSNode>>::iterator itr = m_pChildren.begin();
+    for (; itr != m_pChildren.end(); itr++)
+    {
+        std::shared_ptr<TRSNode> child = *itr;
+        strDebugInfo += child->debugInfo();
+    }
+    return strDebugInfo;
+}
+
 void TRSGroup::insertChild(int idx, std::shared_ptr<TRSNode> pChildNode)
 {
     if (idx >= m_pChildren.size())

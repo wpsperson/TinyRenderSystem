@@ -167,3 +167,9 @@ void TRSShader::applayAllStaticUniform()
     }
     m_mapUniformValue.clear();
 }
+
+std::string TRSShader::debugInfo()
+{
+    std::string strDebugInfo = "shader program: " + std::to_string(program) + ", vs: " + std::to_string(vShader) + ", fs: " + std::to_string(fShader);
+    return strDebugInfo;
+}

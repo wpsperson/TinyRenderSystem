@@ -30,6 +30,8 @@ public:
 
     glm::vec4 getColor() const;
 
+    virtual std::string debugInfo() override;
+
 protected:
     std::shared_ptr<TRSVAO> m_pVAO;
     glm::vec4 m_matColor;

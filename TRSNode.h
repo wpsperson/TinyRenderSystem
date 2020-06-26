@@ -42,7 +42,7 @@ public:
 
     NodeUpdateFunc getUpdateCallBack();
 
-
+    virtual std::string debugInfo() = 0;
 protected:
     glm::mat4 m_mat;
     std::shared_ptr<TRSStateSet> m_pStateSet;

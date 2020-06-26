@@ -1,6 +1,9 @@
 #include "TRSGeode.h"
 #include "TRSVAO.h"
-
+#include <iostream>
+#include "TRSShader.h"
+#include "TRSTexture.h"
+#include "TRSStateSet.h"
 
 
 TRSGeode::TRSGeode()
@@ -54,4 +57,15 @@ std::shared_ptr<TRSVAO> TRSGeode::getVAO() const
 glm::vec4 TRSGeode::getColor() const
 {
     return m_matColor;
+}
+
+std::string TRSGeode::debugInfo()
+{
+    TRSShader* pShader = m_pStateSet->getShader();
+    TRSTexture* pTexture = m_pStateSet->getTexture();
+    std::string strDebugInfo;
+    strDebugInfo = "Geode VAO ID: " + std::to_string(m_pVAO->getVAO());
+    strDebugInfo += pShader->debugInfo();
+    strDebugInfo += pTexture->debugInfo();
+    return strDebugInfo;
 }

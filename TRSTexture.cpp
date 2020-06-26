@@ -52,7 +52,14 @@ int TRSTexture::createTexture(const std::string& imageFile, const std::string& s
     int width, height, channel;
     stbi_set_flip_vertically_on_load(true);
     unsigned char* source = stbi_load(imageFile.c_str(), &width, &height, &channel, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, source);
+    GLenum format = GL_RGB;//默认颜色是RGB格式
+    if (channel == 1)
+        format = GL_RED;
+    else if (channel == 3)
+        format = GL_RGB;
+    else if (channel == 4)
+        format = GL_RGBA;
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, source);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     //最后释放图片内存
@@ -104,4 +111,15 @@ int TRSTexture::count()
 std::vector<std::string> TRSTexture::getSampleNames()
 {
     return m_sSampleNames;
+}
+
+std::string TRSTexture::debugInfo()
+{
+    std::string strDebugInfo;
+    for (int i = 0; i < m_nTextures.size(); i++)
+    {
+        std::string strCurTex ="texture id: " + std::to_string(m_nTextures[i]) + ", imageFile: " + m_sImageFileNames[i] + ", sampleName: " + m_sSampleNames[i];
+        strDebugInfo += strCurTex + "\n";
+    }
+    return strDebugInfo;
 }

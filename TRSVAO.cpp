@@ -202,3 +202,8 @@ void TRSVAO::genVAO(bool bBind /*= true*/)
         glBindVertexArray(VAO);
     }
 }
+
+unsigned int TRSVAO::getVAO()
+{
+    return VAO;
+}

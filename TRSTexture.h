@@ -47,6 +47,8 @@ public:
 
     std::vector<std::string> getSampleNames();
 
+    std::string debugInfo();
+
 protected:
     std::vector<unsigned int> m_nTextures;      //纹理ID
     std::vector<std::string> m_sImageFileNames; //纹理图片的路径

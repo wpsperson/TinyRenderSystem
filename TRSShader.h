@@ -95,6 +95,8 @@ public:
     void addUniformMatrix4(const std::string& uniformName, glm::mat4 mat);
     void applayAllStaticUniform();
 
+    std::string debugInfo();
+
 private:
     //return 0 when failure
     unsigned int createShader(const std::string vShaderFile, GLenum EnShaderType);
