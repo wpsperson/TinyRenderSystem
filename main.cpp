@@ -20,6 +20,6 @@ int main()
 //     CaseSpotlight();
 //     CaseMultiLightSource();
 //     CaseElementArrayTRS();
-     CaseLoadModelByAssimp();
+    CaseLoadModelByAssimp();
     return 0;
 }

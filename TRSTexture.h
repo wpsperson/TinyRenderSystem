@@ -35,7 +35,7 @@ public:
 
     int createTexture(const std::string& imageFile, const std::string& sampleName = "");
 
-    void activeAllTextures();
+    void activeAllTextures(unsigned int program);
 
     //当多个纹理使用相同的纹理图片，可以共享
     void addSharedTexture(const TextureData& textureData);
@@ -44,8 +44,6 @@ public:
     bool getTextureDataByName(const std::string& imageFile, TextureData& outData);
 
     int count();
-
-    std::vector<std::string> getSampleNames();
 
     std::string debugInfo();
 

@@ -88,12 +88,12 @@ void TRSViewer::drawScene()
     {
         std::shared_ptr<TRSStateSet> pStateSet = TRSStateSetManager::instance()->findStateSet(itr->first);
 
-        TRSTexture* pTexture = pStateSet->getTexture();
-        pTexture->activeAllTextures();
         //äÖÈ¾×é¼þ£ºshader vao texture camera
         TRSShader* pShader = pStateSet->getShader();
         pShader->use();
-        pShader->setTexUniform(pTexture->getSampleNames());
+
+        TRSTexture* pTexture = pStateSet->getTexture();
+        pTexture->activeAllTextures(pShader->getProgramId());
 
         std::vector<TRSNode*>& nodeList = itr->second;
         for (std::vector<TRSNode*>::iterator itrNode = nodeList.begin(); itrNode!=nodeList.end(); itrNode++)
@@ -122,6 +122,7 @@ void TRSViewer::drawScene()
             {
                 glDrawArrays(GL_TRIANGLES, 0, pGeode->getVAO()->getDrawCount());
             }
+            pVao->unBind();
         }
 
     }

@@ -59,7 +59,7 @@ int TRSTexture::createTexture(const std::string& imageFile, const std::string& s
         format = GL_RGB;
     else if (channel == 4)
         format = GL_RGBA;
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, source);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, source);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     //最后释放图片内存
@@ -67,12 +67,17 @@ int TRSTexture::createTexture(const std::string& imageFile, const std::string& s
     return m_nTextures[index];
 }
 
-void TRSTexture::activeAllTextures()
+void TRSTexture::activeAllTextures(unsigned int program)
 {
     size_t nCount = m_nTextures.size();
     for (size_t i=0; i<nCount; i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
+        //纹理采样器的Uniform
+        std::string sampleName = m_sSampleNames[i];
+        int loc = glGetUniformLocation(program, sampleName.c_str());
+        glUniform1i(loc, i);
+        //绑定到纹理id上
         glBindTexture(GL_TEXTURE_2D, m_nTextures[i]);
     }
 }
@@ -106,11 +111,6 @@ bool TRSTexture::getTextureDataByName(const std::string& imageFile, TextureData&
 int TRSTexture::count()
 {
     return m_nTextures.size();
-}
-
-std::vector<std::string> TRSTexture::getSampleNames()
-{
-    return m_sSampleNames;
 }
 
 std::string TRSTexture::debugInfo()

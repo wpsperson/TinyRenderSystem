@@ -87,7 +87,6 @@ public:
 
     void use();
 
-    void setTexUniform(const std::vector<std::string> sampleNames);
     void addUniformi(const std::string uniformName, int value);
     void addUniformf(const std::string uniformName, float value);
     void addUniform3v(const std::string uniformName, glm::vec3 vec3Color);
@@ -95,6 +94,7 @@ public:
     void addUniformMatrix4(const std::string& uniformName, glm::mat4 mat);
     void applayAllStaticUniform();
 
+    unsigned int getProgramId();
     std::string debugInfo();
 
 private:

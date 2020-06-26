@@ -3,8 +3,6 @@
 out vec4 FragColor;
 in vec2 ourTex;
 uniform sampler2D texture_diffuse;
-uniform sampler2D texture_specular;
-uniform sampler2D texture_normal;
 void main()
 {
     vec4 color0 = texture(texture_diffuse, ourTex);

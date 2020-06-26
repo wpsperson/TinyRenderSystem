@@ -141,9 +141,10 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
     unsigned int* pIndice = &indices[0];
     //每个vertex顶点数据中有14个float
     pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnAssimpFormat, pIndice, indices.size());
-
-    TRSTexture* pCurTexture = pGeode->getOrCreateStateSet()->getTexture();
-    pGeode->getOrCreateStateSet()->getShader()->createProgram("3_1AssimpTextureVertex.glsl", "3_1AssimpTextureFragment.glsl");
+    TRSStateSet* pStateSet = pGeode->getOrCreateStateSet().get();
+    TRSTexture* pCurTexture = pStateSet->getTexture();
+    TRSShader* pShader = pStateSet->getShader();
+    pShader->createProgram("3_1AssimpTextureVertex.glsl", "3_1AssimpTextureFragment.glsl");
     // process materials
     aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
     // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
@@ -167,11 +168,12 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
         "texture_height"
     };
     int nTexTypeCount = sizeof(arrTexTypes) / sizeof(arrTexTypes[0]);
-    for (int i=0; i< nTexTypeCount; i++ )
-    {
-        aiTextureType textype = arrTexTypes[i];
-        loadMaterialTextures(material, textype, arrTexSampleNames[i], pCurTexture);
-    }
+    //for (int i=0; i< nTexTypeCount; i++ )
+    //{
+    //    aiTextureType textype = arrTexTypes[i];
+    //    loadMaterialTextures(material, textype, arrTexSampleNames[i], pCurTexture);
+    //}
+    loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", pCurTexture);
     return pGeode;
 }
 

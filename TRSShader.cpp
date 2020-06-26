@@ -103,16 +103,6 @@ void TRSShader::addUniformMatrix4(const std::string& uniformName, glm::mat4 mat)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-void TRSShader::setTexUniform(const std::vector<std::string> sampleNames)
-{
-    int nTexCount = sampleNames.size();
-    for (int i=0; i<nTexCount; i++)
-    {
-        std::string strUniformName = sampleNames[i];
-        addUniformi(strUniformName, i);
-    }
-}
-
 unsigned int TRSShader::createShader(const std::string vShaderFile, GLenum EnShaderType)
 {
     unsigned int shader = glCreateShader(EnShaderType);
@@ -166,6 +156,11 @@ void TRSShader::applayAllStaticUniform()
         }
     }
     m_mapUniformValue.clear();
+}
+
+unsigned int TRSShader::getProgramId()
+{
+    return program;
 }
 
 std::string TRSShader::debugInfo()
