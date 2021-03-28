@@ -146,6 +146,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\glfw-3.2.1\lib;$(SolutionDir)ThirdParty\assimp-4.1.0\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y $(SolutionDir)ThirdParty\assimp-4.1.0\bin64\assimp-vc140-mt.dll $(TargetDir)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="1_1BasicFragment.glsl" />
