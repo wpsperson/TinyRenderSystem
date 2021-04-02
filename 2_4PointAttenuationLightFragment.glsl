@@ -1,4 +1,4 @@
-//²ÄÖÊÆ¬¶Î×ÅÉ«Æ÷
+//æè´¨ç‰‡æ®µç€è‰²å™¨
 #version 330 core
 out vec4 FragColor;
 in vec3 Normal;
@@ -19,7 +19,7 @@ struct Light {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-    //¶ÔÓÚË¥¼õµÄµã¹âÔ´µÄ¹«Ê½ÖĞµÄÈı¸öÏî  ¹âÇ¿¶È = 1/(Kc + Kl*d + Kq * d*d)
+    //å¯¹äºè¡°å‡çš„ç‚¹å…‰æºçš„å…¬å¼ä¸­çš„ä¸‰ä¸ªé¡¹  å…‰å¼ºåº¦ = 1/(Kc + Kl*d + Kq * d*d)
     float constant;
     float linear;
     float quadratic;
@@ -48,7 +48,7 @@ void main()
     vec3 normColor = texture(material.specular, TexCoord).rgb;
     float average = (normColor.x + normColor.y + normColor.z) / 3.0f;
     vec3 specular = light.specular * (spec * average);
-    //°´ÕÕµã¹âÔ´¾àÀëË¥¼õ
+    //æŒ‰ç…§ç‚¹å…‰æºè·ç¦»è¡°å‡
     float distance = length(light.position - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance +
         light.quadratic * (distance * distance));

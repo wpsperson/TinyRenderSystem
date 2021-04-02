@@ -1,4 +1,4 @@
-//材质顶点着色器
+//虏脛脰脢露楼碌茫脳脜脡芦脝梅
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;

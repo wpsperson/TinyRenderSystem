@@ -1,4 +1,4 @@
-//材质片段着色器
+//鏉愯川鐗囨鐫�鑹插櫒
 #version 330 core
 out vec4 FragColor;
 in vec3 Normal;
@@ -35,7 +35,7 @@ void main()
 
     //2 diffuse
     vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(light.position - FragPos);//从片段指向光源的向量
+    vec3 lightDir = normalize(light.position - FragPos);//浠庣墖娈垫寚鍚戝厜婧愮殑鍚戦噺
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = light.diffuse * (diff * texture(material.diffuse, TexCoord).rgb);
 
@@ -52,7 +52,7 @@ void main()
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     //if (theta > light.cutOff)
     //{
-    //    // 执行光照计算
+    //    // 鎵ц鍏夌収璁＄畻
     //    vec3 result = ambient + diffuse + specular;
     //    FragColor = vec4(result, 1.0);
     //}

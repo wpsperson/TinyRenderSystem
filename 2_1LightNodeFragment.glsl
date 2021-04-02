@@ -1,4 +1,4 @@
-//灯光节点的片段着色器，指定为白色
+//鐏厜鑺傜偣鐨勭墖娈电潃鑹插櫒锛屾寚瀹氫负鐧借壊
 #version 330 core
 out vec4 FragColor;
 void main()

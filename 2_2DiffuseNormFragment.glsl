@@ -1,4 +1,4 @@
-//²ÄÖÊÆ¬¶Î×ÅÉ«Æ÷
+//Â²Ã„Ã–ÃŠÃ†Â¬Â¶ÃŽÃ—Ã…Ã‰Â«Ã†Ã·
 #version 330 core
 out vec4 FragColor;
 in vec3 Normal;

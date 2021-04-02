@@ -1,4 +1,4 @@
-//灯光节点的顶点着色器
+//鐏厜鑺傜偣鐨勯《鐐圭潃鑹插櫒
 #version 330 core
 layout (location = 0) in vec3 aPos;
 uniform mat4 model;

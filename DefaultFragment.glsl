@@ -1,4 +1,4 @@
-//×î¼òµ¥µÄ×ÅÉ«Æ÷£¬ ´«ÈëÍ³Ò»ÑÕÉ«Öµ
+//æœ€ç®€å•çš„ç€è‰²å™¨ï¼Œ ä¼ å…¥ç»Ÿä¸€é¢œè‰²å€¼
 #version 330 core
 out vec4 FragColor;
 uniform vec4 baseColor;

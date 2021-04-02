@@ -1,4 +1,4 @@
-//两个纹理着色器
+//涓や釜绾圭悊鐫�鑹插櫒
 #version 330 core
 out vec4 FragColor;
 in vec2 ourTex;

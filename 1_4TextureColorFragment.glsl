@@ -9,6 +9,6 @@ void main()
 {
     vec4 tex = texture(ourTexture, texCoord);
     vec4 color = vec4(ourColor, 1.0);
-    //FragColor = tex*0.5 + color*0.5;//ÑÕÉ«½Ïµ­µÄ»ìºÏ
-    FragColor = color*tex;//ÑÕÉ«½ÏÅ¨µÄ»ìºÏ
+    //FragColor = tex*0.5 + color*0.5;//é¢œè‰²è¾ƒæ·¡çš„æ··åˆ
+    FragColor = color*tex;//é¢œè‰²è¾ƒæµ“çš„æ··åˆ
 } 
