@@ -1,4 +1,4 @@
-#include "TRSShader.h"
+ï»¿#include "TRSShader.h"
 #include "TRSUtils.h"
 #include "TRSConst.h"
 
@@ -43,7 +43,7 @@ unsigned int TRSShader::createProgram(bool delShader)
         std::cout << "ERROR::PROGRAM::LINK: " << info << std::endl;
         return 0;
     }
-    if (delShader)//ÊÍ·ÅShaderÄÚ´æ
+    if (delShader)//é‡Šæ”¾Shaderå†…å­˜
     {
         glDeleteShader(vShader);
         glDeleteShader(fShader);
@@ -118,7 +118,7 @@ unsigned int TRSShader::createShader(const std::string vShaderFile, GLenum EnSha
         std::cout << "ERROR::SHADER::COMPILE: " << info << std::endl;
         return 0;
     }
-    delete[] source;//ÊÍ·ÅÄÚ´æ
+    delete[] source;//é‡Šæ”¾å†…å­˜
     return shader;
 }
 

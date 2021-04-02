@@ -1,4 +1,4 @@
-#include "TRSUtils.h"
+ï»¿#include "TRSUtils.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -6,7 +6,7 @@
 using namespace std;
 char* getTextFromFile(const char* fileName)
 {
-    FILE* pFile = fopen(fileName, "rt");//ÕâÀï¼ÓÔØÒ»¸öPEÎÄ¼ş  
+    FILE* pFile = fopen(fileName, "rt");//è¿™é‡ŒåŠ è½½ä¸€ä¸ªPEæ–‡ä»¶  
     fseek(pFile, 0, SEEK_END);
     int len = ftell(pFile);
     char* szBuf = new char[len];

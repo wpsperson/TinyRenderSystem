@@ -1,4 +1,4 @@
-#include "TRSAssimpLoader.h"
+ï»¿#include "TRSAssimpLoader.h"
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
@@ -139,7 +139,7 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
     float* pData = (float*)(&vertices[0]);
     unsigned int* pIndice = &indices[0];
-    //Ã¿¸övertex¶¥µãÊý¾ÝÖÐÓÐ14¸öfloat
+    //æ¯ä¸ªvertexé¡¶ç‚¹æ•°æ®ä¸­æœ‰14ä¸ªfloat
     pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnAssimpFormat, pIndice, indices.size());
     TRSStateSet* pStateSet = pGeode->getOrCreateStateSet().get();
     TRSTexture* pCurTexture = pStateSet->getTexture();

@@ -1,21 +1,21 @@
-/*!  
- *@brief    È«¾ÖÓÃ»§ÊäÈë»Øµ÷º¯Êı
+ï»¿/*!  
+ *@brief    å…¨å±€ç”¨æˆ·è¾“å…¥å›è°ƒå‡½æ•°
  *@author   wangps
- *@date     2019Äê5ÔÂ5ÈÕ
+ *@date     2019å¹´5æœˆ5æ—¥
  */
 
 #pragma once
 #include "TRSExport.h"
 class GLFWwindow;
 
-//´°Ìå³ß´ç±ä»¯»Øµ÷
+//çª—ä½“å°ºå¯¸å˜åŒ–å›è°ƒ
 TRS_EXPORT void TRSWindowChangeCallBack(GLFWwindow* window, int w, int h);
 
-//Êó±êÒÆ¶¯»Øµ÷
+//é¼ æ ‡ç§»åŠ¨å›è°ƒ
 TRS_EXPORT void TRSMouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos);
 
-//¼üÅÌ°´ÏÂ»Øµ÷
+//é”®ç›˜æŒ‰ä¸‹å›è°ƒ
 TRS_EXPORT void TRSKeyboardCallBack(GLFWwindow* pWindow);
 
-//Êó±ê¹öÂÖ»Øµ÷
+//é¼ æ ‡æ»šè½®å›è°ƒ
 TRS_EXPORT void TRSMouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double yScroll);

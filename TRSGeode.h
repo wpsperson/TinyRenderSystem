@@ -1,7 +1,7 @@
-/*!
-*@brief    ÏÔÊ¾½ÚµãÒ¶½Úµã
+ï»¿/*!
+*@brief    æ˜¾ç¤ºèŠ‚ç‚¹å¶èŠ‚ç‚¹
 *@author   wangps
-*@date     2019Äê5ÔÂ5ÈÕ
+*@date     2019å¹´5æœˆ5æ—¥
 */
 
 #pragma once
@@ -14,14 +14,14 @@ class TRS_EXPORT TRSGeode : public TRSNode
 public:
     TRSGeode();
 
-    //¿½±´¹¹Ôìº¯Êı¾ÍÊÇ¹²ÏíVBO
+    //æ‹·è´æ„é€ å‡½æ•°å°±æ˜¯å…±äº«VBO
     TRSGeode(const TRSGeode& refObj, bool bSameStateset = true);
 
     TRSGeode(float* vertices, int verticeSize, EnVertexStruct EnVertType);
 
     ~TRSGeode();
 
-    //vertices float point. verticeSize±íÊ¾ÓĞ¶àÉÙ¸öfloat
+    //vertices float point. verticeSizeè¡¨ç¤ºæœ‰å¤šå°‘ä¸ªfloat
     virtual void readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType);
 
     virtual void readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount);

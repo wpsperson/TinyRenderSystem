@@ -1,7 +1,7 @@
-/*!  
- *@brief    ÎÆÀí
+ï»¿/*!  
+ *@brief    çº¹ç†
  *@author   wangps
- *@date     2019Äê5ÔÂ3ÈÕ
+ *@date     2019å¹´5æœˆ3æ—¥
  */
 
 #pragma once
@@ -9,7 +9,7 @@
 #include <string>
 #include "TRSExport.h"
 
-//ÎÆÀíÊı¾İ£¬±íÕ÷Ò»¸öÎÆÀíµÄÊı¾İ½á¹¹
+//çº¹ç†æ•°æ®ï¼Œè¡¨å¾ä¸€ä¸ªçº¹ç†çš„æ•°æ®ç»“æ„
 struct TextureData
 {
     unsigned int id;
@@ -37,10 +37,10 @@ public:
 
     void activeAllTextures(unsigned int program);
 
-    //µ±¶à¸öÎÆÀíÊ¹ÓÃÏàÍ¬µÄÎÆÀíÍ¼Æ¬£¬¿ÉÒÔ¹²Ïí
+    //å½“å¤šä¸ªçº¹ç†ä½¿ç”¨ç›¸åŒçš„çº¹ç†å›¾ç‰‡ï¼Œå¯ä»¥å…±äº«
     void addSharedTexture(const TextureData& textureData);
 
-    //²éÑ¯ÎÆÀí¶ÔÏóÖĞÊÇ·ñ´æÔÚÎÄ¼şÃûÎªimageFileµÄÎÆÀí£¬Èç¹ûÓĞ£¬·µ»ØÎÆÀíÊı¾İ
+    //æŸ¥è¯¢çº¹ç†å¯¹è±¡ä¸­æ˜¯å¦å­˜åœ¨æ–‡ä»¶åä¸ºimageFileçš„çº¹ç†ï¼Œå¦‚æœæœ‰ï¼Œè¿”å›çº¹ç†æ•°æ®
     bool getTextureDataByName(const std::string& imageFile, TextureData& outData);
 
     int count();
@@ -48,8 +48,8 @@ public:
     std::string debugInfo();
 
 protected:
-    std::vector<unsigned int> m_nTextures;      //ÎÆÀíID
-    std::vector<std::string> m_sImageFileNames; //ÎÆÀíÍ¼Æ¬µÄÂ·¾¶
-    std::vector<std::string> m_sSampleNames;    //×ÅÉ«Æ÷ÖĞ²ÉÑùÆ÷µÄÃû³Æ
+    std::vector<unsigned int> m_nTextures;      //çº¹ç†ID
+    std::vector<std::string> m_sImageFileNames; //çº¹ç†å›¾ç‰‡çš„è·¯å¾„
+    std::vector<std::string> m_sSampleNames;    //ç€è‰²å™¨ä¸­é‡‡æ ·å™¨çš„åç§°
 };
 

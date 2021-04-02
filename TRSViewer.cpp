@@ -1,4 +1,4 @@
-#include "TRSViewer.h"
+ï»¿#include "TRSViewer.h"
 #include "TRSConfig.h"
 #include "TRSConst.h"
 #include <iostream>
@@ -53,7 +53,7 @@ void TRSViewer::run()
     {
         return;
     }
-    //äÖÈ¾Ç°Ä¬ÈÏÉèÖÃ
+    //æ¸²æŸ“å‰é»˜è®¤è®¾ç½®
     defaultSetting();
     while (true)
     {
@@ -88,7 +88,7 @@ void TRSViewer::drawScene()
     {
         std::shared_ptr<TRSStateSet> pStateSet = TRSStateSetManager::instance()->findStateSet(itr->first);
 
-        //äÖÈ¾×é¼ş£ºshader vao texture camera
+        //æ¸²æŸ“ç»„ä»¶ï¼šshader vao texture camera
         TRSShader* pShader = pStateSet->getShader();
         pShader->use();
 

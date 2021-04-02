@@ -1,7 +1,7 @@
-/*!  
- *@brief    TinyRenderSystem µÄ³£Á¿
+ï»¿/*!  
+ *@brief    TinyRenderSystem çš„å¸¸é‡
  *@author   wangps
- *@date     2019Äê5ÔÂ3ÈÕ
+ *@date     2019å¹´5æœˆ3æ—¥
  */
 
 #pragma once
@@ -21,16 +21,16 @@ enum EnVertexStruct
 
 #define DefaultWindowWidth 800
 #define DefaultWindowHeight 600
-//Ä¬ÈÏ±³¾°ÑÕÉ«£¬ÉîÀ¶É«
+//é»˜è®¤èƒŒæ™¯é¢œè‰²ï¼Œæ·±è“è‰²
 static glm::vec4 s_DefaultBGColor(0.2, 0.2, 0.4, 1);
 
-//Ä¬ÈÏ½ÚµãÑÕÉ«£¬Ç³°×É«
+//é»˜è®¤èŠ‚ç‚¹é¢œè‰²ï¼Œæµ…ç™½è‰²
 static glm::vec4 s_DefaultNodeColor(0.5, 0.5, 0.5, 1);
 
 static glm::vec3 s_DefaultCameraPos(0, 0, 3.0f);
 
-static float s_NearDistance = 0.1f;  //½üÆ½Ãæ
-static float s_FarDistance = 100.0f;   //Ô¶Æ½Ãæ
+static float s_NearDistance = 0.1f;  //è¿‘å¹³é¢
+static float s_FarDistance = 100.0f;   //è¿œå¹³é¢
 
 static const char* s_TextUnitPrefix = "texture";
 

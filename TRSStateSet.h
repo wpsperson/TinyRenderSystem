@@ -1,7 +1,7 @@
-/*!
-*@brief    äÖÈ¾×´Ì¬¼¯ ×´Ì¬¼¯¹ÜÀíÆ÷
+ï»¿/*!
+*@brief    æ¸²æŸ“çŠ¶æ€é›† çŠ¶æ€é›†ç®¡ç†å™¨
 *@author   wangps
-*@date     2019Äê5ÔÂ5ÈÕ
+*@date     2019å¹´5æœˆ5æ—¥
 */
 
 #pragma once
@@ -36,7 +36,7 @@ protected:
 
 protected:
     int m_nID;
-    std::vector<TRSNode*> m_pNodes;//¹²Ïí´Ë×´Ì¬¼¯µÄÏÔÊ¾½Úµã
+    std::vector<TRSNode*> m_pNodes;//å…±äº«æ­¤çŠ¶æ€é›†çš„æ˜¾ç¤ºèŠ‚ç‚¹
     TRSStateSetManager* m_pManager;
     TRSShader* m_pShader;
     TRSTexture* m_pTexture;

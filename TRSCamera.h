@@ -1,7 +1,7 @@
-/*!  
- *@brief    Ïà»ú
+ï»¿/*!  
+ *@brief    ç›¸æœº
  *@author   wangps
- *@date     2019Äê5ÔÂ3ÈÕ
+ *@date     2019å¹´5æœˆ3æ—¥
  */
 
 #pragma once
@@ -32,17 +32,17 @@ public:
     void mouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double yScroll);
 
 protected:
-    glm::vec3 m_pos;        //Ïà»úµ±Ç°Î»ÖÃ
-    glm::vec3 m_front;      //Ïà»úµÄÇ°Ïò·½Ïò£¬Ïà»úµ±Ç°Î»ÖÃÖ¸Ïò¹Û²ìÖĞĞÄµãµÄÏòÁ¿
-    glm::vec3 m_right;      //Ïà»úµÄÓÒÊÖ·½Ïò£¬¼´¾Ö²¿×ø±êÏµµÄXÖáÏòÔÚÊÀ½ç×ø±êÏµÖĞµÄÏòÁ¿
-    glm::vec3 m_up;         //Ïà»úµÄÍ·¶¥·½Ïò£¬¼´¾Ö²¿×ø±êÏµµÄYÖáÏòÔÚÊÀ½ç×ø±êÏµÖĞµÄÏòÁ¿
+    glm::vec3 m_pos;        //ç›¸æœºå½“å‰ä½ç½®
+    glm::vec3 m_front;      //ç›¸æœºçš„å‰å‘æ–¹å‘ï¼Œç›¸æœºå½“å‰ä½ç½®æŒ‡å‘è§‚å¯Ÿä¸­å¿ƒç‚¹çš„å‘é‡
+    glm::vec3 m_right;      //ç›¸æœºçš„å³æ‰‹æ–¹å‘ï¼Œå³å±€éƒ¨åæ ‡ç³»çš„Xè½´å‘åœ¨ä¸–ç•Œåæ ‡ç³»ä¸­çš„å‘é‡
+    glm::vec3 m_up;         //ç›¸æœºçš„å¤´é¡¶æ–¹å‘ï¼Œå³å±€éƒ¨åæ ‡ç³»çš„Yè½´å‘åœ¨ä¸–ç•Œåæ ‡ç³»ä¸­çš„å‘é‡
 
-    float m_fMoveSpeed;     //wsad¼üÅÌÒÆ¶¯ÏµÊı
-    float m_fMouseSensity;  //Êó±êÒÆ¶¯µÄÃô¸ĞÏµÊı
+    float m_fMoveSpeed;     //wsadé”®ç›˜ç§»åŠ¨ç³»æ•°
+    float m_fMouseSensity;  //é¼ æ ‡ç§»åŠ¨çš„æ•æ„Ÿç³»æ•°
 
-    float m_fPitch;         //Êó±êÉÏÏÂÒÆ¶¯²úÉúµÄ¸©Ñö½Ç -89~89
-    float m_fYaw;           //Êó±êÉÏÏÂÒÆ¶¯²úÉúµÄÆ«º½½Ç ÎŞÏŞÖÆ
-    float m_fFov;          //Êó±ê¹öÂÖ¹ö¶¯²úÉúµÄfov·Å´óËõĞ¡ 45-90
+    float m_fPitch;         //é¼ æ ‡ä¸Šä¸‹ç§»åŠ¨äº§ç”Ÿçš„ä¿¯ä»°è§’ -89~89
+    float m_fYaw;           //é¼ æ ‡ä¸Šä¸‹ç§»åŠ¨äº§ç”Ÿçš„åèˆªè§’ æ— é™åˆ¶
+    float m_fFov;          //é¼ æ ‡æ»šè½®æ»šåŠ¨äº§ç”Ÿçš„fovæ”¾å¤§ç¼©å° 45-90
     float m_fLastX;
     float m_fLastY;
     GLFWwindow* m_pWindow;

@@ -1,4 +1,4 @@
-#include "TRSTexture.h"
+ï»¿#include "TRSTexture.h"
 #include <iostream>
 #include <cstdarg>
 #include <glad/glad.h>
@@ -52,7 +52,7 @@ int TRSTexture::createTexture(const std::string& imageFile, const std::string& s
     int width, height, channel;
     stbi_set_flip_vertically_on_load(true);
     unsigned char* source = stbi_load(imageFile.c_str(), &width, &height, &channel, 0);
-    GLenum format = GL_RGB;//Ä¬ÈÏÑÕÉ«ÊÇRGB¸ñÊ½
+    GLenum format = GL_RGB;//é»˜è®¤é¢œè‰²æ˜¯RGBæ ¼å¼
     if (channel == 1)
         format = GL_RED;
     else if (channel == 3)
@@ -62,7 +62,7 @@ int TRSTexture::createTexture(const std::string& imageFile, const std::string& s
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, source);
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    //×îºóÊÍ·ÅÍ¼Æ¬ÄÚ´æ
+    //æœ€åé‡Šæ”¾å›¾ç‰‡å†…å­˜
     stbi_image_free(source);
     return m_nTextures[index];
 }
@@ -73,11 +73,11 @@ void TRSTexture::activeAllTextures(unsigned int program)
     for (size_t i=0; i<nCount; i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
-        //ÎÆÀí²ÉÑùÆ÷µÄUniform
+        //çº¹ç†é‡‡æ ·å™¨çš„Uniform
         std::string sampleName = m_sSampleNames[i];
         int loc = glGetUniformLocation(program, sampleName.c_str());
         glUniform1i(loc, i);
-        //°ó¶¨µ½ÎÆÀíidÉÏ
+        //ç»‘å®šåˆ°çº¹ç†idä¸Š
         glBindTexture(GL_TEXTURE_2D, m_nTextures[i]);
     }
 }

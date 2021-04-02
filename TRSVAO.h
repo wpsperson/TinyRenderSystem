@@ -1,7 +1,7 @@
-/*!  
+ï»¿/*!  
  *@brief    VAO
  *@author   wangps
- *@date     2019Äê5ÔÂ3ÈÕ
+ *@date     2019å¹´5æœˆ3æ—¥
  */
 
 #pragma once
@@ -18,15 +18,15 @@ public:
 
     void createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount);
 
-    //»ñÈ¡VBO
+    //è·å–VBO
     unsigned int getVBO() const;
-    //ÉèÖÃVBO
+    //è®¾ç½®VBO
     void setVBO(unsigned int vbo);
-    //BuffµÄÀàĞÍ
+    //Buffçš„ç±»å‹
     EnVertexStruct getBufferType() const;
-    //ÉèÖÃBuffµÄÀàĞÍ
+    //è®¾ç½®Buffçš„ç±»å‹
     void setBuffType(EnVertexStruct buffType);
-    //»æÖÆÊı×éµÄÊıÁ¿
+    //ç»˜åˆ¶æ•°ç»„çš„æ•°é‡
     int getDrawCount() const;
     int getElementCount() const;
     void setDrawCount(int nCount);
@@ -50,9 +50,9 @@ protected:
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
-    EnVertexStruct m_EnVertType;///<¶¥µãÊı×éµÄ¸ñÊ½ÀàĞÍ
-    int m_nDrawCount;           ///<¶¥µãÊı×é»æÖÆÊıÁ¿
-    int m_nElementCount;        ///<Ë÷ÒıÊı×éµÄ»æÖÆÊıÁ¿
+    EnVertexStruct m_EnVertType;///<é¡¶ç‚¹æ•°ç»„çš„æ ¼å¼ç±»å‹
+    int m_nDrawCount;           ///<é¡¶ç‚¹æ•°ç»„ç»˜åˆ¶æ•°é‡
+    int m_nElementCount;        ///<ç´¢å¼•æ•°ç»„çš„ç»˜åˆ¶æ•°é‡
 };
 
 

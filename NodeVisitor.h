@@ -1,7 +1,7 @@
-/*!
- *@brief     ½Úµã·ÃÎÊÆ÷
+ï»¿/*!
+ *@brief     èŠ‚ç‚¹è®¿é—®å™¨
  *@author     wangps
- *@date       2019Äê5ÔÂ11ÈÕ
+ *@date       2019å¹´5æœˆ11æ—¥
  */
 
 #pragma once
@@ -13,11 +13,11 @@ class TRS_EXPORT NodeVisitor
 public:
     NodeVisitor();
     ~NodeVisitor();
-    //·ÃÎÊ½Úµã
+    //è®¿é—®èŠ‚ç‚¹
     virtual void visit(TRSNode* pNode);
-    //¶Ô½ÚµãµÄÊµ¼Ê²Ù×÷
+    //å¯¹èŠ‚ç‚¹çš„å®é™…æ“ä½œ
     virtual void execute(TRSNode* pNode);
-    //ÖØÖÃ×´Ì¬
+    //é‡ç½®çŠ¶æ€
     virtual void reset();
 
     int getExeCount() const;

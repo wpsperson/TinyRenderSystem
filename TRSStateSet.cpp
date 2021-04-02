@@ -1,4 +1,4 @@
-#include "TRSStateSet.h"
+ï»¿#include "TRSStateSet.h"
 #include "TRSShader.h"
 #include "TRSTexture.h"
 
@@ -49,7 +49,7 @@ TRSStateSetManager* TRSStateSetManager::m_pInstance = nullptr;
 TRSStateSetManager::TRSStateSetManager()
     :m_nNewID(0)
 {
-    m_pDefaultStateSet = std::make_shared<TRSStateSet>(this);//Ä¬ÈÏ×´Ì¬¼¯µÄidÊÇ0
+    m_pDefaultStateSet = std::make_shared<TRSStateSet>(this);//é»˜è®¤çŠ¶æ€é›†çš„idæ˜¯0
     m_pDefaultStateSet->getShader()->createProgram("DefaultVertex.glsl", "DefaultFragment.glsl");
     m_StateSets.insert(std::make_pair(m_pDefaultStateSet->id(), m_pDefaultStateSet));
 }

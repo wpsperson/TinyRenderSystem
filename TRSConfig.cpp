@@ -1,4 +1,4 @@
-#include "TRSConfig.h"
+ï»¿#include "TRSConfig.h"
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <iostream>
@@ -19,7 +19,7 @@ bool TRSConfig::initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //ÕâÀïÓĞÒ»¸ö¿Ó£¬Ò»¶¨ÒªÏÈ´´½¨ÉÏÏÂÎÄContextCurrent£¬È»ºóÔÙÈÃglad¶¯Ì¬¼ÓÔØopenglº¯Êı
+    //è¿™é‡Œæœ‰ä¸€ä¸ªå‘ï¼Œä¸€å®šè¦å…ˆåˆ›å»ºä¸Šä¸‹æ–‡ContextCurrentï¼Œç„¶åå†è®©gladåŠ¨æ€åŠ è½½openglå‡½æ•°
     GLFWwindow* pWindow = glfwCreateWindow(w, y, "Tiny Render System", nullptr, nullptr);
     if (!pWindow)
     {
@@ -28,7 +28,7 @@ bool TRSConfig::initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window)
         return false;
     }
     glfwMakeContextCurrent(pWindow);
-    //ÏÈ´´½¨´°Ìå£¬ÔÙÈÃglad¶¯Ì¬¼ÓÔØopenglº¯Êı
+    //å…ˆåˆ›å»ºçª—ä½“ï¼Œå†è®©gladåŠ¨æ€åŠ è½½openglå‡½æ•°
     int ret = gladLoadGLLoader(GLADloadproc(glfwGetProcAddress));
     if (!ret)
     {
@@ -43,9 +43,9 @@ bool TRSConfig::initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window)
 bool TRSConfig::registerUserInputFunc(GLFWwindow *window)
 {
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    //×¢²áÓÃ»§Êó±êÎ»ÖÃ»Øµ÷
+    //æ³¨å†Œç”¨æˆ·é¼ æ ‡ä½ç½®å›è°ƒ
     glfwSetCursorPosCallback(window, TRSMouseMoveCallBack);
-    //Êó±ê¹öÂÖ¹ö¶¯»Øµ÷
+    //é¼ æ ‡æ»šè½®æ»šåŠ¨å›è°ƒ
     glfwSetScrollCallback(window, TRSMouseScrollCallBack);
     //
     glfwSetFramebufferSizeCallback(window, TRSWindowChangeCallBack);

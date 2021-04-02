@@ -1,7 +1,7 @@
-/*!  
- *@brief    µ¼³ö½Ó¿Ú
+ï»¿/*!  
+ *@brief    å¯¼å‡ºæ¥å£
  *@author   wangps
- *@date     2019Äê5ÔÂ3ÈÕ
+ *@date     2019å¹´5æœˆ3æ—¥
  */
 
 #pragma once

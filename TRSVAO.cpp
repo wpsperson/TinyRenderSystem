@@ -1,4 +1,4 @@
-#include "TRSVAO.h"
+ï»¿#include "TRSVAO.h"
 #include <glad/glad.h>
 #include "TRSConst.h"
 
@@ -50,14 +50,14 @@ void TRSVAO::createVBO(float* vertices, int verticeSize)
 {
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, verticeSize * sizeof(float), vertices, GL_STATIC_DRAW);//×¢ÒâÕâÀïÊıÁ¿µÄ´óĞ¡¾ÍÊÇverticesµÄÄÚ´æ´óĞ¡
+    glBufferData(GL_ARRAY_BUFFER, verticeSize * sizeof(float), vertices, GL_STATIC_DRAW);//æ³¨æ„è¿™é‡Œæ•°é‡çš„å¤§å°å°±æ˜¯verticesçš„å†…å­˜å¤§å°
 }
 
 void TRSVAO::createEBO(unsigned int* indice, int indexCount)
 {
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount*sizeof(unsigned int), indice, GL_STATIC_DRAW);//×¢ÒâÕâÀïÊıÁ¿µÄ´óĞ¡¾ÍÊÇindiceµÄÄÚ´æ´óĞ¡
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount*sizeof(unsigned int), indice, GL_STATIC_DRAW);//æ³¨æ„è¿™é‡Œæ•°é‡çš„å¤§å°å°±æ˜¯indiceçš„å†…å­˜å¤§å°
 }
 
 void TRSVAO::setVertexAttrib(EnVertexStruct EnVertType)

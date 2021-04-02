@@ -1,4 +1,4 @@
-#include "AllDemoCodes.h"
+ï»¿#include "AllDemoCodes.h"
 #include "TRSTexture.h"
 #include "TRSVAO.h"
 #include "TRSResource.h"
@@ -29,7 +29,7 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
-//×î¼òµ¥µÄ£¬µÚÒ»¸öÈı½ÇĞÎ
+//æœ€ç®€å•çš„ï¼Œç¬¬ä¸€ä¸ªä¸‰è§’å½¢
 int CaseFirstTriangle()
 {
     float vertices[] = {
@@ -120,19 +120,19 @@ int CaseFirstTriangle()
     glfwTerminate();
     return 0;
 }
-//²ÉÓÃElementArray»æÖÆ
+//é‡‡ç”¨ElementArrayç»˜åˆ¶
 int CaseElementArray()
 {
     float vertices[] = {
-        0.5f, 0.5f, 0.0f,   // ÓÒÉÏ½Ç
-        0.5f, -0.5f, 0.0f,  // ÓÒÏÂ½Ç
-        -0.5f, -0.5f, 0.0f, // ×óÏÂ½Ç
-        -0.5f, 0.5f, 0.0f   // ×óÉÏ½Ç
+        0.5f, 0.5f, 0.0f,   // å³ä¸Šè§’
+        0.5f, -0.5f, 0.0f,  // å³ä¸‹è§’
+        -0.5f, -0.5f, 0.0f, // å·¦ä¸‹è§’
+        -0.5f, 0.5f, 0.0f   // å·¦ä¸Šè§’
     };
 
-    unsigned int indices[] = { // ×¢ÒâË÷Òı´Ó0¿ªÊ¼! 
-        0, 1, 3, // µÚÒ»¸öÈı½ÇĞÎ
-        1, 2, 3  // µÚ¶ş¸öÈı½ÇĞÎ
+    unsigned int indices[] = { // æ³¨æ„ç´¢å¼•ä»0å¼€å§‹! 
+        0, 1, 3, // ç¬¬ä¸€ä¸ªä¸‰è§’å½¢
+        1, 2, 3  // ç¬¬äºŒä¸ªä¸‰è§’å½¢
     };
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -221,7 +221,7 @@ int CaseElementArray()
     glfwTerminate();
     return 0;
 }
-//ËæÊ±¼ä±ä»¯µÄÑÕÉ«Í³Ò»Öµ£¬Èı½ÇĞÎÑÕÉ«½¥±ä
+//éšæ—¶é—´å˜åŒ–çš„é¢œè‰²ç»Ÿä¸€å€¼ï¼Œä¸‰è§’å½¢é¢œè‰²æ¸å˜
 int CaseColorAnimation()
 {
     float vertices[] = {
@@ -317,14 +317,14 @@ int CaseColorAnimation()
     glfwTerminate();
     return 0;
 }
-//Èı½ÇĞÎ¸ü¶àÊôĞÔ£¬Ã¿¸ö¶¥µãÒ»¸öÑÕÉ«¡£
+//ä¸‰è§’å½¢æ›´å¤šå±æ€§ï¼Œæ¯ä¸ªé¡¶ç‚¹ä¸€ä¸ªé¢œè‰²ã€‚
 int CaseEachVertexColor()
 {
     float vertices[] = {
-        // Î»ÖÃ              // ÑÕÉ«
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // ÓÒÏÂ
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // ×óÏÂ
-        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // ¶¥²¿
+        // ä½ç½®              // é¢œè‰²
+        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // å³ä¸‹
+        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // å·¦ä¸‹
+        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // é¡¶éƒ¨
     };
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -412,19 +412,19 @@ int CaseEachVertexColor()
     return 0;
 }
 
-//ÎÆÀíºÍÃ¿¸ö¶¥µãÑÕÉ«»ìºÏ
+//çº¹ç†å’Œæ¯ä¸ªé¡¶ç‚¹é¢œè‰²æ··åˆ
 int CaseTextureColorBasic()
 {
     float vertices[] = {
-        //     ---- Î»ÖÃ ----       ---- ÑÕÉ« ----     - ÎÆÀí×ø±ê -
-        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // ÓÒÉÏ
-        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // ÓÒÏÂ
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // ×óÏÂ
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // ×óÉÏ
+        //     ---- ä½ç½® ----       ---- é¢œè‰² ----     - çº¹ç†åæ ‡ -
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // å³ä¸Š
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // å³ä¸‹
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // å·¦ä¸‹
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // å·¦ä¸Š
     };
-    unsigned int indices[] = { // ×¢ÒâË÷Òı´Ó0¿ªÊ¼! 
-        0, 1, 3, // µÚÒ»¸öÈı½ÇĞÎ
-        1, 2, 3  // µÚ¶ş¸öÈı½ÇĞÎ
+    unsigned int indices[] = { // æ³¨æ„ç´¢å¼•ä»0å¼€å§‹! 
+        0, 1, 3, // ç¬¬ä¸€ä¸ªä¸‰è§’å½¢
+        1, 2, 3  // ç¬¬äºŒä¸ªä¸‰è§’å½¢
     };
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -503,12 +503,12 @@ int CaseTextureColorBasic()
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    // Îªµ±Ç°°ó¶¨µÄÎÆÀí¶ÔÏóÉèÖÃ»·ÈÆ¡¢¹ıÂË·½Ê½
+    // ä¸ºå½“å‰ç»‘å®šçš„çº¹ç†å¯¹è±¡è®¾ç½®ç¯ç»•ã€è¿‡æ»¤æ–¹å¼
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // ¼ÓÔØ²¢Éú³ÉÎÆÀí
+    // åŠ è½½å¹¶ç”Ÿæˆçº¹ç†
     int width, height, nrChannels;
     unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
     if (data)
@@ -531,7 +531,7 @@ int CaseTextureColorBasic()
 
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        glActiveTexture(GL_TEXTURE0);//Õâ¾ä¿ÉÒÔ²»Ğ´£¬ÒòÎªÄ¬ÈÏTexture0×ÜÊÇ±»¼¤»î¡£
+        glActiveTexture(GL_TEXTURE0);//è¿™å¥å¯ä»¥ä¸å†™ï¼Œå› ä¸ºé»˜è®¤Texture0æ€»æ˜¯è¢«æ¿€æ´»ã€‚
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
         glBindVertexArray(0);
@@ -542,19 +542,19 @@ int CaseTextureColorBasic()
     glfwTerminate();
     return 0;
 }
-//Á½¸öÎÆÀí»ìºÏ£¨Á½¸öÎÆÀí»ìºÏ¼æÃ¿¸ö¶¥µãÑÕÉ«»ìºÏ£©
+//ä¸¤ä¸ªçº¹ç†æ··åˆï¼ˆä¸¤ä¸ªçº¹ç†æ··åˆå…¼æ¯ä¸ªé¡¶ç‚¹é¢œè‰²æ··åˆï¼‰
 int CaseMultiTexture()
 {
     float vertices[] = {
-        //     ---- Î»ÖÃ ----       ---- ÑÕÉ« ----     - ÎÆÀí×ø±ê -
-        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // ÓÒÉÏ
-        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // ÓÒÏÂ
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // ×óÏÂ
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // ×óÉÏ
+        //     ---- ä½ç½® ----       ---- é¢œè‰² ----     - çº¹ç†åæ ‡ -
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // å³ä¸Š
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // å³ä¸‹
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // å·¦ä¸‹
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // å·¦ä¸Š
     };
-    unsigned int indices[] = { // ×¢ÒâË÷Òı´Ó0¿ªÊ¼! 
-        0, 1, 3, // µÚÒ»¸öÈı½ÇĞÎ
-        1, 2, 3  // µÚ¶ş¸öÈı½ÇĞÎ
+    unsigned int indices[] = { // æ³¨æ„ç´¢å¼•ä»0å¼€å§‹! 
+        0, 1, 3, // ç¬¬ä¸€ä¸ªä¸‰è§’å½¢
+        1, 2, 3  // ç¬¬äºŒä¸ªä¸‰è§’å½¢
     };
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -633,14 +633,14 @@ int CaseMultiTexture()
     unsigned int BoxTexture;
     glGenTextures(1, &BoxTexture);
     glBindTexture(GL_TEXTURE_2D, BoxTexture);
-    // Îªµ±Ç°°ó¶¨µÄÎÆÀí¶ÔÏóÉèÖÃ»·ÈÆ¡¢¹ıÂË·½Ê½
+    // ä¸ºå½“å‰ç»‘å®šçš„çº¹ç†å¯¹è±¡è®¾ç½®ç¯ç»•ã€è¿‡æ»¤æ–¹å¼
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // ¼ÓÔØ²¢Éú³ÉÎÆÀí
+    // åŠ è½½å¹¶ç”Ÿæˆçº¹ç†
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);//¼ÓÔØÍ¼Æ¬·­×ª
+    stbi_set_flip_vertically_on_load(true);//åŠ è½½å›¾ç‰‡ç¿»è½¬
     unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
@@ -656,7 +656,7 @@ int CaseMultiTexture()
     unsigned int FaceTexture;
     glGenTextures(1, &FaceTexture);
     glBindTexture(GL_TEXTURE_2D, FaceTexture);
-    // Îªµ±Ç°°ó¶¨µÄÎÆÀí¶ÔÏóÉèÖÃ»·ÈÆ¡¢¹ıÂË·½Ê½
+    // ä¸ºå½“å‰ç»‘å®šçš„çº¹ç†å¯¹è±¡è®¾ç½®ç¯ç»•ã€è¿‡æ»¤æ–¹å¼
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -673,7 +673,7 @@ int CaseMultiTexture()
     }
     stbi_image_free(data2);
 
-    //Õâ²¿·Ö±¾À´ÓÃ²»µ½£¬µ«ÒòÎªºóÃæÊ¹ÓÃTRSäÖÈ¾ÒıÇæ£¬ĞŞ¸ÄÁË¹²Í¬µÄshader£¬ËùÒÔ´Ë´¦ÊÊÅäÒ»ÏÂ
+    //è¿™éƒ¨åˆ†æœ¬æ¥ç”¨ä¸åˆ°ï¼Œä½†å› ä¸ºåé¢ä½¿ç”¨TRSæ¸²æŸ“å¼•æ“ï¼Œä¿®æ”¹äº†å…±åŒçš„shaderï¼Œæ‰€ä»¥æ­¤å¤„é€‚é…ä¸€ä¸‹
     int nPosModelMatrix = glGetUniformLocation(shaderProgram, "model");
     int nPosViewMatrix = glGetUniformLocation(shaderProgram, "view");
     int nPosProjectMatrix = glGetUniformLocation(shaderProgram, "projection");
@@ -682,9 +682,9 @@ int CaseMultiTexture()
     glUniformMatrix4fv(nPosViewMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
     glUniformMatrix4fv(nPosProjectMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
 
-    //glUniform1iÉèÖÃÃ¿¸ö²ÉÑùÆ÷µÄ·½Ê½¸æËßOpenGLÃ¿¸ö×ÅÉ«Æ÷²ÉÑùÆ÷ÊôÓÚÄÄ¸öÎÆÀíµ¥Ôª¡£ÎÒÃÇÖ»ĞèÒªÉèÖÃÒ»´Î¼´¿É£¬ËùÒÔÕâ¸ö»á·ÅÔÚäÖÈ¾Ñ­»·µÄÇ°Ãæ£º
-    //×ÅÉ«Æ÷ÖĞtexture0¶ÔÓ¦GL_TEXTURE0£¨BoxTexture£©
-    //×ÅÉ«Æ÷ÖĞtexture1¶ÔÓ¦GL_TEXTURE1£¨FaceTexture£©
+    //glUniform1iè®¾ç½®æ¯ä¸ªé‡‡æ ·å™¨çš„æ–¹å¼å‘Šè¯‰OpenGLæ¯ä¸ªç€è‰²å™¨é‡‡æ ·å™¨å±äºå“ªä¸ªçº¹ç†å•å…ƒã€‚æˆ‘ä»¬åªéœ€è¦è®¾ç½®ä¸€æ¬¡å³å¯ï¼Œæ‰€ä»¥è¿™ä¸ªä¼šæ”¾åœ¨æ¸²æŸ“å¾ªç¯çš„å‰é¢ï¼š
+    //ç€è‰²å™¨ä¸­texture0å¯¹åº”GL_TEXTURE0ï¼ˆBoxTextureï¼‰
+    //ç€è‰²å™¨ä¸­texture1å¯¹åº”GL_TEXTURE1ï¼ˆFaceTextureï¼‰
     int nPosTexture0 = glGetUniformLocation(shaderProgram, "texture0");
     int nPosTexture1 = glGetUniformLocation(shaderProgram, "texture1");
     glUniform1i(nPosTexture0, 0);
@@ -698,7 +698,7 @@ int CaseMultiTexture()
 
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        glActiveTexture(GL_TEXTURE0);//Õâ¾ä¿ÉÒÔ²»Ğ´£¬ÒòÎªÄ¬ÈÏTexture0×ÜÊÇ±»¼¤»î¡£
+        glActiveTexture(GL_TEXTURE0);//è¿™å¥å¯ä»¥ä¸å†™ï¼Œå› ä¸ºé»˜è®¤Texture0æ€»æ˜¯è¢«æ¿€æ´»ã€‚
         glBindTexture(GL_TEXTURE_2D, BoxTexture);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, FaceTexture);
@@ -712,9 +712,9 @@ int CaseMultiTexture()
     return 0;
 }
 
-//----------- Ê¹ÓÃTRSäÖÈ¾ÒıÇæ ----------------------
+//----------- ä½¿ç”¨TRSæ¸²æŸ“å¼•æ“ ----------------------
 
-//¿ªĞÄºĞ×Ó shaderÎ´¿ªÆôÄ¬ÈÏÉãÏñ»úÏµÍ³
+//å¼€å¿ƒç›’å­ shaderæœªå¼€å¯é»˜è®¤æ‘„åƒæœºç³»ç»Ÿ
 void CaseTextureColorArray()
 {
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
@@ -729,7 +729,7 @@ void CaseTextureColorArray()
     viewer->run();
 }
 
-//¶à¸ö¿ªĞÄºĞ×Ó³¡¾°£¬shaderÎ´¿ªÆôÄ¬ÈÏÉãÏñ»úÏµÍ³
+//å¤šä¸ªå¼€å¿ƒç›’å­åœºæ™¯ï¼Œshaderæœªå¼€å¯é»˜è®¤æ‘„åƒæœºç³»ç»Ÿ
 void CaseManyFunnyBoxRotate()
 {
     glm::vec3 cubePositions[] = {
@@ -771,7 +771,7 @@ void CaseManyFunnyBoxRotate()
 
 
 
-//µÚ¶şÕÂ »ù±¾¹âÕÕ
+//ç¬¬äºŒç«  åŸºæœ¬å…‰ç…§
 void updateFunc(TRSNode* pNode)
 {
     glm::vec3 lightColor;
@@ -779,8 +779,8 @@ void updateFunc(TRSNode* pNode)
     lightColor.y = sin(glfwGetTime() * 0.7f);
     lightColor.z = sin(glfwGetTime() * 1.3f);
 
-    glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // ½µµÍÓ°Ïì
-    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // ºÜµÍµÄÓ°Ïì
+    glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // é™ä½å½±å“
+    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // å¾ˆä½çš„å½±å“
     pNode->getStateSet()->getShader()->addUniform3v("light.ambient", ambientColor);
     pNode->getStateSet()->getShader()->addUniform3v("light.diffuse", diffuseColor);
 }
@@ -801,7 +801,7 @@ void CaseMaterial_AmbientDiffuseSpecular()
     pGeodeStateSet->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     pGeodeStateSet->getShader()->addUniformf("material.shininess", 32.0f);
     pGeodeStateSet->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-    pGeodeStateSet->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // ½«¹âÕÕµ÷°µÁËÒ»Ğ©ÒÔ´îÅä³¡¾°
+    pGeodeStateSet->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // å°†å…‰ç…§è°ƒæš—äº†ä¸€äº›ä»¥æ­é…åœºæ™¯
     pGeodeStateSet->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     pGeodeStateSet->getShader()->addUniform3v("light.position", lightPos);
     pGeode->setUpdateCallBack(updateFunc);
@@ -818,7 +818,7 @@ void CaseMaterial_AmbientDiffuseSpecular()
     viewer->run();
 }
 
-//µÚ¶şÕÂ Âş·´ÉäÌùÍ¼ºÍ·¨ÏßÌùÍ¼
+//ç¬¬äºŒç«  æ¼«åå°„è´´å›¾å’Œæ³•çº¿è´´å›¾
 void CaseMaterial_DiffuseNormal()
 {
     glm::vec3 lightPos = glm::vec3(0.8f, 0.8f, 2.0f);
@@ -828,12 +828,12 @@ void CaseMaterial_DiffuseNormal()
     pBoxNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pBoxNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("2_2DiffuseNormVertex.glsl", "2_2DiffuseNormFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png ¼ÓÔØºóÍ¼Æ¬ÏÔÊ¾Ñ©»¨×ªÎªjpg¡£
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png åŠ è½½åå›¾ç‰‡æ˜¾ç¤ºé›ªèŠ±è½¬ä¸ºjpgã€‚
     pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // ½«¹âÕÕµ÷°µÁËÒ»Ğ©ÒÔ´îÅä³¡¾°
+    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // å°†å…‰ç…§è°ƒæš—äº†ä¸€äº›ä»¥æ­é…åœºæ™¯
     pBoxSS->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     pBoxSS->getShader()->addUniform3v("light.position", lightPos);
 
@@ -874,12 +874,12 @@ void CaseDirectionLight()
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("2_3DirectionLightNormVertex.glsl", "2_3DirectionLightNormFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png ¼ÓÔØºóÍ¼Æ¬ÏÔÊ¾Ñ©»¨×ªÎªjpg¡£
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png åŠ è½½åå›¾ç‰‡æ˜¾ç¤ºé›ªèŠ±è½¬ä¸ºjpgã€‚
     pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // ½«¹âÕÕµ÷°µÁËÒ»Ğ©ÒÔ´îÅä³¡¾°
+    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // å°†å…‰ç…§è°ƒæš—äº†ä¸€äº›ä»¥æ­é…åœºæ™¯
     pBoxSS->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     pBoxSS->getShader()->addUniform3v("light.direction", lightDirection);
 
@@ -923,15 +923,15 @@ void CasePointAttenuationLight()
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("2_4PointAttenuationLightVertex.glsl", "2_4PointAttenuationLightFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png ¼ÓÔØºóÍ¼Æ¬ÏÔÊ¾Ñ©»¨×ªÎªjpg¡£
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png åŠ è½½åå›¾ç‰‡æ˜¾ç¤ºé›ªèŠ±è½¬ä¸ºjpgã€‚
     pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // ½«¹âÕÕµ÷°µÁËÒ»Ğ©ÒÔ´îÅä³¡¾°
+    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // å°†å…‰ç…§è°ƒæš—äº†ä¸€äº›ä»¥æ­é…åœºæ™¯
     pBoxSS->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     pBoxSS->getShader()->addUniform3v("light.position", lightPos);
-    //¶ÔÓÚË¥¼õµÄµã¹âÔ´µÄ¹«Ê½ÖĞµÄÈı¸öÏî  ¹âÇ¿¶È = 1/(Kc + Kl*d + Kq * d*d)
+    //å¯¹äºè¡°å‡çš„ç‚¹å…‰æºçš„å…¬å¼ä¸­çš„ä¸‰ä¸ªé¡¹  å…‰å¼ºåº¦ = 1/(Kc + Kl*d + Kq * d*d)
     pBoxSS->getShader()->addUniformf("light.constant", 1.0f);
     pBoxSS->getShader()->addUniformf("light.linear", 0.09f);
     pBoxSS->getShader()->addUniformf("light.quadratic", 0.032f);
@@ -991,11 +991,11 @@ void CaseSpotlight()
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("2_5SpotLightVertex.glsl", "2_5SpotLightFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png ¼ÓÔØºóÍ¼Æ¬ÏÔÊ¾Ñ©»¨×ªÎªjpg¡£
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png åŠ è½½åå›¾ç‰‡æ˜¾ç¤ºé›ªèŠ±è½¬ä¸ºjpgã€‚
     pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // ½«¹âÕÕµ÷°µÁËÒ»Ğ©ÒÔ´îÅä³¡¾°
+    pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // å°†å…‰ç…§è°ƒæš—äº†ä¸€äº›ä»¥æ­é…åœºæ™¯
     pBoxSS->getShader()->addUniform3v("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     pBoxSS->getShader()->addUniform3v("light.position", lightPos);
     pTemplateNode->setUpdateCallBack(SpotlightUpdateFunc);
@@ -1045,16 +1045,16 @@ void CaseMultiLightSource()
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("2_6MultiLightSourceVertex.glsl", "2_6MultiLightSourceFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png ¼ÓÔØºóÍ¼Æ¬ÏÔÊ¾Ñ©»¨×ªÎªjpg¡£
+    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png åŠ è½½åå›¾ç‰‡æ˜¾ç¤ºé›ªèŠ±è½¬ä¸ºjpgã€‚
     pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
-    //Ò»¸öÆ½ĞĞ¹â
+    //ä¸€ä¸ªå¹³è¡Œå…‰
     glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
     pBoxSS->getShader()->addUniform3v("dirLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-    pBoxSS->getShader()->addUniform3v("dirLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // ½«¹âÕÕµ÷°µÁËÒ»Ğ©ÒÔ´îÅä³¡¾°
+    pBoxSS->getShader()->addUniform3v("dirLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // å°†å…‰ç…§è°ƒæš—äº†ä¸€äº›ä»¥æ­é…åœºæ™¯
     pBoxSS->getShader()->addUniform3v("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     pBoxSS->getShader()->addUniform3v("dirLight.direction", lightDirection);
-    //ËÄ¸öµã¹âÔ´
+    //å››ä¸ªç‚¹å…‰æº
     glm::vec3 pointLightPositions[] = {
         glm::vec3(0.7f,  0.2f,  2.0f),
         glm::vec3(2.3f, -3.3f, -4.0f),
@@ -1066,15 +1066,15 @@ void CaseMultiLightSource()
     {
         std::string strLightName = "pointLights[" + std::to_string(i)+"]";
         pBoxSS->getShader()->addUniform3v(strLightName + ".ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-        pBoxSS->getShader()->addUniform3v(strLightName + ".diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // ½«¹âÕÕµ÷°µÁËÒ»Ğ©ÒÔ´îÅä³¡¾°
+        pBoxSS->getShader()->addUniform3v(strLightName + ".diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // å°†å…‰ç…§è°ƒæš—äº†ä¸€äº›ä»¥æ­é…åœºæ™¯
         pBoxSS->getShader()->addUniform3v(strLightName + ".specular", glm::vec3(1.0f, 1.0f, 1.0f));
         pBoxSS->getShader()->addUniform3v(strLightName + ".position", pointLightPositions[i]);
-        //¶ÔÓÚË¥¼õµÄµã¹âÔ´µÄ¹«Ê½ÖĞµÄÈı¸öÏî  ¹âÇ¿¶È = 1/(Kc + Kl*d + Kq * d*d)
+        //å¯¹äºè¡°å‡çš„ç‚¹å…‰æºçš„å…¬å¼ä¸­çš„ä¸‰ä¸ªé¡¹  å…‰å¼ºåº¦ = 1/(Kc + Kl*d + Kq * d*d)
         pBoxSS->getShader()->addUniformf(strLightName + ".constant", 1.0f);
         pBoxSS->getShader()->addUniformf(strLightName + ".linear", 0.09f);
         pBoxSS->getShader()->addUniformf(strLightName + ".quadratic", 0.032f);
 
-        //Ë³±ãÌí¼ÓµÆ¹âµÄ½Úµã
+        //é¡ºä¾¿æ·»åŠ ç¯å…‰çš„èŠ‚ç‚¹
         std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pTemplateNode.get(), false);
         glm::mat4 lightMat = glm::translate(glm::mat4(), pointLightPositions[i]);
         lightMat = glm::scale(lightMat, glm::vec3(0.2f));
@@ -1083,9 +1083,9 @@ void CaseMultiLightSource()
         pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
         pGroup->addChild(pLightNode);
     }
-    // ¾Û¹âµÆ
+    // èšå…‰ç¯
     pBoxSS->getShader()->addUniform3v("spotLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-    pBoxSS->getShader()->addUniform3v("spotLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // ½«¹âÕÕµ÷°µÁËÒ»Ğ©ÒÔ´îÅä³¡¾°
+    pBoxSS->getShader()->addUniform3v("spotLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // å°†å…‰ç…§è°ƒæš—äº†ä¸€äº›ä»¥æ­é…åœºæ™¯
     pBoxSS->getShader()->addUniform3v("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     pTemplateNode->setUpdateCallBack(MultiLightSpotlightUpdateFunc);
 

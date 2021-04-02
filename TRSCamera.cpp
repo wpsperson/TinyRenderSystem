@@ -1,4 +1,4 @@
-#include "TRSCamera.h"
+ï»¿#include "TRSCamera.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "glfw/glfw3.h"
 #include "TRSConst.h"
@@ -25,7 +25,7 @@ void TRSCamera::initMember()
     m_fMoveSpeed = 0.05f;
     m_fMouseSensity = 0.05f;
 
-    //pitch yaw ½Ç¶È³õÖµµÄº¬ÒåÊÇÍ¨¹ıÂú×ã m_front = glm::vec3(0, 0, -1.0f)·´Ëã³öÀ´µÄ
+    //pitch yaw è§’åº¦åˆå€¼çš„å«ä¹‰æ˜¯é€šè¿‡æ»¡è¶³ m_front = glm::vec3(0, 0, -1.0f)åç®—å‡ºæ¥çš„
     m_fPitch = 0.0f;
     m_fYaw = -90.0f;
     m_fFov = 45.0f;
