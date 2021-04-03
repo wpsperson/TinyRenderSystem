@@ -2,6 +2,8 @@
 #include "TRSConfig.h"
 #include "TRSShader.h"
 #include "AllDemoCodes.h"
+#include "CaseStencilTest.h"
+
 
 int main()
 {
@@ -11,15 +13,16 @@ int main()
     //CaseEachVertexColor();
     //CaseTextureColorBasic();
     //CaseMultiTexture();
-     //CaseTextureColorArray();
-//     CaseManyFunnyBoxRotate();
-//     CaseMaterial_AmbientDiffuseSpecular();
-//     CaseMaterial_DiffuseNormal();
-//     CaseDirectionLight();
-//     CasePointAttenuationLight();
-//     CaseSpotlight();
-//     CaseMultiLightSource();
-//     CaseElementArrayTRS();
-    CaseLoadModelByAssimp();
+    //CaseTextureColorArray();
+    //CaseManyFunnyBoxRotate();
+    //CaseMaterial_AmbientDiffuseSpecular();
+    //CaseMaterial_DiffuseNormal();
+    //CaseDirectionLight();
+    //CasePointAttenuationLight();
+    //CaseSpotlight();
+    //CaseMultiLightSource();
+    //CaseElementArrayTRS();
+    //CaseLoadModelByAssimp();
+    CaseStencilTest();
     return 0;
 }

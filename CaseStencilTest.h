@@ -9,3 +9,4 @@
 
 int CaseStencilTest();
 
+int createShaderBorder();
