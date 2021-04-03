@@ -166,12 +166,12 @@ int CaseStencilTest()
 
     // Æô¶¯Ä£°å²âÊÔ
     glEnable(GL_STENCIL_TEST); //***
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); //***
 
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         m_fCurTime = glfwGetTime();
         float timeDiff = m_fCurTime - m_fLastTime;
@@ -183,7 +183,8 @@ int CaseStencilTest()
         TRSKeyboardCallBack(window);
 
         glStencilFunc(GL_ALWAYS, 1, 0xff); //***
-        glStencilMask(0xff); //***
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); //***
+        //glStencilMask(0xff); //***
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
         glm::mat4 projMatrix = g_pCamera->getProjectMatrix();
@@ -200,7 +201,8 @@ int CaseStencilTest()
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glStencilFunc(GL_NOTEQUAL, 1, 0xff); //***
-        glStencilMask(0x00); //***
+        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP); //***
+        //glStencilMask(0x00); //***
         glDisable(GL_DEPTH_TEST); //***
         glBindVertexArray(VAO);
         glUseProgram(shaderBorder);
@@ -216,7 +218,7 @@ int CaseStencilTest()
         glDrawArrays(GL_TRIANGLES, 0, 36);
         
 
-        glStencilMask(0xFF); //***
+        //glStencilMask(0xFF); //***
         glEnable(GL_DEPTH_TEST); //***
 
         glBindVertexArray(0);
