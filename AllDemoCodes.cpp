@@ -17,18 +17,9 @@
 #include "TRSUtils.h"
 #include "stb_image.h"
 
-
 TRSCamera* g_pCamera;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
+
 //最简单的，第一个三角形
 int CaseFirstTriangle()
 {

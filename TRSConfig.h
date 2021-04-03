@@ -7,7 +7,7 @@
 #pragma once
 #include "TRSExport.h"
 
-class GLFWwindow;
+struct GLFWwindow;
 
 class TRS_EXPORT TRSConfig
 {

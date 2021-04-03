@@ -2,8 +2,23 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include "glad\glad.h"
+#include "GLFW\glfw3.h"
+
 
 using namespace std;
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
 char* getTextFromFile(const char* fileName)
 {
     FILE* pFile = fopen(fileName, "rt");//这里加载一个PE文件  

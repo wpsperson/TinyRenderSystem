@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Examples">
+      <UniqueIdentifier>{14472917-eb35-49bb-bf0d-4d9684d1630a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultFragment.glsl">
@@ -152,11 +155,14 @@
     <ClCompile Include="CullVisitor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="AllDemoCodes.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="TRSAssimpLoader.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AllDemoCodes.cpp">
+      <Filter>Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="CaseStencilTest.cpp">
+      <Filter>Examples</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,11 +220,14 @@
     <ClInclude Include="CullVisitor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AllDemoCodes.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="TRSAssimpLoader.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AllDemoCodes.h">
+      <Filter>Examples</Filter>
+    </ClInclude>
+    <ClInclude Include="CaseStencilTest.h">
+      <Filter>Examples</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

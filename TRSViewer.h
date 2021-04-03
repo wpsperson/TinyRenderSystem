@@ -13,7 +13,7 @@
 
 class TRSCamera;
 class TRSNode;
-class GLFWwindow;
+struct GLFWwindow;
 
 class TRS_EXPORT TRSViewer
 {

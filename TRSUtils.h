@@ -9,6 +9,12 @@
 #include <string>
 #include "TRSExport.h"
 
+struct GLFWwindow;
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+void processInput(GLFWwindow *window);
+
 //deprecated
 TRS_EXPORT char* getTextFromFile(const char* fileName);
 

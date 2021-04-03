@@ -7,7 +7,7 @@
 #pragma once
 #include "TRSExport.h"
 #include "glm/glm.hpp"
-class GLFWwindow;
+struct GLFWwindow;
 
 class TRS_EXPORT TRSCamera
 {

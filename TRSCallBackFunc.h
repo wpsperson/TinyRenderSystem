@@ -6,7 +6,7 @@
 
 #pragma once
 #include "TRSExport.h"
-class GLFWwindow;
+struct GLFWwindow;
 
 //窗体尺寸变化回调
 TRS_EXPORT void TRSWindowChangeCallBack(GLFWwindow* window, int w, int h);
