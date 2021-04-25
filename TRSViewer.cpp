@@ -13,6 +13,7 @@
 #include "TRSGeode.h"
 #include "TRSVAO.h"
 #include "TRSTexture.h"
+#include "Windows.h"
 
 extern TRSCamera* g_pCamera;
 

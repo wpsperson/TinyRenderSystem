@@ -13,6 +13,8 @@
 #include "TRSCamera.h"
 #include "TRSCallBackFunc.h"
 #include "TRSConst.h"
+#include "Windows.h"
+
 
 extern TRSCamera* g_pCamera;
 
