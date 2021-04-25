@@ -170,6 +170,9 @@
     <ClCompile Include="NodeVisitor.cpp">
       <Filter>TRS</Filter>
     </ClCompile>
+    <ClCompile Include="CaseTessellationOnShader.cpp">
+      <Filter>Examples</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -234,6 +237,9 @@
     </ClInclude>
     <ClInclude Include="NodeVisitor.h">
       <Filter>TRS</Filter>
+    </ClInclude>
+    <ClInclude Include="CaseTessellationOnShader.h">
+      <Filter>Examples</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

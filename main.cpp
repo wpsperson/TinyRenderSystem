@@ -3,6 +3,7 @@
 #include "TRSShader.h"
 #include "AllDemoCodes.h"
 #include "CaseStencilTest.h"
+#include "CaseTessellationOnShader.h"
 
 
 int main()
@@ -23,6 +24,7 @@ int main()
     //CaseMultiLightSource();
     //CaseElementArrayTRS();
     //CaseLoadModelByAssimp();
-    CaseStencilTest();
+    //CaseStencilTest();
+    CaseTessellationOnShader();
     return 0;
 }

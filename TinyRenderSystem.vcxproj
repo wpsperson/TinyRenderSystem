@@ -183,6 +183,7 @@
   <ItemGroup>
     <ClCompile Include="AllDemoCodes.cpp" />
     <ClCompile Include="CaseStencilTest.cpp" />
+    <ClCompile Include="CaseTessellationOnShader.cpp" />
     <ClCompile Include="CullVisitor.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
@@ -205,6 +206,7 @@
   <ItemGroup>
     <ClInclude Include="AllDemoCodes.h" />
     <ClInclude Include="CaseStencilTest.h" />
+    <ClInclude Include="CaseTessellationOnShader.h" />
     <ClInclude Include="CullVisitor.h" />
     <ClInclude Include="NodeVisitor.h" />
     <ClInclude Include="stb_image.h" />
