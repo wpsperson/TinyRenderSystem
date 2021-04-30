@@ -19,7 +19,7 @@ enum EnVertexStruct
 };
 
 
-#define DefaultWindowWidth 1800
+#define DefaultWindowWidth 1200
 #define DefaultWindowHeight 800
 //默认背景颜色，深蓝色
 static glm::vec4 s_DefaultBGColor(0.2, 0.2, 0.4, 1);
