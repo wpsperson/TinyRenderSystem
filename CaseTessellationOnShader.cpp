@@ -42,10 +42,10 @@ int CaseTessellationOnShader()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("hermite_curve.vert");
-    char* fragmentShaderSource = readTextFile("hermite_curve.frag");
-    char* tessControlShaderSource = readTextFile("hermite_curve.tess");
-    char* tessEvaluateShaderSource = readTextFile("hermite_curve.eval");
+    char* vertexShaderSource = readTextFile("shaders/hermite_curve_vert.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/hermite_curve_frag.glsl");
+    char* tessControlShaderSource = readTextFile("shaders/hermite_curve_tess.glsl");
+    char* tessEvaluateShaderSource = readTextFile("shaders/hermite_curve_eval.glsl");
 
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);

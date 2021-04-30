@@ -46,8 +46,8 @@ int CaseFirstTriangle()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("1_1BasicVertex.glsl");
-    char* fragmentShaderSource = readTextFile("1_1BasicFragment.glsl");
+    char* vertexShaderSource = readTextFile("shaders/1_1BasicVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/1_1BasicFragment.glsl");
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -143,8 +143,8 @@ int CaseElementArray()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("1_1BasicVertex.glsl");
-    char* fragmentShaderSource = readTextFile("1_1BasicFragment.glsl");
+    char* vertexShaderSource = readTextFile("shaders/1_1BasicVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/1_1BasicFragment.glsl");
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -238,8 +238,8 @@ int CaseColorAnimation()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("1_2ColorAnimationVertex.glsl");
-    char* fragmentShaderSource = readTextFile("1_2ColorAnimationFragment.glsl");
+    char* vertexShaderSource = readTextFile("shaders/1_2ColorAnimationVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/1_2ColorAnimationFragment.glsl");
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -335,8 +335,8 @@ int CaseEachVertexColor()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("1_3EachVertexColorVertex.glsl");
-    char* fragmentShaderSource = readTextFile("1_3EachVertexColorFragment.glsl");
+    char* vertexShaderSource = readTextFile("shaders/1_3EachVertexColorVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/1_3EachVertexColorFragment.glsl");
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -435,8 +435,8 @@ int CaseTextureColorBasic()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("1_4TextureColorVertex.glsl");
-    char* fragmentShaderSource = readTextFile("1_4TextureColorFragment.glsl");
+    char* vertexShaderSource = readTextFile("shaders/1_4TextureColorVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/1_4TextureColorFragment.glsl");
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -501,7 +501,7 @@ int CaseTextureColorBasic()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("resources/textures/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -565,8 +565,8 @@ int CaseMultiTexture()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("1_5MultiTextureVertex.glsl");
-    char* fragmentShaderSource = readTextFile("1_5MultiTextureFragment.glsl");
+    char* vertexShaderSource = readTextFile("shaders/1_5MultiTextureVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/1_5MultiTextureFragment.glsl");
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -632,7 +632,7 @@ int CaseMultiTexture()
     // 加载并生成纹理
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);//加载图片翻转
-    unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("resources/textures/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -652,7 +652,7 @@ int CaseMultiTexture()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    unsigned char *data2 = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+    unsigned char *data2 = stbi_load("resources/textures/awesomeface.png", &width, &height, &nrChannels, 0);
     if (data2)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
@@ -712,9 +712,9 @@ void CaseTextureColorArray()
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     pNode->readFromVertex(BoxVerticesAndColorAndTex, sizeof(BoxVerticesAndColorAndTex) / sizeof(float), EnVertexColorTexture);
     std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
-    pSS->getTexture()->createTexture("container.jpg");
-    pSS->getTexture()->createTexture("awesomeface.png");
-    pSS->getShader()->createProgram("1_5MultiTextureVertex.glsl", "1_5MultiTextureFragment.glsl");
+    pSS->getTexture()->createTexture("resources/textures/container.jpg");
+    pSS->getTexture()->createTexture("resources/textures/awesomeface.png");
+    pSS->getShader()->createProgram("shaders/1_5MultiTextureVertex.glsl", "shaders/1_5MultiTextureFragment.glsl");
 
     viewer->setSecenNode(pNode);
     viewer->run();
@@ -740,9 +740,9 @@ void CaseManyFunnyBoxRotate()
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
     std::shared_ptr<TRSStateSet> pSS = pTemplateNode->getOrCreateStateSet();
-    pSS->getTexture()->createTexture("container.jpg");//container.jpg
-    pSS->getTexture()->createTexture("awesomeface.png");
-    pSS->getShader()->createProgram("1_5MultiTextureVertex.glsl", "1_5MultiTextureFragment.glsl");
+    pSS->getTexture()->createTexture("resources/textures/container.jpg");//container.jpg
+    pSS->getTexture()->createTexture("resources/textures/awesomeface.png");
+    pSS->getShader()->createProgram("shaders/1_5MultiTextureVertex.glsl", "shaders/1_5MultiTextureFragment.glsl");
     pTemplateNode->readFromVertex(BoxVerticesAndColorAndTex, sizeof(BoxVerticesAndColorAndTex) / sizeof(float), EnVertexColorTexture);
     int nBoxCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
     for (int i=0; i<nBoxCount; i++)
@@ -785,7 +785,7 @@ void CaseMaterial_AmbientDiffuseSpecular()
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
     pGeode->readFromVertex(BoxVerticesAndNorm, sizeof(BoxVerticesAndNorm) / sizeof(float), EnVertexNormal);
     std::shared_ptr<TRSStateSet> pGeodeStateSet = pGeode->getOrCreateStateSet();
-    pGeodeStateSet->getShader()->createProgram("2_1MaterialVertex.glsl", "2_1MaterialFragment.glsl");
+    pGeodeStateSet->getShader()->createProgram("shaders/2_1MaterialVertex.glsl", "shaders/2_1MaterialFragment.glsl");
 
     pGeodeStateSet->getShader()->addUniform3v("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
     pGeodeStateSet->getShader()->addUniform3v("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
@@ -802,7 +802,7 @@ void CaseMaterial_AmbientDiffuseSpecular()
     lightMat = glm::scale(lightMat, glm::vec3(0.2f));
     pLightNode->setMatrix(lightMat);
     std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
-    pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
+    pLightStateSet->getShader()->createProgram("shaders/2_1LightNodeVertex.glsl", "shaders/2_1LightNodeFragment.glsl");
     pGroup->addChild(pGeode);
     pGroup->addChild(pLightNode);
     viewer->setSecenNode(pGroup);
@@ -818,9 +818,9 @@ void CaseMaterial_DiffuseNormal()
     std::shared_ptr<TRSGeode> pBoxNode = std::make_shared<TRSGeode>();
     pBoxNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pBoxNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("2_2DiffuseNormVertex.glsl", "2_2DiffuseNormFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
-    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    pBoxSS->getShader()->createProgram("shaders/2_2DiffuseNormVertex.glsl", "shaders/2_2DiffuseNormFragment.glsl");
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
@@ -833,7 +833,7 @@ void CaseMaterial_DiffuseNormal()
     lightMat = glm::scale(lightMat, glm::vec3(0.2f));
     pLightNode->setMatrix(lightMat);
     std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
-    pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
+    pLightStateSet->getShader()->createProgram("shaders/2_1LightNodeVertex.glsl", "shaders/2_1LightNodeFragment.glsl");
 
     pGroup->addChild(pBoxNode);
     pGroup->addChild(pLightNode);
@@ -864,9 +864,9 @@ void CaseDirectionLight()
     glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("2_3DirectionLightNormVertex.glsl", "2_3DirectionLightNormFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
-    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    pBoxSS->getShader()->createProgram("shaders/2_3DirectionLightNormVertex.glsl", "shaders/2_3DirectionLightNormFragment.glsl");
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
@@ -913,9 +913,9 @@ void CasePointAttenuationLight()
     glm::vec3 lightPos = glm::vec3(0.8f, 0.8f, 2.0f);
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("2_4PointAttenuationLightVertex.glsl", "2_4PointAttenuationLightFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
-    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    pBoxSS->getShader()->createProgram("shaders/2_4PointAttenuationLightVertex.glsl", "shaders/2_4PointAttenuationLightFragment.glsl");
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
@@ -944,7 +944,7 @@ void CasePointAttenuationLight()
     lightMat = glm::scale(lightMat, glm::vec3(0.2f));
     pLightNode->setMatrix(lightMat);
     std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
-    pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
+    pLightStateSet->getShader()->createProgram("shaders/2_1LightNodeVertex.glsl", "shaders/2_1LightNodeFragment.glsl");
     pGroup->addChild(pLightNode);
 
     viewer->setSecenNode(pGroup);
@@ -981,9 +981,9 @@ void CaseSpotlight()
     glm::vec3 lightPos = glm::vec3(0.8f, 0.8f, 2.0f);
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("2_5SpotLightVertex.glsl", "2_5SpotLightFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
-    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    pBoxSS->getShader()->createProgram("shaders/2_5SpotLightVertex.glsl", "shaders/2_5SpotLightFragment.glsl");
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
     pBoxSS->getShader()->addUniform3v("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)); // 将光照调暗了一些以搭配场景
@@ -1035,9 +1035,9 @@ void CaseMultiLightSource()
 
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("2_6MultiLightSourceVertex.glsl", "2_6MultiLightSourceFragment.glsl");
-    pBoxSS->getTexture()->createTexture("container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
-    pBoxSS->getTexture()->createTexture("container2_specular.jpg", "material.specular");
+    pBoxSS->getShader()->createProgram("shaders/2_6MultiLightSourceVertex.glsl", "shaders/2_6MultiLightSourceFragment.glsl");
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     //一个平行光
     glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
@@ -1071,7 +1071,7 @@ void CaseMultiLightSource()
         lightMat = glm::scale(lightMat, glm::vec3(0.2f));
         pLightNode->setMatrix(lightMat);
         std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
-        pLightStateSet->getShader()->createProgram("2_1LightNodeVertex.glsl", "2_1LightNodeFragment.glsl");
+        pLightStateSet->getShader()->createProgram("shaders/2_1LightNodeVertex.glsl", "shaders/2_1LightNodeFragment.glsl");
         pGroup->addChild(pLightNode);
     }
     // 聚光灯

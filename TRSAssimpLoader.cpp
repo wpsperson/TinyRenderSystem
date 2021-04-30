@@ -144,7 +144,7 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
     TRSStateSet* pStateSet = pGeode->getOrCreateStateSet().get();
     TRSTexture* pCurTexture = pStateSet->getTexture();
     TRSShader* pShader = pStateSet->getShader();
-    pShader->createProgram("3_1AssimpTextureVertex.glsl", "3_1AssimpTextureFragment.glsl");
+    pShader->createProgram("shaders/3_1AssimpTextureVertex.glsl", "shaders/3_1AssimpTextureFragment.glsl");
     // process materials
     aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
     // we assume a convention for sampler names in the shaders. Each diffuse texture should be named

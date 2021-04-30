@@ -38,8 +38,8 @@ int CaseStencilTest()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("1_5MultiTextureVertex.glsl");
-    char* fragmentShaderSource = readTextFile("1_5MultiTextureFragment.glsl");//1_1BasicFragment.glsl  
+    char* vertexShaderSource = readTextFile("shaders/1_5MultiTextureVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/1_5MultiTextureFragment.glsl");//1_1BasicFragment.glsl  
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -105,7 +105,7 @@ int CaseStencilTest()
     // 加载并生成纹理
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);//加载图片翻转
-    unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("resources/textures/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -125,7 +125,7 @@ int CaseStencilTest()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    unsigned char *data2 = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+    unsigned char *data2 = stbi_load("resources/textures/awesomeface.png", &width, &height, &nrChannels, 0);
     if (data2)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
@@ -234,8 +234,8 @@ int CaseStencilTest()
 
 int createShaderBorder()
 {
-    char* vertexShaderSource = readTextFile("DefaultVertex.glsl");
-    char* fragmentShaderSource = readTextFile("1_1BasicFragment.glsl");//  
+    char* vertexShaderSource = readTextFile("shaders/DefaultVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/1_1BasicFragment.glsl");//  
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);

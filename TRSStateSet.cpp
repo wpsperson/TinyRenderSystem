@@ -50,7 +50,7 @@ TRSStateSetManager::TRSStateSetManager()
     :m_nNewID(0)
 {
     m_pDefaultStateSet = std::make_shared<TRSStateSet>(this);//默认状态集的id是0
-    m_pDefaultStateSet->getShader()->createProgram("DefaultVertex.glsl", "DefaultFragment.glsl");
+    m_pDefaultStateSet->getShader()->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
     m_StateSets.insert(std::make_pair(m_pDefaultStateSet->id(), m_pDefaultStateSet));
 }
 
