@@ -1,5 +1,5 @@
 ﻿#include "TRSViewer.h"
-#include "TRSConfig.h"
+#include "TRSWindowConfig.h"
 #include "TRSConst.h"
 #include <iostream>
 #include "TRSCamera.h"
@@ -23,13 +23,13 @@ TRSViewer::TRSViewer()
     , m_fLastTime(0.0f)
     , m_fCurTime(0.0f)
 {
-    if (!TRSConfig::initGlfwWindowAndGLAD(DefaultWindowWidth, DefaultWindowHeight, &m_pWindow))
+    if (!TRSWindowConfig::initGlfwWindowAndGLAD(DefaultWindowWidth, DefaultWindowHeight, &m_pWindow))
     {
         std::cerr << "TRSViewer::INIT::Failure" << std::endl;
     }
-    m_pCamera = new TRSCamera;
+    m_pCamera = new TRSCamera(m_pWindow);
     g_pCamera = m_pCamera;
-    TRSConfig::registerUserInputFunc(m_pWindow);//reg user input callback
+    TRSWindowConfig::registerUserInputFunc(m_pWindow);//reg user input callback
 }
 
 TRSViewer::~TRSViewer()

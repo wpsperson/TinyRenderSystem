@@ -9,7 +9,7 @@
 #include "stb_image.h"
 #include "TRSUtils.h"
 #include "TRSResource.h"
-#include "TRSConfig.h"
+#include "TRSWindowConfig.h"
 #include "TRSCamera.h"
 #include "TRSCallBackFunc.h"
 #include "TRSConst.h"
@@ -160,8 +160,8 @@ int CaseStencilTest()
     glUniform1i(nPosTexture1, 1);
     glEnable(GL_DEPTH_TEST);
 
-    g_pCamera = new TRSCamera;
-    TRSConfig::registerUserInputFunc(window);
+    TRSWindowConfig::registerUserInputFunc(window);
+    g_pCamera = new TRSCamera(window);
     double m_fCurTime = 0;
     double m_fLastTime = 0;
 

@@ -8,7 +8,7 @@
 #include "stb_image.h"
 #include "TRSUtils.h"
 #include "TRSResource.h"
-#include "TRSConfig.h"
+#include "TRSWindowConfig.h"
 #include "TRSCamera.h"
 #include "TRSCallBackFunc.h"
 #include "TRSConst.h"
@@ -17,12 +17,14 @@
 int CaseTessellationOnShader()
 {
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f
+        -0.8f, 0.0f, 0.0f,
+        -0.4f, 0.0f, 0.0f,
+        -0.4f, 0.0f, 0.0f,
+         0.0f, 0.0f, 0.0f
     };
     float tangent[] = {
-        0.0f, 5.0f, 0.0f,
-        2.0f, 5.0f, 0.0f
+        0.5f, 0.866f, 0.0f,
+        0.5f, 0.866f, 0.0f
     };
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -132,7 +134,7 @@ int CaseTessellationOnShader()
         glUseProgram(shaderProgram);
 
         glPatchParameteri(GL_PATCH_VERTICES, 2);
-        glDrawArrays(GL_PATCHES, 0, 2);
+        glDrawArrays(GL_PATCHES, 0, 4);
         //glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
 

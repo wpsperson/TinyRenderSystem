@@ -1,5 +1,5 @@
 ﻿#include "TRSUtils.h"
-#include "TRSConfig.h"
+#include "TRSWindowConfig.h"
 #include "TRSShader.h"
 #include "AllDemoCodes.h"
 #include "CaseStencilTest.h"
@@ -22,9 +22,9 @@ int main()
     //CasePointAttenuationLight();
     //CaseSpotlight();
     //CaseMultiLightSource();
-    //CaseElementArrayTRS();
+    CaseElementArrayTRS();
     //CaseLoadModelByAssimp();
     //CaseStencilTest();
-    CaseTessellationOnShader();
+    //CaseTessellationOnShader();
     return 0;
 }

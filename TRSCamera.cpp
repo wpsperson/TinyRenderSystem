@@ -1,11 +1,17 @@
 ﻿#include "TRSCamera.h"
+#include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include "glfw/glfw3.h"
 #include "TRSConst.h"
 #include "TRSCallBackFunc.h"
+#include "TRSConfig.h"
 
-
-TRSCamera::TRSCamera()
+TRSCamera::TRSCamera(GLFWwindow* pWindow)
+    : m_cameraMode(TRS_CAMERA_TRACK_BALL)
+    , m_leftMousePressed(false)
+    , m_middleMousePressed(false)
+    , m_modifier(0)
+    , m_pWindow(pWindow)
 {
     initMember();
 }
@@ -91,35 +97,48 @@ void TRSCamera::keyboardCallBack(GLFWwindow* pWindow)
 
 void TRSCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos)
 {
-    static bool s_bFirst = true;
-    if (s_bFirst)
+    if (m_leftMousePressed)// left mouse button pressed, do rotate
     {
-        s_bFirst = false;
-        m_fLastX = float(xpos);
-        m_fLastY = float(ypos);
+        double xOffset = xpos - m_fLastX;
+        double yOffset = -(ypos - m_fLastY);
+        m_fLastX = xpos;
+        m_fLastY = ypos;
+        m_fYaw += m_fMouseSensity * xOffset;
+        m_fPitch += m_fMouseSensity * yOffset * 5;
+        if (m_fPitch > 89.0f)
+        {
+            m_fPitch = 89.0f;
+        }
+        else if (m_fPitch < -89.0f)
+        {
+            m_fPitch = -89.0f;
+        }
+
+        m_front.y = sin(glm::radians(m_fPitch));
+        m_front.x = cos(glm::radians(m_fPitch)) * cos(glm::radians(m_fYaw));
+        m_front.z = cos(glm::radians(m_fPitch)) * sin(glm::radians(m_fYaw));
+        m_front = glm::normalize(m_front);
+        m_right = glm::cross(m_front, glm::vec3(0, 1, 0));
+        m_right = glm::normalize(m_right);
+        m_up = glm::cross(m_right, m_front);
         return;
     }
-    float xOffset = float(xpos) - m_fLastX;
-    float yOffset = -(float(ypos) - m_fLastY);
-    m_fLastX = float(xpos);
-    m_fLastY = float(ypos);
-    m_fYaw += m_fMouseSensity * xOffset;
-    m_fPitch += m_fMouseSensity * yOffset * 5;
-    if (m_fPitch > 89.0f)
+    else if (m_middleMousePressed)// middle mouse button pressed, do panning
     {
-        m_fPitch = 89.0f;
-    }else if (m_fPitch < -89.0f)
-    {
-        m_fPitch = -89.0f;
+        // todo refactor
+        double xOffset = xpos - m_fLastX;
+        double yOffset = -(ypos - m_fLastY);
+        //std::cout <<xOffset<< ", " << yOffset << std::endl;
+        m_fLastX = xpos;
+        m_fLastY = ypos;
+
+        glm::vec3 delta = m_up * float(yOffset) + m_right * float(xOffset);
+        delta = delta*0.001f;
+        m_pos -= delta;
+        m_front -= delta;
+        return;
     }
 
-    m_front.y = sin(glm::radians(m_fPitch));
-    m_front.x = cos(glm::radians(m_fPitch)) * cos(glm::radians(m_fYaw));
-    m_front.z = cos(glm::radians(m_fPitch)) * sin(glm::radians(m_fYaw));
-    m_front = glm::normalize(m_front);
-    m_right = glm::cross(m_front, glm::vec3(0, 1, 0));
-    m_right = glm::normalize(m_right);
-    m_up = glm::cross(m_right, m_front);
 }
 
 void TRSCamera::mouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double yScroll)
@@ -130,4 +149,36 @@ void TRSCamera::mouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double 
         m_fFov = 1.0f;
     if (m_fFov >= 45.0f)
         m_fFov = 45.0f;
+}
+
+void TRSCamera::mouseButtonCallBack(GLFWwindow* pWindow, int button, int action, int mods)
+{
+    if (GLFW_MOUSE_BUTTON_LEFT == button)
+    {
+        if (action == GLFW_PRESS)
+        {
+            m_leftMousePressed = true;
+            glfwGetCursorPos(m_pWindow, &m_fLastX, &m_fLastY);
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            m_leftMousePressed = false;
+        }
+    }
+    if (GLFW_MOUSE_BUTTON_MIDDLE == button)
+    {
+        if (action == GLFW_PRESS)
+        {
+            m_middleMousePressed = true;
+            glfwGetCursorPos(m_pWindow, &m_fLastX, &m_fLastY);
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            m_middleMousePressed = false;
+        }
+    }
+    if (m_modifier != mods)
+    {
+        m_modifier = mods;
+    }
 }

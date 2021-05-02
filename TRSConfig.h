@@ -1,22 +1,23 @@
-﻿/*!  
- *@brief    初始配置和上下文
+/*!  
+ *@brief    user custom config define
  *@author   wangps
- *@date     2019年5月3日
+ *@date     2021��5��1��
  */
- 
+
 #pragma once
-#include "TRSExport.h"
 
-struct GLFWwindow;
 
-class TRS_EXPORT TRSConfig
-{
-public:
-    TRSConfig();
-    ~TRSConfig();
-    static bool initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window);
+/**
+* Define camera control style:
+*  In track ball style, motion occurs only when the mouse button is pressed and cursor is moving.
+*  This is the default camera style
+*/
+static const int TRS_CAMERA_TRACK_BALL = 0;
 
-    static bool registerUserInputFunc(GLFWwindow *window);
+/**
+*  Define camera control style: 
+*  In joystick style, motion occurs continuously as long as a mouse button is pressed
+*/
+static const int TRS_CAMERA_JOY_STICK = 1;
 
-};
 

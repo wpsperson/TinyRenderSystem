@@ -9,6 +9,11 @@ TRS_EXPORT void TRSWindowChangeCallBack(GLFWwindow* window, int w, int h)
     glViewport(0, 0, w, h);
 }
 
+TRS_EXPORT void TRSMouseButtonCallBack(GLFWwindow* pWindow, int button, int action, int mods)
+{
+    g_pCamera->mouseButtonCallBack(pWindow,button, action, mods);
+}
+
 TRS_EXPORT void TRSMouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos)
 {
     g_pCamera->mouseMoveCallBack(pWindow, xpos, ypos);

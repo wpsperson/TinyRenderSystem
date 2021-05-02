@@ -11,6 +11,9 @@ struct GLFWwindow;
 //窗体尺寸变化回调
 TRS_EXPORT void TRSWindowChangeCallBack(GLFWwindow* window, int w, int h);
 
+//鼠标按下回调
+TRS_EXPORT void TRSMouseButtonCallBack(GLFWwindow* pWindow, int button, int action, int mods);
+
 //鼠标移动回调
 TRS_EXPORT void TRSMouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos);
 

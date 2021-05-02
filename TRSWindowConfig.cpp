@@ -1,19 +1,19 @@
-﻿#include "TRSConfig.h"
+﻿#include "TRSWindowConfig.h"
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <iostream>
 #include "TRSCallBackFunc.h"
 
-TRSConfig::TRSConfig()
+TRSWindowConfig::TRSWindowConfig()
 {
 }
 
 
-TRSConfig::~TRSConfig()
+TRSWindowConfig::~TRSWindowConfig()
 {
 }
 
-bool TRSConfig::initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window)
+bool TRSWindowConfig::initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -40,9 +40,11 @@ bool TRSConfig::initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window)
     return true;
 }
 
-bool TRSConfig::registerUserInputFunc(GLFWwindow *window)
+bool TRSWindowConfig::registerUserInputFunc(GLFWwindow *window)
 {
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //注册用户鼠标按钮回调
+    glfwSetMouseButtonCallback(window, TRSMouseButtonCallBack);
     //注册用户鼠标位置回调
     glfwSetCursorPosCallback(window, TRSMouseMoveCallBack);
     //鼠标滚轮滚动回调

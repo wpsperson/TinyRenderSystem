@@ -12,7 +12,7 @@ struct GLFWwindow;
 class TRS_EXPORT TRSCamera
 {
 public:
-    TRSCamera();
+    TRSCamera(GLFWwindow* pWindow);
     ~TRSCamera();
 
     void initMember();
@@ -31,6 +31,8 @@ public:
 
     void mouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double yScroll);
 
+    void mouseButtonCallBack(GLFWwindow* pWindow, int button, int action, int mods);
+
 protected:
     glm::vec3 m_pos;        //相机当前位置
     glm::vec3 m_front;      //相机的前向方向，相机当前位置指向观察中心点的向量
@@ -43,8 +45,14 @@ protected:
     float m_fPitch;         //鼠标上下移动产生的俯仰角 -89~89
     float m_fYaw;           //鼠标上下移动产生的偏航角 无限制
     float m_fFov;          //鼠标滚轮滚动产生的fov放大缩小 45-90
-    float m_fLastX;
-    float m_fLastY;
+    double m_fLastX;
+    double m_fLastY;
     GLFWwindow* m_pWindow;
+    
+    int m_cameraMode;       //mouse mode, joystick or trackball.
+    bool m_leftMousePressed;      // press state.
+    bool m_middleMousePressed;      // press state.
+    int m_modifier;
+
 };
 
