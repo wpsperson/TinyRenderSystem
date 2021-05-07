@@ -144,3 +144,55 @@ int CaseTessellationOnShader()
     glfwTerminate();
     return 0;
 }
+
+#include <iostream>
+#include "TRSViewer.h"
+#include "TRSGeode.h"
+#include "TRSGroup.h"
+#include "TRSTexture.h"
+#include "TRSVAO.h"
+#include "TRSResource.h"
+#include "TRSConst.h"
+#include "TRSCamera.h"
+#include "TRSShader.h"
+#include "TRSStateset.h"
+#include "TRSUtils.h"
+#include "TRSAssimpLoader.h"
+
+int tess(int argn, char** argc)
+{
+    float vertices[] = {
+        -0.8f, 0.0f, 0.0f,
+        -0.4f, 0.0f, 0.0f,
+        -0.4f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f
+    };
+    float tangent[] = {
+        0.5f, 0.866f, 0.0f,
+        0.5f, 0.866f, 0.0f
+    };
+
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
+    pNode->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
+    TRSShader* shader = pSS->getShader();
+    shader->createVertexShader("shaders/hermite_curve_vert.glsl");
+    shader->createFragmentShader("shaders/hermite_curve_frag.glsl");
+    shader->createTessControlShader("shaders/hermite_curve_tess.glsl");
+    shader->createTessEvaluateShader("shaders/hermite_curve_eval.glsl");
+    shader->createProgram();
+
+    shader->addUniform3v("vTan0", glm::vec3(0.5f, 0.866f, 0.0f));
+    shader->addUniform3v("vTan1", glm::vec3(0.5f, 0.866f, 0.0f));
+    pNode->getVAO()->setDrawType(GL_PATCHES);
+    pNode->getVAO()->setDrawParam(2);
+
+
+    viewer->setSecenNode(pNode);
+    viewer->run();
+
+    return 0;
+}
+
+

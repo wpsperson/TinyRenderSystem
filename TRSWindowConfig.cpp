@@ -16,8 +16,8 @@ TRSWindowConfig::~TRSWindowConfig()
 bool TRSWindowConfig::initGlfwWindowAndGLAD(int w, int y, GLFWwindow **window)
 {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //这里有一个坑，一定要先创建上下文ContextCurrent，然后再让glad动态加载opengl函数
     GLFWwindow* pWindow = glfwCreateWindow(w, y, "Tiny Render System", nullptr, nullptr);

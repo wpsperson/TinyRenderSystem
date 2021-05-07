@@ -81,6 +81,10 @@ public:
 
     void createFragmentShader(const std::string fShaderFile);
 
+    void createTessControlShader(const std::string tescShaderFile);
+
+    void createTessEvaluateShader(const std::string teseShaderFile);
+
     unsigned int createProgram(bool delShader = true);
 
     unsigned int createProgram(const std::string vShaderFile, const std::string fShaderFile, bool delShader = true);
@@ -105,6 +109,8 @@ public:
     unsigned int program;
     unsigned int vShader;
     unsigned int fShader;
+    unsigned int tescShader;
+    unsigned int teseShader;
     std::map<std::string, UniformData> m_mapUniformValue;
 };
 

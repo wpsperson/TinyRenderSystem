@@ -26,6 +26,11 @@ public:
     EnVertexStruct getBufferType() const;
     //设置Buff的类型
     void setBuffType(EnVertexStruct buffType);
+    int getDrawType();
+    void setDrawType(int drawType);
+    int getDrawParam();
+    void setDrawParam(int param);
+
     //绘制数组的数量
     int getDrawCount() const;
     int getElementCount() const;
@@ -53,6 +58,8 @@ protected:
     EnVertexStruct m_EnVertType;///<顶点数组的格式类型
     int m_nDrawCount;           ///<顶点数组绘制数量
     int m_nElementCount;        ///<索引数组的绘制数量
+    int m_nDrawType;            ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
+    int m_nPatchParam;          ///<绘制类型为GL_PATCHES时，表示碎片的参数
 };
 
 

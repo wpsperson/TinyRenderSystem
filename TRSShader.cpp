@@ -4,7 +4,7 @@
 
 
 TRSShader::TRSShader()
-    :vShader(0), fShader(0)
+    :vShader(0), fShader(0), tescShader(0), teseShader(0)
 {
 
 }
@@ -24,6 +24,16 @@ void TRSShader::createFragmentShader(const std::string fShaderFile)
     fShader = createShader(fShaderFile, GL_FRAGMENT_SHADER);
 }
 
+void TRSShader::createTessControlShader(const std::string tescShaderFile)
+{
+    tescShader = createShader(tescShaderFile, GL_TESS_CONTROL_SHADER);
+}
+
+void TRSShader::createTessEvaluateShader(const std::string teseShaderFile)
+{
+    teseShader = createShader(teseShaderFile, GL_TESS_EVALUATION_SHADER);
+}
+
 unsigned int TRSShader::createProgram(bool delShader)
 {
     if (!vShader || !fShader)
@@ -33,6 +43,11 @@ unsigned int TRSShader::createProgram(bool delShader)
     program = glCreateProgram();
     glAttachShader(program, vShader);
     glAttachShader(program, fShader);
+    if (tescShader && teseShader)
+    {
+        glAttachShader(program, tescShader);
+        glAttachShader(program, teseShader);
+    }
     glLinkProgram(program);
     int ret;
     glGetProgramiv(program, GL_LINK_STATUS, &ret);

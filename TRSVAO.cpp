@@ -163,6 +163,26 @@ void TRSVAO::setBuffType(EnVertexStruct buffType)
     setVertexAttrib(m_EnVertType);
 }
 
+int TRSVAO::getDrawType()
+{
+    return m_nDrawType;
+}
+
+void TRSVAO::setDrawType(int drawType)
+{
+    m_nDrawType = drawType;
+}
+
+int TRSVAO::getDrawParam()
+{
+    return m_nPatchParam;
+}
+
+void TRSVAO::setDrawParam(int param)
+{
+    m_nPatchParam = param;
+}
+
 void TRSVAO::setVBO(unsigned int vbo)
 {
     VBO = vbo;

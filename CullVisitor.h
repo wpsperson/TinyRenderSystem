@@ -16,7 +16,7 @@ class TRS_EXPORT CullVisitor : public NodeVisitor
 public:
     CullVisitor();
     ~CullVisitor();
-    virtual void execute(TRSNode* pNode);
+    virtual void execute(TRSNode* pNode) override;
     
     std::map<int, std::vector<TRSNode*>> getMapState2Node();
 

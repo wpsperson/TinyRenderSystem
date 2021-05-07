@@ -6,7 +6,7 @@
 #include "CaseTessellationOnShader.h"
 
 
-int main()
+int main(int argn, char** argc)
 {
     //CaseFirstTriangle();
     //CaseElementArray();
@@ -22,9 +22,10 @@ int main()
     //CasePointAttenuationLight();
     //CaseSpotlight();
     //CaseMultiLightSource();
-    CaseElementArrayTRS();
+    //CaseElementArrayTRS();
     //CaseLoadModelByAssimp();
     //CaseStencilTest();
     //CaseTessellationOnShader();
+    tess(argn, argc);
     return 0;
 }

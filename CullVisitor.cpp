@@ -6,6 +6,7 @@
 
 
 CullVisitor::CullVisitor()
+    : NodeVisitor()
 {
 
 }
@@ -17,6 +18,8 @@ CullVisitor::~CullVisitor()
 
 void CullVisitor::execute(TRSNode* pNode)
 {
+    NodeVisitor::execute(pNode);
+
     TRSGeode* pGeode = dynamic_cast<TRSGeode*>(pNode);
     if (!pGeode)
     {
