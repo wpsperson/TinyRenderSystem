@@ -27,8 +27,8 @@ int CaseTessellationOnShader()
         0.5f, 0.866f, 0.0f
     };
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, g_OpenGLVersionMajor);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, g_OpenGLVersionMinor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     GLFWwindow* window = glfwCreateWindow(DefaultWindowWidth, DefaultWindowHeight, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
@@ -159,7 +159,7 @@ int CaseTessellationOnShader()
 #include "TRSUtils.h"
 #include "TRSAssimpLoader.h"
 
-int tess(int argn, char** argc)
+int CaseTessHermiteCurve(int argn, char** argc)
 {
     float vertices[] = {
         -0.8f, 0.0f, 0.0f,

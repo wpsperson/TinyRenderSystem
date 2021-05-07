@@ -21,8 +21,8 @@ extern TRSCamera* g_pCamera;
 int CaseStencilTest()
 {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, g_OpenGLVersionMajor);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, g_OpenGLVersionMinor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     GLFWwindow* window = glfwCreateWindow(DefaultWindowWidth, DefaultWindowHeight, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
@@ -176,7 +176,7 @@ int CaseStencilTest()
         glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         m_fCurTime = glfwGetTime();
-        float timeDiff = m_fCurTime - m_fLastTime;
+        double timeDiff = m_fCurTime - m_fLastTime;
         if (timeDiff < 15)
         {
             Sleep(15 - timeDiff);

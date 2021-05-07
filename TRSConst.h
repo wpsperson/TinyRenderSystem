@@ -18,9 +18,13 @@ enum EnVertexStruct
     EnAssimpFormat
 };
 
+// now we use OpenGL 4.6
+static const int g_OpenGLVersionMajor = 4;
+static const int g_OpenGLVersionMinor = 6;
 
-#define DefaultWindowWidth 1200
-#define DefaultWindowHeight 800
+static const int DefaultWindowWidth = 1200;
+static const int DefaultWindowHeight = 800;
+
 //默认背景颜色，深蓝色
 static glm::vec4 s_DefaultBGColor(0.2, 0.2, 0.4, 1);
 
