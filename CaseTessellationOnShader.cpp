@@ -177,8 +177,8 @@ int CaseTessHermiteCurve(int argn, char** argc)
     pNode->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
     std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
-    shader->createVertexShader("shaders/hermite_curve_vert.glsl");
-    shader->createFragmentShader("shaders/hermite_curve_frag.glsl");
+    shader->createVertexShader("shaders/DefaultVertex.glsl");
+    shader->createFragmentShader("shaders/DefaultFragment.glsl");
     shader->createTessControlShader("shaders/hermite_curve_tess.glsl");
     shader->createTessEvaluateShader("shaders/hermite_curve_eval.glsl");
     shader->createProgram();
