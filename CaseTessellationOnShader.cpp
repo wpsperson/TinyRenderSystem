@@ -193,4 +193,40 @@ int CaseTessHermiteCurve(int argn, char** argc)
     return 0;
 }
 
+int CaseTessBezierCurve(int argn, char** argc)
+{
+    float vertices[] = {
+        -1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f
+    };
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+
+    std::shared_ptr<TRSGeode> bezierCurve = std::make_shared<TRSGeode>();
+    bezierCurve->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    std::shared_ptr<TRSStateSet> pSS = bezierCurve->getOrCreateStateSet();
+    TRSShader* shader = pSS->getShader();
+    shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
+    shader->createFragmentShader("shaders/DefaultFragment.glsl");
+    shader->createTessControlShader("shaders/BezierTesc.glsl");
+    shader->createTessEvaluateShader("shaders/BezierTese.glsl");
+    shader->createProgram();
+    bezierCurve->getVAO()->setDrawType(GL_PATCHES);
+    bezierCurve->getVAO()->setDrawParam(4);
+    bezierCurve->setColor(glm::vec4(1, 0.5, 0.5, 1));
+
+    std::shared_ptr<TRSGeode> polyLine = std::make_shared<TRSGeode>();
+    polyLine->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    polyLine->getVAO()->setDrawType(GL_LINE_STRIP);
+    polyLine->setColor(glm::vec4(1, 1, 1, 1));
+
+    std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
+    rootNodes->addChild(polyLine);
+    rootNodes->addChild(bezierCurve);
+
+    viewer->setSecenNode(rootNodes);
+    viewer->run();
+    return 0;
+}
 

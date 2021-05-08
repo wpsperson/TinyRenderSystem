@@ -59,6 +59,11 @@ glm::vec4 TRSGeode::getColor() const
     return m_matColor;
 }
 
+void TRSGeode::setColor(const glm::vec4& color)
+{
+    m_matColor = color;
+}
+
 std::string TRSGeode::debugInfo()
 {
     TRSShader* pShader = m_pStateSet->getShader();

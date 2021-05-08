@@ -7,3 +7,5 @@
 int CaseTessellationOnShader();
 
 int CaseTessHermiteCurve(int argn, char** argc);
+
+int CaseTessBezierCurve(int argn, char** argc);

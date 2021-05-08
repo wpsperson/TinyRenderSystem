@@ -26,6 +26,9 @@ int main(int argn, char** argc)
     //CaseLoadModelByAssimp();
     //CaseStencilTest();
     //CaseTessellationOnShader();
-    CaseTessHermiteCurve(argn, argc);
+    //CaseTessHermiteCurve(argn, argc);
+
+    CaseTessBezierCurve(argn, argc);
+
     return 0;
 }

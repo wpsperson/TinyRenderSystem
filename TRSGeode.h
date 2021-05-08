@@ -30,6 +30,8 @@ public:
 
     glm::vec4 getColor() const;
 
+    void setColor(const glm::vec4& color);
+
     virtual std::string debugInfo() override;
 
 protected:
