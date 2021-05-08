@@ -121,6 +121,10 @@ void TRSViewer::drawScene()
                 glPatchParameteri(GL_PATCH_VERTICES, pVao->getDrawParam());
                 glDrawArrays(GL_PATCHES, 0, pVao->getDrawCount());
             }
+            else if (pVao->getDrawType() == GL_LINES)
+            {
+                glDrawArrays(GL_LINES, 0, pVao->getDrawCount());
+            }
             else if (pVao->getDrawType() == GL_LINE_STRIP)
             {
                 glDrawArrays(GL_LINE_STRIP, 0, pVao->getDrawCount());

@@ -216,12 +216,20 @@ int CaseTessBezierCurve(int argn, char** argc)
     bezierCurve->getVAO()->setDrawParam(4);
     bezierCurve->setColor(glm::vec4(1, 0.5, 0.5, 1));
 
+    int arraySize;
+    float* grid = createXYGridVertexArray(0.5, 7, arraySize);
+    std::shared_ptr<TRSGeode> gridLine = std::make_shared<TRSGeode>();
+    gridLine->readFromVertex(grid, arraySize, EnVertex);
+    gridLine->getVAO()->setDrawType(GL_LINES);
+    gridLine->setColor(glm::vec4(0.5, 0.5, 1, 1));
+
     std::shared_ptr<TRSGeode> polyLine = std::make_shared<TRSGeode>();
     polyLine->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
     polyLine->getVAO()->setDrawType(GL_LINE_STRIP);
     polyLine->setColor(glm::vec4(1, 1, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
+    rootNodes->addChild(gridLine);
     rootNodes->addChild(polyLine);
     rootNodes->addChild(bezierCurve);
 

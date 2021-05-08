@@ -1,10 +1,12 @@
 ﻿#include "TRSVAO.h"
+#include <exception>
 #include <glad/glad.h>
 #include "TRSConst.h"
 
 
 TRSVAO::TRSVAO()
-    :VAO(0), VBO(0), EBO(0), m_nDrawCount(0), m_nElementCount(0)
+    :VAO(0), VBO(0), EBO(0)
+    , m_nDrawCount(0), m_nElementCount(0) ,m_nDrawType(GL_TRIANGLES)
 {
 
 }
@@ -170,6 +172,10 @@ int TRSVAO::getDrawType()
 
 void TRSVAO::setDrawType(int drawType)
 {
+    if (drawType == GL_LINE)
+    {
+        throw std::exception("GL_LINE is not a valid primitive type! use GL_LINES!");
+    }
     m_nDrawType = drawType;
 }
 
