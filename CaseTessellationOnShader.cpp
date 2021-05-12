@@ -238,3 +238,62 @@ int CaseTessBezierCurve(int argn, char** argc)
     return 0;
 }
 
+int CaseTessBezierSurface(int argn, char** argc)
+{
+    // 4*4 Bezier surface control pts
+    float vertices[] = {
+        0.0,  0.0,  0.0,
+        1.0,  0.0,  -1.0,
+        2.0,  0.0,  -1.0,
+        3.0,  0.0,  0.0,
+        0.0,  1.0,  2.0,
+        1.0,  1.0,  0.0,
+        2.0,  1.0,  0.0,
+        3.0,  1.0,  2.0,
+        0.0,  2.0,  2.0,
+        1.0,  2.0,  0.0,
+        2.0,  2.0,  0.0,
+        3.0,  2.0,  2.0,
+        0.0,  3.0,  0.0,
+        1.0,  3.0,  -1.0,
+        2.0,  3.0,  -1.0,
+        3.0,  3.0,  0.0,
+    };
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+
+    std::shared_ptr<TRSGeode> bezierCurve = std::make_shared<TRSGeode>();
+    bezierCurve->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    std::shared_ptr<TRSStateSet> pSS = bezierCurve->getOrCreateStateSet();
+    TRSShader* shader = pSS->getShader();
+    shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
+    shader->createFragmentShader("shaders/DefaultFragment.glsl");
+    shader->createTessControlShader("shaders/BezierSurFaceTesc.glsl");
+    shader->createTessEvaluateShader("shaders/BezierSurFaceTese.glsl");
+    shader->createProgram();
+    bezierCurve->getVAO()->setDrawType(GL_PATCHES);
+    bezierCurve->getVAO()->setDrawParam(16);
+    bezierCurve->setColor(glm::vec4(1, 0.5, 0.5, 1));
+
+    int arraySize;
+    float* grid = createXYGridVertexArray(0.5, 7, arraySize);
+    std::shared_ptr<TRSGeode> gridLine = std::make_shared<TRSGeode>();
+    gridLine->readFromVertex(grid, arraySize, EnVertex);
+    gridLine->getVAO()->setDrawType(GL_LINES);
+    gridLine->setColor(glm::vec4(0.5, 0.5, 1, 1));
+
+    std::shared_ptr<TRSGeode> polyLine = std::make_shared<TRSGeode>();
+    polyLine->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    polyLine->getVAO()->setDrawType(GL_QUADS);
+    polyLine->setPolygonMode(GL_LINE);
+    polyLine->setColor(glm::vec4(1, 1, 1, 1));
+
+    std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
+    rootNodes->addChild(gridLine);
+    rootNodes->addChild(polyLine);
+    rootNodes->addChild(bezierCurve);
+
+    viewer->setSecenNode(rootNodes);
+    viewer->run();
+    return 0;
+}
+

@@ -14,6 +14,7 @@ int main(int argn, char** argc)
     //CaseEachVertexColor();
     //CaseTextureColorBasic();
     //CaseMultiTexture();
+
     //CaseTextureColorArray();
     //CaseManyFunnyBoxRotate();
     //CaseMaterial_AmbientDiffuseSpecular();
@@ -27,8 +28,8 @@ int main(int argn, char** argc)
     //CaseStencilTest();
     //CaseTessellationOnShader();
     //CaseTessHermiteCurve(argn, argc);
-
-    CaseTessBezierCurve(argn, argc);
+    //CaseTessBezierCurve(argn, argc);
+    CaseTessBezierSurface(argn, argc);
 
     return 0;
 }

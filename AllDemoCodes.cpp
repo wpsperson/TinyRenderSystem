@@ -93,7 +93,6 @@ int CaseFirstTriangle()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);//unbind VAO
-
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
@@ -102,7 +101,7 @@ int CaseFirstTriangle()
 
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 4);
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
@@ -716,7 +715,15 @@ void CaseTextureColorArray()
     pSS->getTexture()->createTexture("resources/textures/awesomeface.png");
     pSS->getShader()->createProgram("shaders/1_5MultiTextureVertex.glsl", "shaders/1_5MultiTextureFragment.glsl");
 
-    viewer->setSecenNode(pNode);
+    std::shared_ptr<TRSGeode> pWireFrame = std::make_shared<TRSGeode>(*pNode, false);
+    pWireFrame->setPolygonMode(GL_LINE);
+    pWireFrame->setColor(glm::vec4(1, 1, 1, 1));
+
+    std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
+    root->addChild(pWireFrame);
+    root->addChild(pNode);
+
+    viewer->setSecenNode(root);
     viewer->run();
 }
 
