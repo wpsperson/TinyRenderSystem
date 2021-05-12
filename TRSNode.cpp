@@ -24,6 +24,11 @@ void TRSNode::setMatrix(const glm::mat4& mat)
     m_mat = mat;
 }
 
+void TRSNode::draw()
+{
+
+}
+
 void TRSNode::traverse(NodeVisitor& visitor)
 {
 

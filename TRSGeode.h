@@ -21,6 +21,8 @@ public:
 
     ~TRSGeode();
 
+    virtual void draw() override;
+
     //vertices float point. verticeSize表示有多少个float
     virtual void readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType);
 
@@ -32,10 +34,18 @@ public:
 
     void setColor(const glm::vec4& color);
 
+    void setPolygonMode(int polyMode);
+
     virtual std::string debugInfo() override;
+
+protected:
+    void preProcess();
+    void drawInternal();
+    void postProcess();
 
 protected:
     std::shared_ptr<TRSVAO> m_pVAO;
     glm::vec4 m_matColor;
+    int m_polygonMode;
 };
 

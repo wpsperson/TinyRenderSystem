@@ -29,6 +29,7 @@ public:
 
     void setMatrix(const glm::mat4& mat);
 
+    virtual void draw();
 
     virtual void traverse(NodeVisitor& visitor);
 

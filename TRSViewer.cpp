@@ -115,28 +115,8 @@ void TRSViewer::drawScene()
                 pGeode->getUpdateCallBack()(pGeode);
             }
             pShader->applayAllStaticUniform();//Apply Uniform
-            // todo refactor to VAO member function
-            if (pVao->getDrawType() == GL_PATCHES)
-            {
-                glPatchParameteri(GL_PATCH_VERTICES, pVao->getDrawParam());
-                glDrawArrays(GL_PATCHES, 0, pVao->getDrawCount());
-            }
-            else if (pVao->getDrawType() == GL_LINES)
-            {
-                glDrawArrays(GL_LINES, 0, pVao->getDrawCount());
-            }
-            else if (pVao->getDrawType() == GL_LINE_STRIP)
-            {
-                glDrawArrays(GL_LINE_STRIP, 0, pVao->getDrawCount());
-            }
-            else if (pGeode->getVAO()->getElementCount() > 0)
-            {
-                glDrawElements(GL_TRIANGLES, pGeode->getVAO()->getElementCount(), GL_UNSIGNED_INT, 0);
-            }
-            else
-            {
-                glDrawArrays(GL_TRIANGLES, 0, pGeode->getVAO()->getDrawCount());
-            }
+            // simple draw call
+            pGeode->draw();
             pVao->unBind();
         }
 
