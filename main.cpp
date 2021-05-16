@@ -29,7 +29,7 @@ int main(int argn, char** argc)
     //CaseTessellationOnShader();
     //CaseTessHermiteCurve(argn, argc);
     //CaseTessBezierCurve(argn, argc);
-    CaseTessBezierSurface(argn, argc);
-
+    //CaseTessBezierSurface(argn, argc);
+    CaseTessBSplineCurve(argn, argc);
     return 0;
 }
