@@ -22,6 +22,8 @@ TRSGeode::TRSGeode(const TRSGeode& refObj, bool bSameStateset/* = true*/)
     m_pVAO->setVBO(refObj.getVAO()->getVBO());
     m_pVAO->setBuffType(refObj.getVAO()->getBufferType());
     m_pVAO->setDrawCount(refObj.getVAO()->getDrawCount());
+    m_pVAO->setDrawType(refObj.getVAO()->getDrawType());
+    m_pVAO->setDrawParam(refObj.getVAO()->getDrawParam());
     m_pVAO->unBind();
 
     if (bSameStateset)

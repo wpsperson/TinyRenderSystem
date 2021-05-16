@@ -266,14 +266,13 @@ int CaseTessBezierSurface(int argn, char** argc)
     std::shared_ptr<TRSStateSet> pSS = bezierSurface->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
-    shader->createFragmentShader("shaders/DefaultFragment.glsl");
+    shader->createFragmentShader("shaders/PhongFragment.glsl");
     shader->createTessControlShader("shaders/BezierSurFaceTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierSurFaceTese.glsl");
     shader->createProgram();
     bezierSurface->getVAO()->setDrawType(GL_PATCHES);
     bezierSurface->getVAO()->setDrawParam(16);
     bezierSurface->setColor(glm::vec4(1, 0.5, 0.5, 1));
-    bezierSurface->setPolygonMode(GL_LINE);
 
     int arraySize;
     float* grid = createXYGridVertexArray(0.5, 7, arraySize);
@@ -282,13 +281,19 @@ int CaseTessBezierSurface(int argn, char** argc)
     gridLine->getVAO()->setDrawType(GL_LINES);
     gridLine->setColor(glm::vec4(0.5, 0.5, 1, 1));
 
+    std::shared_ptr<TRSGeode> bezierSurfaceWireframe = std::make_shared<TRSGeode>(*bezierSurface, true);
+    bezierSurfaceWireframe->setPolygonMode(GL_LINE);
+    bezierSurfaceWireframe->setColor(glm::vec4(0.5, 1.0, 0.5, 1));
+
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(gridLine);
     rootNodes->addChild(bezierSurface);
+    rootNodes->addChild(bezierSurfaceWireframe);
 
     viewer->setSecenNode(rootNodes);
     viewer->run();
+
     return 0;
 }
 

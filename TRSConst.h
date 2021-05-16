@@ -33,6 +33,8 @@ static glm::vec4 s_DefaultNodeColor(0.5, 0.5, 0.5, 1);
 
 static glm::vec3 s_DefaultCameraPos(0, 0, 3.0f);
 
+static glm::vec3 s_DefaultLightPos(0.0f, 0.0f, 100.0f);
+
 static float s_NearDistance = 0.1f;  //近平面
 static float s_FarDistance = 100.0f;   //远平面
 
