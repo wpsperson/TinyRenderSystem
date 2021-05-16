@@ -261,18 +261,19 @@ int CaseTessBezierSurface(int argn, char** argc)
     };
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
 
-    std::shared_ptr<TRSGeode> bezierCurve = std::make_shared<TRSGeode>();
-    bezierCurve->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
-    std::shared_ptr<TRSStateSet> pSS = bezierCurve->getOrCreateStateSet();
+    std::shared_ptr<TRSGeode> bezierSurface = std::make_shared<TRSGeode>();
+    bezierSurface->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    std::shared_ptr<TRSStateSet> pSS = bezierSurface->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
     shader->createFragmentShader("shaders/DefaultFragment.glsl");
     shader->createTessControlShader("shaders/BezierSurFaceTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierSurFaceTese.glsl");
     shader->createProgram();
-    bezierCurve->getVAO()->setDrawType(GL_PATCHES);
-    bezierCurve->getVAO()->setDrawParam(16);
-    bezierCurve->setColor(glm::vec4(1, 0.5, 0.5, 1));
+    bezierSurface->getVAO()->setDrawType(GL_PATCHES);
+    bezierSurface->getVAO()->setDrawParam(16);
+    bezierSurface->setColor(glm::vec4(1, 0.5, 0.5, 1));
+    bezierSurface->setPolygonMode(GL_LINE);
 
     int arraySize;
     float* grid = createXYGridVertexArray(0.5, 7, arraySize);
@@ -281,16 +282,10 @@ int CaseTessBezierSurface(int argn, char** argc)
     gridLine->getVAO()->setDrawType(GL_LINES);
     gridLine->setColor(glm::vec4(0.5, 0.5, 1, 1));
 
-    std::shared_ptr<TRSGeode> polyLine = std::make_shared<TRSGeode>();
-    polyLine->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
-    polyLine->getVAO()->setDrawType(GL_QUADS);
-    polyLine->setPolygonMode(GL_LINE);
-    polyLine->setColor(glm::vec4(1, 1, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(gridLine);
-    rootNodes->addChild(polyLine);
-    rootNodes->addChild(bezierCurve);
+    rootNodes->addChild(bezierSurface);
 
     viewer->setSecenNode(rootNodes);
     viewer->run();
