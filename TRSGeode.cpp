@@ -97,44 +97,43 @@ std::string TRSGeode::debugInfo()
 
 void TRSGeode::preProcess()
 {
-    if (m_polygonMode == GL_FILL)
-    {
-        return;
-    }
-    glPolygonMode(GL_FRONT_AND_BACK, m_polygonMode);
-}
-
-void TRSGeode::drawInternal()
-{
-    // todo refactor to VAO member function
-    if (m_pVAO->getDrawType() == GL_PATCHES)
+    if (GL_PATCHES == m_pVAO->getDrawType())
     {
         glPatchParameteri(GL_PATCH_VERTICES, m_pVAO->getDrawParam());
-        glDrawArrays(GL_PATCHES, 0, m_pVAO->getDrawCount());
     }
-    else if (m_pVAO->getDrawType() == GL_LINES)
+
+    if (m_polygonMode != GL_FILL)
     {
-        glDrawArrays(GL_LINES, 0, m_pVAO->getDrawCount());
+        glPolygonMode(GL_FRONT_AND_BACK, m_polygonMode);
     }
-    else if (m_pVAO->getDrawType() == GL_LINE_STRIP)
+}
+
+// #define GL_POINTS 0x0000
+// #define GL_LINES 0x0001
+// #define GL_LINE_LOOP 0x0002
+// #define GL_LINE_STRIP 0x0003
+// #define GL_TRIANGLES 0x0004
+// #define GL_TRIANGLE_STRIP 0x0005
+// #define GL_TRIANGLE_FAN 0x0006
+void TRSGeode::drawInternal()
+{
+    int nElementCount = m_pVAO->getElementCount();
+    int OpenGLDrawType = m_pVAO->getDrawType();
+    if (nElementCount > 0)
     {
-        glDrawArrays(GL_LINE_STRIP, 0, m_pVAO->getDrawCount());
-    }
-    else if (m_pVAO->getElementCount() > 0)
-    {
-        glDrawElements(GL_TRIANGLES, m_pVAO->getElementCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(OpenGLDrawType, m_pVAO->getElementCount(), GL_UNSIGNED_INT, 0);
     }
     else
     {
-        glDrawArrays(GL_TRIANGLES, 0, m_pVAO->getDrawCount());
+        glDrawArrays(OpenGLDrawType, 0, m_pVAO->getDrawCount());
     }
+
 }
 
 void TRSGeode::postProcess()
 {
-    if (m_polygonMode == GL_FILL)
+    if (m_polygonMode != GL_FILL)
     {
-        return;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
