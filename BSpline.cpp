@@ -81,7 +81,7 @@ void BSpline::interpolatePoint(float u, float* pt)
         for (int j=i-m_k, idx=0; j<=i-L; j++, idx++)
         {
             float* curPt = d + 3*(4*L+idx);
-            float alpha = (u - m_knots[j + 1]) / (m_knots[j + m_k + 1] - m_knots[j + 1]);
+            float alpha = (u - m_knots[j + L]) / (m_knots[j + m_k + 1] - m_knots[j + L]);
             float* d_last_j = d + 3 * (4 *(L-1) + idx);
             float* d_last_j1 = d + 3 * (4 * (L - 1) + idx+1);
             divTwoPt(d_last_j, d_last_j1, alpha, curPt);
