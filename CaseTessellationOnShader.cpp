@@ -12,7 +12,8 @@
 #include "TRSCamera.h"
 #include "TRSCallBackFunc.h"
 #include "TRSConst.h"
-
+#include "BSpline.h"
+#include "BSplineSurface.h"
 
 int CaseTessellationOnShader()
 {
@@ -295,20 +296,27 @@ int CaseTessBezierSurface(int argn, char** argc)
 
     return 0;
 }
-#include "BSpline.h"
+
+
 int CaseTessBSplineCurve(int argn, char** argc)
 {
-    float CtrlPts[] = 
-    {
-        0,0,0,
-        0,1,0,
-        1,1,0,
-        1,0,0,
-        2,0,0,
-        2,1,0
+    float vertexBigDipper[] = {
+        -2.4,   1.0,    0.0,
+        -1.3,   1.0,    0.0,
+        -0.75,  0.7,   0.0,
+         0.0,   0.0,    0.0,
+         0.0,  -0.75,   0.0,
+         1.28, -1.08,   0.0,
+         1.68, -0.27,   0.0
     };
+    //unsigned int elementBigDipper[] = {
+    //    0,1,2,3,
+    //    1,2,3,4,
+    //    2,3,4,5,
+    //    3,4,5,6
+    //};
     BSpline* bs = new BSpline;
-    bs->setCtrlPts(CtrlPts, 5);
+    bs->setCtrlPts(vertexBigDipper, 6);
     int num = 100;
     float* curve = new float[3 * num + 3];
     int sampleNum = (num / 10 + 1);
@@ -334,21 +342,6 @@ int CaseTessBSplineCurve(int argn, char** argc)
         }
         pt += 3;
     }
-    //float vertexBigDipper[] = {
-    //    -2.4,   1.0,    0.0,
-    //    -1.3,   1.0,    0.0,
-    //    -0.75,  0.7,   0.0,
-    //     0.0,   0.0,    0.0,
-    //     0.0,  -0.75,   0.0,
-    //     1.28, -1.08,   0.0,
-    //     1.68, -0.27,   0.0
-    //};
-    //unsigned int elementBigDipper[] = {
-    //    0,1,2,3,
-    //    1,2,3,4,
-    //    2,3,4,5,
-    //    3,4,5,6
-    //};
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     //std::shared_ptr<TRSGeode> BSplineCurve = std::make_shared<TRSGeode>();
@@ -376,7 +369,7 @@ int CaseTessBSplineCurve(int argn, char** argc)
     BSplineNormPair->setColor(glm::vec4(0.5, 1, 1, 1));
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
-    CtrlPolygon->readFromVertex(CtrlPts, sizeof(CtrlPts) / sizeof(float), EnVertex);
+    CtrlPolygon->readFromVertex(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float), EnVertex);
     CtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
     CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
 
@@ -390,4 +383,44 @@ int CaseTessBSplineCurve(int argn, char** argc)
     return 0;
 }
 
- 
+
+int CaseTessBSplineSurface(int argn, char** argc)
+{
+    float SurfacePts[]=
+    {
+        0.000000, 0.000000, 0.003754,
+        1.000000, 0.000000, 1.690756,
+        2.000000, 0.000000, 0.579913,
+        3.000000, 0.000000, 2.426222,
+        4.000000, 0.000000, 1.755028,
+        5.000000, 0.000000, 1.439619,
+        0.000000, 1.000000, 1.050874,
+        1.000000, 1.000000, 2.687887,
+        2.000000, 1.000000, 2.468520,
+        3.000000, 1.000000, 2.239814,
+        4.000000, 1.000000, 0.522324,
+        5.000000, 1.000000, 2.576830,
+        0.000000, 2.000000, 2.131504,
+        1.000000, 2.000000, 1.540605,
+        2.000000, 2.000000, 0.911985,
+        3.000000, 2.000000, 0.044954,
+        4.000000, 2.000000, 0.274209,
+        5.000000, 2.000000, 1.093356,
+        0.000000, 3.000000, 0.441939,
+        1.000000, 3.000000, 0.497696,
+        2.000000, 3.000000, 2.965575,
+        3.000000, 3.000000, 1.337077,
+        4.000000, 3.000000, 0.357250,
+        5.000000, 3.000000, 0.014008,
+        0.000000, 4.000000, 0.026734,
+        1.000000, 4.000000, 1.133641,
+        2.000000, 4.000000, 1.594989,
+        3.000000, 4.000000, 1.713553,
+        4.000000, 4.000000, 1.805292,
+        5.000000, 4.000000, 1.821497,
+    };
+
+    BSplineSurface* bsSurface = new BSplineSurface;
+    bsSurface->setCtrlPts(SurfacePts, 5, 4);
+    return 0;
+}

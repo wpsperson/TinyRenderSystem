@@ -30,6 +30,7 @@ int main(int argn, char** argc)
     //CaseTessHermiteCurve(argn, argc);
     //CaseTessBezierCurve(argn, argc);
     //CaseTessBezierSurface(argn, argc);
-    CaseTessBSplineCurve(argn, argc);
+    //CaseTessBSplineCurve(argn, argc);
+    CaseTessBSplineSurface(argn, argc);
     return 0;
 }

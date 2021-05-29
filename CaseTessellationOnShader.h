@@ -14,3 +14,5 @@ int CaseTessBezierSurface(int argn, char** argc);
 
 int CaseTessBSplineCurve(int argn, char** argc);
 
+int CaseTessBSplineSurface(int argn, char** argc);
+
