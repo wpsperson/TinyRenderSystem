@@ -310,12 +310,28 @@ int CaseTessBSplineCurve(int argn, char** argc)
     BSpline* bs = new BSpline;
     bs->setCtrlPts(CtrlPts, 5);
     int num = 100;
-    float* curve = new float[3 * num+3];
+    float* curve = new float[3 * num + 3];
+    int sampleNum = (num / 10 + 1);
+    float* samplePtPair = new float[6 * sampleNum];
+    float* curPair = samplePtPair;
     float* pt = curve;
+    float norm[3]; //normal of any point.
     for (int i=0; i<=num; i++)
     {
         float u = float(i) / num;
         bs->interpolatePoint(u, pt);
+        if (i % 10 == 0)
+        {
+            memcpy(curPair, pt, sizeof(float) * 3);
+            curPair += 3;
+
+            bs->interpolateNormal(u, norm);
+            normlize(norm);
+            float newPt[3];
+            add(pt, norm, newPt);
+            memcpy(curPair, newPt, sizeof(float) * 3);
+            curPair += 3;
+        }
         pt += 3;
     }
     //float vertexBigDipper[] = {
@@ -351,8 +367,13 @@ int CaseTessBSplineCurve(int argn, char** argc)
 
     std::shared_ptr<TRSGeode> Bspline = std::make_shared<TRSGeode>();
     Bspline->readFromVertex(curve, 303, EnVertex);
-    Bspline->getVAO()->setDrawType(GL_POINTS);
+    Bspline->getVAO()->setDrawType(GL_LINE_STRIP);
     Bspline->setColor(glm::vec4(0.9, 0.5, 1, 1));
+
+    std::shared_ptr<TRSGeode> BSplineNormPair = std::make_shared<TRSGeode>();
+    BSplineNormPair->readFromVertex(samplePtPair, sampleNum*6, EnVertex);
+    BSplineNormPair->getVAO()->setDrawType(GL_LINES);
+    BSplineNormPair->setColor(glm::vec4(0.5, 1, 1, 1));
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
     CtrlPolygon->readFromVertex(CtrlPts, sizeof(CtrlPts) / sizeof(float), EnVertex);
@@ -362,6 +383,7 @@ int CaseTessBSplineCurve(int argn, char** argc)
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(Bspline);
     rootNodes->addChild(CtrlPolygon);
+    rootNodes->addChild(BSplineNormPair);
 
     viewer->setSecenNode(rootNodes);
     viewer->run();
