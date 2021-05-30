@@ -156,8 +156,6 @@ void BSplineSurface::calcKnotsByHardleyJuddy()
 
 void BSplineSurface::interpolatePoint(float u, float v, float* pt)
 {
-    int iu = getUIndex(u);
-    int iv = getVIndex(v);
     float* ptInVDir = genCtrlPtsInVDir(u);
     BSpline bs;
     bs.setCtrlPts(ptInVDir, m_m);
@@ -167,7 +165,23 @@ void BSplineSurface::interpolatePoint(float u, float v, float* pt)
 
 void BSplineSurface::interpolateNormal(float u, float v, float* norm)
 {
+    float tangentV[3];
+    float* ptInVDir = genCtrlPtsInVDir(u);
+    BSpline bs;
+    bs.setCtrlPts(ptInVDir, m_m);
+    bs.interpolateTangent(v, tangentV);
+    normlize(tangentV);
+    delete[] ptInVDir;
 
+    float tangentU[3];
+    float* ptInUDir = genCtrlPtsInUDir(v);
+    BSpline bs2;
+    bs2.setCtrlPts(ptInUDir, m_n);
+    bs2.interpolateTangent(u, tangentU);
+    normlize(tangentU);
+    delete[] ptInUDir;
+
+    cross(tangentU, tangentV, norm);
 }
 
 int BSplineSurface::getUIndex(float u)
@@ -206,4 +220,33 @@ float* BSplineSurface::genCtrlPtsInVDir(float u)
         bs.interpolatePoint(u, resultPt);
     }
     return ctrlPts;
+}
+
+float* BSplineSurface::genCtrlPtsInUDir(float v)
+{
+    float* ctrlPts = new float[(m_n + 1) * 3];
+    for (int uIndex = 0; uIndex <= m_n; uIndex++)
+    {
+        float* resultPt = ctrlPts + 3 * uIndex;
+        float* origCtrlPts = copyOriginaPtInVDir(uIndex);
+        BSpline bs;
+        bs.setCtrlPts(origCtrlPts, m_m);
+        bs.interpolatePoint(v, resultPt);
+        delete[] origCtrlPts;
+    }
+    return ctrlPts;
+}
+
+float* BSplineSurface::copyOriginaPtInVDir(int uIndex)
+{
+    float* ctrlPtsInVDirAtUIndex = new float[(m_m + 1) * 3];
+    memset(ctrlPtsInVDirAtUIndex, 0, (m_m + 1) * 3 * sizeof(float));
+    float* curPt = ctrlPtsInVDirAtUIndex;
+    for (int vIndex = 0; vIndex <= m_m; vIndex++)
+    {
+        float* pt = m_ctrlPts + 3 * (vIndex*(m_n + 1) + uIndex);
+        memcpy(curPt, pt, 3 * sizeof(float));
+        curPt += 3;
+    }
+    return ctrlPtsInVDirAtUIndex;
 }

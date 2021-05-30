@@ -25,6 +25,11 @@ protected:
     int getVIndex(float v);
     // create m_m+1 pts which arrange in V direction.
     float* genCtrlPtsInVDir(float u);
+
+    // create m_n+1 pts which arrange in U direction.
+    float* genCtrlPtsInUDir(float v);
+    float* copyOriginaPtInVDir(int uIndex);
+
 private:
     int m_n; // num of ctrlpt -1 in u;
     int m_m; // num of ctrlpt -1 in v;

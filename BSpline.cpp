@@ -90,7 +90,7 @@ void BSpline::interpolatePoint(float u, float* pt)
     memcpy(pt, ret, sizeof(float) * 3);
 }
 
-void BSpline::interpolateNormal(float u, float* norm)
+void BSpline::interpolateTangent(float u, float* norm)
 {
     int i = getIndex(u);
     float d[48];//16 pt

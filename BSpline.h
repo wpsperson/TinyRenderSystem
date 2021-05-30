@@ -18,7 +18,7 @@ public:
 
     void interpolatePoint(float u, float* pt);
 
-    void interpolateNormal(float u, float* norm);
+    void interpolateTangent(float u, float* norm);
 
 protected:
     int getIndex(float u);

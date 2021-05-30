@@ -33,6 +33,13 @@ void add(float* p1, float* p2, float* out)
     out[2] = p1[2] + p2[2];
 }
 
+void cross(float* p1, float*p2, float* out)
+{
+    out[0] = p1[1] * p2[2] - p1[2] * p2[1];
+    out[1] = p1[2] * p2[0] - p1[0] * p2[2];
+    out[2] = p1[0] * p2[1] - p1[1] * p2[0];
+}
+
 unsigned int* genWireFrameElementsArray(int n, int m)
 {
     if (n<2 || m<2)
