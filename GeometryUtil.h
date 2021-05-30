@@ -15,3 +15,4 @@ void normlize(float* v);
 
 void add(float* p1, float* p2, float* out);
 
+unsigned int* genWireFrameElementsArray(int n, int m);

@@ -438,12 +438,25 @@ int CaseTessBSplineSurface(int argn, char** argc)
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> BsplineSurFace = std::make_shared<TRSGeode>();
-    BsplineSurFace->readFromVertex(surface, uResolution*vResolution * 3, EnVertex);
-    BsplineSurFace->getVAO()->setDrawType(GL_POINTS);
+    unsigned int* surFaceEleArr = genWireFrameElementsArray(uResolution, vResolution);
+    BsplineSurFace->readFromVertex(surface, uResolution*vResolution * 3, EnVertex, surFaceEleArr, uResolution*vResolution*6);
+    BsplineSurFace->getVAO()->setDrawType(GL_TRIANGLES);
     BsplineSurFace->setColor(glm::vec4(0.9, 0.5, 1, 1));
+
+
+
+    std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
+    unsigned int* ctrlPolygonEleArr = genWireFrameElementsArray(6, 5);
+    CtrlPolygon->readFromVertex(SurfacePts, sizeof(SurfacePts) / sizeof(float), EnVertex, ctrlPolygonEleArr, 180);
+    CtrlPolygon->setPolygonMode(GL_LINE);
+    CtrlPolygon->getVAO()->setDrawType(GL_TRIANGLES);
+    CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
+
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(BsplineSurFace);
+    rootNodes->addChild(CtrlPolygon);
+
     glPointSize(3);
     viewer->setSecenNode(rootNodes);
     viewer->run();

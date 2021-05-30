@@ -33,4 +33,36 @@ void add(float* p1, float* p2, float* out)
     out[2] = p1[2] + p2[2];
 }
 
+unsigned int* genWireFrameElementsArray(int n, int m)
+{
+    if (n<2 || m<2)
+    {
+        return nullptr;
+    }
+    unsigned int *elementArray = new unsigned int[n*m * 6];
+    unsigned int *curEle = elementArray;
+    for (unsigned int v = 1; v<m; v++)
+    {
+        for (unsigned int u=1; u<n; u++)
+        {
+            unsigned int idxRightBtm= v*n + u;
+            unsigned int idxLeftBtm = v*n + u - 1;
+            unsigned int idxRightTop = (v - 1)*n + u;
+            unsigned int idxLeftTop = (v - 1)*n + u - 1;
+            *curEle = idxRightTop;
+            curEle++;
+            *curEle = idxLeftTop;
+            curEle++;
+            *curEle = idxLeftBtm;
+            curEle++;
+            *curEle = idxRightTop;
+            curEle++;
+            *curEle = idxLeftBtm;
+            curEle++;
+            *curEle = idxRightBtm;
+            curEle++;
+        }
+    }
+    return elementArray;
+}
 
