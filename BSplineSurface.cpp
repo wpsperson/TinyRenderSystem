@@ -1,5 +1,5 @@
 #include "BSplineSurface.h"
-
+#include "BSpline.h"
 
 
 BSplineSurface::BSplineSurface()
@@ -156,7 +156,13 @@ void BSplineSurface::calcKnotsByHardleyJuddy()
 
 void BSplineSurface::interpolatePoint(float u, float v, float* pt)
 {
-
+    int iu = getUIndex(u);
+    int iv = getVIndex(v);
+    float* ptInVDir = genCtrlPtsInVDir(u);
+    BSpline bs;
+    bs.setCtrlPts(ptInVDir, m_m);
+    bs.interpolatePoint(v, pt);
+    delete[] ptInVDir;
 }
 
 void BSplineSurface::interpolateNormal(float u, float v, float* norm)
@@ -186,4 +192,18 @@ int BSplineSurface::getVIndex(float v)
         }
     }
     return -1;
+}
+
+float* BSplineSurface::genCtrlPtsInVDir(float u)
+{
+    float* ctrlPts = new float[(m_m + 1)*3];
+    for (int vIndex = 0; vIndex<=m_m; vIndex++)
+    {
+        float* resultPt = ctrlPts+ 3*vIndex;
+        float* origCtrlPts = m_ctrlPts + 3 * vIndex*(m_n + 1);
+        BSpline bs;
+        bs.setCtrlPts(origCtrlPts, m_n);
+        bs.interpolatePoint(u, resultPt);
+    }
+    return ctrlPts;
 }

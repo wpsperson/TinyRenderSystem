@@ -419,8 +419,34 @@ int CaseTessBSplineSurface(int argn, char** argc)
         4.000000, 4.000000, 1.805292,
         5.000000, 4.000000, 1.821497,
     };
-
+    int uResolution = 20;
+    int vResolution = 20;
+    float* surface = new float[uResolution*vResolution*3];
+    memset(surface, 0, uResolution*vResolution * 3 * sizeof(float));
     BSplineSurface* bsSurface = new BSplineSurface;
     bsSurface->setCtrlPts(SurfacePts, 5, 4);
+    for (int vIndex =0; vIndex<vResolution; vIndex++)
+    {
+        float v = float(vIndex) / (vResolution - 1);
+        for (int uIndex = 0; uIndex<uResolution; uIndex++)
+        {
+            float u = float(uIndex) / (uResolution - 1);
+            float *curPt = surface + (vIndex*uResolution+uIndex) * 3;
+            bsSurface->interpolatePoint(u, v, curPt);
+        }
+    }
+
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGeode> BsplineSurFace = std::make_shared<TRSGeode>();
+    BsplineSurFace->readFromVertex(surface, uResolution*vResolution * 3, EnVertex);
+    BsplineSurFace->getVAO()->setDrawType(GL_POINTS);
+    BsplineSurFace->setColor(glm::vec4(0.9, 0.5, 1, 1));
+
+    std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
+    rootNodes->addChild(BsplineSurFace);
+    glPointSize(3);
+    viewer->setSecenNode(rootNodes);
+    viewer->run();
+    return 0;
     return 0;
 }
