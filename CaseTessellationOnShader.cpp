@@ -419,11 +419,9 @@ int CaseTessBSplineSurface(int argn, char** argc)
         4.000000, 4.000000, 1.805292,
         5.000000, 4.000000, 1.821497,
     };
-    int uResolution = 10;
-    int vResolution = 10;
-    float* surface = new float[uResolution*vResolution*3];
-    memset(surface, 0, uResolution*vResolution * 3 * sizeof(float));
-    float* normPairArr = new float[uResolution*vResolution * 6];
+    int uResolution = 20;
+    int vResolution = 20;
+    float* surface = new float[uResolution*vResolution*6];
     memset(surface, 0, uResolution*vResolution * 6 * sizeof(float));
     BSplineSurface* bsSurface = new BSplineSurface;
     bsSurface->setCtrlPts(SurfacePts, 5, 4);
@@ -433,33 +431,24 @@ int CaseTessBSplineSurface(int argn, char** argc)
         for (int uIndex = 0; uIndex<uResolution; uIndex++)
         {
             float u = float(uIndex) / (uResolution - 1);
-            float *curPt = surface + (vIndex*uResolution+uIndex) * 3;
+            float *curPt = surface + (vIndex*uResolution+uIndex) * 6;
             bsSurface->interpolatePoint(u, v, curPt);
 
-            float norm[3];
+            float* norm = surface + (vIndex*uResolution + uIndex) * 6 + 3;
             bsSurface->interpolateNormal(u, v, norm);
-            float* curNormPair = normPairArr + (vIndex*uResolution + uIndex) * 6;
-            memcpy(curNormPair, curPt, sizeof(float) * 3);
-            curNormPair += 3;
-            float nextPt[3];
-            add(curPt, norm, nextPt);
-            memcpy(curNormPair, nextPt, sizeof(float) * 3);
-            curNormPair += 3;
         }
     }
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> BsplineSurFace = std::make_shared<TRSGeode>();
     unsigned int* surFaceEleArr = genWireFrameElementsArray(uResolution, vResolution);
-    BsplineSurFace->readFromVertex(surface, uResolution*vResolution * 3, EnVertex, surFaceEleArr, uResolution*vResolution*6);
-    BsplineSurFace->setPolygonMode(GL_LINE);
+    BsplineSurFace->readFromVertex(surface, uResolution*vResolution * 6, EnVertexNormal, surFaceEleArr, uResolution*vResolution * 6);
+    std::shared_ptr<TRSStateSet> pSS = BsplineSurFace->getOrCreateStateSet();
+    TRSShader* shader = pSS->getShader();
+    shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
     BsplineSurFace->getVAO()->setDrawType(GL_TRIANGLES);
     BsplineSurFace->setColor(glm::vec4(0.9, 0.5, 1, 1));
 
-    std::shared_ptr<TRSGeode> NormLines = std::make_shared<TRSGeode>();
-    NormLines->readFromVertex(normPairArr, uResolution*vResolution * 6, EnVertex);
-    NormLines->getVAO()->setDrawType(GL_LINES);
-    NormLines->setColor(glm::vec4(1, 1, 0.5, 1));
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
     unsigned int* ctrlPolygonEleArr = genWireFrameElementsArray(6, 5);
@@ -468,12 +457,9 @@ int CaseTessBSplineSurface(int argn, char** argc)
     CtrlPolygon->getVAO()->setDrawType(GL_TRIANGLES);
     CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
 
-
-
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(BsplineSurFace);
-    //rootNodes->addChild(CtrlPolygon);
-    rootNodes->addChild(NormLines);
+    rootNodes->addChild(CtrlPolygon);
 
     glPointSize(3);
     viewer->setSecenNode(rootNodes);
