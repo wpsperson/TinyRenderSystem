@@ -26,14 +26,14 @@ BSplineSurface::~BSplineSurface()
     }
 }
 
-void BSplineSurface::setCtrlPts(const float* pt, int n, int m)
+void BSplineSurface::setCtrlPts(const float* pt, int ptNumInUDir, int ptNumInVDir)
 {
-    if (n < m_k || m<m_k)
+    if (ptNumInUDir-1 < m_k || ptNumInVDir-1<m_k)
     {
         return;
     }
-    m_n = n;
-    m_m = m;
+    m_n = ptNumInUDir - 1;
+    m_m = ptNumInVDir - 1;
     int ptCount = (m_n + 1) * (m_m + 1);
     m_ctrlPts = new float[ptCount*3];
     memcpy(m_ctrlPts, pt, ptCount * 3 * sizeof(float));
@@ -158,7 +158,7 @@ void BSplineSurface::interpolatePoint(float u, float v, float* pt)
 {
     float* ptInVDir = genCtrlPtsInVDir(u);
     BSpline bs;
-    bs.setCtrlPts(ptInVDir, m_m);
+    bs.setCtrlPts(ptInVDir, m_m+1);
     bs.interpolatePoint(v, pt);
     delete[] ptInVDir;
 }
@@ -168,7 +168,7 @@ void BSplineSurface::interpolateNormal(float u, float v, float* norm)
     float tangentV[3];
     float* ptInVDir = genCtrlPtsInVDir(u);
     BSpline bs;
-    bs.setCtrlPts(ptInVDir, m_m);
+    bs.setCtrlPts(ptInVDir, m_m+1);
     bs.interpolateTangent(v, tangentV);
     normlize(tangentV);
     delete[] ptInVDir;
@@ -176,7 +176,7 @@ void BSplineSurface::interpolateNormal(float u, float v, float* norm)
     float tangentU[3];
     float* ptInUDir = genCtrlPtsInUDir(v);
     BSpline bs2;
-    bs2.setCtrlPts(ptInUDir, m_n);
+    bs2.setCtrlPts(ptInUDir, m_n+1);
     bs2.interpolateTangent(u, tangentU);
     normlize(tangentU);
     delete[] ptInUDir;
@@ -216,7 +216,7 @@ float* BSplineSurface::genCtrlPtsInVDir(float u)
         float* resultPt = ctrlPts+ 3*vIndex;
         float* origCtrlPts = m_ctrlPts + 3 * vIndex*(m_n + 1);
         BSpline bs;
-        bs.setCtrlPts(origCtrlPts, m_n);
+        bs.setCtrlPts(origCtrlPts, m_n+1);
         bs.interpolatePoint(u, resultPt);
     }
     return ctrlPts;
@@ -230,7 +230,7 @@ float* BSplineSurface::genCtrlPtsInUDir(float v)
         float* resultPt = ctrlPts + 3 * uIndex;
         float* origCtrlPts = copyOriginaPtInVDir(uIndex);
         BSpline bs;
-        bs.setCtrlPts(origCtrlPts, m_m);
+        bs.setCtrlPts(origCtrlPts, m_m+1);
         bs.interpolatePoint(v, resultPt);
         delete[] origCtrlPts;
     }

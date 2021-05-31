@@ -298,7 +298,7 @@ int CaseTessBezierSurface(int argn, char** argc)
 }
 
 
-int CaseTessBSplineCurve(int argn, char** argc)
+int CaseTraditionalBSplineCurve(int argn, char** argc)
 {
     float vertexBigDipper[] = {
         -2.4,   1.0,    0.0,
@@ -309,14 +309,8 @@ int CaseTessBSplineCurve(int argn, char** argc)
          1.28, -1.08,   0.0,
          1.68, -0.27,   0.0
     };
-    //unsigned int elementBigDipper[] = {
-    //    0,1,2,3,
-    //    1,2,3,4,
-    //    2,3,4,5,
-    //    3,4,5,6
-    //};
     BSpline* bs = new BSpline;
-    bs->setCtrlPts(vertexBigDipper, 6);
+    bs->setCtrlPts(vertexBigDipper, 7);
     int num = 100;
     float* curve = new float[3 * num + 3];
     int sampleNum = (num / 10 + 1);
@@ -344,20 +338,6 @@ int CaseTessBSplineCurve(int argn, char** argc)
     }
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
-    //std::shared_ptr<TRSGeode> BSplineCurve = std::make_shared<TRSGeode>();
-    //BSplineCurve->readFromVertex(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float), EnVertex, 
-    //    elementBigDipper, sizeof(elementBigDipper) / sizeof(unsigned int));
-    //std::shared_ptr<TRSStateSet> pSS = BSplineCurve->getOrCreateStateSet();
-    //TRSShader* shader = pSS->getShader();
-    //shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
-    //shader->createFragmentShader("shaders/DefaultFragment.glsl");
-    //shader->createTessControlShader("shaders/BezierTesc.glsl");
-    //shader->createTessEvaluateShader("shaders/BezierTese.glsl");
-    //shader->createProgram();
-    //BSplineCurve->getVAO()->setDrawType(GL_PATCHES);
-    //BSplineCurve->getVAO()->setDrawParam(4);
-    //BSplineCurve->setColor(glm::vec4(1, 1, 1, 1));
-
     std::shared_ptr<TRSGeode> Bspline = std::make_shared<TRSGeode>();
     Bspline->readFromVertex(curve, 303, EnVertex);
     Bspline->getVAO()->setDrawType(GL_LINE_STRIP);
@@ -384,7 +364,12 @@ int CaseTessBSplineCurve(int argn, char** argc)
 }
 
 
-int CaseTessBSplineSurface(int argn, char** argc)
+int CaseTessBSplineCurve(int argn, char** argc)
+{
+    return 0;
+}
+
+int CaseTraditionalBSplineSurface(int argn, char** argc)
 {
     float SurfacePts[]=
     {
@@ -424,7 +409,7 @@ int CaseTessBSplineSurface(int argn, char** argc)
     float* surface = new float[uResolution*vResolution*6];
     memset(surface, 0, uResolution*vResolution * 6 * sizeof(float));
     BSplineSurface* bsSurface = new BSplineSurface;
-    bsSurface->setCtrlPts(SurfacePts, 5, 4);
+    bsSurface->setCtrlPts(SurfacePts, 6, 5);
     for (int vIndex =0; vIndex<vResolution; vIndex++)
     {
         float v = float(vIndex) / (vResolution - 1);
@@ -465,5 +450,9 @@ int CaseTessBSplineSurface(int argn, char** argc)
     viewer->setSecenNode(rootNodes);
     viewer->run();
     return 0;
+}
+
+int CaseTessBSplineSurface(int argn, char** argc)
+{
     return 0;
 }

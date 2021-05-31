@@ -22,13 +22,13 @@ BSpline::~BSpline()
     }
 }
 
-void BSpline::setCtrlPts(const float* pt, int n)
+void BSpline::setCtrlPts(const float* pt, int numberOfPts)
 {
-    if (n < m_k)
+    if (numberOfPts -1 < m_k)
     {
         return;
     }
-    m_n = n;
+    m_n = numberOfPts - 1;
     m_ctrlPts = new float[3 * (m_n + 1)];
     memcpy(m_ctrlPts, pt, sizeof(float) * 3 * (m_n + 1));
     calcKnotsByHardleyJuddy();

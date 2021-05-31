@@ -12,7 +12,7 @@ public:
     BSpline();
     ~BSpline();
 
-    void setCtrlPts(const float* pt, int n);
+    void setCtrlPts(const float* pt, int numberOfPts);
 
     void calcKnotsByHardleyJuddy();
 

@@ -12,7 +12,7 @@ public:
     BSplineSurface();
     ~BSplineSurface();
 public:
-    void setCtrlPts(const float* pt, int n, int m);
+    void setCtrlPts(const float* pt, int ptNumInUDir, int ptNumInVDir);
 
     void calcKnotsByHardleyJuddy();
 
