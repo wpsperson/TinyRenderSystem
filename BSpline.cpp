@@ -125,6 +125,50 @@ void BSpline::interpolateTangent(float u, float* norm)
     memcpy(norm, ret, sizeof(float) * 3);
 }
 
+void BSpline::convertPiecewiseBezier()
+{
+    if (m_n == m_k)
+    {
+        return;
+    }
+    int new_n = (m_n - m_k)*(m_k -1) + m_n;// each knot except endpoint repeat insert (m_k - 1)
+    // first recalc new knots array.
+    float* newKnots = new float[new_n + m_k + 1 + 1];
+    memset(newKnots, 0, (new_n + m_k + 1 + 1) * sizeof(float));
+    newKnots[new_n + 1] = newKnots[new_n + 2] = newKnots[new_n + 3] = newKnots[new_n + 4] = 1.0;
+    float* curKnot = newKnots + m_k + 1;
+    for (int i=m_k+1; i<=m_n; i++)
+    {
+        float value = m_knots[i];
+        *(curKnot++) = value;
+        *(curKnot++) = value;
+        *(curKnot++) = value;
+    }
+
+    // then recalc new ctrl points
+    float* newCtrlPts = new float[(new_n + 1) * 3];
+    memset(newCtrlPts, 0, (new_n + 1) * 3 * sizeof(float));
+    float* curNewPt = newCtrlPts + new_n * 3;
+    float* curOldPt = m_ctrlPts + m_n * 3;
+    memcpy(curNewPt, curOldPt, 3 * sizeof(float));
+    float d1_j[3];
+    float d1_j1[3];
+    float d2[3];
+    for (int i=m_n; i>=m_k+1; i--)
+    {
+        int j = i - m_k;
+        // insert two repeat same knot at knots[i]
+
+    }
+    //for (int s=1; s<=2; s++)
+    //{
+    //    for ()
+    //    {
+    //    }
+    //}
+
+}
+
 int BSpline::getIndex(float u)
 {
     for (int i=m_k; i<m_n+1; i++)

@@ -366,6 +366,19 @@ int CaseTraditionalBSplineCurve(int argn, char** argc)
 
 int CaseTessBSplineCurve(int argn, char** argc)
 {
+    float vertexBigDipper[] = {
+        -2.4,   1.0,    0.0,
+        -1.3,   1.0,    0.0,
+        -0.75,  0.7,   0.0,
+        0.0,   0.0,    0.0,
+        0.0,  -0.75,   0.0,
+        1.28, -1.08,   0.0,
+        1.68, -0.27,   0.0
+    };
+    BSpline* bs = new BSpline;
+    bs->setCtrlPts(vertexBigDipper, 7);
+    bs->convertPiecewiseBezier();
+
     return 0;
 }
 

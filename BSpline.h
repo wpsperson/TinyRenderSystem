@@ -20,6 +20,9 @@ public:
 
     void interpolateTangent(float u, float* norm);
 
+    // insert k repeat knots to convert to piecewise bezier curve
+    void convertPiecewiseBezier();
+
 protected:
     int getIndex(float u);
 private:
