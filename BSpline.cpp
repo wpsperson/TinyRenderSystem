@@ -72,35 +72,35 @@ void BSpline::calcKnotsByHardleyJuddy()
 void BSpline::interpolatePoint(float u, float* pt)
 {
     int i = getIndex(u);
-    float d[48];//16 pt
+    float d[4][12];//16 pt arrange in 4 row
     // define  0->i-k, k-l-> i-l
     memcpy(d, m_ctrlPts + 3 * (i - m_k), 12 * sizeof(float)); // first line four ctrl pts. (L == 0)
     for (int L = 1; L<=m_k; L++)
     {
         for (int j=i-m_k, idx=0; j<=i-L; j++, idx++)
         {
-            float* curPt = d + 3*(4*L+idx);
+            float* curPt = d[L] + 3 * idx;
             float alpha = (u - m_knots[j + L]) / (m_knots[j + m_k + 1] - m_knots[j + L]);
-            float* d_last_j = d + 3 * (4 *(L-1) + idx);
-            float* d_last_j1 = d + 3 * (4 * (L - 1) + idx+1);
+            float* d_last_j = d[L - 1] + 3 * idx;
+            float* d_last_j1 = d[L - 1] + 3 * (idx+1);
             divTwoPt(d_last_j, d_last_j1, alpha, curPt);
         }
     }
-    float* ret = d + 3 * (4 * m_k);
+    float* ret = &(d[3][0]);
     memcpy(pt, ret, sizeof(float) * 3);
 }
 
 void BSpline::interpolateTangent(float u, float* norm)
 {
     int i = getIndex(u);
-    float d[48];//16 pt
+    float d[4][12];//16 pt arrange in 4 row
     memcpy(d, m_ctrlPts + 3 * (i - m_k), 12 * sizeof(float)); // first line four ctrl pts.
     // calc new ctrl pt
     for (int j = i - m_k, idx = 0; j <= i - 1; j++, idx++)      // second line three new ctrl pt.
     {
-        float* curPt = d + 3 * (4 * 1 + idx);// First derivative
-        float* d_last_j = d + 3 * (idx);
-        float* d_last_j1 = d + 3 * (idx + 1);
+        float* curPt = d[1] + 3 * idx; // First row 3 pt represent derivative
+        float* d_last_j = d[0] + 3 * (idx);
+        float* d_last_j1 = d[0] + 3 * (idx + 1);
         float alpha = m_k / (m_knots[j + m_k + 1] - m_knots[j + 1]);
         curPt[0] = alpha * (d_last_j1[0] - d_last_j[0]);
         curPt[1] = alpha * (d_last_j1[1] - d_last_j[1]);
@@ -113,15 +113,14 @@ void BSpline::interpolateTangent(float u, float* norm)
     {
         for (int j = i - new_k, idx = 0; j <= i - L; j++, idx++)
         {
-            float* curPt = d + 3 * (4 *(L+1) + idx);
+            float* curPt = d[L + 1] + 3 * idx;
             float alpha = (u - m_knots[j + L]) / (m_knots[j + new_k + 1] - m_knots[j + L]);
-            float* d_last_j = d + 3 * (4 * L + idx);
-            float* d_last_j1 = d + 3 * (4 * L + idx + 1);
+            float* d_last_j = d[L] + 3 * idx;;
+            float* d_last_j1 = d[L] + 3 * (idx+1);
             divTwoPt(d_last_j, d_last_j1, alpha, curPt);
         }
     }
-
-    float* ret = d + 3 * (4 * m_k);
+    float* ret = &(d[3][0]);
     memcpy(norm, ret, sizeof(float) * 3);
 }
 
@@ -151,11 +150,11 @@ void BSpline::convertPiecewiseBezier()
     float* curNewPt = newCtrlPts + (new_n -1 )* 3;
     float* curOldPt = m_ctrlPts + (m_n-1) * 3;
     memcpy(curNewPt, curOldPt, 6 * sizeof(float));// copy dn-1 , dn
-    float insertPt[3][9];
     const int r = 1;//existed repeat number r=1;
     const int L = 2;// insert repeat number l=2
     for (int i=m_n; i>=m_k+1; i--)
     {
+        float insertPt[3][9];
         memcpy(insertPt, m_ctrlPts+3*(i-m_k), 3* 3 * sizeof(float));// three original ctrlPt
         for (int s = 1; s <= L; s++)
         {
