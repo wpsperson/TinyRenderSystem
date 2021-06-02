@@ -148,25 +148,42 @@ void BSpline::convertPiecewiseBezier()
     // then recalc new ctrl points
     float* newCtrlPts = new float[(new_n + 1) * 3];
     memset(newCtrlPts, 0, (new_n + 1) * 3 * sizeof(float));
-    float* curNewPt = newCtrlPts + new_n * 3;
-    float* curOldPt = m_ctrlPts + m_n * 3;
-    memcpy(curNewPt, curOldPt, 3 * sizeof(float));
-    float d1_j[3];
-    float d1_j1[3];
-    float d2[3];
+    float* curNewPt = newCtrlPts + (new_n -1 )* 3;
+    float* curOldPt = m_ctrlPts + (m_n-1) * 3;
+    memcpy(curNewPt, curOldPt, 6 * sizeof(float));// copy dn-1 , dn
+    float insertPt[3][9];
+    const int r = 1;//existed repeat number r=1;
+    const int L = 2;// insert repeat number l=2
     for (int i=m_n; i>=m_k+1; i--)
     {
-        int j = i - m_k;
-        // insert two repeat same knot at knots[i]
-
+        memcpy(insertPt, m_ctrlPts+3*(i-m_k), 3* 3 * sizeof(float));// three original ctrlPt
+        for (int s = 1; s <= L; s++)
+        {
+            for (int j = i - m_k, idx=0; j<=i-s-r; j++, idx++)
+            {
+                float u = m_knots[i];
+                float alpha = (u - m_knots[j + s]) / (m_knots[j + m_k + 1] - m_knots[j + s]);
+                float* d_j = insertPt[s - 1] + 3 * idx;
+                float* d_j1 = insertPt[s - 1] + 3 * (idx+1);
+                divTwoPt(d_j, d_j1, alpha, insertPt[s]+3*idx);
+            }
+        }
+        curNewPt -= 3;
+        memcpy(curNewPt, insertPt[1] + 3, 3 * sizeof(float)); // d'0
+        curNewPt -= 3;
+        memcpy(curNewPt, insertPt[2] + 0, 3 * sizeof(float)); // d''0
+        curNewPt -= 3;
+        memcpy(curNewPt, insertPt[1] + 0, 3 * sizeof(float)); // d'1
     }
-    //for (int s=1; s<=2; s++)
-    //{
-    //    for ()
-    //    {
-    //    }
-    //}
+    curNewPt -= 6;
+    memcpy(curNewPt, m_ctrlPts, 6 * sizeof(float));
 
+    // replace
+    delete[]m_knots;
+    m_knots = newKnots;
+    delete[]m_ctrlPts;
+    m_ctrlPts = newCtrlPts;
+    m_n = new_n;
 }
 
 int BSpline::getIndex(float u)

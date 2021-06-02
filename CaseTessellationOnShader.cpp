@@ -367,17 +367,68 @@ int CaseTraditionalBSplineCurve(int argn, char** argc)
 int CaseTessBSplineCurve(int argn, char** argc)
 {
     float vertexBigDipper[] = {
-        -2.4,   1.0,    0.0,
-        -1.3,   1.0,    0.0,
-        -0.75,  0.7,   0.0,
-        0.0,   0.0,    0.0,
-        0.0,  -0.75,   0.0,
-        1.28, -1.08,   0.0,
-        1.68, -0.27,   0.0
+        0,0,0,
+        0,1,0,
+        1,1,0,
+        1,0,0,
+        2,0,0,
+        2,1,0
     };
     BSpline* bs = new BSpline;
-    bs->setCtrlPts(vertexBigDipper, 7);
+    bs->setCtrlPts(vertexBigDipper, 6);
     bs->convertPiecewiseBezier();
+
+    int num = 100;
+    float* curve = new float[3 * num + 3];
+    int sampleNum = (num / 10 + 1);
+    float* samplePtPair = new float[6 * sampleNum];
+    float* curPair = samplePtPair;
+    float* pt = curve;
+    float norm[3]; //normal of any point.
+    for (int i = 0; i <= num; i++)
+    {
+        float u = float(i) / num;
+        bs->interpolatePoint(u, pt);
+        if (i % 10 == 0)
+        {
+            memcpy(curPair, pt, sizeof(float) * 3);
+            curPair += 3;
+
+            bs->interpolateTangent(u, norm);
+            normlize(norm);
+            float newPt[3];
+            add(pt, norm, newPt);
+            memcpy(curPair, newPt, sizeof(float) * 3);
+            curPair += 3;
+        }
+        pt += 3;
+    }
+
+    std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
+    std::shared_ptr<TRSGeode> Bspline = std::make_shared<TRSGeode>();
+    Bspline->readFromVertex(curve, 303, EnVertex);
+    Bspline->getVAO()->setDrawType(GL_LINE_STRIP);
+    Bspline->setColor(glm::vec4(0.9, 0.5, 1, 1));
+
+    std::shared_ptr<TRSGeode> BSplineNormPair = std::make_shared<TRSGeode>();
+    BSplineNormPair->readFromVertex(samplePtPair, sampleNum * 6, EnVertex);
+    BSplineNormPair->getVAO()->setDrawType(GL_LINES);
+    BSplineNormPair->setColor(glm::vec4(0.5, 1, 1, 1));
+
+    std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
+    CtrlPolygon->readFromVertex(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float), EnVertex);
+    CtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
+    CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
+
+    std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
+    rootNodes->addChild(Bspline);
+    rootNodes->addChild(CtrlPolygon);
+    rootNodes->addChild(BSplineNormPair);
+
+    viewer->setSecenNode(rootNodes);
+    viewer->run();
+    return 0;
+
 
     return 0;
 }
