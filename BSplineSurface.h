@@ -20,6 +20,12 @@ public:
 
     void interpolateNormal(float u, float v, float* norm);
 
+    void convertPiecewiseBezierSurface();
+
+    float* getAllCtrlPt();
+    int getNumberOfPtsInUDir();
+    int getNumberOfPtsInVDir();
+
 protected:
     int getUIndex(float u);
     int getVIndex(float v);

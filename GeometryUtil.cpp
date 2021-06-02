@@ -90,3 +90,34 @@ unsigned int* genBS2BezierElementArray(int ptNum)
     return elementArray;
 }
 
+unsigned int* genBS2BezierPatchEleArr(int ptNumU, int ptNumV)
+{
+    int setNumU = (ptNumU - 1) / 3;
+    int setNumV = (ptNumV - 1) / 3;
+    unsigned int *elementArray = new unsigned int[setNumU*setNumV*16];
+    unsigned int *curEle = elementArray;
+    for (int vIndex = 0; vIndex < ptNumV-1; vIndex += 3)
+    {
+        for (int uIndex = 0; uIndex < ptNumU-1; uIndex += 3)
+        {
+            *(curEle++) = (vIndex + 0)*ptNumU + uIndex;
+            *(curEle++) = (vIndex + 0)*ptNumU + uIndex + 1;
+            *(curEle++) = (vIndex + 0)*ptNumU + uIndex + 2;
+            *(curEle++) = (vIndex + 0)*ptNumU + uIndex + 3;
+            *(curEle++) = (vIndex + 1)*ptNumU + uIndex;
+            *(curEle++) = (vIndex + 1)*ptNumU + uIndex + 1;
+            *(curEle++) = (vIndex + 1)*ptNumU + uIndex + 2;
+            *(curEle++) = (vIndex + 1)*ptNumU + uIndex + 3;
+            *(curEle++) = (vIndex + 2)*ptNumU + uIndex;
+            *(curEle++) = (vIndex + 2)*ptNumU + uIndex + 1;
+            *(curEle++) = (vIndex + 2)*ptNumU + uIndex + 2;
+            *(curEle++) = (vIndex + 2)*ptNumU + uIndex + 3;
+            *(curEle++) = (vIndex + 3)*ptNumU + uIndex;
+            *(curEle++) = (vIndex + 3)*ptNumU + uIndex + 1;
+            *(curEle++) = (vIndex + 3)*ptNumU + uIndex + 2;
+            *(curEle++) = (vIndex + 3)*ptNumU + uIndex + 3;
+        }
+    }
+    return elementArray;
+}
+

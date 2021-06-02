@@ -184,6 +184,97 @@ void BSplineSurface::interpolateNormal(float u, float v, float* norm)
     cross(tangentU, tangentV, norm);
 }
 
+void BSplineSurface::convertPiecewiseBezierSurface()
+{
+    if (m_n == m_k && m_m == m_k)
+    {
+        return;
+    }
+    int new_n = (m_n - m_k)*(m_k - 1) + m_n;
+    int new_m = (m_m - m_k)*(m_k - 1) + m_m;
+    float* newUKnots = nullptr;
+    float* newVKnots = nullptr;
+    float** root = new float*[new_m + 1];
+    for (int vIndex=0;vIndex<=new_m; vIndex++)
+    {
+        root[vIndex] = new float[(new_n + 1) * 3];
+    }
+    // first u direction
+    for (int vIndex=0; vIndex<=m_m; vIndex++)
+    {
+        float* origCtrlPtsInUDir = m_ctrlPts + 3 * vIndex*(m_n + 1);
+        BSpline bs;
+        bs.setCtrlPts(origCtrlPtsInUDir, m_n + 1);
+        bs.convertPiecewiseBezier();
+        float* newCtrlPts = bs.getCtrlPt();
+        memcpy(root[vIndex], newCtrlPts, (new_n + 1) * 3 * sizeof(float));
+        if (!newUKnots)
+        {
+            newUKnots = new float[new_n + m_k + 2];
+            memcpy(newUKnots, bs.getKnots(), (new_n + m_k + 2) * sizeof(float));
+        }
+    }
+    // then v direction
+    for (int uIndex = 0; uIndex<=new_n; uIndex++)
+    {
+        float* temp = new float[(new_m + 1) * 3];
+        // pre process:copy root to temp.
+        for (int vIndex = 0; vIndex<=/*new_m*/ m_m; vIndex++)//only [0 ~ m_m] is valid.
+        {
+            memcpy(temp + 3 * vIndex, root[vIndex] + 3 * uIndex, 3 * sizeof(float));
+        }
+
+        BSpline bs;
+        bs.setCtrlPts(temp, m_m + 1);
+        bs.convertPiecewiseBezier();
+        float* newCtrlPts = bs.getCtrlPt();
+        memcpy(temp, newCtrlPts, (new_m + 1) * 3 * sizeof(float));
+        if (!newVKnots)
+        {
+            newVKnots = new float[new_m + m_k + 2];
+            memcpy(newVKnots, bs.getKnots(), (new_m + m_k + 2) * sizeof(float));
+        }
+
+        // post process:copy temp to root.
+        for (int vIndex = 0; vIndex <=new_m; vIndex++)
+        {
+            memcpy(root[vIndex] + 3 * uIndex, temp + 3 * vIndex, 3 * sizeof(float));
+        }
+        delete[]temp;
+    }
+
+    // finally, assign member variable.
+    m_n = new_n;
+    m_m = new_m;
+    delete[]m_ctrlPts;
+    m_ctrlPts = new float[(new_m + 1) * (new_n + 1) * 3];
+    for (int vIndex = 0; vIndex <= new_m; vIndex++)
+    {
+        memcpy(m_ctrlPts + 3 * vIndex*(new_n + 1), root[vIndex], (new_n + 1) * 3 * sizeof(float));
+        delete root[vIndex];
+    }
+    delete[]root;
+    delete[]m_uknots;
+    m_uknots = newUKnots;
+    delete[]m_vknots;
+    m_vknots = newVKnots;
+}
+
+float* BSplineSurface::getAllCtrlPt()
+{
+    return m_ctrlPts;
+}
+
+int BSplineSurface::getNumberOfPtsInUDir()
+{
+    return m_n + 1;
+}
+
+int BSplineSurface::getNumberOfPtsInVDir()
+{
+    return m_m + 1;
+}
+
 int BSplineSurface::getUIndex(float u)
 {
     for (int i = m_k; i < m_n + 1; i++)

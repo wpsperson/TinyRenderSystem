@@ -20,3 +20,5 @@ void cross(float* p1, float*p2, float* out);
 unsigned int* genWireFrameElementsArray(int n, int m);
 
 unsigned int* genBS2BezierElementArray(int ptNum);
+
+unsigned int* genBS2BezierPatchEleArr(int ptNumU, int ptNumV);

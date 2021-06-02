@@ -195,6 +195,11 @@ float* BSpline::getCtrlPt()
     return m_ctrlPts;
 }
 
+float* BSpline::getKnots()
+{
+    return m_knots;
+}
+
 int BSpline::getIndex(float u)
 {
     for (int i=m_k; i<m_n+1; i++)

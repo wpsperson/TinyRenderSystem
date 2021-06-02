@@ -25,6 +25,7 @@ public:
 
     int getNumberOfPts();
     float* getCtrlPt();
+    float* getKnots();
 
 protected:
     int getIndex(float u);
