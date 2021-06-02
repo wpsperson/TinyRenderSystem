@@ -185,6 +185,16 @@ void BSpline::convertPiecewiseBezier()
     m_n = new_n;
 }
 
+int BSpline::getNumberOfPts()
+{
+    return m_n + 1;
+}
+
+float* BSpline::getCtrlPt()
+{
+    return m_ctrlPts;
+}
+
 int BSpline::getIndex(float u)
 {
     for (int i=m_k; i<m_n+1; i++)

@@ -73,3 +73,20 @@ unsigned int* genWireFrameElementsArray(int n, int m)
     return elementArray;
 }
 
+// if ptNum = 10; result is "0 1 2 3 3 4 5 6 6 7 8 9"
+unsigned int* genBS2BezierElementArray(int ptNum)
+{
+    int segNum = (ptNum - 1) / 3;
+    unsigned int *elementArray = new unsigned int[segNum * 4];
+    unsigned int *curEle = elementArray;
+    for (int i=0; i<ptNum; i++ )
+    {
+        *(curEle++) = i;
+        if (i>0 && i%3 == 0)
+        {
+            *(curEle++) = i;
+        }
+    }
+    return elementArray;
+}
+

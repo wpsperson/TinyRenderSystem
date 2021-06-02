@@ -23,6 +23,9 @@ public:
     // insert k repeat knots to convert to piecewise bezier curve
     void convertPiecewiseBezier();
 
+    int getNumberOfPts();
+    float* getCtrlPt();
+
 protected:
     int getIndex(float u);
 private:

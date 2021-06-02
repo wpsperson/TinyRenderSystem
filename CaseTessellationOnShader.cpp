@@ -377,59 +377,42 @@ int CaseTessBSplineCurve(int argn, char** argc)
     BSpline* bs = new BSpline;
     bs->setCtrlPts(vertexBigDipper, 6);
     bs->convertPiecewiseBezier();
-
-    int num = 100;
-    float* curve = new float[3 * num + 3];
-    int sampleNum = (num / 10 + 1);
-    float* samplePtPair = new float[6 * sampleNum];
-    float* curPair = samplePtPair;
-    float* pt = curve;
-    float norm[3]; //normal of any point.
-    for (int i = 0; i <= num; i++)
-    {
-        float u = float(i) / num;
-        bs->interpolatePoint(u, pt);
-        if (i % 10 == 0)
-        {
-            memcpy(curPair, pt, sizeof(float) * 3);
-            curPair += 3;
-
-            bs->interpolateTangent(u, norm);
-            normlize(norm);
-            float newPt[3];
-            add(pt, norm, newPt);
-            memcpy(curPair, newPt, sizeof(float) * 3);
-            curPair += 3;
-        }
-        pt += 3;
-    }
+    float* newCtrlPt = bs->getCtrlPt();
+    int newPtNum = bs->getNumberOfPts();
+    unsigned int* elementArr = genBS2BezierElementArray(newPtNum);
+    int eleCount = ((newPtNum - 1) / 3) * 4;
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
-    std::shared_ptr<TRSGeode> Bspline = std::make_shared<TRSGeode>();
-    Bspline->readFromVertex(curve, 303, EnVertex);
-    Bspline->getVAO()->setDrawType(GL_LINE_STRIP);
-    Bspline->setColor(glm::vec4(0.9, 0.5, 1, 1));
-
-    std::shared_ptr<TRSGeode> BSplineNormPair = std::make_shared<TRSGeode>();
-    BSplineNormPair->readFromVertex(samplePtPair, sampleNum * 6, EnVertex);
-    BSplineNormPair->getVAO()->setDrawType(GL_LINES);
-    BSplineNormPair->setColor(glm::vec4(0.5, 1, 1, 1));
+    std::shared_ptr<TRSGeode> BSplineToBezierCurve = std::make_shared<TRSGeode>();
+    BSplineToBezierCurve->readFromVertex(newCtrlPt, newPtNum *3, EnVertex, elementArr, eleCount);
+    std::shared_ptr<TRSStateSet> pSS = BSplineToBezierCurve->getOrCreateStateSet();
+    TRSShader* shader = pSS->getShader();
+    shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
+    shader->createFragmentShader("shaders/DefaultFragment.glsl");
+    shader->createTessControlShader("shaders/BezierTesc.glsl");
+    shader->createTessEvaluateShader("shaders/BezierTese.glsl");
+    shader->createProgram();
+    BSplineToBezierCurve->getVAO()->setDrawType(GL_PATCHES);
+    BSplineToBezierCurve->getVAO()->setDrawParam(4);
+    BSplineToBezierCurve->setColor(glm::vec4(1, 0.5, 0.5, 1));
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
     CtrlPolygon->readFromVertex(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float), EnVertex);
     CtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
     CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
 
+    std::shared_ptr<TRSGeode> NewCtrlPolygon = std::make_shared<TRSGeode>();
+    NewCtrlPolygon->readFromVertex(newCtrlPt, newPtNum * 3, EnVertex);
+    NewCtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
+    NewCtrlPolygon->setColor(glm::vec4(1, 1, 1, 1));
+
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
-    rootNodes->addChild(Bspline);
+    rootNodes->addChild(BSplineToBezierCurve);
     rootNodes->addChild(CtrlPolygon);
-    rootNodes->addChild(BSplineNormPair);
+    rootNodes->addChild(NewCtrlPolygon);
 
     viewer->setSecenNode(rootNodes);
     viewer->run();
-    return 0;
-
-
     return 0;
 }
 
