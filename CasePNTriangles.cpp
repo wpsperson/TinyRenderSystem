@@ -22,7 +22,7 @@ int CaseTraditional3DModel(int argn, char** argc)
     std::string strFile = std::string("resources/objects/bunny.obj");
     if (argn == 2)
     {
-        std::string strFile = std::string(argc[1]);
+        strFile = std::string(argc[1]);
     }
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     TRSAssimpLoader* pLoader = new TRSAssimpLoader();
