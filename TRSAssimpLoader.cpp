@@ -23,10 +23,10 @@ struct Vertex {
     glm::vec3 Normal;
     // texCoords
     glm::vec2 TexCoords;
-    // tangent
-    glm::vec3 Tangent;
-    // bitangent
-    glm::vec3 Bitangent;
+    //// tangent
+    //glm::vec3 Tangent;
+    //// bitangent
+    //glm::vec3 Bitangent;
 };
 
 TRSAssimpLoader::TRSAssimpLoader()
@@ -72,7 +72,8 @@ void TRSAssimpLoader::recurseNode(aiNode* pNode, const aiScene* pScene)
     {
         // the node object only contains indices to index the actual objects in the scene. 
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
-        aiMesh* pMesh = pScene->mMeshes[pNode->mMeshes[i]];
+        int index = pNode->mMeshes[i];
+        aiMesh* pMesh = pScene->mMeshes[index];
         std::shared_ptr<TRSNode> pNode = retrieveGeodeByMesh(pMesh, pScene);
         m_pGroupNode->addChild(pNode);
     }
@@ -100,10 +101,13 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
         vector.z = pMesh->mVertices[i].z;
         vertex.Position = vector;
         // normals
-        vector.x = pMesh->mNormals[i].x;
-        vector.y = pMesh->mNormals[i].y;
-        vector.z = pMesh->mNormals[i].z;
-        vertex.Normal = vector;
+        if (pMesh->mNormals)
+        {
+            vector.x = pMesh->mNormals[i].x;
+            vector.y = pMesh->mNormals[i].y;
+            vector.z = pMesh->mNormals[i].z;
+            vertex.Normal = vector;
+        }
         // texture coordinates
         if (pMesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
         {
@@ -116,16 +120,22 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
         }
         else
             vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-        // tangent
-        vector.x = pMesh->mTangents[i].x;
-        vector.y = pMesh->mTangents[i].y;
-        vector.z = pMesh->mTangents[i].z;
-        vertex.Tangent = vector;
-        // bitangent
-        vector.x = pMesh->mBitangents[i].x;
-        vector.y = pMesh->mBitangents[i].y;
-        vector.z = pMesh->mBitangents[i].z;
-        vertex.Bitangent = vector;
+        //// tangent
+        //if (pMesh->mTangents)
+        //{
+        //    vector.x = pMesh->mTangents[i].x;
+        //    vector.y = pMesh->mTangents[i].y;
+        //    vector.z = pMesh->mTangents[i].z;
+        //    vertex.Tangent = vector;
+        //}
+        //// bitangent
+        //if (pMesh->mBitangents)
+        //{
+        //    vector.x = pMesh->mBitangents[i].x;
+        //    vector.y = pMesh->mBitangents[i].y;
+        //    vector.z = pMesh->mBitangents[i].z;
+        //    vertex.Bitangent = vector;
+        //}
         vertices.push_back(vertex);
     }
     // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -140,11 +150,11 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
     float* pData = (float*)(&vertices[0]);
     unsigned int* pIndice = &indices[0];
     //每个vertex顶点数据中有14个float
-    pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnAssimpFormat, pIndice, indices.size());
+    pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnVertexNormTexture, pIndice, indices.size());
     TRSStateSet* pStateSet = pGeode->getOrCreateStateSet().get();
     TRSTexture* pCurTexture = pStateSet->getTexture();
     TRSShader* pShader = pStateSet->getShader();
-    pShader->createProgram("shaders/3_1AssimpTextureVertex.glsl", "shaders/3_1AssimpTextureFragment.glsl");
+    createShaderByMesh(pMesh, pShader);
     // process materials
     aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
     // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
@@ -196,4 +206,30 @@ void TRSAssimpLoader::loadMaterialTextures(aiMaterial *mat, aiTextureType type, 
             pCurTexture->addSharedTexture(texData);
         }
     }
+}
+
+
+int TRSAssimpLoader::createShaderByMesh(aiMesh *pMesh, TRSShader* shader)
+{
+    bool bHasNormal = pMesh->mNormals;
+    bool bHasTexture = (pMesh->mTextureCoords && pMesh->mTextureCoords[0]);
+    if (bHasNormal && !bHasTexture)
+    {
+        shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
+        return EnVertexNormal;
+    }
+    else if (!bHasNormal && bHasTexture)
+    {
+        throw "to do";
+        //shader->createProgram("shaders/3_1AssimpTextureVertex.glsl", "shaders/3_1AssimpTextureFragment.glsl");
+        return EnVertexTexture;
+    }
+    else if (bHasNormal && bHasTexture)
+    {
+        shader->createProgram("shaders/3_1AssimpTextureVertex.glsl", "shaders/3_1AssimpTextureFragment.glsl");
+        return EnVertexNormTexture;
+    }
+
+    shader->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
+    return EnVertex;
 }

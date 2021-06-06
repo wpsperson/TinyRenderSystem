@@ -15,7 +15,6 @@ enum EnVertexStruct
     EnVertexColorTexture,
     EnVertexNormTexture,
     EnVertexNormal,
-    EnAssimpFormat
 };
 
 // now we use OpenGL 4.6

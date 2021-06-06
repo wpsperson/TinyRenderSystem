@@ -4,7 +4,7 @@
 #include "AllDemoCodes.h"
 #include "CaseStencilTest.h"
 #include "CaseTessellationOnShader.h"
-
+#include "CasePNTriangles.h"
 
 int main(int argn, char** argc)
 {
@@ -33,6 +33,7 @@ int main(int argn, char** argc)
     //CaseTraditionalBSplineCurve(argn, argc);
     //CaseTraditionalBSplineSurface(argn, argc);
     //CaseTessBSplineCurve(argn, argc);
-    CaseTessBSplineSurface(argn, argc);
+    //CaseTessBSplineSurface(argn, argc);
+    CaseTraditional3DModel(argn, argc);
     return 0;
 }

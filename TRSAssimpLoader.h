@@ -12,6 +12,7 @@
 class TRSGroup;
 class TRSNode;
 class TRSTexture;
+class TRSShader;
 
 struct aiNode;
 struct aiMesh;
@@ -32,6 +33,10 @@ public:
     void recurseNode(aiNode* pNode, const aiScene* pScene);
     std::shared_ptr<TRSNode> retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene);
     void loadMaterialTextures(aiMaterial *mat, aiTextureType type, string sampleName, TRSTexture* pCurTexture);
+
+protected:
+    int createShaderByMesh(aiMesh *pMesh, TRSShader* shader);
+
 private:
     TRSGroup* m_pGroupNode;
     std::string m_strDirectory;
