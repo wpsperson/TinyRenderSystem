@@ -8,3 +8,5 @@
 
 int CaseTraditional3DModel(int argn, char** argc);
 
+int CasePNTriangles(int argn, char** argc);
+
