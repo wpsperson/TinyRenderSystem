@@ -8,6 +8,7 @@
 
 int main(int argn, char** argc)
 {
+
     //CaseFirstTriangle();
     //CaseElementArray();
     //CaseColorAnimation();
