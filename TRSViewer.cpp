@@ -14,6 +14,7 @@
 #include "TRSVAO.h"
 #include "TRSTexture.h"
 #include "Windows.h"
+#include "TRSVisitors.h"
 
 extern TRSCamera* g_pCamera;
 
@@ -30,11 +31,12 @@ TRSViewer::TRSViewer()
     m_pCamera = new TRSCamera(m_pWindow);
     g_pCamera = m_pCamera;
     TRSWindowConfig::registerUserInputFunc(m_pWindow);//reg user input callback
+    m_polygonModeVisitor = new PolygonModeVisitor;
 }
 
 TRSViewer::~TRSViewer()
 {
-
+    delete m_polygonModeVisitor;
 }
 
 void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
@@ -65,7 +67,7 @@ void TRSViewer::run()
         glClearColor(m_BGColor.r, m_BGColor.g, m_BGColor.b, m_BGColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         calcFrameTime();
-        TRSKeyboardCallBack(m_pWindow);
+        keyboardCallBack();
         updateScene();
         drawScene();
 
@@ -133,4 +135,16 @@ void TRSViewer::calcFrameTime()
         Sleep(15 - timeDiff);
     }
     m_fLastTime = m_fCurTime;
+}
+
+
+void TRSViewer::keyboardCallBack()
+{
+    TRSKeyboardCallBack(m_pWindow);
+    if ((glfwGetKey(m_pWindow, GLFW_KEY_F1) == GLFW_PRESS))
+    {
+        m_polygonModeVisitor->switchPolygonMode();
+        m_polygonModeVisitor->visit(m_pSceneNode.get());
+        Sleep(100); // avoid frame rate so fast to execute this function twice and more.
+    }
 }

@@ -13,6 +13,7 @@
 
 class TRSCamera;
 class TRSNode;
+class PolygonModeVisitor;
 struct GLFWwindow;
 
 class TRS_EXPORT TRSViewer
@@ -32,13 +33,14 @@ public:
 protected:
     virtual void defaultSetting();
     void calcFrameTime();
+    void keyboardCallBack();
 
 protected:
     std::shared_ptr<TRSNode> m_pSceneNode;
     GLFWwindow* m_pWindow;
     glm::vec4 m_BGColor;
     TRSCamera* m_pCamera;
-
+    PolygonModeVisitor* m_polygonModeVisitor;
     std::map<int, std::vector<TRSNode*>> m_mapState2Node;
     float m_fLastTime;
     float m_fCurTime;
