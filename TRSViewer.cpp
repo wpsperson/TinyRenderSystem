@@ -115,7 +115,7 @@ void TRSViewer::drawScene()
             pShader->addUniform3v("lightPos", s_DefaultLightPos);
             if (pGeode->getUpdateCallBack())
             {
-                pGeode->getUpdateCallBack()(pGeode);
+                pGeode->getUpdateCallBack()(pGeode, m_pWindow);
             }
             pShader->applayAllStaticUniform();//Apply Uniform
             // simple draw call

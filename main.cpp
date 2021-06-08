@@ -35,7 +35,7 @@ int main(int argn, char** argc)
     //CaseTraditionalBSplineSurface(argn, argc);
     //CaseTessBSplineCurve(argn, argc);
     //CaseTessBSplineSurface(argn, argc);
-    CaseTraditional3DModel(argn, argc);
-    //CasePNTriangles(argn, argc);
+    //CaseTraditional3DModel(argn, argc);
+    CasePNTriangles(argn, argc);
     return 0;
 }

@@ -2,13 +2,14 @@
 layout (vertices = 3) out;
 in vec3 vNormal[];
 out vec3 tcNormals[];
+uniform int lod;
 
 void main()
 {
-    gl_TessLevelOuter[0] = 6;
-    gl_TessLevelOuter[1] = 6;
-    gl_TessLevelOuter[2] = 6;
-    gl_TessLevelInner[0] = 6;
+    gl_TessLevelOuter[0] = lod;
+    gl_TessLevelOuter[1] = lod;
+    gl_TessLevelOuter[2] = lod;
+    gl_TessLevelInner[0] = lod;
 
     tcNormals[gl_InvocationID] = vNormal[gl_InvocationID];
 

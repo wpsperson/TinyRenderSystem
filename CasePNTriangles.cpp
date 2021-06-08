@@ -16,6 +16,7 @@
 #include <iostream>
 #include "TRSUtils.h"
 #include "stb_image.h"
+#include "Windows.h"
 
 
 int CaseTraditional3DModel(int argn, char** argc)
@@ -35,6 +36,31 @@ int CaseTraditional3DModel(int argn, char** argc)
     return 0;
 }
 
+void LodCallBack(TRSNode* pNode, GLFWwindow*window)
+{
+    static int lod = 1;
+    if ((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS))
+    {
+        lod++;
+        if (lod > 10)
+        {
+            lod = 10;
+        }
+        pNode->getStateSet()->getShader()->addUniformi("lod", lod);
+        Sleep(100);
+    }
+    else if ((glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS))
+    {
+        lod--;
+        if (lod < 1)
+        {
+            lod = 1;
+        }
+        pNode->getStateSet()->getShader()->addUniformi("lod", lod);
+        Sleep(100);
+    }
+}
+
 class PNNodeVisitor : public NodeVisitor
 {
 public:
@@ -50,11 +76,13 @@ public:
             shader->createTessControlShader("shaders/PNTriangleTesc.glsl");
             shader->createTessEvaluateShader("shaders/PNTriangleTese.glsl");
             shader->createProgram();
+            shader->addUniformi("lod", 1);
 
             PNTriangleGeode->getVAO()->setDrawType(GL_TRIANGLES);
             PNTriangleGeode->setColor(glm::vec4(1.0, 1.0, 0.5, 1));
             PNTriangleGeode->getVAO()->setDrawType(GL_PATCHES);
             PNTriangleGeode->getVAO()->setDrawParam(3);
+            PNTriangleGeode->setUpdateCallBack(LodCallBack);
            // PNTriangleGeode->setPolygonMode(GL_LINE);
         }
     }

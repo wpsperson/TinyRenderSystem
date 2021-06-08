@@ -770,7 +770,7 @@ void CaseManyFunnyBoxRotate()
 
 
 //第二章 基本光照
-void updateFunc(TRSNode* pNode)
+void updateFunc(TRSNode* pNode, GLFWwindow*)
 {
     glm::vec3 lightColor;
     lightColor.x = float(sin(glfwGetTime() * 2.0f));
@@ -959,7 +959,7 @@ void CasePointAttenuationLight()
 }
 
 
-void SpotlightUpdateFunc(TRSNode* pNode)
+void SpotlightUpdateFunc(TRSNode* pNode, GLFWwindow*)
 {
     pNode->getStateSet()->getShader()->addUniform3v("light.position", g_pCamera->getCameraPos());
     pNode->getStateSet()->getShader()->addUniform3v("light.direction", g_pCamera->getCameraFront());
@@ -1013,7 +1013,7 @@ void CaseSpotlight()
     viewer->run();
 }
 
-void MultiLightSpotlightUpdateFunc(TRSNode* pNode)
+void MultiLightSpotlightUpdateFunc(TRSNode* pNode, GLFWwindow*)
 {
     pNode->getStateSet()->getShader()->addUniform3v("spotLight.position", g_pCamera->getCameraPos());
     pNode->getStateSet()->getShader()->addUniform3v("spotLight.direction", g_pCamera->getCameraFront());
