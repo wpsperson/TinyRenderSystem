@@ -6,6 +6,11 @@ extern TRSCamera* g_pCamera;
 
 TRS_EXPORT void TRSWindowChangeCallBack(GLFWwindow* window, int w, int h)
 {
+    if (h < 2)
+    {
+        h = 1;
+    }
+    g_pCamera->setWidthHeight(w, h);
     glViewport(0, 0, w, h);
 }
 

@@ -33,11 +33,16 @@ public:
 
     void mouseButtonCallBack(GLFWwindow* pWindow, int button, int action, int mods);
 
+    void setWidthHeight(int w, int h);
+
 protected:
     glm::vec3 m_pos;        //相机当前位置
     glm::vec3 m_front;      //相机的前向方向，相机当前位置指向观察中心点的向量
     glm::vec3 m_right;      //相机的右手方向，即局部坐标系的X轴向在世界坐标系中的向量
     glm::vec3 m_up;         //相机的头顶方向，即局部坐标系的Y轴向在世界坐标系中的向量
+
+    int m_width;
+    int m_height;
 
     float m_fMoveSpeed;     //wsad键盘移动系数
     float m_fMouseSensity;  //鼠标移动的敏感系数

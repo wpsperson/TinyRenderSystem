@@ -28,6 +28,9 @@ void TRSCamera::initMember()
     m_right = glm::vec3(1.0f, 0, 0);
     m_up = glm::vec3(0, 1.0f, 0);
 
+    m_width = DefaultWindowWidth;
+    m_height = DefaultWindowHeight;
+
     m_fMoveSpeed = 0.05f;
     m_fMouseSensity = 0.05f;
 
@@ -48,7 +51,7 @@ glm::mat4 TRSCamera::getViewMatrix()
 
 glm::mat4 TRSCamera::getProjectMatrix()
 {
-    glm::mat4 projectMatrix = glm::perspective(glm::radians(m_fFov), float(DefaultWindowWidth) / DefaultWindowHeight, s_NearDistance, s_FarDistance);
+    glm::mat4 projectMatrix = glm::perspective(glm::radians(m_fFov), float(m_width) / m_height, s_NearDistance, s_FarDistance);
     return projectMatrix;
 }
 
@@ -181,4 +184,10 @@ void TRSCamera::mouseButtonCallBack(GLFWwindow* pWindow, int button, int action,
     {
         m_modifier = mods;
     }
+}
+
+void TRSCamera::setWidthHeight(int w, int h)
+{
+    m_width = w;
+    m_height = h;
 }
