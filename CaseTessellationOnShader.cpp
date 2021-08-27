@@ -164,13 +164,7 @@ int CaseTessHermiteCurve(int argn, char** argc)
 {
     float vertices[] = {
         -0.8f, 0.0f, 0.0f,
-        -0.4f, 0.0f, 0.0f,
-        -0.4f, 0.0f, 0.0f,
         0.0f, 0.0f, 0.0f
-    };
-    float tangent[] = {
-        0.5f, 0.866f, 0.0f,
-        0.5f, 0.866f, 0.0f
     };
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
