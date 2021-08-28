@@ -23,7 +23,9 @@ public:
 
     glm::vec3 getCameraFront() const;
 
-    void setWidthHeight(int w, int h);
+    void setCameraMode(bool parallelMode);
+
+    void setAspect(double aspect);
 
     virtual void keyboardCallBack(GLFWwindow* pWindow);
 
@@ -41,15 +43,12 @@ protected:
     glm::vec3 m_right;      //相机的右手方向，即局部坐标系的X轴向在世界坐标系中的向量
     glm::vec3 m_up;         //相机的头顶方向，即局部坐标系的Y轴向在世界坐标系中的向量
     // project matrix parameter
-    int m_width;            // keep the aspect with window change
-    int m_height;           // keep the aspect with window change
+    float m_width;            // keep the aspect with window change
+    float m_height;           // keep the aspect with window change
     float m_near;
     float m_far;
     float m_fFov;           // vertical angle, perspective mode only
     bool m_parallelMode;    // whether it is parallel project or perspective project.
-    // camera control parameter
-    float m_fMoveSpeed;     //wsad键盘移动系数
-    float m_fMouseSensity;  //鼠标移动的敏感系数
 
 };
 

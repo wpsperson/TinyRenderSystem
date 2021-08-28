@@ -20,9 +20,6 @@ TRSCamera::TRSCamera(GLFWwindow* pWindow)
     m_far = DefaultFarDistance;
     m_fFov = 45.0f;
     m_parallelMode = false;
-
-    m_fMoveSpeed = 0.05f;
-    m_fMouseSensity = 0.05f;
 }
 
 
@@ -38,8 +35,16 @@ glm::mat4 TRSCamera::getViewMatrix()
 
 glm::mat4 TRSCamera::getProjectMatrix()
 {
-    glm::mat4 projectMatrix = glm::perspective(glm::radians(m_fFov), float(m_width) / m_height, m_near, m_far);
-    return projectMatrix;
+    if (m_parallelMode)
+    {
+        glm::mat4 projectMatrix = glm::ortho(-m_width/2, m_width/2, -m_height/2, m_height/2, m_near, m_far);
+        return projectMatrix;
+    }
+    else
+    {
+        glm::mat4 projectMatrix = glm::perspective(glm::radians(m_fFov), m_width / m_height, m_near, m_far);
+        return projectMatrix;
+    }
 }
 
 glm::vec3 TRSCamera::getCameraPos() const
@@ -52,43 +57,47 @@ glm::vec3 TRSCamera::getCameraFront() const
     return m_front;
 }
 
-void TRSCamera::setWidthHeight(int w, int h)
+void TRSCamera::setCameraMode(bool parallelMode)
 {
-    m_width = w;
-    m_height = h;
+    m_parallelMode = parallelMode;
+}
+
+void TRSCamera::setAspect(double aspect)
+{
+    m_width = aspect * m_height;
 }
 
 void TRSCamera::keyboardCallBack(GLFWwindow* pWindow)
 {
+    float MoveSpeed = 0.05f;
     if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(pWindow, true);
     }
     if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS)
     {
-        m_pos += m_front * m_fMoveSpeed;
+        m_pos += m_front * MoveSpeed;
     }
     else if (glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS)
     {
-        m_pos -= m_front * m_fMoveSpeed;
+        m_pos -= m_front * MoveSpeed;
     }
     else if (glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS)
     {
-        m_pos -= m_right * m_fMoveSpeed;
+        m_pos -= m_right * MoveSpeed;
     }
     else if (glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS)
     {
-        m_pos += m_right * m_fMoveSpeed;
+        m_pos += m_right * MoveSpeed;
     }
     else if (glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS)
     {
-        m_pos -= m_up * m_fMoveSpeed;
+        m_pos -= m_up * MoveSpeed;
     }
     else if (glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS)
     {
-        m_pos += m_up * m_fMoveSpeed;
+        m_pos += m_up * MoveSpeed;
     }
-
 }
 
 void TRSCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos)

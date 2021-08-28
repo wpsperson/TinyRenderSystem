@@ -5,7 +5,6 @@
 TRSObserveCamera::TRSObserveCamera(GLFWwindow* pWindow)
     : TRSCamera(pWindow)
 {
-
     m_leftMousePressed = false;
     m_middleMousePressed = false;
     m_modifier = 0;
@@ -16,6 +15,8 @@ TRSObserveCamera::TRSObserveCamera(GLFWwindow* pWindow)
 
     m_fLastX = DefaultWindowWidth / 2;
     m_fLastY = DefaultWindowHeight / 2;
+
+    m_fMouseSensity = 0.05f;
 }
 
 TRSObserveCamera::~TRSObserveCamera()

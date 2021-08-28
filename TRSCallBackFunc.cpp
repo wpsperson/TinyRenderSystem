@@ -10,7 +10,8 @@ TRS_EXPORT void TRSWindowChangeCallBack(GLFWwindow* window, int w, int h)
     {
         h = 1;
     }
-    g_pCamera->setWidthHeight(w, h);
+    double aspect = double(w) / h;
+    g_pCamera->setAspect(aspect);
     glViewport(0, 0, w, h);
 }
 

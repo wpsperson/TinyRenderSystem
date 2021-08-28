@@ -24,6 +24,7 @@ public:
 
 protected:
     // camera control parameter
+    float m_fMouseSensity;  //鼠标移动的敏感系数
     float m_fPitch;         //鼠标上下移动产生的俯仰角 -89~89
     float m_fYaw;           //鼠标上下移动产生的偏航角 无限制
     double m_fLastX;
