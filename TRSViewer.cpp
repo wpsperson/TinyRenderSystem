@@ -15,6 +15,7 @@
 #include "TRSTexture.h"
 #include "Windows.h"
 #include "TRSVisitors.h"
+#include "TRSObserveCamera.h"
 
 extern TRSCamera* g_pCamera;
 
@@ -28,7 +29,7 @@ TRSViewer::TRSViewer()
     {
         std::cerr << "TRSViewer::INIT::Failure" << std::endl;
     }
-    m_pCamera = new TRSCamera(m_pWindow);
+    m_pCamera = new TRSObserveCamera(m_pWindow);
     g_pCamera = m_pCamera;
     TRSWindowConfig::registerUserInputFunc(m_pWindow);//reg user input callback
     m_polygonModeVisitor = new PolygonModeVisitor;

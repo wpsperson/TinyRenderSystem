@@ -11,6 +11,7 @@
 #include "TRSResource.h"
 #include "TRSWindowConfig.h"
 #include "TRSCamera.h"
+#include "TRSObserveCamera.h"
 #include "TRSCallBackFunc.h"
 #include "TRSConst.h"
 #include "Windows.h"
@@ -161,7 +162,7 @@ int CaseStencilTest()
     glEnable(GL_DEPTH_TEST);
 
     TRSWindowConfig::registerUserInputFunc(window);
-    g_pCamera = new TRSCamera(window);
+    g_pCamera = new TRSObserveCamera(window);
     double m_fCurTime = 0;
     double m_fLastTime = 0;
 
