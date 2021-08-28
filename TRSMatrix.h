@@ -1,5 +1,5 @@
 /*!
- *@brief    
+ *@brief    4x4Matrix(Row-Major Matrix)
  *@date     2021-6-23
  */
 
@@ -10,7 +10,26 @@ class TRSMatrix
 {
 public:
     TRSMatrix();
+    TRSMatrix(const TRSMatrix& matrix);
+    TRSMatrix operator =(const TRSMatrix& matrix);
     ~TRSMatrix();
+
+    void setEle(int row, int col, double value);
+    double ele(int row, int col) const;
+
+    void makeIdentity();
+
+    void makeTranslate(double x, double y, double z);
+
+    void makeRotate(double angle, double vecx, double vecy, double vecz);
+
+    void makeScale(double scale);
+    void makeScale(double scalex, double scaley, double scalez);
+
+    TRSMatrix operator *(const TRSMatrix& matrix) const;
+
+    TRSMatrix& postMultiply(const TRSMatrix& matrix);
+    TRSMatrix& preMultiply(const TRSMatrix& matrix);
 
 private:
     double element[4][4];
