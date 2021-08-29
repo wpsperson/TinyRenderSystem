@@ -61,10 +61,24 @@ void TRSMatrix::makeTranslate(double x, double y, double z)
     element[3][2] = z;
 }
 
+void TRSMatrix::translate(double x, double y, double z)
+{
+    TRSMatrix mat;
+    mat.translate(x, y, z);
+    *this = (*this) * mat;
+}
+
 void TRSMatrix::makeRotate(double angle, double vecx, double vecy, double vecz)
 {
     makeIdentity();
     // to do
+}
+
+void TRSMatrix::rotate(double angle, double vecx, double vecy, double vecz)
+{
+    TRSMatrix mat;
+    mat.rotate(angle, vecx, vecy, vecz);
+    *this = (*this) * mat;
 }
 
 void TRSMatrix::makeScale(double scale)
@@ -78,6 +92,18 @@ void TRSMatrix::makeScale(double scalex, double scaley, double scalez)
     element[0][0] = scalex;
     element[1][1] = scaley;
     element[2][2] = scalez;
+}
+
+void TRSMatrix::scale(double s)
+{
+    scale(s, s, s);
+}
+
+void TRSMatrix::scale(double scalex, double scaley, double scalez)
+{
+    TRSMatrix mat;
+    mat.scale(scalex, scaley, scalez);
+    *this = (*this) * mat;
 }
 
 TRSMatrix& TRSMatrix::postMultiply(const TRSMatrix& matrix)

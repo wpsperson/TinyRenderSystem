@@ -20,11 +20,15 @@ public:
     void makeIdentity();
 
     void makeTranslate(double x, double y, double z);
+    void translate(double x, double y, double z);
 
     void makeRotate(double angle, double vecx, double vecy, double vecz);
+    void rotate(double angle, double vecx, double vecy, double vecz);
 
     void makeScale(double scale);
     void makeScale(double scalex, double scaley, double scalez);
+    void scale(double scale);
+    void scale(double scalex, double scaley, double scalez);
 
     TRSMatrix operator *(const TRSMatrix& matrix) const;
 
