@@ -1,5 +1,5 @@
 #include "TRSMatrix.h"
-
+#include <cmath>
 
 
 TRSMatrix::TRSMatrix()
@@ -71,7 +71,40 @@ void TRSMatrix::translate(double x, double y, double z)
 void TRSMatrix::makeRotate(double angle, double vecx, double vecy, double vecz)
 {
     makeIdentity();
-    // to do
+    // v' = p v p*
+    // p = [cos(angle/2), sin(angle/2)* u ]
+    // u = (ux, uy, uz); normalized
+    double length = std::sqrt(vecx*vecx + vecy*vecy + vecz*vecz);
+    if (length == 0)
+    {
+        return;
+    }
+    vecx = vecx / length;
+    vecy = vecy / length;
+    vecz = vecz / length;
+    double halfAngle = angle / 2;
+    double sin = std::sin(halfAngle);
+    double a = std::cos(halfAngle);
+    double b = sin * vecx;
+    double c = sin * vecy;
+    double d = sin * vecz;
+
+    element[0][0] = 1 - 2 * c*c - 2 * d*d;
+    element[0][1] = 2 * b*c - 2 * a*d;
+    element[0][2] = 2 * a*c + 2 * b*d;
+    element[0][3] = 0;
+
+    element[1][0] = 2 * b*c + 2 * a*d;
+    element[1][1] = 1 - 2 * b*b - 2 * d*d;
+    element[1][2] = 2 * c*d - 2 * a*b;
+    element[1][3] = 0;
+
+    element[2][0] = 2 * b*d - 2 * a*c;
+    element[2][1] = 2 * a*b + 2 * c*d;
+    element[2][2] = 1 - 2 * b*b - 2 * c*c;
+    element[2][3] = 0;
+
+    element[3][0] = 0; element[3][1] = 0; element[3][2] = 0; element[3][3] = 1;
 }
 
 void TRSMatrix::rotate(double angle, double vecx, double vecy, double vecz)
