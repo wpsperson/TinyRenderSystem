@@ -20,8 +20,11 @@ public:
     TRSVector<N> operator + (const TRSVector<N>& vec) const;
     TRSVector<N> operator - (const TRSVector<N>& vec) const;
     TRSVector<N> operator * (double value) const;
-    double distSquare(const TRSVector<N>& vec);
-    double dist(const TRSVector<N>& vec);
+
+    double distance(const TRSVector<N>& vec);
+    double length() const;
+    void normalize();
+    inline TRSVector<N> cross(const TRSVector<N>& vec);
 
     double operator[](int i)const;
     double& operator[](int i);
@@ -31,6 +34,33 @@ public:
 private:
     double arr[N];
 };
+
+template<>
+TRSVector<3> TRSVector<3>::cross(const TRSVector<3>& vec)
+{
+    TRSVector<3> result;
+    result[0] = arr[1] * vec[2] - arr[2] * vec[1];
+    result[1] = arr[2] * vec[0] - arr[0] * vec[2];
+    result[2] = arr[0] * vec[1] - arr[1] * vec[0];
+    return result;
+}
+
+template<int N>
+void TRSVector<N>::normalize()
+{
+    double len - length();
+    for (int i = 0; i < N; i++)
+        arr[i] /= len;
+}
+
+template<int N>
+double TRSVector<N>::length() const
+{
+    double sum = 0;
+    for (int i = 0; i < N; i++)
+        sum += arr[i] * arr[i];
+    return std::sqrt(sum);
+}
 
 template <>
 TRSVector<2>::TRSVector(double x, double y)
@@ -55,18 +85,10 @@ TRSVector<4>::TRSVector(double x, double y, double z, double w)
 }
 
 template<int N>
-double TRSVector<N>::dist(const TRSVector<N>& vec)
+double TRSVector<N>::distance(const TRSVector<N>& vec)
 {
-    return std::sqrt(distSquare(vec));
-}
-
-template<int N>
-double TRSVector<N>::distSquare(const TRSVector<N>& vec)
-{
-    double sum = 0;
-    for (int i = 0; i < N; i++)
-        sum += (this->arr[i] - vec[i])*(this->arr[i] - vec[i]);
-    return sum;
+    TRSVector<N> substract = vec - *this;
+    return substract.length();
 }
 
 template<int N>
