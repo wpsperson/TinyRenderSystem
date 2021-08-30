@@ -13,9 +13,9 @@ public:
     TRSVector();
     TRSVector(const TRSVector<N>& vec);
     TRSVector<N> operator=(const TRSVector<N>& vec);
-    TRSVector<N>(double x, double y);
-    TRSVector<N>(double x, double y, double z);
-    TRSVector<N>(double x, double y, double z, double w);
+    inline TRSVector<N>(double x, double y);
+    inline TRSVector<N>(double x, double y, double z);
+    inline TRSVector<N>(double x, double y, double z, double w);
     ~TRSVector();
     TRSVector<N> operator + (const TRSVector<N>& vec) const;
     TRSVector<N> operator - (const TRSVector<N>& vec) const;
@@ -24,6 +24,7 @@ public:
     double dist(const TRSVector<N>& vec);
 
     double operator[](int i)const;
+    double& operator[](int i);
 
     void set(int i, double value);
 
@@ -102,6 +103,12 @@ void TRSVector<N>::set(int i, double value)
 
 template<int N>
 double TRSVector<N>::operator[](int i) const
+{
+    return arr[i];
+}
+
+template<int N>
+double& TRSVector<N>::operator[](int i)
 {
     return arr[i];
 }
