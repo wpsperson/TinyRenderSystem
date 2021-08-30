@@ -9,22 +9,22 @@ TRSMatrix::TRSMatrix()
 
 TRSMatrix::TRSMatrix(const TRSMatrix& matrix)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) // col
     {
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 4; j++)// row
         {
-            element[i][j] = matrix.ele(i, j);
+            columns[i][j] = matrix[i][j];
         }
     }
 }
 
 TRSMatrix TRSMatrix::operator=(const TRSMatrix& matrix)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) // col
     {
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 4; j++)// row
         {
-            element[i][j] = matrix.ele(i, j);
+            columns[i][j] = matrix[i][j];
         }
     }
     return *this;
@@ -35,36 +35,36 @@ TRSMatrix::~TRSMatrix()
 
 }
 
-void TRSMatrix::setEle(int row, int col, double value)
+TRSVec4& TRSMatrix::operator[](int col_index)
 {
-    element[row][col] = value;
+    return columns[col_index];
 }
 
-double TRSMatrix::ele(int row, int col) const
+TRSVec4 TRSMatrix::operator[](int col_index) const
 {
-    return element[row][col];
+    return columns[col_index];
 }
 
 void TRSMatrix::makeIdentity()
 {
-    element[0][0] = 1.0; element[0][1] = 0.0; element[0][2] = 0.0; element[0][3] = 0.0;
-    element[1][0] = 0.0; element[1][1] = 1.0; element[1][2] = 0.0; element[1][3] = 0.0;
-    element[2][0] = 0.0; element[2][1] = 0.0; element[2][2] = 1.0; element[2][3] = 0.0;
-    element[3][0] = 0.0; element[3][1] = 0.0; element[3][2] = 0.0; element[3][3] = 1.0;
+    columns[0][0] = 1.0; columns[0][1] = 0.0; columns[0][2] = 0.0; columns[0][3] = 0.0;
+    columns[1][0] = 0.0; columns[1][1] = 1.0; columns[1][2] = 0.0; columns[1][3] = 0.0;
+    columns[2][0] = 0.0; columns[2][1] = 0.0; columns[2][2] = 1.0; columns[2][3] = 0.0;
+    columns[3][0] = 0.0; columns[3][1] = 0.0; columns[3][2] = 0.0; columns[3][3] = 1.0;
 }
 
 void TRSMatrix::makeTranslate(double x, double y, double z)
 {
     makeIdentity();
-    element[3][0] = x;
-    element[3][1] = y;
-    element[3][2] = z;
+    columns[3][0] = x;
+    columns[3][1] = y;
+    columns[3][2] = z;
 }
 
 void TRSMatrix::translate(double x, double y, double z)
 {
     TRSMatrix mat;
-    mat.translate(x, y, z);
+    mat.makeTranslate(x, y, z);
     *this = (*this) * mat;
 }
 
@@ -89,28 +89,31 @@ void TRSMatrix::makeRotate(double angle, double vecx, double vecy, double vecz)
     double c = sin * vecy;
     double d = sin * vecz;
 
-    element[0][0] = 1 - 2 * c*c - 2 * d*d;
-    element[0][1] = 2 * b*c - 2 * a*d;
-    element[0][2] = 2 * a*c + 2 * b*d;
-    element[0][3] = 0;
+    columns[0][0] = 1 - 2 * c*c - 2 * d*d;
+    columns[0][1] = 2 * b*c + 2 * a*d;
+    columns[0][2] = 2 * b*d - 2 * a*c;
+    columns[0][3] = 0;
 
-    element[1][0] = 2 * b*c + 2 * a*d;
-    element[1][1] = 1 - 2 * b*b - 2 * d*d;
-    element[1][2] = 2 * c*d - 2 * a*b;
-    element[1][3] = 0;
+    columns[1][0] = 2 * b*c - 2 * a*d;
+    columns[1][1] = 1 - 2 * b*b - 2 * d*d;
+    columns[1][2] = 2 * a*b + 2 * c*d;
+    columns[1][3] = 0;
 
-    element[2][0] = 2 * b*d - 2 * a*c;
-    element[2][1] = 2 * a*b + 2 * c*d;
-    element[2][2] = 1 - 2 * b*b - 2 * c*c;
-    element[2][3] = 0;
+    columns[2][0] = 2 * a*c + 2 * b*d;
+    columns[2][1] = 2 * c*d - 2 * a*b;
+    columns[2][2] = 1 - 2 * b*b - 2 * c*c;
+    columns[2][3] = 0;
 
-    element[3][0] = 0; element[3][1] = 0; element[3][2] = 0; element[3][3] = 1;
+    columns[3][0] = 0;
+    columns[3][1] = 0;
+    columns[3][2] = 0;
+    columns[3][3] = 1;
 }
 
 void TRSMatrix::rotate(double angle, double vecx, double vecy, double vecz)
 {
     TRSMatrix mat;
-    mat.rotate(angle, vecx, vecy, vecz);
+    mat.makeRotate(angle, vecx, vecy, vecz);
     *this = (*this) * mat;
 }
 
@@ -122,9 +125,9 @@ void TRSMatrix::makeScale(double scale)
 void TRSMatrix::makeScale(double scalex, double scaley, double scalez)
 {
     makeIdentity();
-    element[0][0] = scalex;
-    element[1][1] = scaley;
-    element[2][2] = scalez;
+    columns[0][0] = scalex;
+    columns[1][1] = scaley;
+    columns[2][2] = scalez;
 }
 
 void TRSMatrix::scale(double s)
@@ -135,7 +138,7 @@ void TRSMatrix::scale(double s)
 void TRSMatrix::scale(double scalex, double scaley, double scalez)
 {
     TRSMatrix mat;
-    mat.scale(scalex, scaley, scalez);
+    mat.makeScale(scalex, scaley, scalez);
     *this = (*this) * mat;
 }
 
@@ -158,12 +161,12 @@ TRSMatrix TRSMatrix::operator*(const TRSMatrix& matrix) const
     {
         for (int j=0; j<4; j++)
         {
-            double sum
-                = element[i][0] * matrix.ele(0, j)
-                + element[i][1] * matrix.ele(1, j)
-                + element[i][2] * matrix.ele(2, j)
-                + element[i][3] * matrix.ele(3, j);
-            result.setEle(i, j, sum);
+            result[i][j]
+                = columns[0][i] * matrix[j][0]
+                + columns[1][i] * matrix[j][1]
+                + columns[2][i] * matrix[j][2]
+                + columns[3][i] * matrix[j][3];
+            
         }
     }
     return result;

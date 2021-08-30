@@ -5,6 +5,7 @@
 
 #pragma once
 #include <math.h>
+#include "TRSVector.h"
 
 class TRSMatrix
 {
@@ -14,8 +15,8 @@ public:
     TRSMatrix operator =(const TRSMatrix& matrix);
     ~TRSMatrix();
 
-    void setEle(int row, int col, double value);
-    double ele(int row, int col) const;
+    TRSVec4& operator[](int col_index);
+    TRSVec4 operator[](int col_index) const;
 
     void makeIdentity();
 
@@ -36,5 +37,5 @@ public:
     TRSMatrix& preMultiply(const TRSMatrix& matrix);
 
 private:
-    double element[4][4];
+    TRSVec4 columns[4];         // denote four column
 };

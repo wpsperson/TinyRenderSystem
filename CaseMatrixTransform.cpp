@@ -4,6 +4,7 @@
 #include "glm\gtc\matrix_transform.hpp"
 #include "TRSMatrix.h"
 #include <iostream>
+#include "TRSVector.h"
 
 double epsilon = 1e-6;
 bool judgetSame(const TRSMatrix& m1, const glm::mat4& m2)
@@ -12,7 +13,7 @@ bool judgetSame(const TRSMatrix& m1, const glm::mat4& m2)
     {
         for (int j=0; j<4; j++)
         {
-            double delta = m1.ele(i, j) - m2[j][i];
+            double delta = m1[i][j] - m2[i][j];
             if ( std::fabs(delta) > epsilon )
             {
                 return false;
