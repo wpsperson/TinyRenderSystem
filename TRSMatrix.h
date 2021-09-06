@@ -32,7 +32,8 @@ public:
     void scale(double scalex, double scaley, double scalez);
 
     void makeOtho(double l, double r, double b, double t, double n, double f);
-    void makePerspective(double fov, double ratio, double n, double f);
+    void makePerspective(double l, double r, double b, double t, double n, double f);
+    void makePerspective(double fov, double aspect, double n, double f);
 
     TRSMatrix operator *(const TRSMatrix& matrix) const;
 

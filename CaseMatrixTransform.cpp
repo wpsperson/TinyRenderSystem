@@ -6,7 +6,7 @@
 #include <iostream>
 #include "TRSVector.h"
 
-double epsilon = 1e-6;
+double epsilon = 1e-5;
 bool judgetSame(const TRSMatrix& m1, const glm::mat4& m2)
 {
     for (int i=0; i<4; i++)
@@ -57,10 +57,27 @@ void CaseMatrixTransform()
     //    std::cout << "angle:" << zvalue << ", " << same << std::endl;
     //}
 
-    glm::mat4 mat = glm::ortho<double>(-2, 3, 0, 4, 0, 100);
-    TRSMatrix trsMat;
-    trsMat.makeOtho(-2, 3, 0, 4, 0, 100);
-    bool same = judgetSame(trsMat, mat);
+    //glm::mat4 mat = glm::ortho<double>(-2, 3, 0, 4, 0, 100);
+    //TRSMatrix trsMat;
+    //trsMat.makeOtho(-2, 3, 0, 4, 0, 100);
+    //bool same = judgetSame(trsMat, mat);
+
+    //for (float fov = 15; fov < 80; fov+=5)
+    //{
+    //    for (double near = 0.1; near<5; near*=2)
+    //    {
+    //        for (double far = 10; far<1000; far+=10)
+    //        {
+    //            for (double aspect = 0.1; aspect<10; aspect+=0.2)
+    //            {
+    //                glm::mat4 matPer = glm::perspective<double>(glm::radians(fov), aspect, near, far);
+    //                TRSMatrix trsMatPer;
+    //                trsMatPer.makePerspective(glm::radians(fov), aspect, near, far);
+    //                bool samePer = judgetSame(trsMatPer, matPer);
+    //            }
+    //        }
+    //    }
+    //}
 
     return ;
 }

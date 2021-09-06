@@ -146,10 +146,15 @@ void TRSMatrix::scale(double scalex, double scaley, double scalez)
 clip volume center coordinate is [ (l+r)/2, (t+b)/2, -(f+n)/2 ]
 translate matrix: we first move clip volume to make volume center to coincide with view origin. 
 scale matrix:    scale the clip volume to make it dimension is [-1,1]. then reverse z axis
-|2/(r-l), 0,       0,       0| |1, 0, 0, -(l+r)/2|
+|2/(r-l), 0,       0,       0| |1, 0, 0, -(r+l)/2|
 |0,       2/(t-b), 0,       0| |0, 1, 0, -(t+b)/2|
-|0,       0,      -2/(f-n), 0| |0, 0, 1, (f+n)/2|
+|0,       0,      -2/(f-n), 0| |0, 0, 1,  (f+n)/2|
 |0,       0,       0,       1| |0, 0, 0,        1|
+calculate above matrix we get
+|2/(r-l), 0,       0,       -(r+l)/(r-l)|
+|0,       2/(t-b), 0,       -(t+b)/(t-b)|
+|0,       0,      -2/(f-n), -(f+n)/(f-n)|
+|0,       0,       0,                  1|
 */
 
 void TRSMatrix::makeOtho(double l, double r, double b, double t, double n, double f)
@@ -175,9 +180,53 @@ void TRSMatrix::makeOtho(double l, double r, double b, double t, double n, doubl
     columns[3][3] = 1;
 }
 
-void TRSMatrix::makePerspective(double fov, double ratio, double n, double f)
-{
+/*
+x' = x*n/(-z);
+y' = y*n/(-z);
+z' = (Az+B)/(-z); 
+we make it meet for z =-n and z = -f; => A = (n+f) & B = fn
+|2/(r-l), 0,       0,       0| |1, 0, 0, -(r+l)/2| |n, 0,  0, 0|
+|0,       2/(t-b), 0,       0| |0, 1, 0, -(t+b)/2| |0, n,  0, 0|
+|0,       0,      -2/(f-n), 0| |0, 0, 1,  (f+n)/2| |0, 0,  A, B|
+|0,       0,       0,       1| |0, 0, 0,        1| |0, 0, -1, 0|
+calculate above matrix we get
+|2n/(r-l), 0,       (r+l)/(r-l),           0|
+|0,       2n/(t-b), (t+b)/(t-b),           0|
+|0,       0,        -(f+n)/(f-n), -2fn/(f-n)|
+|0,       0,        -1,                    0|
+*/
 
+
+void TRSMatrix::makePerspective(double l, double r, double b, double t, double n, double f)
+{
+    columns[0][0] = 2.0 * n / (r - l);
+    columns[0][1] = 0;
+    columns[0][2] = 0;
+    columns[0][3] = 0;
+
+    columns[1][0] = 0;
+    columns[1][1] = 2.0 * n / (t - b);
+    columns[1][2] = 0;
+    columns[1][3] = 0;
+
+    columns[2][0] = (r + l) / (r - l);
+    columns[2][1] = (t + b) / (t - b);
+    columns[2][2] = -(f + n) / (f - n);
+    columns[2][3] = -1;
+
+    columns[3][0] = 0;
+    columns[3][1] = 0;
+    columns[3][2] = -2 * f * n / (f - n);
+    columns[3][3] = 0;
+}
+
+void TRSMatrix::makePerspective(double fov, double aspect, double n, double f)
+{
+    double t = std::tan(fov / 2)*n;
+    double b = -t;
+    double r = t * aspect;
+    double l = -r;
+    makePerspective(l, r, b, t, n, f);
 }
 
 TRSMatrix& TRSMatrix::postMultiply(const TRSMatrix& matrix)
