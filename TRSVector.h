@@ -13,27 +13,33 @@ public:
     TRSVector();
     TRSVector(const TRSVector<N>& vec);
     TRSVector<N> operator=(const TRSVector<N>& vec);
-    inline TRSVector<N>(double x, double y);
-    inline TRSVector<N>(double x, double y, double z);
-    inline TRSVector<N>(double x, double y, double z, double w);
+    inline TRSVector<N>(float x, float y);
+    inline TRSVector<N>(float x, float y, float z);
+    inline TRSVector<N>(float x, float y, float z, float w);
     ~TRSVector();
     TRSVector<N> operator + (const TRSVector<N>& vec) const;
     TRSVector<N> operator - (const TRSVector<N>& vec) const;
-    TRSVector<N> operator * (double value) const;
+    TRSVector<N> operator * (float value) const;
 
-    double distance(const TRSVector<N>& vec);
-    double length() const;
+    float distance(const TRSVector<N>& vec);
+    float length() const;
     void normalize();
     inline TRSVector<N> cross(const TRSVector<N>& vec);
 
-    double operator[](int i)const;
-    double& operator[](int i);
-
-    void set(int i, double value);
+    float operator[](int i)const;
+    float& operator[](int i);
+    float* pointer();
+    void set(int i, float value);
 
 private:
-    double arr[N];
+    float arr[N];
 };
+
+template<int N>
+float* TRSVector<N>::pointer()
+{
+    return arr;
+}
 
 template<>
 TRSVector<3> TRSVector<3>::cross(const TRSVector<3>& vec)
@@ -48,35 +54,35 @@ TRSVector<3> TRSVector<3>::cross(const TRSVector<3>& vec)
 template<int N>
 void TRSVector<N>::normalize()
 {
-    double len - length();
+    float len - length();
     for (int i = 0; i < N; i++)
         arr[i] /= len;
 }
 
 template<int N>
-double TRSVector<N>::length() const
+float TRSVector<N>::length() const
 {
-    double sum = 0;
+    float sum = 0;
     for (int i = 0; i < N; i++)
         sum += arr[i] * arr[i];
     return std::sqrt(sum);
 }
 
 template <>
-TRSVector<2>::TRSVector(double x, double y)
+TRSVector<2>::TRSVector(float x, float y)
 {
     arr[0] = x;
     arr[1] = y;
 }
 template <>
-TRSVector<3>::TRSVector(double x, double y, double z)
+TRSVector<3>::TRSVector(float x, float y, float z)
 {
     arr[0] = x;
     arr[1] = y;
     arr[2] = z;
 }
 template <>
-TRSVector<4>::TRSVector(double x, double y, double z, double w)
+TRSVector<4>::TRSVector(float x, float y, float z, float w)
 {
     arr[0] = x;
     arr[1] = y;
@@ -85,14 +91,14 @@ TRSVector<4>::TRSVector(double x, double y, double z, double w)
 }
 
 template<int N>
-double TRSVector<N>::distance(const TRSVector<N>& vec)
+float TRSVector<N>::distance(const TRSVector<N>& vec)
 {
     TRSVector<N> substract = vec - *this;
     return substract.length();
 }
 
 template<int N>
-TRSVector<N> TRSVector<N>::operator*(double value) const
+TRSVector<N> TRSVector<N>::operator*(float value) const
 {
     TRSVector<N> result;
     for (int i = 0; i < N; i++)
@@ -118,19 +124,19 @@ TRSVector<N> TRSVector<N>::operator+(const TRSVector<N>& vec) const
 }
 
 template<int N>
-void TRSVector<N>::set(int i, double value)
+void TRSVector<N>::set(int i, float value)
 {
     arr[i] = value;
 }
 
 template<int N>
-double TRSVector<N>::operator[](int i) const
+float TRSVector<N>::operator[](int i) const
 {
     return arr[i];
 }
 
 template<int N>
-double& TRSVector<N>::operator[](int i)
+float& TRSVector<N>::operator[](int i)
 {
     return arr[i];
 }
@@ -163,6 +169,7 @@ TRSVector<N> TRSVector<N>::operator=(const TRSVector<N>& vec)
     return *this;
 }
 
+typedef TRSVector<2> TRSVec2;
 typedef TRSVector<3> TRSVec3;
 typedef TRSVector<4> TRSVec4;
 
