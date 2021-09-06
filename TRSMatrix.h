@@ -20,20 +20,20 @@ public:
 
     void makeIdentity();
 
-    void makeTranslate(double x, double y, double z);
-    void translate(double x, double y, double z);
+    void makeTranslate(float x, float y, float z);
+    void translate(float x, float y, float z);
 
-    void makeRotate(double angle, double vecx, double vecy, double vecz);
-    void rotate(double angle, double vecx, double vecy, double vecz);
+    void makeRotate(float angle, float vecx, float vecy, float vecz);
+    void rotate(float angle, float vecx, float vecy, float vecz);
 
-    void makeScale(double scale);
-    void makeScale(double scalex, double scaley, double scalez);
-    void scale(double scale);
-    void scale(double scalex, double scaley, double scalez);
+    void makeScale(float scale);
+    void makeScale(float scalex, float scaley, float scalez);
+    void scale(float scale);
+    void scale(float scalex, float scaley, float scalez);
 
-    void makeOtho(double l, double r, double b, double t, double n, double f);
-    void makePerspective(double l, double r, double b, double t, double n, double f);
-    void makePerspective(double fov, double aspect, double n, double f);
+    void makeOtho(float l, float r, float b, float t, float n, float f);
+    void makePerspective(float l, float r, float b, float t, float n, float f);
+    void makePerspective(float fov, float aspect, float n, float f);
 
     TRSMatrix operator *(const TRSMatrix& matrix) const;
 

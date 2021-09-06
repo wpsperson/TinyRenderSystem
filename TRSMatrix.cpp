@@ -53,7 +53,7 @@ void TRSMatrix::makeIdentity()
     columns[3][0] = 0.0; columns[3][1] = 0.0; columns[3][2] = 0.0; columns[3][3] = 1.0;
 }
 
-void TRSMatrix::makeTranslate(double x, double y, double z)
+void TRSMatrix::makeTranslate(float x, float y, float z)
 {
     makeIdentity();
     columns[3][0] = x;
@@ -61,20 +61,20 @@ void TRSMatrix::makeTranslate(double x, double y, double z)
     columns[3][2] = z;
 }
 
-void TRSMatrix::translate(double x, double y, double z)
+void TRSMatrix::translate(float x, float y, float z)
 {
     TRSMatrix mat;
     mat.makeTranslate(x, y, z);
     *this = (*this) * mat;
 }
 
-void TRSMatrix::makeRotate(double angle, double vecx, double vecy, double vecz)
+void TRSMatrix::makeRotate(float angle, float vecx, float vecy, float vecz)
 {
     makeIdentity();
     // v' = p v p*
     // p = [cos(angle/2), sin(angle/2)* u ]
     // u = (ux, uy, uz); normalized
-    double length = std::sqrt(vecx*vecx + vecy*vecy + vecz*vecz);
+    float length = std::sqrt(vecx*vecx + vecy*vecy + vecz*vecz);
     if (length == 0)
     {
         return;
@@ -82,12 +82,12 @@ void TRSMatrix::makeRotate(double angle, double vecx, double vecy, double vecz)
     vecx = vecx / length;
     vecy = vecy / length;
     vecz = vecz / length;
-    double halfAngle = angle / 2;
-    double sin = std::sin(halfAngle);
-    double a = std::cos(halfAngle);
-    double b = sin * vecx;
-    double c = sin * vecy;
-    double d = sin * vecz;
+    float halfAngle = angle / 2;
+    float sin = std::sin(halfAngle);
+    float a = std::cos(halfAngle);
+    float b = sin * vecx;
+    float c = sin * vecy;
+    float d = sin * vecz;
 
     columns[0][0] = 1 - 2 * c*c - 2 * d*d;
     columns[0][1] = 2 * b*c + 2 * a*d;
@@ -110,19 +110,19 @@ void TRSMatrix::makeRotate(double angle, double vecx, double vecy, double vecz)
     columns[3][3] = 1;
 }
 
-void TRSMatrix::rotate(double angle, double vecx, double vecy, double vecz)
+void TRSMatrix::rotate(float angle, float vecx, float vecy, float vecz)
 {
     TRSMatrix mat;
     mat.makeRotate(angle, vecx, vecy, vecz);
     *this = (*this) * mat;
 }
 
-void TRSMatrix::makeScale(double scale)
+void TRSMatrix::makeScale(float scale)
 {
     makeScale(scale, scale, scale);
 }
 
-void TRSMatrix::makeScale(double scalex, double scaley, double scalez)
+void TRSMatrix::makeScale(float scalex, float scaley, float scalez)
 {
     makeIdentity();
     columns[0][0] = scalex;
@@ -130,12 +130,12 @@ void TRSMatrix::makeScale(double scalex, double scaley, double scalez)
     columns[2][2] = scalez;
 }
 
-void TRSMatrix::scale(double s)
+void TRSMatrix::scale(float s)
 {
     scale(s, s, s);
 }
 
-void TRSMatrix::scale(double scalex, double scaley, double scalez)
+void TRSMatrix::scale(float scalex, float scaley, float scalez)
 {
     TRSMatrix mat;
     mat.makeScale(scalex, scaley, scalez);
@@ -157,21 +157,21 @@ calculate above matrix we get
 |0,       0,       0,                  1|
 */
 
-void TRSMatrix::makeOtho(double l, double r, double b, double t, double n, double f)
+void TRSMatrix::makeOtho(float l, float r, float b, float t, float n, float f)
 {
-    columns[0][0] = 2.0 / (r - l);
+    columns[0][0] = 2.0f / (r - l);
     columns[0][1] = 0;
     columns[0][2] = 0;
     columns[0][3] = 0;
 
     columns[1][0] = 0;
-    columns[1][1] = 2.0 / (t - b);
+    columns[1][1] = 2.0f / (t - b);
     columns[1][2] = 0;
     columns[1][3] = 0;
 
     columns[2][0] = 0;
     columns[2][1] = 0;
-    columns[2][2] = -2.0 / (f - n);
+    columns[2][2] = -2.0f / (f - n);
     columns[2][3] = 0;
 
     columns[3][0] = -(r + l) / (r - l);
@@ -197,15 +197,15 @@ calculate above matrix we get
 */
 
 
-void TRSMatrix::makePerspective(double l, double r, double b, double t, double n, double f)
+void TRSMatrix::makePerspective(float l, float r, float b, float t, float n, float f)
 {
-    columns[0][0] = 2.0 * n / (r - l);
+    columns[0][0] = 2.0f * n / (r - l);
     columns[0][1] = 0;
     columns[0][2] = 0;
     columns[0][3] = 0;
 
     columns[1][0] = 0;
-    columns[1][1] = 2.0 * n / (t - b);
+    columns[1][1] = 2.0f * n / (t - b);
     columns[1][2] = 0;
     columns[1][3] = 0;
 
@@ -220,12 +220,12 @@ void TRSMatrix::makePerspective(double l, double r, double b, double t, double n
     columns[3][3] = 0;
 }
 
-void TRSMatrix::makePerspective(double fov, double aspect, double n, double f)
+void TRSMatrix::makePerspective(float fov, float aspect, float n, float f)
 {
-    double t = std::tan(fov / 2)*n;
-    double b = -t;
-    double r = t * aspect;
-    double l = -r;
+    float t = std::tan(fov / 2)*n;
+    float b = -t;
+    float r = t * aspect;
+    float l = -r;
     makePerspective(l, r, b, t, n, f);
 }
 
