@@ -69,12 +69,12 @@ std::shared_ptr<TRSVAO> TRSGeode::getVAO() const
     return m_pVAO;
 }
 
-glm::vec4 TRSGeode::getColor() const
+TRSVec4 TRSGeode::getColor() const
 {
     return m_matColor;
 }
 
-void TRSGeode::setColor(const glm::vec4& color)
+void TRSGeode::setColor(const TRSVec4& color)
 {
     m_matColor = color;
 }

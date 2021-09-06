@@ -4,7 +4,7 @@
 
 
 TRSNode::TRSNode()
-    : m_mat(glm::mat4(1.0f)), m_UpdateFunc(nullptr)
+    : m_mat(), m_UpdateFunc(nullptr)
 {
 
 }
@@ -14,12 +14,12 @@ TRSNode::~TRSNode()
 
 }
 
-glm::mat4 TRSNode::getMatrix()
+TRSMatrix TRSNode::getMatrix()
 {
     return m_mat;
 }
 
-void TRSNode::setMatrix(const glm::mat4& mat)
+void TRSNode::setMatrix(const TRSMatrix& mat)
 {
     m_mat = mat;
 }

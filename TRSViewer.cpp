@@ -65,7 +65,7 @@ void TRSViewer::run()
         {
             break;
         }
-        glClearColor(m_BGColor.r, m_BGColor.g, m_BGColor.b, m_BGColor.a);
+        glClearColor(m_BGColor[0], m_BGColor[1], m_BGColor[2], m_BGColor[3]);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         calcFrameTime();
         keyboardCallBack();
@@ -105,9 +105,9 @@ void TRSViewer::drawScene()
             TRSGeode* pGeode = dynamic_cast<TRSGeode*>(*itrNode);
             std::shared_ptr<TRSVAO> pVao = pGeode->getVAO();
             pVao->bind();
-            glm::mat4 modelMatrix = pGeode->getMatrix();
-            glm::mat4 viewMatrix = m_pCamera->getViewMatrix();
-            glm::mat4 projectMatrix = m_pCamera->getProjectMatrix();
+            TRSMatrix modelMatrix = pGeode->getMatrix();
+            TRSMatrix viewMatrix = m_pCamera->getViewMatrix();
+            TRSMatrix projectMatrix = m_pCamera->getProjectMatrix();
             pShader->addUniformMatrix4("model", modelMatrix);
             pShader->addUniformMatrix4("view", viewMatrix);
             pShader->addUniformMatrix4("projection", projectMatrix);

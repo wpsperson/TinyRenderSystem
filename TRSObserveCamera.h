@@ -24,10 +24,10 @@ public:
 
 protected:
     // camera control parameter
-    glm::vec3 m_facialPt;
-    float m_fMouseSensity;  //鼠标移动的敏感系数
-    float m_fPitch;         //鼠标上下移动产生的俯仰角 -89~89
-    float m_fYaw;           //鼠标上下移动产生的偏航角 无限制
+    TRSVec3 m_facialPt;
+    float m_fMouseSensity;
+    float m_fPitch;
+    float m_fYaw;
     double m_fLastX;
     double m_fLastY;
 

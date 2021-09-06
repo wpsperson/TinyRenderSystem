@@ -7,7 +7,7 @@
 #pragma once
 #include "TRSExport.h"
 #include "TRSConst.h"
-#include "glm/glm.hpp"
+#include "TRSMatrix.h"
 #include <memory>
 #include <string>
 #include <functional>
@@ -26,9 +26,9 @@ public:
     TRSNode();
     ~TRSNode();
 
-    glm::mat4 getMatrix();
+    TRSMatrix getMatrix();
 
-    void setMatrix(const glm::mat4& mat);
+    void setMatrix(const TRSMatrix& mat);
 
     virtual void draw();
 
@@ -46,7 +46,7 @@ public:
 
     virtual std::string debugInfo() = 0;
 protected:
-    glm::mat4 m_mat;
+    TRSMatrix m_mat;
     std::shared_ptr<TRSStateSet> m_pStateSet;
     NodeUpdateFunc m_UpdateFunc;
 };

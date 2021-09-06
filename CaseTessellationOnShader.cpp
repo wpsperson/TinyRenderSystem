@@ -3,7 +3,6 @@
 
 #include <glad\glad.h>
 #include <GLFW\glfw3.h>
-#include <glm\gtc\matrix_transform.hpp>
 
 #include "stb_image.h"
 #include "TRSUtils.h"
@@ -178,8 +177,8 @@ int CaseTessHermiteCurve(int argn, char** argc)
     shader->createTessEvaluateShader("shaders/HermiteTese.glsl");
     shader->createProgram();
 
-    shader->addUniform3v("vTan0", glm::vec3(0.5f, 0.866f, 0.0f));
-    shader->addUniform3v("vTan1", glm::vec3(0.5f, 0.866f, 0.0f));
+    shader->addUniform3v("vTan0", TRSVec3(0.5f, 0.866f, 0.0f));
+    shader->addUniform3v("vTan1", TRSVec3(0.5f, 0.866f, 0.0f));
     pNode->getVAO()->setDrawType(GL_PATCHES);
     pNode->getVAO()->setDrawParam(2);
 
@@ -209,19 +208,19 @@ int CaseTessBezierCurve(int argn, char** argc)
     shader->createProgram();
     bezierCurve->getVAO()->setDrawType(GL_PATCHES);
     bezierCurve->getVAO()->setDrawParam(4);
-    bezierCurve->setColor(glm::vec4(1, 0.5, 0.5, 1));
+    bezierCurve->setColor(TRSVec4(1, 0.5, 0.5, 1));
 
     int arraySize;
     float* grid = createXYGridVertexArray(0.5, 7, arraySize);
     std::shared_ptr<TRSGeode> gridLine = std::make_shared<TRSGeode>();
     gridLine->readFromVertex(grid, arraySize, EnVertex);
     gridLine->getVAO()->setDrawType(GL_LINES);
-    gridLine->setColor(glm::vec4(0.5, 0.5, 1, 1));
+    gridLine->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGeode> polyLine = std::make_shared<TRSGeode>();
     polyLine->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
     polyLine->getVAO()->setDrawType(GL_LINE_STRIP);
-    polyLine->setColor(glm::vec4(1, 1, 1, 1));
+    polyLine->setColor(TRSVec4(1, 1, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(gridLine);
@@ -267,18 +266,18 @@ int CaseTessBezierSurface(int argn, char** argc)
     shader->createProgram();
     bezierSurface->getVAO()->setDrawType(GL_PATCHES);
     bezierSurface->getVAO()->setDrawParam(16);
-    bezierSurface->setColor(glm::vec4(1, 0.5, 0.5, 1));
+    bezierSurface->setColor(TRSVec4(1, 0.5, 0.5, 1));
 
     int arraySize;
     float* grid = createXYGridVertexArray(0.5, 7, arraySize);
     std::shared_ptr<TRSGeode> gridLine = std::make_shared<TRSGeode>();
     gridLine->readFromVertex(grid, arraySize, EnVertex);
     gridLine->getVAO()->setDrawType(GL_LINES);
-    gridLine->setColor(glm::vec4(0.5, 0.5, 1, 1));
+    gridLine->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGeode> bezierSurfaceWireframe = std::make_shared<TRSGeode>(*bezierSurface, true);
     bezierSurfaceWireframe->setPolygonMode(GL_LINE);
-    bezierSurfaceWireframe->setColor(glm::vec4(0.5, 1.0, 0.5, 1));
+    bezierSurfaceWireframe->setColor(TRSVec4(0.5, 1.0, 0.5, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(gridLine);
@@ -335,17 +334,17 @@ int CaseTraditionalBSplineCurve(int argn, char** argc)
     std::shared_ptr<TRSGeode> Bspline = std::make_shared<TRSGeode>();
     Bspline->readFromVertex(curve, 303, EnVertex);
     Bspline->getVAO()->setDrawType(GL_LINE_STRIP);
-    Bspline->setColor(glm::vec4(0.9, 0.5, 1, 1));
+    Bspline->setColor(TRSVec4(0.9, 0.5, 1, 1));
 
     std::shared_ptr<TRSGeode> BSplineNormPair = std::make_shared<TRSGeode>();
     BSplineNormPair->readFromVertex(samplePtPair, sampleNum*6, EnVertex);
     BSplineNormPair->getVAO()->setDrawType(GL_LINES);
-    BSplineNormPair->setColor(glm::vec4(0.5, 1, 1, 1));
+    BSplineNormPair->setColor(TRSVec4(0.5, 1, 1, 1));
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
     CtrlPolygon->readFromVertex(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float), EnVertex);
     CtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
-    CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
+    CtrlPolygon->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(Bspline);
@@ -389,17 +388,17 @@ int CaseTessBSplineCurve(int argn, char** argc)
     shader->createProgram();
     BSplineToBezierCurve->getVAO()->setDrawType(GL_PATCHES);
     BSplineToBezierCurve->getVAO()->setDrawParam(4);
-    BSplineToBezierCurve->setColor(glm::vec4(1, 0.5, 0.5, 1));
+    BSplineToBezierCurve->setColor(TRSVec4(1, 0.5, 0.5, 1));
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
     CtrlPolygon->readFromVertex(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float), EnVertex);
     CtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
-    CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
+    CtrlPolygon->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGeode> NewCtrlPolygon = std::make_shared<TRSGeode>();
     NewCtrlPolygon->readFromVertex(newCtrlPt, newPtNum * 3, EnVertex);
     NewCtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
-    NewCtrlPolygon->setColor(glm::vec4(1, 1, 1, 1));
+    NewCtrlPolygon->setColor(TRSVec4(1, 1, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(BSplineToBezierCurve);
@@ -474,7 +473,7 @@ int CaseTraditionalBSplineSurface(int argn, char** argc)
     TRSShader* shader = pSS->getShader();
     shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
     BsplineSurFace->getVAO()->setDrawType(GL_TRIANGLES);
-    BsplineSurFace->setColor(glm::vec4(0.9, 0.5, 1, 1));
+    BsplineSurFace->setColor(TRSVec4(0.9, 0.5, 1, 1));
 
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
@@ -482,7 +481,7 @@ int CaseTraditionalBSplineSurface(int argn, char** argc)
     CtrlPolygon->readFromVertex(SurfacePts, sizeof(SurfacePts) / sizeof(float), EnVertex, ctrlPolygonEleArr, 180);
     CtrlPolygon->setPolygonMode(GL_LINE);
     CtrlPolygon->getVAO()->setDrawType(GL_TRIANGLES);
-    CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
+    CtrlPolygon->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(BsplineSurFace);
@@ -551,7 +550,7 @@ int CaseTessBSplineSurface(int argn, char** argc)
     shader->createProgram();
     BsplineSurFace->getVAO()->setDrawType(GL_PATCHES);
     BsplineSurFace->getVAO()->setDrawParam(16);
-    BsplineSurFace->setColor(glm::vec4(1, 0.5, 0.5, 1));
+    BsplineSurFace->setColor(TRSVec4(1, 0.5, 0.5, 1));
     BsplineSurFace->setPolygonMode(GL_LINE);
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
@@ -559,7 +558,7 @@ int CaseTessBSplineSurface(int argn, char** argc)
     CtrlPolygon->readFromVertex(SurfacePts, sizeof(SurfacePts) / sizeof(float), EnVertex, ctrlPolygonEleArr, 180);
     CtrlPolygon->setPolygonMode(GL_LINE);
     CtrlPolygon->getVAO()->setDrawType(GL_TRIANGLES);
-    CtrlPolygon->setColor(glm::vec4(0.5, 0.5, 1, 1));
+    CtrlPolygon->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(BsplineSurFace);

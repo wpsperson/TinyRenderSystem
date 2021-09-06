@@ -10,6 +10,7 @@
 #include "TRSShader.h"
 #include "TRSAssimpLoader.h"
 #include "TRSStateset.h"
+#include "TRSVector.h"
 #include "NodeVisitor.h"
 #include "glfw\glfw3.h"
 
@@ -79,7 +80,7 @@ public:
             shader->addUniformi("lod", 1);
 
             PNTriangleGeode->getVAO()->setDrawType(GL_TRIANGLES);
-            PNTriangleGeode->setColor(glm::vec4(1.0, 1.0, 0.5, 1));
+            PNTriangleGeode->setColor(TRSVec4(1.0, 1.0, 0.5, 1));
             PNTriangleGeode->getVAO()->setDrawType(GL_PATCHES);
             PNTriangleGeode->getVAO()->setDrawParam(3);
             PNTriangleGeode->setUpdateCallBack(LodCallBack);
@@ -118,7 +119,7 @@ int CasePNTriangles(int argn, char** argc)
     //shader->createProgram();
 
     //PNTriangleGeode->getVAO()->setDrawType(GL_TRIANGLES);
-    //PNTriangleGeode->setColor(glm::vec4(1.0, 1.0, 0.5, 1));
+    //PNTriangleGeode->setColor(TRSVec4(1.0, 1.0, 0.5, 1));
     //PNTriangleGeode->getVAO()->setDrawType(GL_PATCHES);
     //PNTriangleGeode->getVAO()->setDrawParam(3);
     //PNTriangleGeode->setPolygonMode(GL_LINE);

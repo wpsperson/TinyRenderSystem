@@ -9,7 +9,8 @@
 #include <vector>
 #include <glad/glad.h>
 #include "TRSExport.h"
-#include "glm/glm.hpp"
+#include "TRSVector.h"
+#include "TRSMatrix.h"
 #include <map>
 
 enum EnUniformType
@@ -29,10 +30,10 @@ struct UniformData
     {
         float fValue;
         int  nValue;
-        glm::vec2 vec2Value;
-        glm::vec3 vec3Value;
-        glm::vec4 vec4Value;
-        glm::mat4 mat4Value;
+        TRSVec2 vec2Value;
+        TRSVec3 vec3Value;
+        TRSVec4 vec4Value;
+        TRSMatrix mat4Value;
     };
     UniformData()
         :enType(EnFloat), fValue(0.0f)
@@ -93,9 +94,9 @@ public:
 
     void addUniformi(const std::string uniformName, int value);
     void addUniformf(const std::string uniformName, float value);
-    void addUniform3v(const std::string uniformName, glm::vec3 vec3Color);
-    void addUniform4v(const std::string uniformName, glm::vec4 vec4Color);
-    void addUniformMatrix4(const std::string& uniformName, glm::mat4 mat);
+    void addUniform3v(const std::string uniformName, TRSVec3 vec3Color);
+    void addUniform4v(const std::string uniformName, TRSVec4 vec4Color);
+    void addUniformMatrix4(const std::string& uniformName, TRSMatrix mat);
     void applayAllStaticUniform();
 
     unsigned int getProgramId();

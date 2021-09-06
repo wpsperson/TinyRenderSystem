@@ -5,7 +5,7 @@
  */
 
 #pragma once
-#include <glm/glm.hpp>
+#include "TRSVector.h"
 
 enum EnVertexStruct
 {
@@ -25,14 +25,14 @@ static const int DefaultWindowWidth = 1200;
 static const int DefaultWindowHeight = 800;
 
 //默认背景颜色，深蓝色
-static glm::vec4 s_DefaultBGColor(0.2, 0.2, 0.4, 1);
+static TRSVec4 s_DefaultBGColor(0.2f, 0.2f, 0.4f, 1.0f);
 
 //默认节点颜色，浅白色
-static glm::vec4 s_DefaultNodeColor(0.5, 0.5, 0.5, 1);
+static TRSVec4 s_DefaultNodeColor(0.5, 0.5, 0.5, 1);
 
-static glm::vec3 s_DefaultCameraPos(0, 0, 3.0f);
+static TRSVec3 s_DefaultCameraPos(0, 0, 3.0f);
 
-static glm::vec3 s_DefaultLightPos(0.0f, 0.0f, 100.0f);
+static TRSVec3 s_DefaultLightPos(0.0f, 0.0f, 100.0f);
 
 static float DefaultNearDistance = 0.1f;  //近平面
 static float DefaultFarDistance = 100.0f;   //远平面

@@ -1,6 +1,7 @@
 #include "TRSObserveCamera.h"
 #include "GLFW/glfw3.h"
 #include "TRSConst.h"
+#include "TRSMathUtil.h"
 
 TRSObserveCamera::TRSObserveCamera(GLFWwindow* pWindow)
     : TRSCamera(pWindow)
@@ -8,13 +9,12 @@ TRSObserveCamera::TRSObserveCamera(GLFWwindow* pWindow)
     m_leftMousePressed = false;
     m_middleMousePressed = false;
     m_modifier = 0;
-    //pitch yaw 角度初值的含义是通过满足 m_front = glm::vec3(0, 0, -1.0f)反算出来的
     m_fPitch = 0.0f;
     m_fYaw = -90.0f;
     m_fLastX = 0;
     m_fLastY = 0;
     m_fMouseSensity = 0.15f;
-    m_facialPt = glm::vec3(0, 0, 0);
+    m_facialPt = TRSVec3(0, 0, 0);
 }
 
 TRSObserveCamera::~TRSObserveCamera()
@@ -32,8 +32,8 @@ void TRSObserveCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, doubl
     TRSCamera::mouseMoveCallBack(pWindow, xpos, ypos);
     if (m_leftMousePressed)// left mouse button pressed, do rotate
     {
-        double xOffset = xpos - m_fLastX;
-        double yOffset = -(ypos - m_fLastY);
+        float xOffset = xpos - m_fLastX;
+        float yOffset = -(ypos - m_fLastY);
         m_fLastX = xpos;
         m_fLastY = ypos;
         m_fYaw += m_fMouseSensity * xOffset;
@@ -46,16 +46,16 @@ void TRSObserveCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, doubl
         {
             m_fPitch = -89.0f;
         }
-        float origDist = glm::distance(m_pos, m_facialPt);
+        float origDist = m_pos.distance(m_facialPt);
 
-        m_front.y = sin(glm::radians(m_fPitch));
-        m_front.x = cos(glm::radians(m_fPitch)) * cos(glm::radians(m_fYaw));
-        m_front.z = cos(glm::radians(m_fPitch)) * sin(glm::radians(m_fYaw));
-        m_front = glm::normalize(m_front);
-        m_pos = m_facialPt - origDist * m_front;
-        m_right = glm::cross(m_front, glm::vec3(0, 1, 0));
-        m_right = glm::normalize(m_right);
-        m_up = glm::cross(m_right, m_front);
+        m_front[1] = sin(toRadian(m_fPitch));
+        m_front[0] = cos(toRadian(m_fPitch)) * cos(toRadian(m_fYaw));
+        m_front[2] = cos(toRadian(m_fPitch)) * sin(toRadian(m_fYaw));
+        m_front.normalize();
+        m_pos = m_facialPt - m_front*origDist;
+        m_right = m_front.cross(TRSVec3(0, 1, 0));
+        m_right.normalize();
+        m_up = m_right.cross(m_front);
         return;
     }
     else if (m_middleMousePressed)// middle mouse button pressed, do panning
@@ -67,7 +67,7 @@ void TRSObserveCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, doubl
         m_fLastX = xpos;
         m_fLastY = ypos;
 
-        glm::vec3 delta = m_up * float(yOffset) + m_right * float(xOffset);
+        TRSVec3 delta = m_up * float(yOffset) + m_right * float(xOffset);
         delta = delta*0.001f;
         m_pos -= delta;
         m_facialPt -= delta;

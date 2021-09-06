@@ -1,8 +1,6 @@
 ﻿#include "TRSAssimpLoader.h"
 #include <iostream>
 #include <vector>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -18,15 +16,11 @@ using namespace std;
 
 struct Vertex {
     // position
-    glm::vec3 Position;
+    TRSVec3 Position;
     // normal
-    glm::vec3 Normal;
+    TRSVec3 Normal;
     // texCoords
-    glm::vec2 TexCoords;
-    //// tangent
-    //glm::vec3 Tangent;
-    //// bitangent
-    //glm::vec3 Bitangent;
+    TRSVec2 TexCoords;
 };
 
 TRSAssimpLoader::TRSAssimpLoader()
@@ -94,32 +88,32 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
     for (unsigned int i = 0; i < pMesh->mNumVertices; i++)
     {
         Vertex vertex;
-        glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
+        TRSVec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to TRSVec3 class so we transfer the data to this placeholder TRSVec3 first.
                           // positions
-        vector.x = pMesh->mVertices[i].x;
-        vector.y = pMesh->mVertices[i].y;
-        vector.z = pMesh->mVertices[i].z;
+        vector[0] = pMesh->mVertices[i].x;
+        vector[1] = pMesh->mVertices[i].y;
+        vector[2] = pMesh->mVertices[i].z;
         vertex.Position = vector;
         // normals
         if (pMesh->mNormals)
         {
-            vector.x = pMesh->mNormals[i].x;
-            vector.y = pMesh->mNormals[i].y;
-            vector.z = pMesh->mNormals[i].z;
+            vector[0] = pMesh->mNormals[i].x;
+            vector[1] = pMesh->mNormals[i].y;
+            vector[2] = pMesh->mNormals[i].z;
             vertex.Normal = vector;
         }
         // texture coordinates
         if (pMesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
         {
-            glm::vec2 vec;
+            TRSVec2 vec;
             // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
             // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
-            vec.x = pMesh->mTextureCoords[0][i].x;
-            vec.y = pMesh->mTextureCoords[0][i].y;
+            vec[0] = pMesh->mTextureCoords[0][i].x;
+            vec[1] = pMesh->mTextureCoords[0][i].y;
             vertex.TexCoords = vec;
         }
         else
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+            vertex.TexCoords = TRSVec2(0.0f, 0.0f);
         //// tangent
         //if (pMesh->mTangents)
         //{

@@ -5,6 +5,7 @@
 
 #pragma once
 #include "TRSExport.h"
+#include <cmath>
 
 template<int N>
 class TRS_EXPORT TRSVector
@@ -19,12 +20,14 @@ public:
     ~TRSVector();
     TRSVector<N> operator + (const TRSVector<N>& vec) const;
     TRSVector<N> operator - (const TRSVector<N>& vec) const;
+    void operator += (const TRSVector<N>& vec);
+    void operator -= (const TRSVector<N>& vec);
     TRSVector<N> operator * (float value) const;
 
     float distance(const TRSVector<N>& vec);
     float length() const;
     void normalize();
-    inline TRSVector<N> cross(const TRSVector<N>& vec);
+    inline TRSVector<N> cross(const TRSVector<N>& vec) const;
 
     float operator[](int i)const;
     float& operator[](int i);
@@ -42,7 +45,7 @@ float* TRSVector<N>::pointer()
 }
 
 template<>
-TRSVector<3> TRSVector<3>::cross(const TRSVector<3>& vec)
+TRSVector<3> TRSVector<3>::cross(const TRSVector<3>& vec) const
 {
     TRSVector<3> result;
     result[0] = arr[1] * vec[2] - arr[2] * vec[1];
@@ -54,7 +57,7 @@ TRSVector<3> TRSVector<3>::cross(const TRSVector<3>& vec)
 template<int N>
 void TRSVector<N>::normalize()
 {
-    float len - length();
+    float len = length();
     for (int i = 0; i < N; i++)
         arr[i] /= len;
 }
@@ -121,6 +124,18 @@ TRSVector<N> TRSVector<N>::operator+(const TRSVector<N>& vec) const
     for (int i = 0; i < N; i++)
         result.set(i, this->arr[i] + vec[i]);
     return result;
+}
+
+template<int N>
+void TRSVector<N>::operator+=(const TRSVector<N>& vec)
+{
+    *this = *this + vec;
+}
+
+template<int N>
+void TRSVector<N>::operator-=(const TRSVector<N>& vec)
+{
+    *this = *this - vec;
 }
 
 template<int N>

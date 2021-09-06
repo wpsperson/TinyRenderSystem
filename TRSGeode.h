@@ -7,7 +7,7 @@
 #pragma once
 #include "TRSExport.h"
 #include "TRSNode.h"
-#include <glm/glm.hpp>
+#include "TRSVector.h"
 
 class TRS_EXPORT TRSGeode : public TRSNode
 {
@@ -30,9 +30,9 @@ public:
 
     std::shared_ptr<TRSVAO> getVAO() const;
 
-    glm::vec4 getColor() const;
+    TRSVec4 getColor() const;
 
-    void setColor(const glm::vec4& color);
+    void setColor(const TRSVec4& color);
 
     void setPolygonMode(int polyMode);
 
@@ -45,7 +45,7 @@ protected:
 
 protected:
     std::shared_ptr<TRSVAO> m_pVAO;
-    glm::vec4 m_matColor;
+    TRSVec4 m_matColor;
     int m_polygonMode;
 };
 

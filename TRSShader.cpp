@@ -94,7 +94,7 @@ void TRSShader::addUniformf(const std::string uniformName, float value)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-void TRSShader::addUniform3v(const std::string uniformName, glm::vec3 vec3Color)
+void TRSShader::addUniform3v(const std::string uniformName, TRSVec3 vec3Color)
 {
     UniformData oData;
     oData.enType = EnVec3;
@@ -102,7 +102,7 @@ void TRSShader::addUniform3v(const std::string uniformName, glm::vec3 vec3Color)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-void TRSShader::addUniform4v(const std::string uniformName, glm::vec4 vec4Color)
+void TRSShader::addUniform4v(const std::string uniformName, TRSVec4 vec4Color)
 {
     UniformData oData;
     oData.enType = EnVec4;
@@ -110,7 +110,7 @@ void TRSShader::addUniform4v(const std::string uniformName, glm::vec4 vec4Color)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-void TRSShader::addUniformMatrix4(const std::string& uniformName, glm::mat4 mat)
+void TRSShader::addUniformMatrix4(const std::string& uniformName, TRSMatrix mat)
 {
     UniformData oData;
     oData.enType = EnMat4;
@@ -155,17 +155,20 @@ void TRSShader::applayAllStaticUniform()
             glUniform1i(loc, oData.nValue);
             break;
         case EnVec2:
-            glUniform2f(loc, oData.vec2Value.x, oData.vec2Value.y);
+            glUniform2f(loc, oData.vec2Value[0], oData.vec2Value[1]);
             break;
         case EnVec3:
-            glUniform3f(loc, oData.vec3Value.x, oData.vec3Value.y, oData.vec3Value.z);
+            glUniform3f(loc, oData.vec3Value[0], oData.vec3Value[1], oData.vec3Value[2]);
             break;
         case EnVec4:
-            glUniform4f(loc, oData.vec4Value.x, oData.vec4Value.y, oData.vec4Value.z, oData.vec4Value.w);
+            glUniform4f(loc, oData.vec4Value[0], oData.vec4Value[1], oData.vec4Value[2], oData.vec4Value[3]);
             break;
         case EnMat4:
-            glUniformMatrix4fv(loc, 1, GL_FALSE, &(oData.mat4Value[0][0]));
+        {
+            TRSVec4& vec = oData.mat4Value[0];
+            glUniformMatrix4fv(loc, 1, GL_FALSE, vec.pointer());
             break;
+        }
         default:
             break;
         }

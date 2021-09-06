@@ -61,11 +61,21 @@ void TRSMatrix::makeTranslate(float x, float y, float z)
     columns[3][2] = z;
 }
 
+void TRSMatrix::makeTranslate(const TRSVec3& trans)
+{
+    makeTranslate(trans[0], trans[1], trans[2]);
+}
+
 void TRSMatrix::translate(float x, float y, float z)
 {
     TRSMatrix mat;
     mat.makeTranslate(x, y, z);
     *this = (*this) * mat;
+}
+
+void TRSMatrix::translate(const TRSVec3& trans)
+{
+    translate(trans[0], trans[1], trans[2]);
 }
 
 void TRSMatrix::makeRotate(float angle, float vecx, float vecy, float vecz)
@@ -110,11 +120,21 @@ void TRSMatrix::makeRotate(float angle, float vecx, float vecy, float vecz)
     columns[3][3] = 1;
 }
 
+void TRSMatrix::makeRotate(float angle, const TRSVec3& axis)
+{
+    makeRotate(angle, axis[0], axis[1], axis[2]);
+}
+
 void TRSMatrix::rotate(float angle, float vecx, float vecy, float vecz)
 {
     TRSMatrix mat;
     mat.makeRotate(angle, vecx, vecy, vecz);
     *this = (*this) * mat;
+}
+
+void TRSMatrix::rotate(float angle, const TRSVec3& axis)
+{
+    rotate(angle, axis[0], axis[1], axis[2]);
 }
 
 void TRSMatrix::makeScale(float scale)
@@ -227,6 +247,20 @@ void TRSMatrix::makePerspective(float fov, float aspect, float n, float f)
     float r = t * aspect;
     float l = -r;
     makePerspective(l, r, b, t, n, f);
+}
+
+void TRSMatrix::makeLookat(const TRSVec3& eye, const TRSVec3& front, const TRSVec3& up)
+{
+    TRSVec3 Z = front * -1;
+    Z.normalize();
+    TRSVec3 X = up.cross(Z);
+    X.normalize();
+    TRSVec3 Y = Z.cross(X);
+
+    columns[0][0] = X[0]; columns[1][0] = X[1]; columns[2][0] = X[2]; columns[3][0] = eye[0];
+    columns[0][1] = Y[0]; columns[1][1] = Y[1]; columns[2][1] = Y[2]; columns[3][1] = eye[1];
+    columns[0][2] = Z[0]; columns[1][2] = Z[1]; columns[2][2] = Z[2]; columns[3][2] = eye[2];
+    columns[0][3] = 0;    columns[1][3] = 0;    columns[2][3] = 0;    columns[3][3] = 1;
 }
 
 TRSMatrix& TRSMatrix::postMultiply(const TRSMatrix& matrix)

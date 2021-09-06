@@ -1,18 +1,18 @@
 ﻿#include "TRSCamera.h"
 #include <iostream>
-#include <glm/gtc/matrix_transform.hpp>
 #include "glfw/glfw3.h"
 #include "TRSConst.h"
 #include "TRSCallBackFunc.h"
 #include "TRSConfig.h"
+#include "TRSMathUtil.h"
 
 TRSCamera::TRSCamera(GLFWwindow* pWindow)
     : m_pWindow(pWindow)
 {
     m_pos = s_DefaultCameraPos;
-    m_front = glm::vec3(0, 0, -1);
-    m_right = glm::vec3(1, 0, 0);
-    m_up =    glm::vec3(0, 1, 0);
+    m_front = TRSVec3(0, 0, -1);
+    m_right = TRSVec3(1, 0, 0);
+    m_up = TRSVec3(0, 1, 0);
 
     m_width = DefaultWindowWidth;
     m_height = DefaultWindowHeight;
@@ -27,32 +27,33 @@ TRSCamera::~TRSCamera()
 {
 }
 
-glm::mat4 TRSCamera::getViewMatrix()
+TRSMatrix TRSCamera::getViewMatrix()
 {
-    glm::mat4 viewMatrix = glm::lookAt(m_pos, m_pos + m_front, m_up);
-    return viewMatrix;
+    TRSMatrix matrix;
+    matrix.makeLookat(m_pos, m_front, m_up);
+    return matrix;
 }
 
-glm::mat4 TRSCamera::getProjectMatrix()
+TRSMatrix TRSCamera::getProjectMatrix()
 {
+    TRSMatrix matrix;
     if (m_parallelMode)
     {
-        glm::mat4 projectMatrix = glm::ortho(-m_width/2, m_width/2, -m_height/2, m_height/2, m_near, m_far);
-        return projectMatrix;
+        matrix.makeOtho(-m_width / 2, m_width / 2, -m_height / 2, m_height / 2, m_near, m_far);
     }
     else
     {
-        glm::mat4 projectMatrix = glm::perspective(glm::radians(m_fFov), m_width / m_height, m_near, m_far);
-        return projectMatrix;
+        matrix.makePerspective(toRadian(m_fFov), m_width / m_height, m_near, m_far);
     }
+    return matrix;
 }
 
-glm::vec3 TRSCamera::getCameraPos() const
+TRSVec3 TRSCamera::getCameraPos() const
 {
     return m_pos;
 }
 
-glm::vec3 TRSCamera::getCameraFront() const
+TRSVec3 TRSCamera::getCameraFront() const
 {
     return m_front;
 }

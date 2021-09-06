@@ -4,7 +4,6 @@
 
 #include <glad\glad.h>
 #include <GLFW\glfw3.h>
-#include <glm\gtc\matrix_transform.hpp>
 
 #include "stb_image.h"
 #include "TRSUtils.h"
@@ -148,10 +147,12 @@ int CaseStencilTest()
     int nPosViewMatrix2 = glGetUniformLocation(shaderBorder, "view");
     int nPosProjectMatrix2 = glGetUniformLocation(shaderBorder, "projection");
 
-    glm::mat4 IdentityMatrix;
-    glm::mat4 ScaleUpMatrix = glm::scale(IdentityMatrix, glm::vec3(1.05f, 1.05f, 1.05f));
-    glm::mat4 TranslateMatrix = glm::translate(IdentityMatrix, glm::vec3(0.8f, 0.5f, 0.1f));
-    glm::mat4 SecondModelScaleUpMatrix = TranslateMatrix * ScaleUpMatrix;
+    TRSMatrix IdentityMatrix;
+    TRSMatrix ScaleUpMatrix;
+    ScaleUpMatrix.makeScale(1.05f, 1.05f, 1.05f);
+    TRSMatrix TranslateMatrix;
+    TranslateMatrix.makeTranslate(0.8f, 0.5f, 0.1f);
+    TRSMatrix SecondModelScaleUpMatrix = TranslateMatrix * ScaleUpMatrix;
     //glUniform1i设置每个采样器的方式告诉OpenGL每个着色器采样器属于哪个纹理单元。我们只需要设置一次即可，所以这个会放在渲染循环的前面：
     //着色器中texture0对应GL_TEXTURE0（BoxTexture）
     //着色器中texture1对应GL_TEXTURE1（FaceTexture）
@@ -190,8 +191,8 @@ int CaseStencilTest()
         //glStencilMask(0xff); //***
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        glm::mat4 projMatrix = g_pCamera->getProjectMatrix();
-        glm::mat4 viewMatrix = g_pCamera->getViewMatrix();
+        TRSMatrix projMatrix = g_pCamera->getProjectMatrix();
+        TRSMatrix viewMatrix = g_pCamera->getViewMatrix();
         glUniformMatrix4fv(nPosModelMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
         glUniformMatrix4fv(nPosViewMatrix, 1, GL_FALSE, &(viewMatrix[0][0]));
         glUniformMatrix4fv(nPosProjectMatrix, 1, GL_FALSE, &(projMatrix[0][0]));

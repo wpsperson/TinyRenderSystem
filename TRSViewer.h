@@ -7,10 +7,9 @@
 #pragma once
 #include "TRSExport.h"
 #include <memory>
-#include "glm\glm.hpp"
 #include <map>
 #include <vector>
-
+#include "TRSVector.h"
 class TRSCamera;
 class TRSNode;
 class PolygonModeVisitor;
@@ -38,7 +37,7 @@ protected:
 protected:
     std::shared_ptr<TRSNode> m_pSceneNode;
     GLFWwindow* m_pWindow;
-    glm::vec4 m_BGColor;
+    TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;
     PolygonModeVisitor* m_polygonModeVisitor;
     std::map<int, std::vector<TRSNode*>> m_mapState2Node;
