@@ -164,11 +164,8 @@ void TRSShader::applayAllStaticUniform()
             glUniform4f(loc, oData.vec4Value[0], oData.vec4Value[1], oData.vec4Value[2], oData.vec4Value[3]);
             break;
         case EnMat4:
-        {
-            TRSVec4& vec = oData.mat4Value[0];
-            glUniformMatrix4fv(loc, 1, GL_FALSE, vec.pointer());
+            glUniformMatrix4fv(loc, 1, GL_FALSE, &(oData.mat4Value[0][0]));
             break;
-        }
         default:
             break;
         }

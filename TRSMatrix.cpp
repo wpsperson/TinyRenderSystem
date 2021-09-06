@@ -257,9 +257,9 @@ void TRSMatrix::makeLookat(const TRSVec3& eye, const TRSVec3& front, const TRSVe
     X.normalize();
     TRSVec3 Y = Z.cross(X);
 
-    columns[0][0] = X[0]; columns[1][0] = X[1]; columns[2][0] = X[2]; columns[3][0] = eye[0];
-    columns[0][1] = Y[0]; columns[1][1] = Y[1]; columns[2][1] = Y[2]; columns[3][1] = eye[1];
-    columns[0][2] = Z[0]; columns[1][2] = Z[1]; columns[2][2] = Z[2]; columns[3][2] = eye[2];
+    columns[0][0] = X[0]; columns[1][0] = X[1]; columns[2][0] = X[2]; columns[3][0] = -eye[0];
+    columns[0][1] = Y[0]; columns[1][1] = Y[1]; columns[2][1] = Y[2]; columns[3][1] = -eye[1];
+    columns[0][2] = Z[0]; columns[1][2] = Z[1]; columns[2][2] = Z[2]; columns[3][2] = -eye[2];
     columns[0][3] = 0;    columns[1][3] = 0;    columns[2][3] = 0;    columns[3][3] = 1;
 }
 
