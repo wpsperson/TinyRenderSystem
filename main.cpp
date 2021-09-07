@@ -17,7 +17,7 @@ int main(int argn, char** argc)
     //CaseTextureColorBasic();
     //CaseMultiTexture();
 
-    //CaseTextureColorArray();
+    CaseTextureColorArray();
     //CaseManyFunnyBoxRotate();
     //CaseMaterial_AmbientDiffuseSpecular();
     //CaseMaterial_DiffuseNormal();
@@ -38,7 +38,7 @@ int main(int argn, char** argc)
     //CaseTessBSplineSurface(argn, argc);
     //CaseTraditional3DModel(argn, argc);
     //CasePNTriangles(argn, argc);
-    CaseMatrixTransform();
-	
+    //CaseMatrixTransform();
+
     return 0;
 }

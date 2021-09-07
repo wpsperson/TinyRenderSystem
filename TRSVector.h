@@ -28,6 +28,7 @@ public:
     float length() const;
     void normalize();
     inline TRSVector<N> cross(const TRSVector<N>& vec) const;
+    inline float dot(const TRSVector<N>& vec) const;
 
     float operator[](int i)const;
     float& operator[](int i);
@@ -37,6 +38,17 @@ public:
 private:
     float arr[N];
 };
+
+template<int N>
+float TRSVector<N>::dot(const TRSVector<N>& vec) const
+{
+    float sum = 0.0f;
+    for (int i=0; i<N; i++)
+    {
+        sum += arr[i] * vec[i];
+    }
+    return sum;
+}
 
 template<int N>
 float* TRSVector<N>::pointer()

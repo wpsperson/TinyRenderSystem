@@ -257,9 +257,13 @@ void TRSMatrix::makeLookat(const TRSVec3& eye, const TRSVec3& front, const TRSVe
     X.normalize();
     TRSVec3 Y = Z.cross(X);
 
-    columns[0][0] = X[0]; columns[1][0] = X[1]; columns[2][0] = X[2]; columns[3][0] = -eye[0];
-    columns[0][1] = Y[0]; columns[1][1] = Y[1]; columns[2][1] = Y[2]; columns[3][1] = -eye[1];
-    columns[0][2] = Z[0]; columns[1][2] = Z[1]; columns[2][2] = Z[2]; columns[3][2] = -eye[2];
+    float tranx = -X.dot(eye);
+    float trany = -Y.dot(eye);
+    float tranz = -Z.dot(eye);
+
+    columns[0][0] = X[0]; columns[1][0] = X[1]; columns[2][0] = X[2]; columns[3][0] = tranx;
+    columns[0][1] = Y[0]; columns[1][1] = Y[1]; columns[2][1] = Y[2]; columns[3][1] = trany;
+    columns[0][2] = Z[0]; columns[1][2] = Z[1]; columns[2][2] = Z[2]; columns[3][2] = tranz;
     columns[0][3] = 0;    columns[1][3] = 0;    columns[2][3] = 0;    columns[3][3] = 1;
 }
 
@@ -278,15 +282,15 @@ TRSMatrix& TRSMatrix::preMultiply(const TRSMatrix& matrix)
 TRSMatrix TRSMatrix::operator*(const TRSMatrix& matrix) const
 {
     TRSMatrix result;
-    for (int i=0; i<4;i++)
+    for (int row=0; row<4;row++)
     {
-        for (int j=0; j<4; j++)
+        for (int col=0; col<4; col++)
         {
-            result[i][j]
-                = columns[0][i] * matrix[j][0]
-                + columns[1][i] * matrix[j][1]
-                + columns[2][i] * matrix[j][2]
-                + columns[3][i] * matrix[j][3];
+            result[col][row]
+                = columns[0][row] * matrix[col][0]
+                + columns[1][row] * matrix[col][1]
+                + columns[2][row] * matrix[col][2]
+                + columns[3][row] * matrix[col][3];
             
         }
     }
