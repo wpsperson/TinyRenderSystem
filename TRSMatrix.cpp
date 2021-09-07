@@ -267,6 +267,23 @@ void TRSMatrix::makeLookat(const TRSVec3& eye, const TRSVec3& front, const TRSVe
     columns[0][3] = 0;    columns[1][3] = 0;    columns[2][3] = 0;    columns[3][3] = 1;
 }
 
+TRSVec4 TRSMatrix::operator*(const TRSVec4& vec) const
+{
+    TRSVec4 result;
+    result[0] = columns[0][0] * vec[0] + columns[1][0] * vec[1] + columns[2][0] * vec[2] + columns[3][0] * vec[3];
+    result[1] = columns[0][1] * vec[0] + columns[1][1] * vec[1] + columns[2][1] * vec[2] + columns[3][1] * vec[3];
+    result[2] = columns[0][2] * vec[0] + columns[1][2] * vec[1] + columns[2][2] * vec[2] + columns[3][2] * vec[3];
+    result[3] = columns[0][3] * vec[0] + columns[1][3] * vec[1] + columns[2][3] * vec[2] + columns[3][3] * vec[3];
+    return result;
+}
+
+TRSVec3 TRSMatrix::operator*(const TRSVec3& vec) const
+{
+    TRSVec4 input(vec[0], vec[1], vec[2], 1);
+    TRSVec4 output = (*this) * input;
+    return TRSVec3(output[0] / output[3], output[1] / output[3], output[2] / output[3]);
+}
+
 TRSMatrix& TRSMatrix::postMultiply(const TRSMatrix& matrix)
 {
     *this = (*this) * matrix;

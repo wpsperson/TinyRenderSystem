@@ -42,6 +42,8 @@ public:
     void makeLookat(const TRSVec3& eye, const TRSVec3& front, const TRSVec3& up);
 
     TRSMatrix operator *(const TRSMatrix& matrix) const;
+    TRSVec4 operator *(const TRSVec4& vec) const;
+    TRSVec3 operator *(const TRSVec3& vec) const;
 
     TRSMatrix& postMultiply(const TRSMatrix& matrix);
     TRSMatrix& preMultiply(const TRSMatrix& matrix);
