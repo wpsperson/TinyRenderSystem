@@ -18,6 +18,9 @@ public:
     inline TRSVector<N>(float x, float y, float z);
     inline TRSVector<N>(float x, float y, float z, float w);
     ~TRSVector();
+    TRSVector<N> operator -() const;
+    bool operator == (const TRSVector<N>& vec) const;
+    bool operator != (const TRSVector<N>& vec) const;
     TRSVector<N> operator + (const TRSVector<N>& vec) const;
     TRSVector<N> operator - (const TRSVector<N>& vec) const;
     void operator += (const TRSVector<N>& vec);
@@ -38,6 +41,30 @@ public:
 private:
     float arr[N];
 };
+
+template<int N>
+bool TRSVector<N>::operator != (const TRSVector<N>& vec) const
+{
+    return !((*this) == vec);
+}
+
+template<int N>
+bool TRSVector<N>::operator==(const TRSVector<N>& vec) const
+{
+    for (int i=0; i<N; i++)
+    {
+        if (arr[i] != vec[i])
+            return false;
+    }
+    return true;
+}
+
+template<int N>
+TRSVector<N> TRSVector<N>::operator -() const
+{
+    TRSVector<N> result = (*this) * (-1);
+    return result;
+}
 
 template<int N>
 float TRSVector<N>::dot(const TRSVector<N>& vec) const
