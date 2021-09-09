@@ -44,10 +44,10 @@ int CaseTessellationOnShader()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("shaders/hermite_curve_vert.glsl");
-    char* fragmentShaderSource = readTextFile("shaders/hermite_curve_frag.glsl");
-    char* tessControlShaderSource = readTextFile("shaders/hermite_curve_tess.glsl");
-    char* tessEvaluateShaderSource = readTextFile("shaders/hermite_curve_eval.glsl");
+    char* vertexShaderSource = readTextFile("shaders/DefaultVertexWithoutMVP.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/DefaultFragment.glsl");
+    char* tessControlShaderSource = readTextFile("shaders/HermiteTesc.glsl");
+    char* tessEvaluateShaderSource = readTextFile("shaders/HermiteTese.glsl");
 
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -123,6 +123,14 @@ int CaseTessellationOnShader()
     GLuint locTan1 = glGetUniformLocation(shaderProgram, "vTan1");
     glUniform3fv(locTan0, 1, &tangent[0]);
     glUniform3fv(locTan1, 1, &tangent[3]);
+
+    int nPosModelMatrix = glGetUniformLocation(shaderProgram, "model");
+    int nPosViewMatrix = glGetUniformLocation(shaderProgram, "view");
+    int nPosProjectMatrix = glGetUniformLocation(shaderProgram, "projection");
+    TRSMatrix IdentityMatrix;
+    glUniformMatrix4fv(nPosModelMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
+    glUniformMatrix4fv(nPosViewMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
+    glUniformMatrix4fv(nPosProjectMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
 
     while (!glfwWindowShouldClose(window))
     {
