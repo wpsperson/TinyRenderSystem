@@ -6,6 +6,7 @@
 #include "CaseTessellationOnShader.h"
 #include "CasePNTriangles.h"
 #include "CaseMatrixTransform.h"
+#include "CaseFreeType.h"
 
 int main(int argn, char** argc)
 {
@@ -17,7 +18,7 @@ int main(int argn, char** argc)
     //CaseTextureColorBasic();
     //CaseMultiTexture();
 
-    CaseTextureColorArray();
+    //CaseTextureColorArray();
     //CaseManyFunnyBoxRotate();
     //CaseMaterial_AmbientDiffuseSpecular();
     //CaseMaterial_DiffuseNormal();
@@ -39,6 +40,8 @@ int main(int argn, char** argc)
     //CaseTraditional3DModel(argn, argc);
     //CasePNTriangles(argn, argc);
     //CaseMatrixTransform();
+    CaseFreeType();
+
 
     return 0;
 }
