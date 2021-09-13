@@ -83,13 +83,22 @@ std::map<GLchar, Character> loadFreeTypeCharacters(unsigned int BitMapWeidth, un
     if (FT_Init_FreeType(&ft))
         std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
 
-    std::string strArialFont = std::getenv("SystemRoot") + std::string("/Fonts/arial.ttf");
+    std::string strArialFont = std::getenv("SystemRoot") + std::string("/Fonts/simfang.ttf");
     FT_Face face;
     if (FT_New_Face(ft, strArialFont.c_str(), 0, &face))
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
+    if (FT_Select_Charmap(face, ft_encoding_unicode))
+        std::cout << "ERROR::FT_Select_Charmap" << std::endl;
+
     FT_Set_Pixel_Sizes(face, BitMapWeidth, BitMapHeight);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    // code snippet for unicode characters
+    //wchar_t I = L'我';
+    //int index = FT_Get_Char_Index(face, I);
+    //FT_Load_Glyph(face, index, FT_LOAD_RENDER);
+
     std::map<GLchar, Character> Characters;
     for (GLubyte c = 0; c < 128; c++)
     {
