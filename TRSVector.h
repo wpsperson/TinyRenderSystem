@@ -227,3 +227,7 @@ typedef TRSVector<2> TRSVec2;
 typedef TRSVector<3> TRSVec3;
 typedef TRSVector<4> TRSVec4;
 
+const TRSVec3 G_ORIGIN(0.0f, 0.0f, 0.0f);
+const TRSVec3 G_XDIR(1.0f, 0.0f, 0.0f);
+const TRSVec3 G_YDIR(0.0f, 1.0f, 0.0f);
+const TRSVec3 G_ZDIR(0.0f, 0.0f, 1.0f);

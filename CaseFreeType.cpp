@@ -16,6 +16,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+int BITMAPSIZE = 50;
+
 struct ivec2
 {
     ivec2() {}
@@ -27,16 +29,52 @@ struct ivec2
 struct Character
 {
     GLuint      TextureID;
-    ivec2       Size;
-    ivec2       Bearing;
-    GLuint      Advance;
+    ivec2       Size;       // glyph width / glyph height
+    ivec2       Bearing;    // bearingX(distance between origin to left border of glyph) / bearingY (distance between origin to top border of glyph)
+    GLuint      Advance;    // current glyph origin to next glyph origin distance * 64
 };
 
 
 
-void renderText(const std::string& strText)
-{
 
+void renderText(const std::map<GLchar, Character>& mapChars, int VBO, const std::string& strText, TRSVec3 pos, TRSVec3 right, TRSVec3 up, float textHeightInWorld)
+{
+    TRSVec3 curPos = pos;
+    for (auto itr = strText.begin(); itr != strText.end(); itr++)
+    {
+        if (*itr == ' ')
+        {
+            curPos += right * textHeightInWorld*0.5;
+            continue;
+        }
+        const Character c = mapChars.at(*itr);
+        float scale = textHeightInWorld / BITMAPSIZE;
+        float advanceInWorld = (c.Advance >> 6) * scale;
+        float rightOffset = c.Bearing.x * scale;
+        float upOffset = -(c.Size.y - c.Bearing.y) * scale;
+        // four point in quad
+        TRSVec3 leftBtm = curPos + right * rightOffset + up * upOffset;
+        TRSVec3 leftTop = leftBtm + up*(c.Size.y *scale);
+        TRSVec3 rightBtm = leftBtm + right * (c.Size.x * scale);
+        TRSVec3 rightTop = leftBtm + right * (c.Size.x * scale) + up*(c.Size.y *scale);
+        float arr[6][5]=
+        {
+            { leftBtm[0], leftBtm[1], leftBtm[2], 0.0f, 1.0f },
+            { rightBtm[0], rightBtm[1], rightBtm[2], 1.0f, 1.0f },
+            { leftTop[0], leftTop[1], leftTop[2], 0.0f, 0.0f },
+
+            { leftTop[0], leftTop[1], leftTop[2], 0.0f, 0.0f },
+            { rightBtm[0], rightBtm[1], rightBtm[2], 1.0f, 1.0f },
+            { rightTop[0], rightTop[1], rightTop[2], 1.0f, 0.0f },
+        };
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 6 * 5, arr);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindTexture(GL_TEXTURE_2D, c.TextureID);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        curPos += right * advanceInWorld;
+    }
 }
 
 std::map<GLchar, Character> loadFreeTypeCharacters(unsigned int BitMapWeidth, unsigned BitMapHeight)
@@ -88,16 +126,6 @@ std::map<GLchar, Character> loadFreeTypeCharacters(unsigned int BitMapWeidth, un
 
 int CaseFreeType()
 {
-    float vertices[] = {
-        //     ---- 位置 ----   - 纹理坐标 -
-        -0.5f, -0.5f, 0.0f,    0.0f, 1.0f,   // 左下
-        0.5f, -0.5f, 0.0f,    1.0f, 1.0f,   // 右下
-        -0.5f,  0.5f, 0.0f,    0.0f, 0.0f,    // 左上
-
-        -0.5f,  0.5f, 0.0f,    0.0f, 0.0f,    // 左上
-        0.5f, -0.5f, 0.0f,    1.0f, 1.0f,   // 右下
-        0.5f,  0.5f, 0.0f,    1.0f, 0.0f,   // 右上
-    };
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, g_OpenGLVersionMajor);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, g_OpenGLVersionMinor);
@@ -159,7 +187,7 @@ int CaseFreeType()
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);//bind VAO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*6*5, nullptr, GL_DYNAMIC_DRAW); // we allocate memory for a quad for single character (six vertex, 3 point coord+2 texture coord)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -167,7 +195,7 @@ int CaseFreeType()
     glBindVertexArray(0);//unbind VAO
 
 
-    std::map<GLchar, Character> mapCharacter = loadFreeTypeCharacters(0, 200);
+    std::map<GLchar, Character> mapCharacter = loadFreeTypeCharacters(0, BITMAPSIZE);
     Character character = mapCharacter['A'];
 
     int nPosModelMatrix = glGetUniformLocation(shaderProgram, "model");
@@ -191,8 +219,8 @@ int CaseFreeType()
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
         glActiveTexture(GL_TEXTURE0);//这句可以不写，因为默认Texture0总是被激活。
-        glBindTexture(GL_TEXTURE_2D, character.TextureID);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        renderText(mapCharacter, VBO, "Hello, FreeType", G_ORIGIN, G_XDIR, G_YDIR, 0.1);
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
