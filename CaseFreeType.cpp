@@ -12,9 +12,10 @@
 #include "TRSCamera.h"
 #include "TRSCallBackFunc.h"
 #include "TRSConst.h"
-
+#include "TRSCharacterTexture.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <string>
 
 int BITMAPSIZE = 50;
 
@@ -33,9 +34,6 @@ struct Character
     ivec2       Bearing;    // bearingX(distance between origin to left border of glyph) / bearingY (distance between origin to top border of glyph)
     GLuint      Advance;    // current glyph origin to next glyph origin distance * 64
 };
-
-
-
 
 void renderText(const std::map<GLchar, Character>& mapChars, int VBO, const std::string& strText, TRSVec3 pos, TRSVec3 right, TRSVec3 up, float textHeightInWorld)
 {
@@ -133,6 +131,62 @@ std::map<GLchar, Character> loadFreeTypeCharacters(unsigned int BitMapWeidth, un
     return Characters;
 }
 
+unsigned int renderUnicodeText(const std::wstring& strText, TRSVec3 pos, TRSVec3 right, TRSVec3 up, float textHeightInWorld)
+{
+    float x;
+    float y;
+    float z;
+    int textureDimension = TRSCharacterTexture::instance()->getTexDimension();
+    int fontSize = TRSCharacterTexture::instance()->getSingleFontSize();
+    float scale = textHeightInWorld / fontSize;
+    TRSVec3 curPos = pos;
+
+    int size = strText.size();
+    float* vertexArray = new float[size * 6 * 5]; // each character need 6 point(2 triangle), each point need 5 float(3 coordinate and 2 texture coordinate)
+    for (int i=0; i<size; i++)
+    {
+        wchar_t c = strText[i];
+        UniChar unichar = TRSCharacterTexture::instance()->getCharacter(c);
+        float rightOffset = unichar.left * scale;
+        float upOffset = -(unichar.h - unichar.top) * scale;
+        // four point in quad
+        TRSVec3 leftBtm = curPos + right * rightOffset + up * upOffset;
+        TRSVec3 leftTop = leftBtm + up*(unichar.h *scale);
+        TRSVec3 rightBtm = leftBtm + right * (unichar.w * scale);
+        TRSVec3 rightTop = leftBtm + right * (unichar.w * scale) + up*(unichar.h *scale);
+        // texture coordinate
+        float leftTC = float(unichar.x) / textureDimension;
+        float topTC = float(unichar.y) / textureDimension;
+        float rightTC = float(unichar.x+unichar.w) / textureDimension;
+        float btmTC = float(unichar.y + unichar.h) / textureDimension;
+        float curSixPtArray[6][5] = {
+            { leftBtm[0], leftBtm[1], leftBtm[2],    leftTC, btmTC },
+            { rightBtm[0], rightBtm[1], rightBtm[2], rightTC, btmTC },
+            { leftTop[0], leftTop[1], leftTop[2],    leftTC, topTC },
+
+            { leftTop[0], leftTop[1], leftTop[2],    leftTC, topTC },
+            { rightBtm[0], rightBtm[1], rightBtm[2], rightTC, btmTC },
+            { rightTop[0], rightTop[1], rightTop[2], rightTC, topTC },
+        };
+        std::memcpy(vertexArray + i * 30, curSixPtArray, sizeof(curSixPtArray));
+        curPos += right * (unichar.left + unichar.w) * scale;
+    }
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    glBindVertexArray(VAO);//bind VAO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) *size * 6 * 5, vertexArray, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);//unbind VAO
+    return VAO;
+}
+
+
 int CaseFreeType()
 {
     glfwInit();
@@ -190,22 +244,17 @@ int CaseFreeType()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-    unsigned int VBO;
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);//bind VAO
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*6*5, nullptr, GL_DYNAMIC_DRAW); // we allocate memory for a quad for single character (six vertex, 3 point coord+2 texture coord)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glBindVertexArray(0);//unbind VAO
-
-
-    std::map<GLchar, Character> mapCharacter = loadFreeTypeCharacters(0, BITMAPSIZE);
-    Character character = mapCharacter['A'];
+    TRSCharacterTexture::instance()->genTexture();
+    std::string errorMsg;
+    bool loadSuccess = TRSCharacterTexture::instance()->loadFreeType(errorMsg);
+    if (!loadSuccess)
+    {
+        std::cout << errorMsg << std::endl;
+        return -1;
+    }
+    std::wstring strText = std::wstring(L"中华人民共和国");
+    unsigned int VAO = renderUnicodeText(strText, G_ORIGIN, G_XDIR, G_YDIR, 0.1);
+    unsigned int TextureID = TRSCharacterTexture::instance()->getTextureID();
 
     int nPosModelMatrix = glGetUniformLocation(shaderProgram, "model");
     int nPosViewMatrix = glGetUniformLocation(shaderProgram, "view");
@@ -228,8 +277,8 @@ int CaseFreeType()
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
         glActiveTexture(GL_TEXTURE0);//这句可以不写，因为默认Texture0总是被激活。
-        renderText(mapCharacter, VBO, "Hello, FreeType", G_ORIGIN, G_XDIR, G_YDIR, 0.1);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindTexture(GL_TEXTURE_2D, TextureID);
+        glDrawArrays(GL_TRIANGLES, 0, strText.size() * 6);
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
