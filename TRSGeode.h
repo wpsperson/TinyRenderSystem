@@ -28,11 +28,7 @@ public:
 
     virtual void readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount);
 
-    std::shared_ptr<TRSVAO> getVAO() const;
-
-    TRSVec4 getColor() const;
-
-    void setColor(const TRSVec4& color);
+    virtual std::shared_ptr<TRSVAO> getVAO() const override;
 
     void setPolygonMode(int polyMode);
 
@@ -45,7 +41,6 @@ protected:
 
 protected:
     std::shared_ptr<TRSVAO> m_pVAO;
-    TRSVec4 m_matColor;
     int m_polygonMode;
 };
 

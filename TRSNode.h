@@ -30,9 +30,15 @@ public:
 
     void setMatrix(const TRSMatrix& mat);
 
+    virtual std::shared_ptr<TRSVAO> getVAO() const;
+
     virtual void draw();
 
     virtual void traverse(NodeVisitor& visitor);
+
+    TRSVec4 getColor() const;
+
+    void setColor(const TRSVec4& color);
 
     std::shared_ptr<TRSStateSet> getStateSet() const;
 
@@ -47,6 +53,7 @@ public:
     virtual std::string debugInfo() = 0;
 protected:
     TRSMatrix m_mat;
+    TRSVec4 m_matColor;
     std::shared_ptr<TRSStateSet> m_pStateSet;
     NodeUpdateFunc m_UpdateFunc;
 };

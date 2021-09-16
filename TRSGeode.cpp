@@ -8,14 +8,13 @@
 
 TRSGeode::TRSGeode()
     : TRSNode()
-    , m_matColor(s_DefaultNodeColor)
     , m_polygonMode(GL_FILL)
 {
     m_pVAO = std::make_shared<TRSVAO>();
 }
 
 TRSGeode::TRSGeode(const TRSGeode& refObj, bool bSameStateset/* = true*/)
-    : TRSNode(), m_matColor(s_DefaultNodeColor)
+    : TRSNode()
 {
     m_pVAO = std::make_shared<TRSVAO>();
     m_pVAO->genVAO(true);
@@ -67,16 +66,6 @@ void TRSGeode::readFromVertex(float* vertices, int verticeSize, EnVertexStruct E
 std::shared_ptr<TRSVAO> TRSGeode::getVAO() const
 {
     return m_pVAO;
-}
-
-TRSVec4 TRSGeode::getColor() const
-{
-    return m_matColor;
-}
-
-void TRSGeode::setColor(const TRSVec4& color)
-{
-    m_matColor = color;
 }
 
 void TRSGeode::setPolygonMode(int polyMode)

@@ -4,7 +4,9 @@
 
 
 TRSNode::TRSNode()
-    : m_mat(), m_UpdateFunc(nullptr)
+    : m_mat()
+    , m_UpdateFunc(nullptr)
+    , m_matColor(s_DefaultNodeColor)
 {
 
 }
@@ -22,6 +24,21 @@ TRSMatrix TRSNode::getMatrix()
 void TRSNode::setMatrix(const TRSMatrix& mat)
 {
     m_mat = mat;
+}
+
+TRSVec4 TRSNode::getColor() const
+{
+    return m_matColor;
+}
+
+void TRSNode::setColor(const TRSVec4& color)
+{
+    m_matColor = color;
+}
+
+std::shared_ptr<TRSVAO> TRSNode::getVAO() const
+{
+    return nullptr;
 }
 
 void TRSNode::draw()

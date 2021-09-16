@@ -2,7 +2,7 @@
 #include "TRSNode.h"
 #include "TRSStateset.h"
 #include "TRSGeode.h"
-
+#include "TRSGroup.h"
 
 
 CullVisitor::CullVisitor()
@@ -20,11 +20,11 @@ void CullVisitor::execute(TRSNode* pNode)
 {
     NodeVisitor::execute(pNode);
 
-    TRSGeode* pGeode = dynamic_cast<TRSGeode*>(pNode);
-    if (!pGeode)
+    if (TRSGroup*pGroup = dynamic_cast<TRSGroup*>(pNode))
     {
         return;
     }
+
     std::shared_ptr<TRSStateSet> pStateSet = pNode->getStateSet();
     if (!pStateSet)
     {

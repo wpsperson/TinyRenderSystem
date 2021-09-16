@@ -16,6 +16,7 @@
 #include "Windows.h"
 #include "TRSVisitors.h"
 #include "TRSObserveCamera.h"
+#include "TRSCharacterTexture.h"
 
 extern TRSCamera* g_pCamera;
 
@@ -33,6 +34,14 @@ TRSViewer::TRSViewer()
     g_pCamera = m_pCamera;
     TRSWindowConfig::registerUserInputFunc(m_pWindow);//reg user input callback
     m_polygonModeVisitor = new PolygonModeVisitor;
+
+    TRSCharacterTexture::instance()->genTexture();
+    std::string errorMsg;
+    bool loadSuccess = TRSCharacterTexture::instance()->loadFreeType(errorMsg);
+    if (!loadSuccess)
+    {
+        std::cout << errorMsg << std::endl;
+    }
 }
 
 TRSViewer::~TRSViewer()
@@ -49,6 +58,8 @@ void TRSViewer::defaultSetting()
 {
     m_fCurTime = m_fLastTime = glfwGetTime();
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void TRSViewer::run()
@@ -102,25 +113,25 @@ void TRSViewer::drawScene()
         std::vector<TRSNode*>& nodeList = itr->second;
         for (std::vector<TRSNode*>::iterator itrNode = nodeList.begin(); itrNode!=nodeList.end(); itrNode++)
         {
-            TRSGeode* pGeode = dynamic_cast<TRSGeode*>(*itrNode);
-            std::shared_ptr<TRSVAO> pVao = pGeode->getVAO();
+            TRSNode* pNode = *itrNode;
+            std::shared_ptr<TRSVAO> pVao = pNode->getVAO();
             pVao->bind();
-            TRSMatrix modelMatrix = pGeode->getMatrix();
+            TRSMatrix modelMatrix = pNode->getMatrix();
             TRSMatrix viewMatrix = m_pCamera->getViewMatrix();
             TRSMatrix projectMatrix = m_pCamera->getProjectMatrix();
             pShader->addUniformMatrix4("model", modelMatrix);
             pShader->addUniformMatrix4("view", viewMatrix);
             pShader->addUniformMatrix4("projection", projectMatrix);
             pShader->addUniform3v("viewPos", m_pCamera->getCameraPos());
-            pShader->addUniform4v("baseColor", pGeode->getColor());
+            pShader->addUniform4v("baseColor", pNode->getColor());
             pShader->addUniform3v("lightPos", s_DefaultLightPos);
-            if (pGeode->getUpdateCallBack())
+            if (pNode->getUpdateCallBack())
             {
-                pGeode->getUpdateCallBack()(pGeode, m_pWindow);
+                pNode->getUpdateCallBack()(pNode, m_pWindow);
             }
             pShader->applayAllStaticUniform();//Apply Uniform
             // simple draw call
-            pGeode->draw();
+            pNode->draw();
             pVao->unBind();
         }
 

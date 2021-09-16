@@ -7,14 +7,20 @@
 #include "TRSTexture.h"
 
 TRSTextNode::TRSTextNode()
-    : m_matColor(0.5f, 1.0f, 0.5f, 1.0f)
-    , pos(G_ORIGIN)
+    : pos(G_ORIGIN)
     , right(G_XDIR)
     , up(G_YDIR)
 {
+    m_matColor = TRSVec4(0.5f, 1.0f, 0.5f, 1.0f);
+    m_size = 0.1;
     m_pVAO = std::make_shared<TRSVAO>();
     getOrCreateStateSet();
     m_pStateSet->getShader()->createProgram("shaders/FontsVertex.glsl", "shaders/FontsFragment .glsl");
+
+    // deal texture
+    unsigned int textureID = TRSCharacterTexture::instance()->getTextureID();
+    TextureData texData(textureID, "all_unicode_texture", "ourTexture");
+    m_pStateSet->getTexture()->addSharedTexture(texData);
 }
 
 TRSTextNode::~TRSTextNode()
@@ -31,7 +37,7 @@ void TRSTextNode::setText(const std::wstring& strText)
     }
 }
 
-void TRSTextNode::sePos(const TRSVec3& textPos)
+void TRSTextNode::setPos(const TRSVec3& textPos)
 {
     if (pos != textPos)
     {
@@ -73,13 +79,24 @@ void TRSTextNode::draw()
     glDrawArrays(GL_TRIANGLES, 0, m_ptCount);
 }
 
+std::shared_ptr<TRSVAO> TRSTextNode::getVAO() const
+{
+    return m_pVAO;
+}
+
+std::string TRSTextNode::debugInfo()
+{
+    TRSShader* pShader = m_pStateSet->getShader();
+    TRSTexture* pTexture = m_pStateSet->getTexture();
+    std::string strDebugInfo;
+    strDebugInfo = "Geode VAO ID: " + std::to_string(m_pVAO->getVAO());
+    strDebugInfo += pShader->debugInfo();
+    strDebugInfo += pTexture->debugInfo();
+    return strDebugInfo;
+}
+
 void TRSTextNode::preProcess()
 {
-    // deal texture
-    unsigned int textureID = TRSCharacterTexture::instance()->getTextureID();
-    TextureData texData(textureID, "all_unicode_texture", "ourTexture");
-    m_pStateSet->getTexture()->addSharedTexture(texData);
-
     int textureDimension = TRSCharacterTexture::instance()->getTexDimension();
     int fontSize = TRSCharacterTexture::instance()->getSingleFontSize();
     float scale = m_size / fontSize;
@@ -115,6 +132,7 @@ void TRSTextNode::preProcess()
         std::memcpy(vertexArray + i * 30, curSixPtArray, sizeof(curSixPtArray));
         curPos += right * (unichar.left + unichar.w) * scale;
     }
-    m_ptCount = size * 6;
+    // to do ,this snippet should before draw()
+    m_ptCount = size * 6 * 5;
     m_pVAO->createVAO(vertexArray, m_ptCount, EnVertexTexture);
 }
