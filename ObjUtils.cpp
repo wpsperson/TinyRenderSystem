@@ -28,8 +28,8 @@ void generateSphereObj(double radius, int resolution, const std::string& fileNam
     int totalVertexNum = 1;
     outputVertex(stream, 0, 0, radius);
     double elevationStep = M_PI / (resolution - 1);
-    double azimuthStep = M_PI / (resolution);
-    for (int i=1; i<resolution-1; i++)
+    double azimuthStep = (M_PI * 2) / (resolution);
+    for (int i = 1; i <= resolution - 2; i++)
     {
         double elev = i * elevationStep;
         for (int j = 0; j < resolution; j++)
@@ -47,19 +47,31 @@ void generateSphereObj(double radius, int resolution, const std::string& fileNam
 
     stream << std::endl;
     // output vertex
-    for (int j=0; j<resolution; j++)
+    int frontIdx = 1;
+    int lastIdx = totalVertexNum;
+    int offset = 1;// pola index
+    for (int i = 1; i <= resolution - 1; i++)
     {
-        int first = j + 1;
-        int second = j + 2;
-        if (j == resolution-1)
+        for (int j = 1; j <= resolution; j++)
         {
-            second = 1;
+            int first = j + offset;
+            int second = j + offset + 1;
+            if (j == resolution)
+            {
+                second = offset + 1;
+            }
+            if (i == 1)
+                outputFace(stream, frontIdx, first, second);
+            else if (i == resolution - 1)
+                outputFace(stream, lastIdx, second - resolution, first - resolution);
+            else
+            {
+                outputFace(stream, first, second, second - resolution);
+                outputFace(stream, first, second - resolution, first - resolution);
+            }
         }
-        outputFace(stream, 0, j + 1, j + 2);
+        offset += resolution;
     }
-
-
-
     stream.close();
 }
 

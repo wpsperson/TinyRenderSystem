@@ -7,6 +7,7 @@
 #include "CasePNTriangles.h"
 #include "CaseMatrixTransform.h"
 #include "CaseFreeType.h"
+#include "ObjUtils.h"
 
 int main(int argn, char** argc)
 {
@@ -42,6 +43,7 @@ int main(int argn, char** argc)
     //CaseMatrixTransform();
     //CaseFreeType();
     CaseTextNode();
+    //generateSphereObj(1.0, 20, "D:\\WorkSpace\\sphere.obj");
 
     return 0;
 }
