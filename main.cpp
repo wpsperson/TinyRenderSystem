@@ -8,6 +8,7 @@
 #include "CaseMatrixTransform.h"
 #include "CaseFreeType.h"
 #include "ObjUtils.h"
+#include "CaseNurbsFaceToMesh.h"
 
 int main(int argn, char** argc)
 {
@@ -42,8 +43,19 @@ int main(int argn, char** argc)
     //CasePNTriangles(argn, argc);
     //CaseMatrixTransform();
     //CaseFreeType();
-    CaseTextNode();
-    //generateSphereObj(1.0, 20, "D:\\WorkSpace\\sphere.obj");
+    //CaseTextNode();
+    //generateSphereObj(1.0, 16, "D:\\WorkSpace\\sphere.obj");
+
+    //TRSVec3 vec(0.0, -0.11548520, 0.276063323);
+    //float leng = vec.length();
+    //TRSVec3 vec2(leng, 0.0, 0.0);
+    //TRSVec3 mid = (vec + vec2) * 0.5;
+
+    //TRSMatrix mat;
+    //mat.makeRotate(3.14159265358979323846, mid);
+    //int a;
+
+    CaseNurbsFaceToMesh(argn, argc);
 
     return 0;
 }
