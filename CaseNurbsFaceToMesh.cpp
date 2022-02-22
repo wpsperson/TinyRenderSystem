@@ -19,7 +19,26 @@
 #include "TRSAssimpLoader.h"
 #include "BSpline.h"
 #include "BSplineSurface.h"
+#include "delaunator.hpp"
 
+
+void CaseDelauneyTriangulation()
+{
+    /* x0, y0, x1, y1, ... */
+    std::vector<double> coords = { -1, 1, 1, 1, 1, -1, -1, -1 };
+
+    //triangulation happens here
+    delaunator::Delaunator d(coords);
+    std::vector<size_t> allTriangles = d.triangles;
+    size_t triangleNumber = allTriangles.size() / 3;
+    for (size_t i=0; i<triangleNumber; i++)
+    {
+        size_t idx0 = allTriangles[i * 3];
+        size_t idx1 = allTriangles[i * 3 + 1];
+        size_t idx2 = allTriangles[i * 3 + 2];
+        std::cout << "triangle-" << i << ": " << idx0 << ", " << idx1 << ", " << idx2 << std::endl;
+    }
+}
 
 int CaseNurbsFaceToMesh(int argn, char** argc)
 {
