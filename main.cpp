@@ -55,8 +55,8 @@ int main(int argn, char** argc)
     //mat.makeRotate(3.14159265358979323846, mid);
     //int a;
 
-    CaseDelauneyTriangulation();
-    //CaseNurbsFaceToMesh(argn, argc);
+    //CaseDelauneyTriangulation();
+    CaseNurbsFaceToMesh(argn, argc);
 
     return 0;
 }
