@@ -130,6 +130,11 @@ TRSCamera* TRSViewer::getCamera() const
     return m_pCamera;
 }
 
+void TRSViewer::addEventHandler(TRSEventHandler* eventHandler)
+{
+    m_pEventDispatcher->addEventHandler(eventHandler);
+}
+
 void TRSViewer::calcFrameTime()
 {
     m_fCurTime = std::chrono::steady_clock::now();

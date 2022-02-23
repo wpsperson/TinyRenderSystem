@@ -105,68 +105,10 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
     BsplineSurFace->getVAO()->setDrawType(GL_TRIANGLES);
     BsplineSurFace->setColor(TRSVec4(1, 0.5, 1, 1));
 
-    // Second part, we dynamic generate a 2d points in parametric space by click mouse,
-    std::vector<double> uvCoords;
-    std::vector<float> parametricSpacePoints;// represent each parametric point in 3d format by set z=0: u, v, 0, u, v, 0...
-    const int initUSize = 4;
-    const int initVSize = 4;
-    for (int vIndex = 0; vIndex < initVSize; vIndex++)
-    {
-        float v = float(vIndex) / (initVSize - 1);
-        for (int uIndex = 0; uIndex < initUSize; uIndex++)
-        {
-            float u = float(uIndex) / (initUSize - 1);
-            uvCoords.push_back(u);
-            uvCoords.push_back(v);
-            parametricSpacePoints.push_back(u);
-            parametricSpacePoints.push_back(v);
-            parametricSpacePoints.push_back(0.0f);
-        }
-    }
-    // and apply the Delaunay Triangulation to those points to generate triangles in parametric space.
-    delaunator::Delaunator delaunay(uvCoords);
-    std::vector<size_t> allTriangles = delaunay.triangles;
-    std::vector<unsigned int> indexArray2d;
-    for (size_t idx : allTriangles)
-    {
-        indexArray2d.push_back(static_cast<unsigned int>(idx));
-    }
-    std::shared_ptr<TRSGeode> Triangles2d = std::make_shared<TRSGeode>();
-    TRSMatrix translateMatrix;
-    translateMatrix.makeTranslate(-1.5, 0, 0);
-    Triangles2d->setMatrix(translateMatrix);
-    Triangles2d->readFromVertex(parametricSpacePoints.data(), parametricSpacePoints.size(), EnVertex, indexArray2d.data(), indexArray2d.size());
-    Triangles2d->getVAO()->setDrawType(GL_TRIANGLES);
-    Triangles2d->setColor(TRSVec4(0.5, 1, 1, 1));
-    Triangles2d->setPolygonMode(GL_LINE);
-
-    // Third, we map those triangles from parametric-domain into 3d-space. and draw those
-    std::vector<float> parametricSpacePointsNormals;// represent the points and normals in 3d space.
-    size_t MeshPointNumber = uvCoords.size() / 2;
-    float point[3];
-    float normal[3];
-    for (size_t i=0; i<MeshPointNumber; i++)
-    {
-        float u = uvCoords[i * 2];
-        float v = uvCoords[i * 2+1];
-        bsSurface->interpolatePoint(u, v, point);
-        bsSurface->interpolateNormal(u, v, normal);
-        parametricSpacePointsNormals.push_back(point[0]);
-        parametricSpacePointsNormals.push_back(point[1]);
-        parametricSpacePointsNormals.push_back(point[2]);
-        parametricSpacePointsNormals.push_back(normal[0]);
-        parametricSpacePointsNormals.push_back(normal[1]);
-        parametricSpacePointsNormals.push_back(normal[2]);
-    }
-
-    std::shared_ptr<TRSGeode> Triangles3d = std::make_shared<TRSGeode>();
-    Triangles3d->readFromVertex(parametricSpacePointsNormals.data(), parametricSpacePointsNormals.size(), EnVertexNormal, indexArray2d.data(), indexArray2d.size());
-    Triangles3d->getVAO()->setDrawType(GL_TRIANGLES);
-    Triangles3d->setColor(TRSVec4(0.5, 1, 1, 1));
-    std::shared_ptr<TRSStateSet> Triangles3dSS = Triangles3d->getOrCreateStateSet();
-    TRSShader* shaderTriangles3d = Triangles3dSS->getShader();
-    shaderTriangles3d->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
-
+    InsertParametricPointHandler* handler = new InsertParametricPointHandler(bsSurface);
+    viewer->addEventHandler(handler);
+    std::shared_ptr<TRSGeode> Triangles3d = handler->get3DSpaceMesh();
+    std::shared_ptr<TRSGeode> Triangles2d = handler->getParametricSpaceMesh();
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(BsplineSurFace);
@@ -177,4 +119,102 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
     viewer->setSecenNode(rootNodes);
     viewer->run();
     return 0;
+}
+
+InsertParametricPointHandler::InsertParametricPointHandler(BSplineSurface* nurbs)
+    : bsSurface(nurbs)
+{
+    Triangles2d = std::make_shared<TRSGeode>();
+    TRSMatrix translateMatrix;
+    translateMatrix.makeTranslate(-1.5, 0, 0);
+    Triangles2d->setMatrix(translateMatrix);
+    Triangles2d->getVAO()->setDrawType(GL_TRIANGLES);
+    Triangles2d->setColor(TRSVec4(0.5, 1, 1, 1));
+    Triangles2d->setPolygonMode(GL_LINE);
+
+    Triangles3d = std::make_shared<TRSGeode>();
+    Triangles3d->getVAO()->setDrawType(GL_TRIANGLES);
+    Triangles3d->setColor(TRSVec4(0.5, 1, 1, 1));
+    Triangles3d->setPolygonMode(GL_LINE);
+    //std::shared_ptr<TRSStateSet> Triangles3dSS = Triangles3d->getOrCreateStateSet();
+    //TRSShader* shaderTriangles3d = Triangles3dSS->getShader();
+    //shaderTriangles3d->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
+    initMesh();
+    updateMesh();
+}
+
+std::shared_ptr<TRSGeode> InsertParametricPointHandler::getParametricSpaceMesh()
+{
+    return Triangles2d;
+}
+
+std::shared_ptr<TRSGeode> InsertParametricPointHandler::get3DSpaceMesh()
+{
+    return Triangles3d;
+}
+
+void InsertParametricPointHandler::processLeftMousePress(double xpos, double ypos, int mods)
+{
+
+}
+
+void InsertParametricPointHandler::initMesh()
+{
+    const int initUSize = 4;
+    const int initVSize = 4;
+    for (int vIndex = 0; vIndex < initVSize; vIndex++)
+    {
+        float v = float(vIndex) / (initVSize - 1);
+        for (int uIndex = 0; uIndex < initUSize; uIndex++)
+        {
+            float u = float(uIndex) / (initUSize - 1);
+            uvCoords.push_back(u);
+            uvCoords.push_back(v);
+        }
+    }
+}
+
+void InsertParametricPointHandler::updateMesh()
+{
+    // generate parametric-domain mesh points
+    size_t MeshPointNumber = uvCoords.size() / 2;
+    parametricSpacePoints.clear();
+    for (size_t i = 0; i < MeshPointNumber; i++)
+    {
+        float u = uvCoords[i * 2];
+        float v = uvCoords[i * 2 + 1];
+        parametricSpacePoints.push_back(u);
+        parametricSpacePoints.push_back(v);
+        parametricSpacePoints.push_back(0.0f);
+    }
+
+    // we map those triangles from parametric-domain into 3d-space. and draw those
+    parametricSpacePointsNormals.clear();
+    float point[3];
+    float normal[3];
+    for (size_t i = 0; i < MeshPointNumber; i++)
+    {
+        float u = uvCoords[i * 2];
+        float v = uvCoords[i * 2 + 1];
+        bsSurface->interpolatePoint(u, v, point);
+        bsSurface->interpolateNormal(u, v, normal);
+        parametricSpacePointsNormals.push_back(point[0]);
+        parametricSpacePointsNormals.push_back(point[1]);
+        parametricSpacePointsNormals.push_back(point[2]);
+        parametricSpacePointsNormals.push_back(normal[0]);
+        parametricSpacePointsNormals.push_back(normal[1]);
+        parametricSpacePointsNormals.push_back(normal[2]);
+    }
+
+    // and apply the Delaunay Triangulation to those points to generate triangles in parametric space.
+    delaunator::Delaunator delaunay(uvCoords);
+    std::vector<size_t> allTriangles = delaunay.triangles;
+    std::vector<unsigned int> indexArray2d;
+    for (size_t idx : allTriangles)
+    {
+        indexArray2d.push_back(static_cast<unsigned int>(idx));
+    }
+
+    Triangles2d->readFromVertex(parametricSpacePoints.data(), parametricSpacePoints.size(), EnVertex, indexArray2d.data(), indexArray2d.size());
+    Triangles3d->readFromVertex(parametricSpacePointsNormals.data(), parametricSpacePointsNormals.size(), EnVertexNormal, indexArray2d.data(), indexArray2d.size());
 }

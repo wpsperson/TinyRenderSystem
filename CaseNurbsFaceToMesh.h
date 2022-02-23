@@ -1,6 +1,33 @@
 #pragma once
+#include "TRSEventHandler.h"
+#include <memory>
+#include <vector>
+
+class TRSGeode;
+class BSplineSurface;
 
 void CaseDelauneyTriangulation();
 
 int CaseNurbsFaceToMesh(int argn, char** argc);
 
+class InsertParametricPointHandler : public TRSEventHandler
+{
+public:
+    InsertParametricPointHandler(BSplineSurface* nurbs);
+
+    std::shared_ptr<TRSGeode> getParametricSpaceMesh();
+
+    std::shared_ptr<TRSGeode> get3DSpaceMesh();
+
+    void processLeftMousePress(double xpos, double ypos, int mods) override;
+
+    void initMesh();
+    void updateMesh();
+private:
+    BSplineSurface* bsSurface = nullptr;
+    std::shared_ptr<TRSGeode> Triangles3d;
+    std::shared_ptr<TRSGeode> Triangles2d;
+    std::vector<double> uvCoords;
+    std::vector<float> parametricSpacePoints;// represent each parametric point in 3d format by set z=0: u, v, 0, u, v, 0...
+    std::vector<float> parametricSpacePointsNormals;// represent the points and normals in 3d space.
+};

@@ -15,6 +15,7 @@
 class TRSContext;
 class TRSCamera;
 class TRSEventDispatcher;
+class TRSEventHandler;
 class TRSDefaultCameraHandler;
 class TRSNode;
 class PolygonModeVisitor;
@@ -34,6 +35,8 @@ public:
     void drawScene();
 
     TRSCamera* getCamera() const;
+
+    void addEventHandler(TRSEventHandler* eventHandler);
 
 protected:
     virtual void defaultSetting();
