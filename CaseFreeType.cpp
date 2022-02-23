@@ -8,9 +8,7 @@
 #include "stb_image.h"
 #include "TRSUtils.h"
 #include "TRSResource.h"
-#include "TRSWindowConfig.h"
 #include "TRSCamera.h"
-#include "TRSCallBackFunc.h"
 #include "TRSConst.h"
 #include "TRSCharacterTexture.h"
 #include <ft2build.h>

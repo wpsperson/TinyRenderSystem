@@ -1,11 +1,8 @@
 ﻿#include "TRSViewer.h"
-#include "TRSWindowConfig.h"
+#include "GLFWContext.h"
 #include "TRSConst.h"
 #include <iostream>
 #include "TRSCamera.h"
-#include "glad\glad.h"
-#include "glfw\glfw3.h"
-#include "TRSCallBackFunc.h"
 #include "TRSNode.h"
 #include "TRSStateSet.h"
 #include "CullVisitor.h"
@@ -15,24 +12,21 @@
 #include "TRSTexture.h"
 #include "Windows.h"
 #include "TRSVisitors.h"
-#include "TRSObserveCamera.h"
 #include "TRSCharacterTexture.h"
+#include "TRSEventDispatcher.h"
+#include "TRSDefaultCameraHandler.h"
 
-extern TRSCamera* g_pCamera;
 
 TRSViewer::TRSViewer()
-    :m_pWindow(nullptr)
-    , m_BGColor(s_DefaultBGColor)
-    , m_fLastTime(0.0f)
-    , m_fCurTime(0.0f)
+    : m_BGColor(s_DefaultBGColor)
 {
-    if (!TRSWindowConfig::initGlfwWindowAndGLAD(DefaultWindowWidth, DefaultWindowHeight, &m_pWindow))
-    {
-        std::cerr << "TRSViewer::INIT::Failure" << std::endl;
-    }
-    m_pCamera = new TRSObserveCamera(m_pWindow);
-    g_pCamera = m_pCamera;
-    TRSWindowConfig::registerUserInputFunc(m_pWindow);//reg user input callback
+    m_pEventDispatcher = std::make_shared<TRSEventDispatcher>();
+    m_context = new GLFWContext;
+    m_context->initContext();
+    m_pCamera = new TRSCamera;
+    m_pCameraHandler = std::make_shared<TRSDefaultCameraHandler>(m_pCamera);
+    m_pEventDispatcher->addEventHandler(m_pCameraHandler.get());
+    m_context->connectEventDispatcher(m_pEventDispatcher.get());
     m_polygonModeVisitor = new PolygonModeVisitor;
 
     TRSCharacterTexture::instance()->genTexture();
@@ -56,7 +50,7 @@ void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
 
 void TRSViewer::defaultSetting()
 {
-    m_fCurTime = m_fLastTime = glfwGetTime();
+    m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -64,27 +58,20 @@ void TRSViewer::defaultSetting()
 
 void TRSViewer::run()
 {
-    if (!m_pWindow)
-    {
-        return;
-    }
     //渲染前默认设置
     defaultSetting();
     while (true)
     {
-        if (glfwWindowShouldClose(m_pWindow))
+        if (m_context->shouldClose())
         {
             break;
         }
         glClearColor(m_BGColor[0], m_BGColor[1], m_BGColor[2], m_BGColor[3]);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         calcFrameTime();
-        keyboardCallBack();
         updateScene();
         drawScene();
-
-        glfwSwapBuffers(m_pWindow);
-        glfwPollEvents();
+        m_context->swapBuffer();
     }
 }
 
@@ -122,12 +109,12 @@ void TRSViewer::drawScene()
             pShader->addUniformMatrix4("model", modelMatrix);
             pShader->addUniformMatrix4("view", viewMatrix);
             pShader->addUniformMatrix4("projection", projectMatrix);
-            pShader->addUniform3v("viewPos", m_pCamera->getCameraPos());
+            pShader->addUniform3v("viewPos", m_pCamera->getPosition());
             pShader->addUniform4v("baseColor", pNode->getColor());
             pShader->addUniform3v("lightPos", s_DefaultLightPos);
             if (pNode->getUpdateCallBack())
             {
-                pNode->getUpdateCallBack()(pNode, m_pWindow);
+                pNode->getUpdateCallBack()(pNode);
             }
             pShader->applayAllStaticUniform();//Apply Uniform
             // simple draw call
@@ -138,10 +125,16 @@ void TRSViewer::drawScene()
     }
 }
 
+TRSCamera* TRSViewer::getCamera() const
+{
+    return m_pCamera;
+}
+
 void TRSViewer::calcFrameTime()
 {
-    m_fCurTime = glfwGetTime();
-    float timeDiff = m_fCurTime - m_fLastTime;
+    m_fCurTime = std::chrono::steady_clock::now();
+    std::chrono::milliseconds result = std::chrono::duration_cast<std::chrono::milliseconds>(m_fCurTime - m_fLastTime);
+    long long timeDiff = result.count();
     if (timeDiff < 15)
     {
         Sleep(15 - timeDiff);
@@ -150,13 +143,13 @@ void TRSViewer::calcFrameTime()
 }
 
 
-void TRSViewer::keyboardCallBack()
+void TRSViewer::keyboardViewCallBack()
 {
-    TRSKeyboardCallBack(m_pWindow);
-    if ((glfwGetKey(m_pWindow, GLFW_KEY_F1) == GLFW_PRESS))
-    {
-        m_polygonModeVisitor->switchPolygonMode();
-        m_polygonModeVisitor->visit(m_pSceneNode.get());
-        Sleep(100); // avoid frame rate so fast to execute this function twice and more.
-    }
+    // to do
+    //if ((glfwGetKey(m_pWindow, GLFW_KEY_F1) == GLFW_PRESS))
+    //{
+    //    m_polygonModeVisitor->switchPolygonMode();
+    //    m_polygonModeVisitor->visit(m_pSceneNode.get());
+    //    Sleep(100); // avoid frame rate so fast to execute this function twice and more.
+    //}
 }

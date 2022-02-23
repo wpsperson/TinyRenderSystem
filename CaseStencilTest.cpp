@@ -8,15 +8,11 @@
 #include "stb_image.h"
 #include "TRSUtils.h"
 #include "TRSResource.h"
-#include "TRSWindowConfig.h"
 #include "TRSCamera.h"
-#include "TRSObserveCamera.h"
-#include "TRSCallBackFunc.h"
 #include "TRSConst.h"
 #include "Windows.h"
 
 
-extern TRSCamera* g_pCamera;
 
 int CaseStencilTest()
 {
@@ -162,8 +158,7 @@ int CaseStencilTest()
     glUniform1i(nPosTexture1, 1);
     glEnable(GL_DEPTH_TEST);
 
-    TRSWindowConfig::registerUserInputFunc(window);
-    g_pCamera = new TRSObserveCamera(window);
+    TRSCamera* pCamera = new TRSCamera;
     double m_fCurTime = 0;
     double m_fLastTime = 0;
 
@@ -184,15 +179,14 @@ int CaseStencilTest()
             Sleep(15 - timeDiff);
         }
         m_fLastTime = m_fCurTime;
-        TRSKeyboardCallBack(window);
 
         glStencilFunc(GL_ALWAYS, 1, 0xff); //***
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); //***
         //glStencilMask(0xff); //***
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        TRSMatrix projMatrix = g_pCamera->getProjectMatrix();
-        TRSMatrix viewMatrix = g_pCamera->getViewMatrix();
+        TRSMatrix projMatrix = pCamera->getProjectMatrix();
+        TRSMatrix viewMatrix = pCamera->getViewMatrix();
         glUniformMatrix4fv(nPosModelMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
         glUniformMatrix4fv(nPosViewMatrix, 1, GL_FALSE, &(viewMatrix[0][0]));
         glUniformMatrix4fv(nPosProjectMatrix, 1, GL_FALSE, &(projMatrix[0][0]));

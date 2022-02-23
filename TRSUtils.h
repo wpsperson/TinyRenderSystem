@@ -9,6 +9,8 @@
 #include <string>
 #include "TRSExport.h"
 
+static double TRS_PI = 3.141592653589793238;
+
 struct GLFWwindow;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);

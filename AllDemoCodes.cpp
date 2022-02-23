@@ -17,7 +17,6 @@
 #include "stb_image.h"
 #include "TRSMathUtil.h"
 
-TRSCamera* g_pCamera;
 
 
 //最简单的，第一个三角形
@@ -772,7 +771,7 @@ void CaseManyFunnyBoxRotate()
 
 
 //第二章 基本光照
-void updateFunc(TRSNode* pNode, GLFWwindow*)
+void updateFunc(TRSNode* pNode)
 {
     TRSVec3 lightColor;
     lightColor[0] = float(sin(glfwGetTime() * 2.0f));
@@ -965,10 +964,11 @@ void CasePointAttenuationLight()
 }
 
 
-void SpotlightUpdateFunc(TRSNode* pNode, GLFWwindow*)
+TRSCamera* globalCamera = nullptr;
+void SpotlightUpdateFunc(TRSNode* pNode)
 {
-    pNode->getStateSet()->getShader()->addUniform3v("light.position", g_pCamera->getCameraPos());
-    pNode->getStateSet()->getShader()->addUniform3v("light.direction", g_pCamera->getCameraFront());
+    pNode->getStateSet()->getShader()->addUniform3v("light.position", globalCamera->getPosition());
+    pNode->getStateSet()->getShader()->addUniform3v("light.direction", globalCamera->getFront());
     pNode->getStateSet()->getShader()->addUniformf("light.cutOff", std::cos(toRadian(12.5f)));
     pNode->getStateSet()->getShader()->addUniformf("light.outerCutOff", std::cos(toRadian(17.5f)));
 }
@@ -990,7 +990,7 @@ void CaseSpotlight()
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
-
+    globalCamera = viewer->getCamera();
     TRSVec3 lightPos = TRSVec3(0.8f, 0.8f, 2.0f);
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
@@ -1020,10 +1020,10 @@ void CaseSpotlight()
     viewer->run();
 }
 
-void MultiLightSpotlightUpdateFunc(TRSNode* pNode, GLFWwindow*)
+void MultiLightSpotlightUpdateFunc(TRSNode* pNode)
 {
-    pNode->getStateSet()->getShader()->addUniform3v("spotLight.position", g_pCamera->getCameraPos());
-    pNode->getStateSet()->getShader()->addUniform3v("spotLight.direction", g_pCamera->getCameraFront());
+    pNode->getStateSet()->getShader()->addUniform3v("spotLight.position", globalCamera->getPosition());
+    pNode->getStateSet()->getShader()->addUniform3v("spotLight.direction", globalCamera->getFront());
     pNode->getStateSet()->getShader()->addUniformf("spotLight.cutOff", std::cos(toRadian(12.5f)));
     pNode->getStateSet()->getShader()->addUniformf("spotLight.outerCutOff", std::cos(toRadian(17.5f)));
 }
@@ -1046,6 +1046,7 @@ void CaseMultiLightSource()
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
+    globalCamera = viewer->getCamera();
 
     pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();

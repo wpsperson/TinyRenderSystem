@@ -16,9 +16,8 @@ class NodeVisitor;
 class TRSStateSet;
 class TRSVAO;
 class TRSNode;
-struct GLFWwindow;
 
-typedef std::tr1::function<void(TRSNode*, GLFWwindow*)> NodeUpdateFunc;
+typedef std::tr1::function<void(TRSNode*)> NodeUpdateFunc;
 
 class TRS_EXPORT TRSNode
 {

@@ -37,29 +37,30 @@ int CaseTraditional3DModel(int argn, char** argc)
     return 0;
 }
 
-void LodCallBack(TRSNode* pNode, GLFWwindow*window)
+void LodCallBack(TRSNode* pNode)
 {
-    static int lod = 1;
-    if ((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS))
-    {
-        lod++;
-        if (lod > 10)
-        {
-            lod = 10;
-        }
-        pNode->getStateSet()->getShader()->addUniformi("lod", lod);
-        Sleep(100);
-    }
-    else if ((glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS))
-    {
-        lod--;
-        if (lod < 1)
-        {
-            lod = 1;
-        }
-        pNode->getStateSet()->getShader()->addUniformi("lod", lod);
-        Sleep(100);
-    }
+    // todo
+    //static int lod = 1;
+    //if ((glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS))
+    //{
+    //    lod++;
+    //    if (lod > 10)
+    //    {
+    //        lod = 10;
+    //    }
+    //    pNode->getStateSet()->getShader()->addUniformi("lod", lod);
+    //    Sleep(100);
+    //}
+    //else if ((glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS))
+    //{
+    //    lod--;
+    //    if (lod < 1)
+    //    {
+    //        lod = 1;
+    //    }
+    //    pNode->getStateSet()->getShader()->addUniformi("lod", lod);
+    //    Sleep(100);
+    //}
 }
 
 class PNNodeVisitor : public NodeVisitor

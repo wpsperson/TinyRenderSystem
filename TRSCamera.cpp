@@ -1,15 +1,13 @@
 ﻿#include "TRSCamera.h"
 #include <iostream>
-#include "glfw/glfw3.h"
 #include "TRSConst.h"
-#include "TRSCallBackFunc.h"
 #include "TRSConfig.h"
 #include "TRSMathUtil.h"
 
-TRSCamera::TRSCamera(GLFWwindow* pWindow)
-    : m_pWindow(pWindow)
+TRSCamera::TRSCamera()
 {
     m_pos = s_DefaultCameraPos;
+    m_lookAt = TRSVec3(0, 0, 0);
     m_front = TRSVec3(0, 0, -1);
     m_right = TRSVec3(1, 0, 0);
     m_up = TRSVec3(0, 1, 0);
@@ -29,33 +27,86 @@ TRSCamera::~TRSCamera()
 
 TRSMatrix TRSCamera::getViewMatrix()
 {
-    TRSMatrix matrix;
-    matrix.makeLookat(m_pos, m_front, m_up);
-    return matrix;
+    if (m_viewMatrixNeedUpdate)
+    {
+        updateViewMatrix();
+        m_viewMatrixNeedUpdate = false;
+    }
+    return m_viewMatrix;
+}
+
+double TRSCamera::getWindowWidth() const
+{
+    return m_width;
+}
+
+double TRSCamera::getWindowHeight() const
+{
+    return m_height;
 }
 
 TRSMatrix TRSCamera::getProjectMatrix()
 {
-    TRSMatrix matrix;
-    if (m_parallelMode)
+    if (m_projectMatrixNeedUpdate)
     {
-        matrix.makeOtho(-m_width / 2, m_width / 2, -m_height / 2, m_height / 2, m_near, m_far);
+        updateProjectMatrix();
+        m_projectMatrixNeedUpdate = false;
     }
-    else
-    {
-        matrix.makePerspective(toRadian(m_fFov), m_width / m_height, m_near, m_far);
-    }
-    return matrix;
+    return m_projectMatrix;
 }
 
-TRSVec3 TRSCamera::getCameraPos() const
+TRSVec3 TRSCamera::getPosition() const
 {
     return m_pos;
 }
 
-TRSVec3 TRSCamera::getCameraFront() const
+TRSVec3 TRSCamera::getLookAt() const
+{
+    return m_lookAt;
+}
+
+TRSVec3 TRSCamera::getFront() const
 {
     return m_front;
+}
+
+TRSVec3 TRSCamera::getRight() const
+{
+    return m_right;
+}
+
+TRSVec3 TRSCamera::getUp() const
+{
+    return m_up;
+}
+
+void TRSCamera::setPosition(const TRSVec3& pos)
+{
+    if (m_pos != pos)
+    {
+        m_pos = pos;
+        m_viewMatrixNeedUpdate = true;
+    }
+}
+
+void TRSCamera::setLookAt(const TRSVec3& lookAt)
+{
+    if (m_lookAt != lookAt)
+    {
+        m_lookAt = lookAt;
+        m_viewMatrixNeedUpdate = true;
+    }
+}
+
+void TRSCamera::setUp(const TRSVec3& up)
+{
+    TRSVec3 normalizedUp = up;
+    normalizedUp.normalize();
+    if (m_up != normalizedUp)
+    {
+        m_up = normalizedUp;
+        m_viewMatrixNeedUpdate = true;
+    }
 }
 
 void TRSCamera::setCameraMode(bool parallelMode)
@@ -63,55 +114,77 @@ void TRSCamera::setCameraMode(bool parallelMode)
     m_parallelMode = parallelMode;
 }
 
-void TRSCamera::setAspect(double aspect)
+void TRSCamera::setWindowWidth(double width)
 {
-    m_width = aspect * m_height;
-}
-
-void TRSCamera::keyboardCallBack(GLFWwindow* pWindow)
-{
-    float MoveSpeed = 0.05f;
-    if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (m_width != width)
     {
-        glfwSetWindowShouldClose(pWindow, true);
-    }
-    if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        m_pos += m_front * MoveSpeed;
-    }
-    else if (glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        m_pos -= m_front * MoveSpeed;
-    }
-    else if (glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        m_pos -= m_right * MoveSpeed;
-    }
-    else if (glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        m_pos += m_right * MoveSpeed;
-    }
-    else if (glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS)
-    {
-        m_pos -= m_up * MoveSpeed;
-    }
-    else if (glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS)
-    {
-        m_pos += m_up * MoveSpeed;
+        m_width = width;
+        m_projectMatrixNeedUpdate = true;
     }
 }
 
-void TRSCamera::mouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos)
+void TRSCamera::setWindowHeight(double height)
 {
-
+    if (m_height != height)
+    {
+        m_height = height;
+        m_projectMatrixNeedUpdate = true;
+    }
 }
 
-void TRSCamera::mouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double yScroll)
+void TRSCamera::Azimuth(double angle)
 {
+    TRSMatrix transLookAtToOrigin;
+    transLookAtToOrigin.makeTranslate(-m_lookAt);
 
+    TRSMatrix rotateMatrix;
+    rotateMatrix.makeRotate(angle, m_up);
+
+    TRSMatrix transRestore;
+    transLookAtToOrigin.makeTranslate(m_lookAt);
+
+    TRSVec3 newPosition = transRestore * rotateMatrix * transLookAtToOrigin * m_pos;
+    this->setPosition(newPosition);
+    updateViewMatrix();// in order to update the m_right
 }
 
-void TRSCamera::mouseButtonCallBack(GLFWwindow* pWindow, int button, int action, int mods)
+void TRSCamera::Elevation(double angle)
 {
+    TRSMatrix transLookAtToOrigin;
+    transLookAtToOrigin.makeTranslate(-m_lookAt);
 
+    TRSMatrix rotateMatrix;
+    rotateMatrix.makeRotate(angle, m_right);
+
+    TRSMatrix transRestore;
+    transLookAtToOrigin.makeTranslate(m_lookAt);
+
+    TRSVec3 newPosition = transRestore * rotateMatrix * transLookAtToOrigin * m_pos;
+    this->setPosition(newPosition);
+    updateViewMatrix();// in order to update the m_up
+}
+
+void TRSCamera::updateViewMatrix()
+{
+    m_front = m_lookAt - m_pos;
+    m_front.normalize();
+
+    m_right = m_front.cross(m_up);
+    m_right.normalize();
+    // because front may be not perpendicular to up; so orthoganalize them.
+    m_up = m_right.cross(m_front);
+
+    m_viewMatrix.makeLookat(m_pos, m_front, m_up);
+}
+
+void TRSCamera::updateProjectMatrix()
+{
+    if (m_parallelMode)
+    {
+        m_projectMatrix.makeOtho(-m_width / 2, m_width / 2, -m_height / 2, m_height / 2, m_near, m_far);
+    }
+    else
+    {
+        m_projectMatrix.makePerspective(toRadian(m_fFov), m_width / m_height, m_near, m_far);
+    }
 }

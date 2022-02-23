@@ -9,11 +9,15 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <chrono>
 #include "TRSVector.h"
+
+class TRSContext;
 class TRSCamera;
+class TRSEventDispatcher;
+class TRSDefaultCameraHandler;
 class TRSNode;
 class PolygonModeVisitor;
-struct GLFWwindow;
 
 class TRS_EXPORT TRSViewer
 {
@@ -29,18 +33,22 @@ public:
 
     void drawScene();
 
+    TRSCamera* getCamera() const;
+
 protected:
     virtual void defaultSetting();
     void calcFrameTime();
-    void keyboardCallBack();
+    void keyboardViewCallBack();
 
 protected:
     std::shared_ptr<TRSNode> m_pSceneNode;
-    GLFWwindow* m_pWindow;
+    std::shared_ptr<TRSEventDispatcher> m_pEventDispatcher;
+    std::shared_ptr<TRSDefaultCameraHandler> m_pCameraHandler;
+    TRSContext* m_context = nullptr;
     TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;
     PolygonModeVisitor* m_polygonModeVisitor;
     std::map<int, std::vector<TRSNode*>> m_mapState2Node;
-    float m_fLastTime;
-    float m_fCurTime;
+    std::chrono::steady_clock::time_point m_fLastTime;
+    std::chrono::steady_clock::time_point m_fCurTime;
 };
