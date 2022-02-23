@@ -55,6 +55,7 @@ void TRSDefaultCameraHandler::processLeftMouseMove(double xpos, double ypos, int
     float elevatAngle = - delatY * TRS_PI * 2;    // deltaY forward down, rotate is clockwise.
     m_camera->Azimuth(azimuthAngle);
     m_camera->Elevation(elevatAngle);
+
     m_lastX = curX;
     m_lastY = curY;
 }
@@ -65,17 +66,17 @@ void TRSDefaultCameraHandler::processMiddleMouseMove(double xpos, double ypos, i
     float curY = ypos;
     float deltaX = (curX - m_lastX) / m_camera->getWindowWidth();
     float delatY = (curY - m_lastY) / m_camera->getWindowHeight();
+    TRSVec3 pos = m_camera->getPosition();
+    TRSVec3 lookAt = m_camera->getLookAt();
     TRSVec3 right = m_camera->getRight();
     TRSVec3 up = m_camera->getUp();
-    TRSVec3 move = right * -deltaX + up * delatY;
+    float dist = lookAt.distance(pos);
+    TRSVec3 move = right * -deltaX * dist + up * delatY * dist;
 
-    TRSVec3 pos = m_camera->getPosition();
     pos += move;
     m_camera->setPosition(pos);
-    TRSVec3 lookAt = m_camera->getLookAt();
     lookAt += move;
     m_camera->setLookAt(lookAt);
-
     m_lastX = curX;
     m_lastY = curY;
 }

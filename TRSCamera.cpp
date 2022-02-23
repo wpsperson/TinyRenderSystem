@@ -135,15 +135,16 @@ void TRSCamera::setWindowHeight(double height)
 void TRSCamera::Azimuth(double angle)
 {
     TRSMatrix transLookAtToOrigin;
-    transLookAtToOrigin.makeTranslate(-m_lookAt);
+    transLookAtToOrigin.makeTranslate(m_lookAt * -1);
 
     TRSMatrix rotateMatrix;
     rotateMatrix.makeRotate(angle, m_up);
 
     TRSMatrix transRestore;
-    transLookAtToOrigin.makeTranslate(m_lookAt);
+    transRestore.makeTranslate(m_lookAt);
 
-    TRSVec3 newPosition = transRestore * rotateMatrix * transLookAtToOrigin * m_pos;
+    TRSMatrix totalMatrix = transRestore * rotateMatrix * transLookAtToOrigin;
+    TRSVec3 newPosition = totalMatrix * m_pos;
     this->setPosition(newPosition);
     updateViewMatrix();// in order to update the m_right
 }
@@ -151,15 +152,16 @@ void TRSCamera::Azimuth(double angle)
 void TRSCamera::Elevation(double angle)
 {
     TRSMatrix transLookAtToOrigin;
-    transLookAtToOrigin.makeTranslate(-m_lookAt);
+    transLookAtToOrigin.makeTranslate(m_lookAt * -1);
 
     TRSMatrix rotateMatrix;
     rotateMatrix.makeRotate(angle, m_right);
 
     TRSMatrix transRestore;
-    transLookAtToOrigin.makeTranslate(m_lookAt);
+    transRestore.makeTranslate(m_lookAt);
 
-    TRSVec3 newPosition = transRestore * rotateMatrix * transLookAtToOrigin * m_pos;
+    TRSMatrix totalMatrix = transRestore * rotateMatrix * transLookAtToOrigin;
+    TRSVec3 newPosition = totalMatrix * m_pos;
     this->setPosition(newPosition);
     updateViewMatrix();// in order to update the m_up
 }
@@ -173,6 +175,7 @@ void TRSCamera::updateViewMatrix()
     m_right.normalize();
     // because front may be not perpendicular to up; so orthoganalize them.
     m_up = m_right.cross(m_front);
+    m_up.normalize();
 
     m_viewMatrix.makeLookat(m_pos, m_front, m_up);
 }
