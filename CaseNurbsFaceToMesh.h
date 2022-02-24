@@ -21,9 +21,12 @@ public:
     std::shared_ptr<TRSGeode> get3DSpaceMesh();
 
     void processLeftMousePress(double xpos, double ypos, int mods) override;
+    void processKeyPress(int key);
 
     void initMesh();
     void updateMesh();
+    void saveParameterToFile(const std::string& fileName);
+    void loadParameterFromFile(const std::string& fileName);
 private:
     TRSCamera* m_camera = nullptr;
     BSplineSurface* bsSurface = nullptr;

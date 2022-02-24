@@ -20,7 +20,18 @@
 #include "BSpline.h"
 #include "BSplineSurface.h"
 #include "delaunator.hpp"
+#include "TRSEventDefine.h"
 
+static double parametricDomainTranslate = -1.5;
+
+void print(const TRSVec3& pt, const std::string& description = "")
+{
+    if (!description.empty())
+    {
+        std::cout << description<<": ";
+    }
+    std::cout << pt[0] << ", " << pt[1] << ", " << pt[2] << std::endl;
+}
 
 void CaseDelauneyTriangulation()
 {
@@ -111,7 +122,7 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
     std::shared_ptr<TRSGeode> Triangles2d = handler->getParametricSpaceMesh();
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
-    rootNodes->addChild(BsplineSurFace);
+    //rootNodes->addChild(BsplineSurFace);
     rootNodes->addChild(Triangles2d);
     rootNodes->addChild(Triangles3d);
 
@@ -127,7 +138,7 @@ InsertParametricPointHandler::InsertParametricPointHandler(BSplineSurface* nurbs
 {
     Triangles2d = std::make_shared<TRSGeode>();
     TRSMatrix translateMatrix;
-    translateMatrix.makeTranslate(-1.5, 0, 0);
+    translateMatrix.makeTranslate(parametricDomainTranslate, 0, 0);
     Triangles2d->setMatrix(translateMatrix);
     Triangles2d->getVAO()->setDrawType(GL_TRIANGLES);
     Triangles2d->setColor(TRSVec4(0.5, 1, 1, 1));
@@ -159,13 +170,64 @@ void InsertParametricPointHandler::processLeftMousePress(double xpos, double ypo
     double width = m_camera->getWindowWidth();
     double height = m_camera->getWindowHeight();
     TRSMatrix projectMatrix = m_camera->getProjectMatrix();
+    TRSMatrix projectInverse = projectMatrix.getInverse();
     TRSMatrix viewMatrix = m_camera->getViewMatrix();
+    TRSMatrix viewInverse = viewMatrix.getInverse();
     double ndcX = (xpos / width) * 2 - 1;
     double ndcY = (ypos / height) * 2 - 1;
+    // in windows, y coordinate increase from top to bottom, while in OpenGL, y coordinate increase from bottom to top
+    ndcY = -ndcY;
     TRSVec3 ndcNear(ndcX, ndcY, -1);
     TRSVec3 ndcFar(ndcX, ndcY, 1);
-    
+    TRSVec3 viewCoordNear = projectInverse * ndcNear;
+    TRSVec3 viewCoordFar = projectInverse * ndcFar;
+    TRSVec3 worldCoordNear = viewInverse * viewCoordNear;
+    TRSVec3 worldCoordFar = viewInverse * viewCoordFar;
+    float zFar = (worldCoordFar[2]);
+    float zNear = (worldCoordNear[2]);
+    bool valid = (zFar < 0 && zNear > 0);
+    if (!valid)
+    {
+        return;
+    }
+    float proportion = (0 - zFar) / (zNear - zFar);
+    TRSVec3 ptOnXYPlane = worldCoordFar * (1 - proportion) + worldCoordNear * proportion;
+    float u = ptOnXYPlane[0] - parametricDomainTranslate;
+    float v = ptOnXYPlane[1];
+    print(worldCoordNear, "near");
+    print(worldCoordFar, "far");
+    std::cout << "v: " << u << ", v: " << v << std::endl;
+    bool parameterValid = u >= 0 && u <= 1 && v >= 0 && v <= 1;
+    if (!parameterValid)
+    {
+        return;
+    }
+    uvCoords.push_back(u);
+    uvCoords.push_back(v);
+    updateMesh();
+}
 
+void InsertParametricPointHandler::processKeyPress(int key)
+{
+    if (TRS_KEY_S == key)
+    {
+        std::string filename;
+        std::cin >> filename;
+        if (filename.empty())
+        {
+            return;
+        }
+
+    }
+    else if (TRS_KEY_L == key)
+    {
+        std::string filename;
+        std::cin >> filename;
+        if (filename.empty())
+        {
+            return;
+        }
+    }
 }
 
 void InsertParametricPointHandler::initMesh()
