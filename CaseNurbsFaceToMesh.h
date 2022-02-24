@@ -4,6 +4,7 @@
 #include <vector>
 
 class TRSGeode;
+class TRSCamera;
 class BSplineSurface;
 
 void CaseDelauneyTriangulation();
@@ -13,7 +14,7 @@ int CaseNurbsFaceToMesh(int argn, char** argc);
 class InsertParametricPointHandler : public TRSEventHandler
 {
 public:
-    InsertParametricPointHandler(BSplineSurface* nurbs);
+    InsertParametricPointHandler(BSplineSurface* nurbs, TRSCamera* camera);
 
     std::shared_ptr<TRSGeode> getParametricSpaceMesh();
 
@@ -24,6 +25,7 @@ public:
     void initMesh();
     void updateMesh();
 private:
+    TRSCamera* m_camera = nullptr;
     BSplineSurface* bsSurface = nullptr;
     std::shared_ptr<TRSGeode> Triangles3d;
     std::shared_ptr<TRSGeode> Triangles2d;

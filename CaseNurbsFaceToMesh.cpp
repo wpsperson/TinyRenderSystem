@@ -105,7 +105,7 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
     BsplineSurFace->getVAO()->setDrawType(GL_TRIANGLES);
     BsplineSurFace->setColor(TRSVec4(1, 0.5, 1, 1));
 
-    InsertParametricPointHandler* handler = new InsertParametricPointHandler(bsSurface);
+    InsertParametricPointHandler* handler = new InsertParametricPointHandler(bsSurface, viewer->getCamera());
     viewer->addEventHandler(handler);
     std::shared_ptr<TRSGeode> Triangles3d = handler->get3DSpaceMesh();
     std::shared_ptr<TRSGeode> Triangles2d = handler->getParametricSpaceMesh();
@@ -121,8 +121,9 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
     return 0;
 }
 
-InsertParametricPointHandler::InsertParametricPointHandler(BSplineSurface* nurbs)
+InsertParametricPointHandler::InsertParametricPointHandler(BSplineSurface* nurbs, TRSCamera* camera)
     : bsSurface(nurbs)
+    , m_camera(camera)
 {
     Triangles2d = std::make_shared<TRSGeode>();
     TRSMatrix translateMatrix;
@@ -155,6 +156,15 @@ std::shared_ptr<TRSGeode> InsertParametricPointHandler::get3DSpaceMesh()
 
 void InsertParametricPointHandler::processLeftMousePress(double xpos, double ypos, int mods)
 {
+    double width = m_camera->getWindowWidth();
+    double height = m_camera->getWindowHeight();
+    TRSMatrix projectMatrix = m_camera->getProjectMatrix();
+    TRSMatrix viewMatrix = m_camera->getViewMatrix();
+    double ndcX = (xpos / width) * 2 - 1;
+    double ndcY = (ypos / height) * 2 - 1;
+    TRSVec3 ndcNear(ndcX, ndcY, -1);
+    TRSVec3 ndcFar(ndcX, ndcY, 1);
+    
 
 }
 

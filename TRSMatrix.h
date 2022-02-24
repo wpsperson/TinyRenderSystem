@@ -48,6 +48,10 @@ public:
     TRSMatrix& postMultiply(const TRSMatrix& matrix);
     TRSMatrix& preMultiply(const TRSMatrix& matrix);
 
+    float determinant() const;
+
+    TRSMatrix getInverse() const;
+
 private:
     TRSVec4 columns[4];         // denote four column
 };

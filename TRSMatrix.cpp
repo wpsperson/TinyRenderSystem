@@ -296,6 +296,174 @@ TRSMatrix& TRSMatrix::preMultiply(const TRSMatrix& matrix)
     return *this;
 }
 
+float TRSMatrix::determinant() const
+{
+    float algebraicComplement00 = columns[1][1] * columns[2][2] * columns[3][3] -
+        columns[1][1] * columns[2][3] * columns[3][2] -
+        columns[2][1] * columns[1][2] * columns[3][3] +
+        columns[2][1] * columns[1][3] * columns[3][2] +
+        columns[3][1] * columns[1][2] * columns[2][3] -
+        columns[3][1] * columns[1][3] * columns[2][2];
+
+    float algebraicComplement01 = -columns[1][0] * columns[2][2] * columns[3][3] +
+        columns[1][0] * columns[2][3] * columns[3][2] +
+        columns[2][0] * columns[1][2] * columns[3][3] -
+        columns[2][0] * columns[1][3] * columns[3][2] -
+        columns[3][0] * columns[1][2] * columns[2][3] +
+        columns[3][0] * columns[1][3] * columns[2][2];
+
+    float algebraicComplement02 = columns[1][0] * columns[2][1] * columns[3][3] -
+        columns[1][0] * columns[2][3] * columns[3][1] -
+        columns[2][0] * columns[1][1] * columns[3][3] +
+        columns[2][0] * columns[1][3] * columns[3][1] +
+        columns[3][0] * columns[1][1] * columns[2][3] -
+        columns[3][0] * columns[1][3] * columns[2][1];
+
+    float algebraicComplement03 = -columns[1][0] * columns[2][1] * columns[3][2] +
+        columns[1][0] * columns[2][2] * columns[3][1] +
+        columns[2][0] * columns[1][1] * columns[3][2] -
+        columns[2][0] * columns[1][2] * columns[3][1] -
+        columns[3][0] * columns[1][1] * columns[2][2] +
+        columns[3][0] * columns[1][2] * columns[2][1];
+    float result = algebraicComplement00 * columns[0][0]
+        + algebraicComplement01 * columns[0][1]
+        + algebraicComplement02 * columns[0][2]
+        + algebraicComplement03 * columns[0][3];
+    return result;
+}
+
+TRSMatrix TRSMatrix::getInverse() const
+{
+    float det = determinant();
+    if (det == 0)
+    {
+        throw "matrix determinant is zero, inverse matrix is non-exist";
+    }
+
+    TRSVec4 adjointMatrix[4];
+    adjointMatrix[0][0] = columns[1][1] * columns[2][2] * columns[3][3] -
+        columns[1][1] * columns[2][3] * columns[3][2] -
+        columns[2][1] * columns[1][2] * columns[3][3] +
+        columns[2][1] * columns[1][3] * columns[3][2] +
+        columns[3][1] * columns[1][2] * columns[2][3] -
+        columns[3][1] * columns[1][3] * columns[2][2];
+
+    adjointMatrix[1][0] = -columns[1][0] * columns[2][2] * columns[3][3] +
+        columns[1][0] * columns[2][3] * columns[3][2] +
+        columns[2][0] * columns[1][2] * columns[3][3] -
+        columns[2][0] * columns[1][3] * columns[3][2] -
+        columns[3][0] * columns[1][2] * columns[2][3] +
+        columns[3][0] * columns[1][3] * columns[2][2];
+
+    adjointMatrix[2][0] = columns[1][0] * columns[2][1] * columns[3][3] -
+        columns[1][0] * columns[2][3] * columns[3][1] -
+        columns[2][0] * columns[1][1] * columns[3][3] +
+        columns[2][0] * columns[1][3] * columns[3][1] +
+        columns[3][0] * columns[1][1] * columns[2][3] -
+        columns[3][0] * columns[1][3] * columns[2][1];
+
+    adjointMatrix[3][0] = -columns[1][0] * columns[2][1] * columns[3][2] +
+        columns[1][0] * columns[2][2] * columns[3][1] +
+        columns[2][0] * columns[1][1] * columns[3][2] -
+        columns[2][0] * columns[1][2] * columns[3][1] -
+        columns[3][0] * columns[1][1] * columns[2][2] +
+        columns[3][0] * columns[1][2] * columns[2][1];
+
+    adjointMatrix[0][1] = -columns[0][1] * columns[2][2] * columns[3][3] +
+        columns[0][1] * columns[2][3] * columns[3][2] +
+        columns[2][1] * columns[0][2] * columns[3][3] -
+        columns[2][1] * columns[0][3] * columns[3][2] -
+        columns[3][1] * columns[0][2] * columns[2][3] +
+        columns[3][1] * columns[0][3] * columns[2][2];
+
+    adjointMatrix[1][1] = columns[0][0] * columns[2][2] * columns[3][3] -
+        columns[0][0] * columns[2][3] * columns[3][2] -
+        columns[2][0] * columns[0][2] * columns[3][3] +
+        columns[2][0] * columns[0][3] * columns[3][2] +
+        columns[3][0] * columns[0][2] * columns[2][3] -
+        columns[3][0] * columns[0][3] * columns[2][2];
+
+    adjointMatrix[2][1] = -columns[0][0] * columns[2][1] * columns[3][3] +
+        columns[0][0] * columns[2][3] * columns[3][1] +
+        columns[2][0] * columns[0][1] * columns[3][3] -
+        columns[2][0] * columns[0][3] * columns[3][1] -
+        columns[3][0] * columns[0][1] * columns[2][3] +
+        columns[3][0] * columns[0][3] * columns[2][1];
+
+    adjointMatrix[3][1] = columns[0][0] * columns[2][1] * columns[3][2] -
+        columns[0][0] * columns[2][2] * columns[3][1] -
+        columns[2][0] * columns[0][1] * columns[3][2] +
+        columns[2][0] * columns[0][2] * columns[3][1] +
+        columns[3][0] * columns[0][1] * columns[2][2] -
+        columns[3][0] * columns[0][2] * columns[2][1];
+
+    adjointMatrix[0][2] = columns[0][1] * columns[1][2] * columns[3][3] -
+        columns[0][1] * columns[1][3] * columns[3][2] -
+        columns[1][1] * columns[0][2] * columns[3][3] +
+        columns[1][1] * columns[0][3] * columns[3][2] +
+        columns[3][1] * columns[0][2] * columns[1][3] -
+        columns[3][1] * columns[0][3] * columns[1][2];
+
+    adjointMatrix[1][2] = -columns[0][0] * columns[1][2] * columns[3][3] +
+        columns[0][0] * columns[1][3] * columns[3][2] +
+        columns[1][0] * columns[0][2] * columns[3][3] -
+        columns[1][0] * columns[0][3] * columns[3][2] -
+        columns[3][0] * columns[0][2] * columns[1][3] +
+        columns[3][0] * columns[0][3] * columns[1][2];
+
+    adjointMatrix[2][2] = columns[0][0] * columns[1][1] * columns[3][3] -
+        columns[0][0] * columns[1][3] * columns[3][1] -
+        columns[1][0] * columns[0][1] * columns[3][3] +
+        columns[1][0] * columns[0][3] * columns[3][1] +
+        columns[3][0] * columns[0][1] * columns[1][3] -
+        columns[3][0] * columns[0][3] * columns[1][1];
+
+    adjointMatrix[3][2] = -columns[0][0] * columns[1][1] * columns[3][2] +
+        columns[0][0] * columns[1][2] * columns[3][1] +
+        columns[1][0] * columns[0][1] * columns[3][2] -
+        columns[1][0] * columns[0][2] * columns[3][1] -
+        columns[3][0] * columns[0][1] * columns[1][2] +
+        columns[3][0] * columns[0][2] * columns[1][1];
+
+    adjointMatrix[0][3] = -columns[0][1] * columns[1][2] * columns[2][3] +
+        columns[0][1] * columns[1][3] * columns[2][2] +
+        columns[1][1] * columns[0][2] * columns[2][3] -
+        columns[1][1] * columns[0][3] * columns[2][2] -
+        columns[2][1] * columns[0][2] * columns[1][3] +
+        columns[2][1] * columns[0][3] * columns[1][2];
+
+    adjointMatrix[1][3] = columns[0][0] * columns[1][2] * columns[2][3] -
+        columns[0][0] * columns[1][3] * columns[2][2] -
+        columns[1][0] * columns[0][2] * columns[2][3] +
+        columns[1][0] * columns[0][3] * columns[2][2] +
+        columns[2][0] * columns[0][2] * columns[1][3] -
+        columns[2][0] * columns[0][3] * columns[1][2];
+
+    adjointMatrix[2][3] = -columns[0][0] * columns[1][1] * columns[2][3] +
+        columns[0][0] * columns[1][3] * columns[2][1] +
+        columns[1][0] * columns[0][1] * columns[2][3] -
+        columns[1][0] * columns[0][3] * columns[2][1] -
+        columns[2][0] * columns[0][1] * columns[1][3] +
+        columns[2][0] * columns[0][3] * columns[1][1];
+
+    adjointMatrix[3][3] = columns[0][0] * columns[1][1] * columns[2][2] -
+        columns[0][0] * columns[1][2] * columns[2][1] -
+        columns[1][0] * columns[0][1] * columns[2][2] +
+        columns[1][0] * columns[0][2] * columns[2][1] +
+        columns[2][0] * columns[0][1] * columns[1][2] -
+        columns[2][0] * columns[0][2] * columns[1][1];
+
+    TRSMatrix inverseMatrix;
+    for (int col = 0; col < 4; col++)
+    {
+        for (int row = 0; row < 4; row++)
+        {
+            inverseMatrix[col][row] = adjointMatrix[col][row] / det;
+        }
+    }
+    return inverseMatrix;
+}
+
 TRSMatrix TRSMatrix::operator*(const TRSMatrix& matrix) const
 {
     TRSMatrix result;
