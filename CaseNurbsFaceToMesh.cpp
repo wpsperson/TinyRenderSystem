@@ -1,5 +1,7 @@
 #include "CaseNurbsFaceToMesh.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 #include <glad\glad.h>
 #include <GLFW\glfw3.h>
@@ -148,9 +150,9 @@ InsertParametricPointHandler::InsertParametricPointHandler(BSplineSurface* nurbs
     Triangles3d->getVAO()->setDrawType(GL_TRIANGLES);
     Triangles3d->setColor(TRSVec4(0.5, 1, 1, 1));
     Triangles3d->setPolygonMode(GL_LINE);
-    //std::shared_ptr<TRSStateSet> Triangles3dSS = Triangles3d->getOrCreateStateSet();
-    //TRSShader* shaderTriangles3d = Triangles3dSS->getShader();
-    //shaderTriangles3d->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
+    std::shared_ptr<TRSStateSet> Triangles3dSS = Triangles3d->getOrCreateStateSet();
+    TRSShader* shaderTriangles3d = Triangles3dSS->getShader();
+    shaderTriangles3d->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
     initMesh();
     updateMesh();
 }
@@ -165,7 +167,7 @@ std::shared_ptr<TRSGeode> InsertParametricPointHandler::get3DSpaceMesh()
     return Triangles3d;
 }
 
-void InsertParametricPointHandler::processLeftMousePress(double xpos, double ypos, int mods)
+void InsertParametricPointHandler::processRightMousePress(double xpos, double ypos, int mods)
 {
     double width = m_camera->getWindowWidth();
     double height = m_camera->getWindowHeight();
@@ -217,7 +219,7 @@ void InsertParametricPointHandler::processKeyPress(int key)
         {
             return;
         }
-
+        saveParameterToFile(filename);
     }
     else if (TRS_KEY_L == key)
     {
@@ -227,6 +229,8 @@ void InsertParametricPointHandler::processKeyPress(int key)
         {
             return;
         }
+        loadParameterFromFile(filename);
+        updateMesh();
     }
 }
 
@@ -289,4 +293,46 @@ void InsertParametricPointHandler::updateMesh()
 
     Triangles2d->readFromVertex(parametricSpacePoints.data(), parametricSpacePoints.size(), EnVertex, indexArray2d.data(), indexArray2d.size());
     Triangles3d->readFromVertex(parametricSpacePointsNormals.data(), parametricSpacePointsNormals.size(), EnVertexNormal, indexArray2d.data(), indexArray2d.size());
+}
+
+void InsertParametricPointHandler::saveParameterToFile(const std::string& fileName)
+{
+    std::ofstream stream(fileName.c_str());
+    if (stream.fail())
+    {
+        return;
+    }
+    int uvCount = uvCoords.size();
+    std::string strNextLine = "\n";
+    stream << uvCount << strNextLine;
+    for (double value : uvCoords)
+    {
+        stream << value << strNextLine;
+    }
+    stream.close();
+}
+
+void InsertParametricPointHandler::loadParameterFromFile(const std::string& fileName)
+{
+    std::ifstream stream(fileName.c_str());
+    if (stream.fail())
+    {
+        return;
+    }
+    int size;
+    std::string strNextLine;
+    getline(stream, strNextLine);
+    std::stringstream ss(strNextLine);
+    ss >> size;
+    uvCoords.clear();
+    uvCoords.reserve(size);
+    for (int i=0; i<size;i++)
+    {
+        double value;
+        getline(stream, strNextLine);
+        std::stringstream ss(strNextLine);
+        ss >> value;
+        uvCoords.push_back(value);
+    }
+    stream.close();
 }

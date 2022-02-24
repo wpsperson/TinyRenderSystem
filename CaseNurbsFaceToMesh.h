@@ -2,6 +2,7 @@
 #include "TRSEventHandler.h"
 #include <memory>
 #include <vector>
+#include <string>
 
 class TRSGeode;
 class TRSCamera;
@@ -20,7 +21,7 @@ public:
 
     std::shared_ptr<TRSGeode> get3DSpaceMesh();
 
-    void processLeftMousePress(double xpos, double ypos, int mods) override;
+    void processRightMousePress(double xpos, double ypos, int mods) override;
     void processKeyPress(int key);
 
     void initMesh();
