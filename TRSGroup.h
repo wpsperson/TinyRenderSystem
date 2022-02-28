@@ -18,6 +18,8 @@ public:
 
     void addChild(std::shared_ptr<TRSNode> ptr);
 
+    void removeChild(TRSNode* pNode);
+
     size_t childNum() const;
 
     std::shared_ptr<TRSNode> child(int idx);

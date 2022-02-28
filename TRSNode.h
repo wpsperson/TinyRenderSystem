@@ -39,6 +39,10 @@ public:
 
     void setColor(const TRSVec4& color);
 
+    void setVisible(bool vis);
+
+    bool visible() const;
+
     std::shared_ptr<TRSStateSet> getStateSet() const;
 
     std::shared_ptr<TRSStateSet> getOrCreateStateSet();
@@ -51,6 +55,7 @@ public:
 
     virtual std::string debugInfo() = 0;
 protected:
+    bool m_visible = true;
     TRSMatrix m_mat;
     TRSVec4 m_matColor;
     std::shared_ptr<TRSStateSet> m_pStateSet;

@@ -25,6 +25,11 @@ void CullVisitor::execute(TRSNode* pNode)
         return;
     }
 
+    if (!pNode->visible())
+    {
+        return;
+    }
+
     std::shared_ptr<TRSStateSet> pStateSet = pNode->getStateSet();
     if (!pStateSet)
     {

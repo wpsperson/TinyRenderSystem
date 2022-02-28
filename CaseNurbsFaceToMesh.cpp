@@ -122,9 +122,10 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
     viewer->addEventHandler(handler);
     std::shared_ptr<TRSGeode> Triangles3d = handler->get3DSpaceMesh();
     std::shared_ptr<TRSGeode> Triangles2d = handler->getParametricSpaceMesh();
+    handler->setReferrenceSurfaceMesh(BsplineSurFace);
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
-    //rootNodes->addChild(BsplineSurFace);
+    rootNodes->addChild(BsplineSurFace);
     rootNodes->addChild(Triangles2d);
     rootNodes->addChild(Triangles3d);
 
@@ -135,36 +136,41 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
 }
 
 InsertParametricPointHandler::InsertParametricPointHandler(BSplineSurface* nurbs, TRSCamera* camera)
-    : bsSurface(nurbs)
+    : m_BSSurface(nurbs)
     , m_camera(camera)
 {
-    Triangles2d = std::make_shared<TRSGeode>();
+    m_triangles2d = std::make_shared<TRSGeode>();
     TRSMatrix translateMatrix;
     translateMatrix.makeTranslate(parametricDomainTranslate, 0, 0);
-    Triangles2d->setMatrix(translateMatrix);
-    Triangles2d->getVAO()->setDrawType(GL_TRIANGLES);
-    Triangles2d->setColor(TRSVec4(0.5, 1, 1, 1));
-    Triangles2d->setPolygonMode(GL_LINE);
+    m_triangles2d->setMatrix(translateMatrix);
+    m_triangles2d->getVAO()->setDrawType(GL_TRIANGLES);
+    m_triangles2d->setColor(TRSVec4(0.5, 1, 1, 1));
+    m_triangles2d->setPolygonMode(GL_LINE);
 
-    Triangles3d = std::make_shared<TRSGeode>();
-    Triangles3d->getVAO()->setDrawType(GL_TRIANGLES);
-    Triangles3d->setColor(TRSVec4(0.5, 1, 1, 1));
-    Triangles3d->setPolygonMode(GL_LINE);
-    std::shared_ptr<TRSStateSet> Triangles3dSS = Triangles3d->getOrCreateStateSet();
+    m_triangles3d = std::make_shared<TRSGeode>();
+    m_triangles3d->getVAO()->setDrawType(GL_TRIANGLES);
+    m_triangles3d->setColor(TRSVec4(0.5, 1, 1, 1));
+    m_triangles3d->setPolygonMode(GL_LINE);
+    std::shared_ptr<TRSStateSet> Triangles3dSS = m_triangles3d->getOrCreateStateSet();
     TRSShader* shaderTriangles3d = Triangles3dSS->getShader();
     shaderTriangles3d->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
     initMesh();
     updateMesh();
 }
 
+void InsertParametricPointHandler::setReferrenceSurfaceMesh(std::shared_ptr<TRSGeode> surfaceMesh)
+{
+    m_refSurfaceMesh = surfaceMesh;
+}
+
 std::shared_ptr<TRSGeode> InsertParametricPointHandler::getParametricSpaceMesh()
 {
-    return Triangles2d;
+    return m_triangles2d;
 }
 
 std::shared_ptr<TRSGeode> InsertParametricPointHandler::get3DSpaceMesh()
 {
-    return Triangles3d;
+    return m_triangles3d;
 }
 
 void InsertParametricPointHandler::processRightMousePress(double xpos, double ypos, int mods)
@@ -196,40 +202,52 @@ void InsertParametricPointHandler::processRightMousePress(double xpos, double yp
     TRSVec3 ptOnXYPlane = worldCoordFar * (1 - proportion) + worldCoordNear * proportion;
     float u = ptOnXYPlane[0] - parametricDomainTranslate;
     float v = ptOnXYPlane[1];
-    print(worldCoordNear, "near");
-    print(worldCoordFar, "far");
-    std::cout << "v: " << u << ", v: " << v << std::endl;
+    //print(worldCoordNear, "near");
+    //print(worldCoordFar, "far");
+    //std::cout << "v: " << u << ", v: " << v << std::endl;
     bool parameterValid = u >= 0 && u <= 1 && v >= 0 && v <= 1;
     if (!parameterValid)
     {
         return;
     }
-    uvCoords.push_back(u);
-    uvCoords.push_back(v);
+    m_uvCoords.push_back(u);
+    m_uvCoords.push_back(v);
     updateMesh();
 }
 
 void InsertParametricPointHandler::processKeyPress(int key)
 {
-    if (TRS_KEY_S == key)
+    if (TRS_KEY_H == key)
+    {
+        m_refSurfaceMesh->setVisible(false);
+    }
+    else if (TRS_KEY_S == key)
+    {
+        m_refSurfaceMesh->setVisible(true);
+    }
+    if (TRS_KEY_E == key)
     {
         std::string filename;
+        std::cout << "please input the export file name:" << std::endl;
         std::cin >> filename;
         if (filename.empty())
         {
             return;
         }
         saveParameterToFile(filename);
+        std::cout << "Export uv coordinates successfully!" << std::endl;
     }
-    else if (TRS_KEY_L == key)
+    else if (TRS_KEY_I == key)
     {
         std::string filename;
+        std::cout << "please input the import file name:" << std::endl;
         std::cin >> filename;
         if (filename.empty())
         {
             return;
         }
         loadParameterFromFile(filename);
+        std::cout << "Import uv coordinates successfully!" << std::endl;
         updateMesh();
     }
 }
@@ -244,8 +262,8 @@ void InsertParametricPointHandler::initMesh()
         for (int uIndex = 0; uIndex < initUSize; uIndex++)
         {
             float u = float(uIndex) / (initUSize - 1);
-            uvCoords.push_back(u);
-            uvCoords.push_back(v);
+            m_uvCoords.push_back(u);
+            m_uvCoords.push_back(v);
         }
     }
 }
@@ -253,37 +271,37 @@ void InsertParametricPointHandler::initMesh()
 void InsertParametricPointHandler::updateMesh()
 {
     // generate parametric-domain mesh points
-    size_t MeshPointNumber = uvCoords.size() / 2;
-    parametricSpacePoints.clear();
+    size_t MeshPointNumber = m_uvCoords.size() / 2;
+    m_parametricSpacePoints.clear();
     for (size_t i = 0; i < MeshPointNumber; i++)
     {
-        float u = uvCoords[i * 2];
-        float v = uvCoords[i * 2 + 1];
-        parametricSpacePoints.push_back(u);
-        parametricSpacePoints.push_back(v);
-        parametricSpacePoints.push_back(0.0f);
+        float u = m_uvCoords[i * 2];
+        float v = m_uvCoords[i * 2 + 1];
+        m_parametricSpacePoints.push_back(u);
+        m_parametricSpacePoints.push_back(v);
+        m_parametricSpacePoints.push_back(0.0f);
     }
 
     // we map those triangles from parametric-domain into 3d-space. and draw those
-    parametricSpacePointsNormals.clear();
+    m_3DSpacePointsNormals.clear();
     float point[3];
     float normal[3];
     for (size_t i = 0; i < MeshPointNumber; i++)
     {
-        float u = uvCoords[i * 2];
-        float v = uvCoords[i * 2 + 1];
-        bsSurface->interpolatePoint(u, v, point);
-        bsSurface->interpolateNormal(u, v, normal);
-        parametricSpacePointsNormals.push_back(point[0]);
-        parametricSpacePointsNormals.push_back(point[1]);
-        parametricSpacePointsNormals.push_back(point[2]);
-        parametricSpacePointsNormals.push_back(normal[0]);
-        parametricSpacePointsNormals.push_back(normal[1]);
-        parametricSpacePointsNormals.push_back(normal[2]);
+        float u = m_uvCoords[i * 2];
+        float v = m_uvCoords[i * 2 + 1];
+        m_BSSurface->interpolatePoint(u, v, point);
+        m_BSSurface->interpolateNormal(u, v, normal);
+        m_3DSpacePointsNormals.push_back(point[0]);
+        m_3DSpacePointsNormals.push_back(point[1]);
+        m_3DSpacePointsNormals.push_back(point[2]);
+        m_3DSpacePointsNormals.push_back(normal[0]);
+        m_3DSpacePointsNormals.push_back(normal[1]);
+        m_3DSpacePointsNormals.push_back(normal[2]);
     }
 
     // and apply the Delaunay Triangulation to those points to generate triangles in parametric space.
-    delaunator::Delaunator delaunay(uvCoords);
+    delaunator::Delaunator delaunay(m_uvCoords);
     std::vector<size_t> allTriangles = delaunay.triangles;
     std::vector<unsigned int> indexArray2d;
     for (size_t idx : allTriangles)
@@ -291,8 +309,8 @@ void InsertParametricPointHandler::updateMesh()
         indexArray2d.push_back(static_cast<unsigned int>(idx));
     }
 
-    Triangles2d->readFromVertex(parametricSpacePoints.data(), parametricSpacePoints.size(), EnVertex, indexArray2d.data(), indexArray2d.size());
-    Triangles3d->readFromVertex(parametricSpacePointsNormals.data(), parametricSpacePointsNormals.size(), EnVertexNormal, indexArray2d.data(), indexArray2d.size());
+    m_triangles2d->readFromVertex(m_parametricSpacePoints.data(), m_parametricSpacePoints.size(), EnVertex, indexArray2d.data(), indexArray2d.size());
+    m_triangles3d->readFromVertex(m_3DSpacePointsNormals.data(), m_3DSpacePointsNormals.size(), EnVertexNormal, indexArray2d.data(), indexArray2d.size());
 }
 
 void InsertParametricPointHandler::saveParameterToFile(const std::string& fileName)
@@ -302,10 +320,10 @@ void InsertParametricPointHandler::saveParameterToFile(const std::string& fileNa
     {
         return;
     }
-    int uvCount = uvCoords.size();
+    int uvCount = m_uvCoords.size();
     std::string strNextLine = "\n";
     stream << uvCount << strNextLine;
-    for (double value : uvCoords)
+    for (double value : m_uvCoords)
     {
         stream << value << strNextLine;
     }
@@ -324,15 +342,15 @@ void InsertParametricPointHandler::loadParameterFromFile(const std::string& file
     getline(stream, strNextLine);
     std::stringstream ss(strNextLine);
     ss >> size;
-    uvCoords.clear();
-    uvCoords.reserve(size);
+    m_uvCoords.clear();
+    m_uvCoords.reserve(size);
     for (int i=0; i<size;i++)
     {
         double value;
         getline(stream, strNextLine);
         std::stringstream ss(strNextLine);
         ss >> value;
-        uvCoords.push_back(value);
+        m_uvCoords.push_back(value);
     }
     stream.close();
 }

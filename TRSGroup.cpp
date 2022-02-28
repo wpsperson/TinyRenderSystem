@@ -20,6 +20,24 @@ void TRSGroup::addChild(std::shared_ptr<TRSNode> ptr)
     TRSGroup::insertChild(m_pChildren.size(), ptr);
 }
 
+void TRSGroup::removeChild(TRSNode* pNode)
+{
+    std::vector<std::shared_ptr<TRSNode>>::iterator itr = m_pChildren.begin();
+    for (; itr != m_pChildren.end();)
+    {
+        TRSNode* curNode = (*itr).get();
+        if (curNode == pNode)
+        {
+            itr = m_pChildren.erase(itr);
+            break;
+        }
+        else
+        {
+            itr++;
+        }
+    }
+}
+
 size_t TRSGroup::childNum() const
 {
     return m_pChildren.size();

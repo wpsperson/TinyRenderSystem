@@ -110,27 +110,27 @@ void TRSDefaultCameraHandler::processKeyPress(int key)
     TRSVec3 right = m_camera->getRight();
     TRSVec3 up = m_camera->getUp();
     TRSVec3 move(0, 0, 0);
-    if (key == TRS_KEY_W)
+    if (key == TRS_KEY_UP)
     {
         move += front * m_MoveSpeed;
     }
-    else if (key == TRS_KEY_S)
+    else if (key == TRS_KEY_DOWN)
     {
         move -= front * m_MoveSpeed;
     }
-    else if (key == TRS_KEY_A)
+    else if (key == TRS_KEY_LEFT)
     {
         move -= right * m_MoveSpeed;
     }
-    else if (key == TRS_KEY_D)
+    else if (key == TRS_KEY_RIGHT)
     {
         move += right * m_MoveSpeed;
     }
-    else if (key == TRS_KEY_Q)
+    else if (key == TRS_KEY_PAGE_UP)
     {
         move += up * m_MoveSpeed;
     }
-    else if (key == TRS_KEY_E)
+    else if (key == TRS_KEY_PAGE_DOWN)
     {
         move -= up * m_MoveSpeed;
     }

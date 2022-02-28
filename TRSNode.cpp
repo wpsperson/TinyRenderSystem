@@ -36,6 +36,16 @@ void TRSNode::setColor(const TRSVec4& color)
     m_matColor = color;
 }
 
+void TRSNode::setVisible(bool vis)
+{
+    m_visible = vis;
+}
+
+bool TRSNode::visible() const
+{
+    return m_visible;
+}
+
 std::shared_ptr<TRSVAO> TRSNode::getVAO() const
 {
     return nullptr;
