@@ -1,4 +1,4 @@
-#include "TRSCharacterTexture.h"
+﻿#include "TRSCharacterTexture.h"
 #include <glad\glad.h>
 #include <algorithm>
 

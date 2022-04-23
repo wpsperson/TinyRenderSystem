@@ -1,4 +1,4 @@
-#include "CaseStencilTest.h"
+ï»¿#include "CaseStencilTest.h"
 
 #include <iostream>
 
@@ -93,14 +93,14 @@ int CaseStencilTest()
     unsigned int BoxTexture;
     glGenTextures(1, &BoxTexture);
     glBindTexture(GL_TEXTURE_2D, BoxTexture);
-    // Îªµ±Ç°°ó¶¨µÄÎÆÀí¶ÔÏóÉèÖÃ»·ÈÆ¡¢¹ıÂË·½Ê½
+    // ä¸ºå½“å‰ç»‘å®šçš„çº¹ç†å¯¹è±¡è®¾ç½®ç¯ç»•ã€è¿‡æ»¤æ–¹å¼
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // ¼ÓÔØ²¢Éú³ÉÎÆÀí
+    // åŠ è½½å¹¶ç”Ÿæˆçº¹ç†
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);//¼ÓÔØÍ¼Æ¬·­×ª
+    stbi_set_flip_vertically_on_load(true);//åŠ è½½å›¾ç‰‡ç¿»è½¬
     unsigned char *data = stbi_load("resources/textures/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
@@ -116,7 +116,7 @@ int CaseStencilTest()
     unsigned int FaceTexture;
     glGenTextures(1, &FaceTexture);
     glBindTexture(GL_TEXTURE_2D, FaceTexture);
-    // Îªµ±Ç°°ó¶¨µÄÎÆÀí¶ÔÏóÉèÖÃ»·ÈÆ¡¢¹ıÂË·½Ê½
+    // ä¸ºå½“å‰ç»‘å®šçš„çº¹ç†å¯¹è±¡è®¾ç½®ç¯ç»•ã€è¿‡æ»¤æ–¹å¼
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -149,9 +149,9 @@ int CaseStencilTest()
     TRSMatrix TranslateMatrix;
     TranslateMatrix.makeTranslate(0.8f, 0.5f, 0.1f);
     TRSMatrix SecondModelScaleUpMatrix = TranslateMatrix * ScaleUpMatrix;
-    //glUniform1iÉèÖÃÃ¿¸ö²ÉÑùÆ÷µÄ·½Ê½¸æËßOpenGLÃ¿¸ö×ÅÉ«Æ÷²ÉÑùÆ÷ÊôÓÚÄÄ¸öÎÆÀíµ¥Ôª¡£ÎÒÃÇÖ»ĞèÒªÉèÖÃÒ»´Î¼´¿É£¬ËùÒÔÕâ¸ö»á·ÅÔÚäÖÈ¾Ñ­»·µÄÇ°Ãæ£º
-    //×ÅÉ«Æ÷ÖĞtexture0¶ÔÓ¦GL_TEXTURE0£¨BoxTexture£©
-    //×ÅÉ«Æ÷ÖĞtexture1¶ÔÓ¦GL_TEXTURE1£¨FaceTexture£©
+    //glUniform1iè®¾ç½®æ¯ä¸ªé‡‡æ ·å™¨çš„æ–¹å¼å‘Šè¯‰OpenGLæ¯ä¸ªç€è‰²å™¨é‡‡æ ·å™¨å±äºå“ªä¸ªçº¹ç†å•å…ƒã€‚æˆ‘ä»¬åªéœ€è¦è®¾ç½®ä¸€æ¬¡å³å¯ï¼Œæ‰€ä»¥è¿™ä¸ªä¼šæ”¾åœ¨æ¸²æŸ“å¾ªç¯çš„å‰é¢ï¼š
+    //ç€è‰²å™¨ä¸­texture0å¯¹åº”GL_TEXTURE0ï¼ˆBoxTextureï¼‰
+    //ç€è‰²å™¨ä¸­texture1å¯¹åº”GL_TEXTURE1ï¼ˆFaceTextureï¼‰
     int nPosTexture0 = glGetUniformLocation(shaderProgram, "texture0");
     int nPosTexture1 = glGetUniformLocation(shaderProgram, "texture1");
     glUniform1i(nPosTexture0, 0);
@@ -163,7 +163,7 @@ int CaseStencilTest()
     double m_fLastTime = 0;
 
 
-    // Æô¶¯Ä£°å²âÊÔ
+    // å¯åŠ¨æ¨¡æ¿æµ‹è¯•
     glEnable(GL_STENCIL_TEST); //***
 
     while (!glfwWindowShouldClose(window))

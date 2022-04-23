@@ -1,7 +1,7 @@
-/*!  
+ï»¿/*!  
  *@brief    user custom config define
  *@author   wangps
- *@date     2021Äê5ÔÂ1ÈÕ
+ *@date     2021å¹´5æœˆ1æ—¥
  */
 
 #pragma once

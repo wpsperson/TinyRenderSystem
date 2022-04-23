@@ -1,4 +1,4 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -19,7 +19,7 @@ void CALLBACK reshape(GLsizei w,GLsizei h)
 	glViewport(0,0,w,h);
 }
 
-//»æÖÆÒ»¸öÕûÔ²
+//ç»˜åˆ¶ä¸€ä¸ªæ•´åœ†
 void MidCircle(int x0, int y0, int r)
 {
 	int x,y;
@@ -28,8 +28,8 @@ void MidCircle(int x0, int y0, int r)
 	y = r;
 	func = 1.25 - r;
 
-	glColor3f(0.0f,1.0f,0.0f); //ÂÌÉ«
-	glPointSize(1.0f); //µã´óĞ¡
+	glColor3f(0.0f,1.0f,0.0f); //ç»¿è‰²
+	glPointSize(1.0f); //ç‚¹å¤§å°
 	glBegin(GL_POINTS);
 	while (x<=y)
 	{

@@ -1,7 +1,7 @@
-/**
-*	ÊµÏÖÒ»¸öÎÆÀíÌùÍ¼³¡¾°;
-*	¶¯Ì¬ÔË¶¯µÄ²èºø;
-*	¼òµ¥µÄ½»»¥²Ù×÷;
+ï»¿/**
+*	å®ç°ä¸€ä¸ªçº¹ç†è´´å›¾åœºæ™¯;
+*	åŠ¨æ€è¿åŠ¨çš„èŒ¶å£¶;
+*	ç®€å•çš„äº¤äº’æ“ä½œ;
 **/
 #include <iostream>
 #include <string>
@@ -11,7 +11,7 @@
 #include <GLAUX.H>
 #include <glut.h>
 
-//----µÚÒ»²¿·Ö£ºÈ«¾Ö±äÁ¿-----------------------------------------------------------------;
+//----ç¬¬ä¸€éƒ¨åˆ†ï¼šå…¨å±€å˜é‡-----------------------------------------------------------------;
 
 GLfloat dist=1.5f; //distance from the eye
 GLfloat x_angle=0.0f, y_angle=0.0f; //angle of eye
@@ -23,7 +23,7 @@ GLfloat pot_speed_x = 0.01, pot_speed_y = 0.015, pot_speed_z = 0.017;
 GLfloat pot_y_angle = 0.0;
 GLfloat pot_y_angle_speed = 2.0f;
 
-GLuint* frontalTextureIndex, *sideTextureIndex, *groundTextureIndex, *ceilTextureIndex;//Á½ÖÖÎÆÀíÌùÍ¼;
+GLuint* frontalTextureIndex, *sideTextureIndex, *groundTextureIndex, *ceilTextureIndex;//ä¸¤ç§çº¹ç†è´´å›¾;
 
 //GLdouble VertexArray[8][3] = { {-2.0, -1.0, -2.0},  {2.0, -1.0, -2.0},  {2.0, 1.0, -2.0},  {-2.0, 1.0, -2.0},  
 //							{-2.0, -1.0, 2.0},  {2.0, -1.0, 2.0},  {2.0, 1.0, 2.0},  {-2.0, 1.0, 2.0} };
@@ -31,14 +31,14 @@ GLdouble VertexArray[8][3] = { {-20.0, -10.0, -20.0},  {20.0, -10.0, -20.0},  {2
 								{-20.0, -10.0, 20.0},  {20.0, -10.0, 20.0},  {20.0, 10.0, 20.0},  {-20.0, 10.0, 20.0} };
 int   tetra[6][4] = { {1,2,3,0}, {0,1,5,4}, {1,2,6,5}, {2,3,7,6}, {3,0,4,7}, {4,5,6,7} };
 
-//----µÚ¶ş²¿·Ö£º±ãÀûº¯Êı-----------------------------------------------------------------;
-//¸ù¾İÒ»¸öÎÄ¼şÃûÉú³ÉÎÆÀí;
+//----ç¬¬äºŒéƒ¨åˆ†ï¼šä¾¿åˆ©å‡½æ•°-----------------------------------------------------------------;
+//æ ¹æ®ä¸€ä¸ªæ–‡ä»¶åç”Ÿæˆçº¹ç†;
 GLuint* generateTextureFromPicture(const std::string& picture_name)
 {
 	GLuint* texture_index_ptr = new GLuint;
 	AUX_RGBImageRec *MyPicture;
 	MyPicture = auxDIBImageLoad(picture_name.c_str() );
-	glGenTextures(1, texture_index_ptr);   //£¨glGenTextures¾ÍÊÇÓÃÀ´²úÉúÄãÒª²Ù×÷µÄÎÆÀí¶ÔÏóµÄË÷ÒıµÄ£¬±ÈÈçÄã¸æËßOpenGL£¬ÎÒĞèÒª5¸öÎÆÀí¶ÔÏó£¬Ëü»á´ÓÃ»ÓĞÓÃµ½µÄÕûÊıÀï·µ»Ø5¸ö¸øÄã£©;
+	glGenTextures(1, texture_index_ptr);   //ï¼ˆglGenTextureså°±æ˜¯ç”¨æ¥äº§ç”Ÿä½ è¦æ“ä½œçš„çº¹ç†å¯¹è±¡çš„ç´¢å¼•çš„ï¼Œæ¯”å¦‚ä½ å‘Šè¯‰OpenGLï¼Œæˆ‘éœ€è¦5ä¸ªçº¹ç†å¯¹è±¡ï¼Œå®ƒä¼šä»æ²¡æœ‰ç”¨åˆ°çš„æ•´æ•°é‡Œè¿”å›5ä¸ªç»™ä½ ï¼‰;
 	glBindTexture(GL_TEXTURE_2D, *texture_index_ptr);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, MyPicture->sizeX, MyPicture->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, MyPicture->data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -192,7 +192,7 @@ void calcPotPosition()
 
 }
 
-//----µÚÈı²¿·Ö£º³õÊ¼º¯ÊıºÍ»Øµ÷º¯Êı-----------------------------------------------------------------;
+//----ç¬¬ä¸‰éƒ¨åˆ†ï¼šåˆå§‹å‡½æ•°å’Œå›è°ƒå‡½æ•°-----------------------------------------------------------------;
 void myInit()
 {
 	glClearColor(1.0,1.0,1.0,0.0);
@@ -212,12 +212,12 @@ void myDisplay(void)
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix();
-	glTranslated(0.0, 0.0, -dist); //¶ÔÓ¦±ä»»ÕóT1
-	glRotatef(x_angle, 1.0f, 0.0f, 0.0f); //¶ÔÓ¦±ä»»ÕóT2
-	glRotatef(y_angle, 0.0f, 1.0f, 0.0f); //¶ÔÓ¦±ä»»ÕóT3
+	glTranslated(0.0, 0.0, -dist); //å¯¹åº”å˜æ¢é˜µT1
+	glRotatef(x_angle, 1.0f, 0.0f, 0.0f); //å¯¹åº”å˜æ¢é˜µT2
+	glRotatef(y_angle, 0.0f, 1.0f, 0.0f); //å¯¹åº”å˜æ¢é˜µT3
 		
 		glPushMatrix();
-		glTranslated(0.0, -3.0, -10.0f ); //µ÷ÕûÒ»ÏÂÎ»ÖÃ;
+		glTranslated(0.0, -3.0, -10.0f ); //è°ƒæ•´ä¸€ä¸‹ä½ç½®;
 			glPushMatrix();
 			calcPotPosition();
 			glTranslated( potx, poty, potz );
@@ -238,13 +238,13 @@ void reshape(int width, int height)
 {
 	glViewport(0,0,width,height);
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity(); //¶ÔÓ¦µ¥Î»ÕóI
+	glLoadIdentity(); //å¯¹åº”å•ä½é˜µI
 
 	if(height < 1) height=1;
-	gluPerspective(45.0, 1.0*width/height, 0.01, 50.0); //¶ÔÓ¦±ä»»ÕóT0
+	gluPerspective(45.0, 1.0*width/height, 0.01, 50.0); //å¯¹åº”å˜æ¢é˜µT0
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity(); //¶ÔÓ¦µ¥Î»ÕóI
+	glLoadIdentity(); //å¯¹åº”å•ä½é˜µI
 	
 }
 
@@ -304,14 +304,14 @@ void timer( int value ) {
 
 }
 
-//----µÚËÄ²¿·Ö£ºÖ÷º¯Êı-----------------------------------------------------------------;
+//----ç¬¬å››éƒ¨åˆ†ï¼šä¸»å‡½æ•°-----------------------------------------------------------------;
 int main(int argc, char** argv )
 {
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(640,480);
 	glutInitWindowPosition(100,150);
-	glutCreateWindow("Ò»¸öOpenGL¶¯Ì¬³¡¾°Õ¹Ê¾ ");
+	glutCreateWindow("ä¸€ä¸ªOpenGLåŠ¨æ€åœºæ™¯å±•ç¤º ");
 	glutDisplayFunc(myDisplay);
 	glutReshapeFunc( reshape );
 	glutMouseFunc( mouseClickFunction );

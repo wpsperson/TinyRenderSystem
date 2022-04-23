@@ -1,8 +1,8 @@
-/*
+ï»¿/*
 *author:	wpsperson
 *date:		20141012
 *function:	polyfill
-*ps£º		¿ÉÒÔÓÃÀ´½»×÷Òµ£¨×îºÃ¸ÄÒ»¸Ä£©£¬µ«ÎªÁË×ğÖØÔ­×÷Õß£¬Çë²»Òª´«µ½ÍøÉÏÈ¥¡£
+*psï¼š		å¯ä»¥ç”¨æ¥äº¤ä½œä¸šï¼ˆæœ€å¥½æ”¹ä¸€æ”¹ï¼‰ï¼Œä½†ä¸ºäº†å°Šé‡åŸä½œè€…ï¼Œè¯·ä¸è¦ä¼ åˆ°ç½‘ä¸Šå»ã€‚
 **/
 
 #include <iostream>
@@ -12,11 +12,11 @@
 #include<gl/Gl.h>
 #include<gl/glu.h>
 #include"glut.h"
-//¶¨ÒåÉ¨ÃèÏßµÄ·¶Î§¡£
+//å®šä¹‰æ‰«æçº¿çš„èŒƒå›´ã€‚
 #define  YMAX 500   
 #define  YMIN 0
-#define  precision 0.01 //¸¡µãÊıÅĞ¶ÏÏàµÈ
-//±íÊ¾µ¥¸öµÄ¶¥µã¡£
+#define  precision 0.01 //æµ®ç‚¹æ•°åˆ¤æ–­ç›¸ç­‰
+//è¡¨ç¤ºå•ä¸ªçš„é¡¶ç‚¹ã€‚
 class Point
 {
 public:
@@ -26,7 +26,7 @@ public:
 	float _yCoordinate;
 };
 
-//±íÊ¾¶à±ßĞÎ¡£ÓÃÒ»×é¶¥µãÀ´±íÊ¾Ò»¸ö¶à±ßĞÎ£¬ÒªÇóÊäÈëµÄ¶¥µã±ØĞë°´ÕÕ¶à±ßĞÎÁ¬ÏßË³ĞòÊäÈë
+//è¡¨ç¤ºå¤šè¾¹å½¢ã€‚ç”¨ä¸€ç»„é¡¶ç‚¹æ¥è¡¨ç¤ºä¸€ä¸ªå¤šè¾¹å½¢ï¼Œè¦æ±‚è¾“å…¥çš„é¡¶ç‚¹å¿…é¡»æŒ‰ç…§å¤šè¾¹å½¢è¿çº¿é¡ºåºè¾“å…¥
 class ClassMyPolygon
 {	
 public:
@@ -46,12 +46,12 @@ public:
 		for (std::vector<Point>::iterator itr=_polygonPointlist.begin(); itr!=_polygonPointlist.end(); itr++)
 		{	
 			i++;
-			std::cout<<"µÚ"<<i<<"¸ö¶¥µãµÄ×ø±êÊÇ£º "<<(*itr)._yCoordinate<<"£¬ "<<(*itr)._yCoordinate<<std::endl;
+			std::cout<<"ç¬¬"<<i<<"ä¸ªé¡¶ç‚¹çš„åæ ‡æ˜¯ï¼š "<<(*itr)._yCoordinate<<"ï¼Œ "<<(*itr)._yCoordinate<<std::endl;
 		}
 	}
 };
 
-//±íÊ¾Ò»ÖÖÑÕÉ«¡£
+//è¡¨ç¤ºä¸€ç§é¢œè‰²ã€‚
 class ColorClass
 {
 public:
@@ -59,7 +59,7 @@ public:
 	float _red,_green,_blue;
 };
 
-//¿¼ÂÇµ½»îĞÔ±ß±íºÍĞÂ±ß±í¶¼ÊÇ±ß±í£¬Í¨ÓÃ¸Ã½á¹¹Ìå
+//è€ƒè™‘åˆ°æ´»æ€§è¾¹è¡¨å’Œæ–°è¾¹è¡¨éƒ½æ˜¯è¾¹è¡¨ï¼Œé€šç”¨è¯¥ç»“æ„ä½“
 struct ET
 {
 	ET(){}
@@ -69,7 +69,7 @@ struct ET
 	ET* pNextET;
 };
 
-//ÊµÏÖ½«Ò»¸öÔªËØ²åÈëµ½Á´±íÖĞÈ¥,²»ÅÅĞò£¬Ö»ÊÇ°´ÕÕÌí¼ÓµÄÏÈºóË³Ğò¡£
+//å®ç°å°†ä¸€ä¸ªå…ƒç´ æ’å…¥åˆ°é“¾è¡¨ä¸­å»,ä¸æ’åºï¼Œåªæ˜¯æŒ‰ç…§æ·»åŠ çš„å…ˆåé¡ºåºã€‚
 void insertET(ET* &et_list, ET* &_et)
 {
 	if (et_list == NULL)
@@ -79,29 +79,29 @@ void insertET(ET* &et_list, ET* &_et)
 	else
 	{
 		ET* rear = et_list;
-		while (rear->pNextET != NULL)//Ê¹µÃrearÖ¸ÏòÎ²½Úµã£¨µ¹ÊıµÚ¶ş½ÚµãµÄÖ¸Õë²¿·Ö£©¡£
+		while (rear->pNextET != NULL)//ä½¿å¾—rearæŒ‡å‘å°¾èŠ‚ç‚¹ï¼ˆå€’æ•°ç¬¬äºŒèŠ‚ç‚¹çš„æŒ‡é’ˆéƒ¨åˆ†ï¼‰ã€‚
 		{
 			rear = rear->pNextET;
 		}
-		//Õâ²ÅÊÇ¸Ä±äÁ´±íµÄºËĞÄÓï¾ä¡£
+		//è¿™æ‰æ˜¯æ”¹å˜é“¾è¡¨çš„æ ¸å¿ƒè¯­å¥ã€‚
 		rear ->pNextET = _et;
 	}
 	
 }
 
-//ÅĞ¶ÏµÚÒ»¸öÔªËØ±ÈµÚ¶ş¸öĞ¡£¿
+//åˆ¤æ–­ç¬¬ä¸€ä¸ªå…ƒç´ æ¯”ç¬¬äºŒä¸ªå°ï¼Ÿ
 bool littleThan(ET* firstET, ET* secondET)
 {
 	if (firstET == NULL)
 	{
-		std::cout<<"³ÌĞòlittleThanÖĞµÚ1²ÎÊıÎªNULL£¬³ö´í£¡ "<<std::endl;
+		std::cout<<"ç¨‹åºlittleThanä¸­ç¬¬1å‚æ•°ä¸ºNULLï¼Œå‡ºé”™ï¼ "<<std::endl;
 	}
-	if (secondET == NULL)//°´ÕÕ²åÈëµÄ¹æÔò£¬Èç¹ûx×î´ó£¬Ôò²åÔÚ×îºó£¬ÄÇÃ´NULL×î´ó
+	if (secondET == NULL)//æŒ‰ç…§æ’å…¥çš„è§„åˆ™ï¼Œå¦‚æœxæœ€å¤§ï¼Œåˆ™æ’åœ¨æœ€åï¼Œé‚£ä¹ˆNULLæœ€å¤§
 	{
-		std::cout<<"³ÌĞòlittleThanÖĞµÚ2²ÎÊıÎªNULL£¬³ö´í£¡ "<<std::endl;
+		std::cout<<"ç¨‹åºlittleThanä¸­ç¬¬2å‚æ•°ä¸ºNULLï¼Œå‡ºé”™ï¼ "<<std::endl;
 	}
 	if ( (firstET->xBeginCord < secondET->xBeginCord) || 
-		( fabs(firstET->xBeginCord - secondET->xBeginCord) < precision && (firstET->dxPerY < secondET->dxPerY) ))//ËùÖ¸½Úµã±ÈÁíÒ»¸öĞ¡£¬
+		( fabs(firstET->xBeginCord - secondET->xBeginCord) < precision && (firstET->dxPerY < secondET->dxPerY) ))//æ‰€æŒ‡èŠ‚ç‚¹æ¯”å¦ä¸€ä¸ªå°ï¼Œ
 	{
 		return true;		
 
@@ -109,47 +109,47 @@ bool littleThan(ET* firstET, ET* secondET)
 	return false;
 }
 
-//ÊµÏÖ½«Ò»¸öÁ´±íNET_YSCANÖĞµÄËùÓĞ½Úµã°´ÕÕ x ÖµÅÅĞò²åÈëµ½»îĞÔ±íÖĞ
+//å®ç°å°†ä¸€ä¸ªé“¾è¡¨NET_YSCANä¸­çš„æ‰€æœ‰èŠ‚ç‚¹æŒ‰ç…§ x å€¼æ’åºæ’å…¥åˆ°æ´»æ€§è¡¨ä¸­
 void insertAETwithRank(ET* &AET, ET* &NET_YSCAN)
 {
-	//NET_YSCAN = NULLÊ²Ã´¶¼²»Ö´ĞĞ
+	//NET_YSCAN = NULLä»€ä¹ˆéƒ½ä¸æ‰§è¡Œ
 	while (NET_YSCAN != NULL)
 	{
-		ET* temp_NET_YScan = NET_YSCAN;//temp_NET_YScan ½«NET_YSCANËùÖ¸µÄ½Úµã¡°Õª¡±³öÀ´£¬×÷ÎªÒ»¸ö¶ÀÁ¢µÄ½Úµã¡£
-		NET_YSCAN = NET_YSCAN->pNextET;//ÓÃÍêNET_YSCANËùÖ¸½Úµãºó£¬NET_YSCANÖ¸ÏòÏÂÒ»¸ö,×îÖÕNET_YSCAN×Ô»Ù¡£
+		ET* temp_NET_YScan = NET_YSCAN;//temp_NET_YScan å°†NET_YSCANæ‰€æŒ‡çš„èŠ‚ç‚¹â€œæ‘˜â€å‡ºæ¥ï¼Œä½œä¸ºä¸€ä¸ªç‹¬ç«‹çš„èŠ‚ç‚¹ã€‚
+		NET_YSCAN = NET_YSCAN->pNextET;//ç”¨å®ŒNET_YSCANæ‰€æŒ‡èŠ‚ç‚¹åï¼ŒNET_YSCANæŒ‡å‘ä¸‹ä¸€ä¸ª,æœ€ç»ˆNET_YSCANè‡ªæ¯ã€‚
 		temp_NET_YScan->pNextET = NULL;
 
 		
-		if (AET == NULL)//Ê×ÏÈÅÅ³ıµôAETÎªNULLµÄÇé¿ö¡£
+		if (AET == NULL)//é¦–å…ˆæ’é™¤æ‰AETä¸ºNULLçš„æƒ…å†µã€‚
 		{
-			AET = temp_NET_YScan;//ÒÑ²åÈë£¬²åÔÚÎ²²¿¡£
+			AET = temp_NET_YScan;//å·²æ’å…¥ï¼Œæ’åœ¨å°¾éƒ¨ã€‚
 			continue;
 		}
 
-		ET* temp = AET;//Ö»ÒªAET²»ÊÇNULL£¬ÔòÍêÈ«ÓÃtempÊ¤ÈÎ¡£
-		if (littleThan(temp_NET_YScan,AET))//ÅĞ¶ÏÊ×½Úµã¡£
+		ET* temp = AET;//åªè¦AETä¸æ˜¯NULLï¼Œåˆ™å®Œå…¨ç”¨tempèƒœä»»ã€‚
+		if (littleThan(temp_NET_YScan,AET))//åˆ¤æ–­é¦–èŠ‚ç‚¹ã€‚
 		{
 			temp_NET_YScan->pNextET = AET;
-			AET = temp_NET_YScan;//ÒÑ²åÈë£¬²åÈëµ½Á´±íÊ×²¿¡£
+			AET = temp_NET_YScan;//å·²æ’å…¥ï¼Œæ’å…¥åˆ°é“¾è¡¨é¦–éƒ¨ã€‚
 			continue;
 		}
 		else
 		{
-			while(temp->pNextET != NULL)//ÅĞ¶ÏÖĞ¼äÄ³Á½¸öÖ®¼ä½Úµã¡£
+			while(temp->pNextET != NULL)//åˆ¤æ–­ä¸­é—´æŸä¸¤ä¸ªä¹‹é—´èŠ‚ç‚¹ã€‚
 			{
 				if (littleThan(temp,temp_NET_YScan)&&littleThan(temp_NET_YScan,temp->pNextET))
 				{
-					//´ËÊ±tempËùÖ¸µÄ½ÚµãÏÂÒ»¸öÎ»ÖÃ²åÈëtemp_NET_YScan
+					//æ­¤æ—¶tempæ‰€æŒ‡çš„èŠ‚ç‚¹ä¸‹ä¸€ä¸ªä½ç½®æ’å…¥temp_NET_YScan
 					temp_NET_YScan->pNextET = temp->pNextET;
 					temp->pNextET = temp_NET_YScan;
 					break;
 				}
 				temp = temp->pNextET;					
 			}
-			//ÔËĞĞµ½´ËÒ»¶¨ÊÇtemp_NET_YScan±ÈÎ²²¿½Úµã»¹Òª´ó¡£
-			if (temp->pNextET == NULL)//ÅĞ¶ÏÎ²½Úµã¡£
+			//è¿è¡Œåˆ°æ­¤ä¸€å®šæ˜¯temp_NET_YScanæ¯”å°¾éƒ¨èŠ‚ç‚¹è¿˜è¦å¤§ã€‚
+			if (temp->pNextET == NULL)//åˆ¤æ–­å°¾èŠ‚ç‚¹ã€‚
 			{			
-				temp->pNextET = temp_NET_YScan;	//ÒÑ²åÈë£¬²åÈëµ½Á´±íÎ²²¿£¬ÔòÓ¦¸ÃÔÚ´Ë¸ãºÃ¡£				
+				temp->pNextET = temp_NET_YScan;	//å·²æ’å…¥ï¼Œæ’å…¥åˆ°é“¾è¡¨å°¾éƒ¨ï¼Œåˆ™åº”è¯¥åœ¨æ­¤æå¥½ã€‚				
 				continue;
 			}
 		}
@@ -159,7 +159,7 @@ void insertAETwithRank(ET* &AET, ET* &NET_YSCAN)
 	}
 }
 
-//»îĞÔ±ß±íµÄ¸üĞÂ
+//æ´»æ€§è¾¹è¡¨çš„æ›´æ–°
 void updateAET(ET* &AET)
 {
 	ET* temp = AET;
@@ -170,11 +170,11 @@ void updateAET(ET* &AET)
 	}
 }
 
-//ÓÃÅä¶Ô·¨½øĞĞ»æÖÆÏàÓ¦ĞĞµÄµã¡£
+//ç”¨é…å¯¹æ³•è¿›è¡Œç»˜åˆ¶ç›¸åº”è¡Œçš„ç‚¹ã€‚
 void drawScan(ColorClass color,int YScan, ET* AET)
 {
-	glColor3f(color._red, color._green, color._blue); //Ö¸¶¨ÑÕÉ«
-	glPointSize(1.0f); //µã´óĞ¡
+	glColor3f(color._red, color._green, color._blue); //æŒ‡å®šé¢œè‰²
+	glPointSize(1.0f); //ç‚¹å¤§å°
 	glBegin(GL_POINTS);
 	if (AET != NULL)
 	{
@@ -187,32 +187,32 @@ void drawScan(ColorClass color,int YScan, ET* AET)
 				glVertex2i(i,YScan);
 				
 			}
-			tempBack = tempBack->pNextET;//ÏòÇ°´«µİÁ½¸ö
+			tempBack = tempBack->pNextET;//å‘å‰ä¼ é€’ä¸¤ä¸ª
 			tempBack = tempBack->pNextET;
-			tempFore = tempFore->pNextET;//´ËÊ±ËûÃÇÁ©×ßÔÚÍ¬Ò»¸öÎ»ÖÃ¡£
-			if (tempFore == NULL)//±íÃ÷»îĞÔ±íµ½Í·ÁË¡£
+			tempFore = tempFore->pNextET;//æ­¤æ—¶ä»–ä»¬ä¿©èµ°åœ¨åŒä¸€ä¸ªä½ç½®ã€‚
+			if (tempFore == NULL)//è¡¨æ˜æ´»æ€§è¡¨åˆ°å¤´äº†ã€‚
 			{
 				break;
 			}
 			tempFore = tempFore->pNextET;
 		}
 	}
-	std::cout<<"»æÖÆÍêÁËµÚ "<<YScan<<" ĞĞ£¡  "<<std::endl;
+	std::cout<<"ç»˜åˆ¶å®Œäº†ç¬¬ "<<YScan<<" è¡Œï¼  "<<std::endl;
 	glEnd();
 }
 
-//É¾³ıAETÖĞ ÖµÊÇYScanµÄ½Úµã¡£
+//åˆ é™¤AETä¸­ å€¼æ˜¯YScançš„èŠ‚ç‚¹ã€‚
 void deleteETnode(int YScan,ET* &AET)
 {
 	if (AET != NULL)
 	{		
 		ET*  tempBack= AET;
 		ET*  tempFore= AET->pNextET;
-		while (tempFore != NULL)//´ÓµÚ¶ş¸ö½ÚµãÒ»Ö±µ½×îºó
+		while (tempFore != NULL)//ä»ç¬¬äºŒä¸ªèŠ‚ç‚¹ä¸€ç›´åˆ°æœ€å
 		{
 			if (tempFore->yMaxCord == YScan)
 			{
-				tempBack->pNextET = tempFore->pNextET;//´Ë´¦É¾³ıÁË¸Ã½Úµã¡£
+				tempBack->pNextET = tempFore->pNextET;//æ­¤å¤„åˆ é™¤äº†è¯¥èŠ‚ç‚¹ã€‚
 				delete(tempFore);
 				tempFore = tempBack->pNextET;
 			}
@@ -222,12 +222,12 @@ void deleteETnode(int YScan,ET* &AET)
 				tempFore = tempFore->pNextET;
 			}
 		}
-		//×îºóÔÙÅĞ¶ÏµÚÒ»¸ö½ÚµãÊÇ·ñÂú×ãÌõ¼ş¡£
+		//æœ€åå†åˆ¤æ–­ç¬¬ä¸€ä¸ªèŠ‚ç‚¹æ˜¯å¦æ»¡è¶³æ¡ä»¶ã€‚
 		if (AET->yMaxCord == YScan)
 		{	
 			ET* temp = AET;			
-			AET = AET->pNextET;//É¾³ıµÚÒ»¸ö½Úµã
-			delete(temp); //ÊÍ·ÅÄÚ´æ¡£
+			AET = AET->pNextET;//åˆ é™¤ç¬¬ä¸€ä¸ªèŠ‚ç‚¹
+			delete(temp); //é‡Šæ”¾å†…å­˜ã€‚
 		}
 
 	}
@@ -236,15 +236,15 @@ void deleteETnode(int YScan,ET* &AET)
 }
 
 
-//ºËĞÄ³ÌĞò---É¨ÃèÏßËã·¨
+//æ ¸å¿ƒç¨‹åº---æ‰«æçº¿ç®—æ³•
 void polyfill(ClassMyPolygon polygon, ColorClass color)
 {
-	//Ê×ÏÈÊÇ½¨Á¢ĞÂ±ß±í	
-	//ĞÂ±ß±í³õÊ¼»¯ÎªNull(ÓĞ¶àÉÙÉ¨ÃæÏß¾ÍÓĞ¶àÉÙĞÂ±ß±í¡£)
+	//é¦–å…ˆæ˜¯å»ºç«‹æ–°è¾¹è¡¨	
+	//æ–°è¾¹è¡¨åˆå§‹åŒ–ä¸ºNull(æœ‰å¤šå°‘æ‰«é¢çº¿å°±æœ‰å¤šå°‘æ–°è¾¹è¡¨ã€‚)
 	std::vector<ET*> NET(YMAX-YMIN+1,NULL);
 	std::vector<Point> polygonPointList = polygon.getPointList();	
 	int lineNum = polygonPointList.size();
-	//iºÍj·Ö±ğ±íÊ¾¶à±ßĞÎÃ¿Ò»Ìõ±ßÁ½¸ö¶ËµãµÄĞòºÅ¡£ÌØ±ğµØ£¬×îºóÒ»¸öµãºÍµÚÒ»¸öµãÀ´×é³ÉÏß¶Î¡£
+	//iå’Œjåˆ†åˆ«è¡¨ç¤ºå¤šè¾¹å½¢æ¯ä¸€æ¡è¾¹ä¸¤ä¸ªç«¯ç‚¹çš„åºå·ã€‚ç‰¹åˆ«åœ°ï¼Œæœ€åä¸€ä¸ªç‚¹å’Œç¬¬ä¸€ä¸ªç‚¹æ¥ç»„æˆçº¿æ®µã€‚
 	int j = 0; 
 	for (int i=0; i<lineNum; i++)
 	{	
@@ -260,9 +260,9 @@ void polyfill(ClassMyPolygon polygon, ColorClass color)
 			float tempDx = (polygonPointList[j]._xCoordinate-polygonPointList[i]._xCoordinate)/
 							(polygonPointList[j]._yCoordinate-polygonPointList[i]._yCoordinate);
 			int tempYMax = polygonPointList[j]._yCoordinate;
-			//ÊÇ·ñNET[pos]Îª¿Õ£¬ÔÚº¯ÊıÄÚ²¿ÓĞÅĞ¶Ï¡£
+			//æ˜¯å¦NET[pos]ä¸ºç©ºï¼Œåœ¨å‡½æ•°å†…éƒ¨æœ‰åˆ¤æ–­ã€‚
 			ET* temp = new ET(tempx, tempDx, tempYMax);
-			temp->pNextET = NULL;//×îĞÂ³õÊ¼µÄÁ´±í½Úµã£¬±ØĞë´¦ÀíºÃÖ¸ÕëÎÊÌâ¡£
+			temp->pNextET = NULL;//æœ€æ–°åˆå§‹çš„é“¾è¡¨èŠ‚ç‚¹ï¼Œå¿…é¡»å¤„ç†å¥½æŒ‡é’ˆé—®é¢˜ã€‚
 			insertET(NET[pos], temp);			
 		}
 		else if(polygonPointList[i]._yCoordinate > polygonPointList[j]._yCoordinate)
@@ -272,25 +272,25 @@ void polyfill(ClassMyPolygon polygon, ColorClass color)
 			float tempDx = (polygonPointList[j]._xCoordinate-polygonPointList[i]._xCoordinate)/
 				(polygonPointList[j]._yCoordinate-polygonPointList[i]._yCoordinate);
 			int tempYMax = polygonPointList[i]._yCoordinate;
-			//ÊÇ·ñNET[pos]Îª¿Õ£¬ÔÚº¯ÊıÄÚ²¿ÓĞÅĞ¶Ï¡£
+			//æ˜¯å¦NET[pos]ä¸ºç©ºï¼Œåœ¨å‡½æ•°å†…éƒ¨æœ‰åˆ¤æ–­ã€‚
 			ET* temp = new ET(tempx, tempDx, tempYMax);
 			temp->pNextET = NULL;
 			insertET(NET[pos], temp);
 		}		
 	}
 
-	std::cout<<"³ÌĞòÔËĞĞµ½´Ë  "<<std::endl;
+	std::cout<<"ç¨‹åºè¿è¡Œåˆ°æ­¤  "<<std::endl;
 
-	//»îĞÔ±ß±í¡£
-	ET* AET = NULL;//C++³ÌĞòÈç¹ûÓĞÖ¸Õë£¬Ò»¶¨ÒªÏëÖ¸µ½NULL£¬ÒÔ·ÀÍòÒ»¡£
+	//æ´»æ€§è¾¹è¡¨ã€‚
+	ET* AET = NULL;//C++ç¨‹åºå¦‚æœæœ‰æŒ‡é’ˆï¼Œä¸€å®šè¦æƒ³æŒ‡åˆ°NULLï¼Œä»¥é˜²ä¸‡ä¸€ã€‚
 	int YScan = YMIN;
 	for (; YScan <= YMAX; YScan++)
 	{
-		if (NET[YScan] != NULL)//µ±²åÈëĞÂ±ß±íÊ±
+		if (NET[YScan] != NULL)//å½“æ’å…¥æ–°è¾¹è¡¨æ—¶
 		{
 			insertAETwithRank(AET, NET[YScan]);	
-			//Èç¹ûYScan == »îĞÔ±ß±íÖĞµÄETÈÎÒâ½ÚµãµÄYMax£¬ÔòÉ¾³ı»îĞÔ±ß±íÖĞµÄ¸Ã½Úµã¡£
-			deleteETnode(YScan,AET); //ÏÈÉ¾³ıºó»æÖÆ£¬·ÀÖ¹³öÏÖÖØ»­¡£
+			//å¦‚æœYScan == æ´»æ€§è¾¹è¡¨ä¸­çš„ETä»»æ„èŠ‚ç‚¹çš„YMaxï¼Œåˆ™åˆ é™¤æ´»æ€§è¾¹è¡¨ä¸­çš„è¯¥èŠ‚ç‚¹ã€‚
+			deleteETnode(YScan,AET); //å…ˆåˆ é™¤åç»˜åˆ¶ï¼Œé˜²æ­¢å‡ºç°é‡ç”»ã€‚
 			drawScan(color,YScan,AET);
 		}
 		else
@@ -300,7 +300,7 @@ void polyfill(ClassMyPolygon polygon, ColorClass color)
 		}
 		
 
-		//»îĞÔ±ß±íÖĞxÏàÓ¦±ä»¯¡£´Ë×îÒ×¡£
+		//æ´»æ€§è¾¹è¡¨ä¸­xç›¸åº”å˜åŒ–ã€‚æ­¤æœ€æ˜“ã€‚
 		updateAET(AET);
 	}
 
@@ -325,8 +325,8 @@ void myDisplay(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	ColorClass myFavoriteColor(1.0,0.0,0.0);	//ÓÃºìÉ«»æÖÆ
-	ClassMyPolygon pentagram;					//²âÊÔÓÃµÄÎå½ÇĞÇĞÎ×´
+	ColorClass myFavoriteColor(1.0,0.0,0.0);	//ç”¨çº¢è‰²ç»˜åˆ¶
+	ClassMyPolygon pentagram;					//æµ‹è¯•ç”¨çš„äº”è§’æ˜Ÿå½¢çŠ¶
 	pentagram.pushOnePoint(181,26);
 	pentagram.pushOnePoint(143,133);
 	pentagram.pushOnePoint(19,133);
@@ -352,7 +352,7 @@ int main(int argc,char **argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(640,480);
 	glutInitWindowPosition(100,150);
-	glutCreateWindow("ZY14DF118 ÍõÅàË§ HomeWork2 ");
+	glutCreateWindow("ZY14DF118 ç‹åŸ¹å¸… HomeWork2 ");
 	glutDisplayFunc(myDisplay);
 	myInit();
 	glutMainLoop();

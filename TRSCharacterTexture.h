@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "TRSExport.h"
 #include <string>
 

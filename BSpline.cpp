@@ -1,4 +1,4 @@
-#include "BSpline.h"
+﻿#include "BSpline.h"
 
 BSpline::BSpline()
     : m_ctrlPts(nullptr)

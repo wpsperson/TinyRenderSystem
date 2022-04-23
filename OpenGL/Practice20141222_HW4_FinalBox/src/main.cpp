@@ -1,7 +1,7 @@
-/*
-*Function:   ÊµÏÖÁ½¸öÃæÎÆÀí£¬Á½¸öÃæµ¥É«½¥±ä£¬Á½¸öÃæÓĞ¹âÕÕ¡£×öÊó±êĞı×ª£¬ÓĞÊó±ê·ÅËõ¡£
-*Author:    ÍõÅàË§ ZY14DF118
-*Data:     2014ÄêÊ¥µ®½ÚÇ°Ò¹¡£
+ï»¿/*
+*Function:   å®ç°ä¸¤ä¸ªé¢çº¹ç†ï¼Œä¸¤ä¸ªé¢å•è‰²æ¸å˜ï¼Œä¸¤ä¸ªé¢æœ‰å…‰ç…§ã€‚åšé¼ æ ‡æ—‹è½¬ï¼Œæœ‰é¼ æ ‡æ”¾ç¼©ã€‚
+*Author:    ç‹åŸ¹å¸… ZY14DF118
+*Data:     2014å¹´åœ£è¯èŠ‚å‰å¤œã€‚
 *
 */
 
@@ -30,12 +30,12 @@ GLfloat dist=10.0f; //distance from the eye
 double VertexArray[8][3] = { {0.0, 0.0, 0.0},  {1.0, 0.0, 0.0},  {1.0, 1.0, 0.0},  {0.0, 1.0, 0.0},  
 {0.0, 0.0, 1.0},  {1.0, 0.0, 1.0},  {1.0, 1.0, 1.0},  {0.0, 1.0, 1.0} };
 int   tetra[6][4] = { {0,3,2,1}, {0,1,5,4}, {1,2,6,5}, {2,3,7,6}, {3,0,4,7}, {4,5,6,7} };
-// 0ÎÆÀíÍ¼£¬1¹âÕÕA£¬  2 ¹âÕÕB£¬ 3µ¥É«½¥±äA£¬ 4µ¥É«½¥±äB£¬  5wpsÍ·Ïñ
+// 0çº¹ç†å›¾ï¼Œ1å…‰ç…§Aï¼Œ  2 å…‰ç…§Bï¼Œ 3å•è‰²æ¸å˜Aï¼Œ 4å•è‰²æ¸å˜Bï¼Œ  5wpså¤´åƒ
 
 
 GLuint myTexture, ChristmasTexture;
 
-GLfloat lit_position[] = {1.5f, -0.5f, 0.5f, 0.0f};//Ê¹µÃµÆÇ¡ºÃÔÚ 1,2ÕâÁ½¸öÃæÄÇÀï¡£
+GLfloat lit_position[] = {1.5f, -0.5f, 0.5f, 0.0f};//ä½¿å¾—ç¯æ°å¥½åœ¨ 1,2è¿™ä¸¤ä¸ªé¢é‚£é‡Œã€‚
 GLfloat mat_yellow[] = {1.0f, 1.0f, 0.0f, 1.0f};
 GLfloat mat_cyan[] = {0.0f, 1.0f, 1.0f, 1.0f};
 
@@ -73,13 +73,13 @@ void CALLBACK reshape(GLsizei w,GLsizei h)
 {
 	glViewport(0,0,w,h);
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity(); //¶ÔÓ¦µ¥Î»ÕóI
+	glLoadIdentity(); //å¯¹åº”å•ä½é˜µI
 
 	if(h < 1) h=1;
-	gluPerspective(30.0, 1.0*w/h, 0.1, 20.0); //¶ÔÓ¦±ä»»ÕóT0
+	gluPerspective(30.0, 1.0*w/h, 0.1, 20.0); //å¯¹åº”å˜æ¢é˜µT0
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity(); //¶ÔÓ¦µ¥Î»ÕóI
+	glLoadIdentity(); //å¯¹åº”å•ä½é˜µI
 }
 
 void CALLBACK OnLButtonDown(AUX_EVENTREC *event)
@@ -129,15 +129,15 @@ void CALLBACK display(void)
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
-		glTranslated(0.0, 0.0, -dist); //¶ÔÓ¦±ä»»ÕóT1
-		glRotatef(x_angle, 1.0f, 0.0f, 0.0f); //¶ÔÓ¦±ä»»ÕóT2
-		glRotatef(y_angle, 0.0f, 1.0f, 0.0f); //¶ÔÓ¦±ä»»ÕóT3
+		glTranslated(0.0, 0.0, -dist); //å¯¹åº”å˜æ¢é˜µT1
+		glRotatef(x_angle, 1.0f, 0.0f, 0.0f); //å¯¹åº”å˜æ¢é˜µT2
+		glRotatef(y_angle, 0.0f, 1.0f, 0.0f); //å¯¹åº”å˜æ¢é˜µT3
 
 		glDisable(GL_LIGHTING);
 		glLightfv(GL_LIGHT0, GL_POSITION, lit_position);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
-		//glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cyan); //ÕâÊÇÉèÖÃÈ«¾Ö²ÄÖÊµÄÂş·´ÉäÑÕÉ«£¿
+		//glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cyan); //è¿™æ˜¯è®¾ç½®å…¨å±€æè´¨çš„æ¼«åå°„é¢œè‰²ï¼Ÿ
 
 		//glShadeModel(GL_SMOOTH);
 		//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
@@ -184,7 +184,7 @@ void drawBox(void)
 
 
 
-	//¹âÕÕÃæ¡£
+	//å…‰ç…§é¢ã€‚
 
 	glEnable(GL_LIGHTING);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cyan);
@@ -232,7 +232,7 @@ void main(void)
 {
 	auxInitDisplayMode(AUX_DOUBLE|AUX_RGBA|AUX_DEPTH24);
 	auxInitPosition(0,0,1500,1000);
-	auxInitWindow("ÍõÅàË§ ZY14DF118 ¼ÆËã»úÍ¼ĞÎÑ§µÚËÄ´Î×÷Òµ");
+	auxInitWindow("ç‹åŸ¹å¸… ZY14DF118 è®¡ç®—æœºå›¾å½¢å­¦ç¬¬å››æ¬¡ä½œä¸š");
 	
 	init();
 

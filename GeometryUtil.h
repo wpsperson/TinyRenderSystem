@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  *@brief    some basic geometry algorithm
  *@date     2021-5-29
  */

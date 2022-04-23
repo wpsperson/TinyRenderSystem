@@ -1,4 +1,4 @@
-#include "TRSTextNode.h"
+﻿#include "TRSTextNode.h"
 #include "TRSVAO.h"
 #include "TRSCharacterTexture.h"
 #include "TRSStateSet.h"

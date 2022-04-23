@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 Function: draw basic spline by a series of control point.
 Author:	  wpsperson
 Data:	  20141102
@@ -12,9 +12,9 @@ Notes:	  All rights reserved
 #include<iostream>
 #include<vector>
 
-#define MinPointNum 4					//3´ÎBÑùÌõ×îÉÙĞèÒª4¸ö¿ØÖÆµã²ÅÄÜ»æÖÆÒ»¶ÎÑùÌõ¡£
-#define AmplificationCoefficient 100	//¸ø¶¨µÄ¿ØÖÆµãµÄ×ø±êÊÇ1£¬ĞèÒª·Å´ó²ÅÄÜÔÚOpenglÖĞ»æÖÆ¡£
-#define NodeStep 0.005					//½Úµã±ä»¯µÄ²½³¤
+#define MinPointNum 4					//3æ¬¡Bæ ·æ¡æœ€å°‘éœ€è¦4ä¸ªæ§åˆ¶ç‚¹æ‰èƒ½ç»˜åˆ¶ä¸€æ®µæ ·æ¡ã€‚
+#define AmplificationCoefficient 100	//ç»™å®šçš„æ§åˆ¶ç‚¹çš„åæ ‡æ˜¯1ï¼Œéœ€è¦æ”¾å¤§æ‰èƒ½åœ¨Openglä¸­ç»˜åˆ¶ã€‚
+#define NodeStep 0.005					//èŠ‚ç‚¹å˜åŒ–çš„æ­¥é•¿
 
 
 
@@ -35,42 +35,42 @@ MyPoint findPointByProportion(const MyPoint &startPoint, const MyPoint &endPoint
 	return MyPoint(xCoordinate, yCoordinate);
 }
 
-//¸ù¾İÊäÈëµÄ¿ØÖÆµãÀ´»æÖÆBÑùÌõÇúÏß
+//æ ¹æ®è¾“å…¥çš„æ§åˆ¶ç‚¹æ¥ç»˜åˆ¶Bæ ·æ¡æ›²çº¿
 void drawBasicSpline(const std::vector<MyPoint> &vect)
 {
 	if (vect.size()< 4)
 	{
-		std::cout<<"¸ø¶¨µÄ¿ØÖÆµãÊıÄ¿Ì«ÉÙ£¬²»ÄÜÊµÏÖ»æÖÆ£¡"<<std::endl;
+		std::cout<<"ç»™å®šçš„æ§åˆ¶ç‚¹æ•°ç›®å¤ªå°‘ï¼Œä¸èƒ½å®ç°ç»˜åˆ¶ï¼"<<std::endl;
 	}
 	else
 	{
-		//Ã¿´ÎÊ¹ÓÃ4¸ö¿ØÖÆµãÉú³ÉÒ»Ğ¡¶ÎBÑùÌõ¡£
+		//æ¯æ¬¡ä½¿ç”¨4ä¸ªæ§åˆ¶ç‚¹ç”Ÿæˆä¸€å°æ®µBæ ·æ¡ã€‚
 		std::vector<MyPoint>::const_iterator constItrStart = vect.begin();
 		std::vector<MyPoint>::const_iterator constItrEnd = vect.begin()+3;
 		//
 		std::vector<MyPoint>::const_iterator constItrActive;
 		while (constItrEnd != vect.end())
 		{			
-			//¶ÔÓÚÃ¿Ò»´ÎµÄËÄ¸ö¿ØÖÆµã£¬´Ót=0 µ½t=1½øĞĞµÂ²¼¶ûËã·¨¡£
+			//å¯¹äºæ¯ä¸€æ¬¡çš„å››ä¸ªæ§åˆ¶ç‚¹ï¼Œä»t=0 åˆ°t=1è¿›è¡Œå¾·å¸ƒå°”ç®—æ³•ã€‚
 			for (double t = 0.0; t <= 1; t += NodeStep)
 			{
 				constItrActive = constItrStart;
-				//µÚÒ»´Îµü´ú¡£
+				//ç¬¬ä¸€æ¬¡è¿­ä»£ã€‚
 				MyPoint temp1_1 = findPointByProportion(*(constItrActive),*(constItrActive+1),(2+t)/3);
 				constItrActive ++;
 				MyPoint temp1_2 = findPointByProportion(*(constItrActive),*(constItrActive+1),(1+t)/3);
 				constItrActive ++;
 				MyPoint temp1_3 = findPointByProportion(*(constItrActive),*(constItrActive+1),(t)/3);
-				//µÚ¶ş´Îµü´ú
+				//ç¬¬äºŒæ¬¡è¿­ä»£
 				MyPoint temp2_1 = findPointByProportion(temp1_1, temp1_2, (1+t)/2);
 				MyPoint temp2_2 = findPointByProportion(temp1_2, temp1_3, t/2);
-				//µÚÈı´Îµü´ú
+				//ç¬¬ä¸‰æ¬¡è¿­ä»£
 				MyPoint temp3 = findPointByProportion(temp2_1, temp2_2, t);
 				glVertex2d(temp3.x, temp3.y);
 
 			}
 			
-			//×îºó½«ÕâÁ½¸öµü´úÆ÷×Ô¼Ó£¬Ê¹µÃÏÂÒ»¸öÑ­»·ÖĞ´¦ÀíÏÂËÄ¸ö¿ØÖÆµãµÄBÑùÌõ¡£
+			//æœ€åå°†è¿™ä¸¤ä¸ªè¿­ä»£å™¨è‡ªåŠ ï¼Œä½¿å¾—ä¸‹ä¸€ä¸ªå¾ªç¯ä¸­å¤„ç†ä¸‹å››ä¸ªæ§åˆ¶ç‚¹çš„Bæ ·æ¡ã€‚
 			constItrStart ++;
 			constItrEnd ++;
 		}
@@ -89,23 +89,23 @@ void drawControlPoint(const std::vector<MyPoint> &vect)
 
 void customInputControlPoint()
 {
-	std::cout<<"ÇëÊäÈëµÚ 1 ¸ö½ÚµãµÄºá×ø±ê"<<std::endl;
+	std::cout<<"è¯·è¾“å…¥ç¬¬ 1 ä¸ªèŠ‚ç‚¹çš„æ¨ªåæ ‡"<<std::endl;
 	double temp,pointX,PointY;
 	int num = 0;
 	while (std::cin>>temp)
 	{
-		num++;//ÓÃÓÚÅĞ¶ÏÆæÊıÅ¼Êı
+		num++;//ç”¨äºåˆ¤æ–­å¥‡æ•°å¶æ•°
 		if (num%2 == 1)
 		{
 			pointX = temp;
-			std::cout<<"ÇëÊäÈëµÚ"<<(int)((num/2)+1)<<"¸ö½ÚµãµÄ×İ×ø±ê"<<std::endl;
+			std::cout<<"è¯·è¾“å…¥ç¬¬"<<(int)((num/2)+1)<<"ä¸ªèŠ‚ç‚¹çš„çºµåæ ‡"<<std::endl;
 		}
 		else
 		{
 			PointY = temp;
 			myPointVector.push_back(MyPoint(pointX*AmplificationCoefficient,PointY*AmplificationCoefficient));
-			std::cout<<"³É¹¦²åÈëµÚ"<<(int)((num/2))<<"¸ö½Úµã £¨"<<pointX<<","<<PointY<<")"<<std::endl;
-			std::cout<<"ÇëÊäÈëµÚ"<<(int)((num/2)+1)<<"¸ö½ÚµãµÄºá×ø±ê"<<std::endl;
+			std::cout<<"æˆåŠŸæ’å…¥ç¬¬"<<(int)((num/2))<<"ä¸ªèŠ‚ç‚¹ ï¼ˆ"<<pointX<<","<<PointY<<")"<<std::endl;
+			std::cout<<"è¯·è¾“å…¥ç¬¬"<<(int)((num/2)+1)<<"ä¸ªèŠ‚ç‚¹çš„æ¨ªåæ ‡"<<std::endl;
 
 		}
 
@@ -145,18 +145,18 @@ void myDisplay(void)
 
 int main(int argc,char **argv)
 {
-	std::cout<<"ÇëÑ¡ÔñÄúÒª½øĞĞµÄ²Ù×÷£º"<<std::endl;
-	std::cout<<"°´Êı×Ö\"1\"½«¸ø¶¨µÄ½Úµã»æÖÆ³ö ¾ùÔÈBÑùÌõ"<<std::endl;
-	std::cout<<"°´Êı×Ö\"2\"½«¸ø¶¨µÄ½Úµã»æÖÆ³ö ×¼¾ùÔÈBÑùÌõ"<<std::endl;
-	std::cout<<"°´Êı×Ö\"3\"½«¸ø¶¨µÄ½Úµã»æÖÆ³ö ¼â½ÇBÑùÌõ"<<std::endl;
-	std::cout<<"°´Êı×Ö\"4\"½«ÇëÊäÈë½Úµã»æÖÆ³ö ¾ùÔÈBÑùÌõ"<<std::endl;
-	std::cout<<"°´Êı×Ö\"5\"ÍË³ö¸Ã³ÌĞò£¡"<<std::endl;
+	std::cout<<"è¯·é€‰æ‹©æ‚¨è¦è¿›è¡Œçš„æ“ä½œï¼š"<<std::endl;
+	std::cout<<"æŒ‰æ•°å­—\"1\"å°†ç»™å®šçš„èŠ‚ç‚¹ç»˜åˆ¶å‡º å‡åŒ€Bæ ·æ¡"<<std::endl;
+	std::cout<<"æŒ‰æ•°å­—\"2\"å°†ç»™å®šçš„èŠ‚ç‚¹ç»˜åˆ¶å‡º å‡†å‡åŒ€Bæ ·æ¡"<<std::endl;
+	std::cout<<"æŒ‰æ•°å­—\"3\"å°†ç»™å®šçš„èŠ‚ç‚¹ç»˜åˆ¶å‡º å°–è§’Bæ ·æ¡"<<std::endl;
+	std::cout<<"æŒ‰æ•°å­—\"4\"å°†è¯·è¾“å…¥èŠ‚ç‚¹ç»˜åˆ¶å‡º å‡åŒ€Bæ ·æ¡"<<std::endl;
+	std::cout<<"æŒ‰æ•°å­—\"5\"é€€å‡ºè¯¥ç¨‹åºï¼"<<std::endl;
 	int OptionNum;
 	std::cin>>OptionNum;
 	switch (OptionNum)
 	{
 	case 1:
-		std::cout<<"¸ø¶¨µÄ½Úµã»æÖÆ¾ùÔÈBÑùÌõÍ¼ĞÎÈçÏÂ£º"<<std::endl;
+		std::cout<<"ç»™å®šçš„èŠ‚ç‚¹ç»˜åˆ¶å‡åŒ€Bæ ·æ¡å›¾å½¢å¦‚ä¸‹ï¼š"<<std::endl;
 		myPointVector.push_back(MyPoint(0,0));
 		myPointVector.push_back(MyPoint(0,1*AmplificationCoefficient));
 		myPointVector.push_back(MyPoint(1*AmplificationCoefficient,1*AmplificationCoefficient));
@@ -165,7 +165,7 @@ int main(int argc,char **argv)
 		myPointVector.push_back(MyPoint(2*AmplificationCoefficient,1*AmplificationCoefficient));		
 		break;
 	case 2:
-		std::cout<<"¸ø¶¨µÄ½Úµã»æÖÆ×¼¾ùÔÈBÑùÌõÍ¼ĞÎÈçÏÂ£º"<<std::endl;
+		std::cout<<"ç»™å®šçš„èŠ‚ç‚¹ç»˜åˆ¶å‡†å‡åŒ€Bæ ·æ¡å›¾å½¢å¦‚ä¸‹ï¼š"<<std::endl;
 		myPointVector.push_back(MyPoint(0,0));
 		myPointVector.push_back(MyPoint(0,0));
 		myPointVector.push_back(MyPoint(0,0));
@@ -181,7 +181,7 @@ int main(int argc,char **argv)
 		break;
 
 	case 3:
-		std::cout<<"¸ø¶¨µÄ½Úµã»æÖÆ´ø¼â½ÇµÄBÑùÌõÍ¼ĞÎÈçÏÂ£º"<<std::endl;
+		std::cout<<"ç»™å®šçš„èŠ‚ç‚¹ç»˜åˆ¶å¸¦å°–è§’çš„Bæ ·æ¡å›¾å½¢å¦‚ä¸‹ï¼š"<<std::endl;
 		myPointVector.push_back(MyPoint(0,0));
 		myPointVector.push_back(MyPoint(0,1*AmplificationCoefficient));
 		myPointVector.push_back(MyPoint(1*AmplificationCoefficient,1*AmplificationCoefficient));
@@ -192,14 +192,14 @@ int main(int argc,char **argv)
 		myPointVector.push_back(MyPoint(2*AmplificationCoefficient,1*AmplificationCoefficient));
 		break;
 	case 4:
-		std::cout<<"×Ô¶¨ÒåÊäÈë½Úµã»æÖÆ¾ùÔÈBÑùÌõ£¬ÇëÊäÈë¿ØÖÆµã×ø±ê£¨·¶Î§0.0-10.0¸¡µãÊı£©£º"<<std::endl;
+		std::cout<<"è‡ªå®šä¹‰è¾“å…¥èŠ‚ç‚¹ç»˜åˆ¶å‡åŒ€Bæ ·æ¡ï¼Œè¯·è¾“å…¥æ§åˆ¶ç‚¹åæ ‡ï¼ˆèŒƒå›´0.0-10.0æµ®ç‚¹æ•°ï¼‰ï¼š"<<std::endl;
 		customInputControlPoint();
 		break;
 	case 5:
 		return 0;
 		break;
 	default:
-		std::cout<<"ÄúÊäÈëµÄÖ¸Áî´íÎó£¬ÇëÖØĞÂÀ´¹ı£¡"<<std::endl;		
+		std::cout<<"æ‚¨è¾“å…¥çš„æŒ‡ä»¤é”™è¯¯ï¼Œè¯·é‡æ–°æ¥è¿‡ï¼"<<std::endl;		
 		return 0;
 		break;
 	}

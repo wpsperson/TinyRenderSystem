@@ -1,4 +1,4 @@
-class Block{
+﻿class Block{
  private:
   int posX, posY; // Block's position
   

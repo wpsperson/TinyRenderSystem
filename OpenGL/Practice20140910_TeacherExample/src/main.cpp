@@ -1,4 +1,4 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -30,16 +30,16 @@ void CALLBACK display(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	//»­10*10Íø¸ñ
-	glColor3f(0.0f,1.0f,0.0f); //ÂÌÉ«
-	for(i=0; i<=10; i++) //10ÌõË®Æ½Ïß
+	//ç”»10*10ç½‘æ ¼
+	glColor3f(0.0f,1.0f,0.0f); //ç»¿è‰²
+	for(i=0; i<=10; i++) //10æ¡æ°´å¹³çº¿
 	{
 		glBegin(GL_LINES);
 			glVertex2d(  0.0,i*10.0);
 			glVertex2d(100.0, i*10.0);
 		glEnd();
 	}
-	glBegin(GL_LINES); //10ÌõÊúÏß
+	glBegin(GL_LINES); //10æ¡ç«–çº¿
 		for(i=0; i<=10; i++)
 		{
 			glVertex2d(i*10.0,  0.0);
@@ -47,9 +47,9 @@ void CALLBACK display(void)
 		}
 	glEnd();
 
-	//ÔÚ¶Ô½ÇÏß»­µã
-	glColor3f(1.0f,1.0f,1.0f); //°×É«
-	glPointSize(10.0f); //µã´óÐ¡
+	//åœ¨å¯¹è§’çº¿ç”»ç‚¹
+	glColor3f(1.0f,1.0f,1.0f); //ç™½è‰²
+	glPointSize(10.0f); //ç‚¹å¤§å°
 	glBegin(GL_POINTS);
 		for(i=0; i<=10; i++) glVertex2d(i*10.0,i*10.0);
 	glEnd();
@@ -67,7 +67,7 @@ void main(void)
 {
 	auxInitDisplayMode(AUX_SINGLE|AUX_RGBA);
 	auxInitPosition(0,0,500,500);
-	//ÒòÎªÕâÊÇÒ»¸ö¿ìÒªÌÔÌ­µÄ¿âglaux£¬ËùÒÔÊý¾ÝÀàÐÍ²»ÊÇÖ÷Á÷µÄµÄ¡£¡£¡£
+	//å› ä¸ºè¿™æ˜¯ä¸€ä¸ªå¿«è¦æ·˜æ±°çš„åº“glauxï¼Œæ‰€ä»¥æ•°æ®ç±»åž‹ä¸æ˜¯ä¸»æµçš„çš„ã€‚ã€‚ã€‚
 	auxInitWindow(TEXT("Draw the color sphere"));
 	init();
 

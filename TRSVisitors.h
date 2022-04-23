@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "NodeVisitor.h"
 
 class PolygonModeVisitor : public NodeVisitor

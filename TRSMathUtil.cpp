@@ -1,4 +1,4 @@
-#include "TRSMathUtil.h"
+﻿#include "TRSMathUtil.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 

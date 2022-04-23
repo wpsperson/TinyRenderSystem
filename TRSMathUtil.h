@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 float toRadian(float degree);
 

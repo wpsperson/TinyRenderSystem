@@ -1,4 +1,4 @@
-#include "CasePNTriangles.h"
+﻿#include "CasePNTriangles.h"
 #include "TRSTexture.h"
 #include "TRSVAO.h"
 #include "TRSResource.h"
