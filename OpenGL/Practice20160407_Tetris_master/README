@@ -1,8 +1,0 @@
-This is a very simple Tetris game written in C++/OpenGL.
-I wrote it just for fun and partially to have better understanding of game states transition.
-
-The Control:
-s - left
-d - down
-f - right
-e - rotate
