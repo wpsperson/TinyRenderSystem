@@ -1,17 +1,57 @@
 ﻿#include "E06StencilTest.h"
-/*
 #include <iostream>
 
 #include <glad\glad.h>
 #include <GLFW\glfw3.h>
 
 #include "stb_image.h"
-#include "TRSUtils.h"
-#include "TRSResource.h"
-#include "TRSCamera.h"
-#include "TRSConst.h"
 #include "Windows.h"
+#include "BasicUtils.h"
 
+static float BoxVerticesAndColorAndTex[] =
+{
+    -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+    0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+
+    0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+    0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+    0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+    0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
+};
 
 
 int E06StencilTest()
@@ -34,8 +74,8 @@ int E06StencilTest()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("shaders/1_5MultiTextureVertex.glsl");
-    char* fragmentShaderSource = readTextFile("shaders/1_5MultiTextureFragment.glsl");//1_1BasicFragment.glsl  
+    char* vertexShaderSource = readTextFile("shaders/DefaultVertex.glsl");
+    char* fragmentShaderSource = readTextFile("shaders/DefaultFragment.glsl");
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -73,8 +113,6 @@ int E06StencilTest()
 
     unsigned int shaderBorder = createShaderBorder();
 
-
-
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     unsigned int VBO;
@@ -90,112 +128,49 @@ int E06StencilTest()
     glEnableVertexAttribArray(2);
     glBindVertexArray(0);//unbind VAO
 
-    unsigned int BoxTexture;
-    glGenTextures(1, &BoxTexture);
-    glBindTexture(GL_TEXTURE_2D, BoxTexture);
-    // 为当前绑定的纹理对象设置环绕、过滤方式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // 加载并生成纹理
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);//加载图片翻转
-    unsigned char *data = stbi_load("resources/textures/container.jpg", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-
-    unsigned int FaceTexture;
-    glGenTextures(1, &FaceTexture);
-    glBindTexture(GL_TEXTURE_2D, FaceTexture);
-    // 为当前绑定的纹理对象设置环绕、过滤方式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    unsigned char *data2 = stbi_load("resources/textures/awesomeface.png", &width, &height, &nrChannels, 0);
-    if (data2)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data2);
-
-
-
     int nPosModelMatrix = glGetUniformLocation(shaderProgram, "model");
     int nPosViewMatrix = glGetUniformLocation(shaderProgram, "view");
     int nPosProjectMatrix = glGetUniformLocation(shaderProgram, "projection");
+    int nPosBaseColor = glGetUniformLocation(shaderProgram, "baseColor");
 
     int nPosModelMatrix2 = glGetUniformLocation(shaderBorder, "model");
     int nPosViewMatrix2 = glGetUniformLocation(shaderBorder, "view");
     int nPosProjectMatrix2 = glGetUniformLocation(shaderBorder, "projection");
 
-    TRSMatrix IdentityMatrix;
-    TRSMatrix ScaleUpMatrix;
-    ScaleUpMatrix.makeScale(1.05f, 1.05f, 1.05f);
-    TRSMatrix TranslateMatrix;
-    TranslateMatrix.makeTranslate(0.8f, 0.5f, 0.1f);
-    TRSMatrix SecondModelScaleUpMatrix = TranslateMatrix * ScaleUpMatrix;
-    //glUniform1i设置每个采样器的方式告诉OpenGL每个着色器采样器属于哪个纹理单元。我们只需要设置一次即可，所以这个会放在渲染循环的前面：
-    //着色器中texture0对应GL_TEXTURE0（BoxTexture）
-    //着色器中texture1对应GL_TEXTURE1（FaceTexture）
-    int nPosTexture0 = glGetUniformLocation(shaderProgram, "texture0");
-    int nPosTexture1 = glGetUniformLocation(shaderProgram, "texture1");
-    glUniform1i(nPosTexture0, 0);
-    glUniform1i(nPosTexture1, 1);
+    float modelMatrix[16] = { 1,0,0,0,  0,1,0,0,  0,0,1,0,  0,0,0,1 };
+    float modelMatrixScale[16] = { 1.05f,0,0,0,  0,1.05f,0,0,  0,0,1.05f,0,  0,0,0,1 };
+    float projMatrix[16] = { 1,0,0,0,  0,1,0,0,  0,0,1,0,  0,0,0,1 };
+
     glEnable(GL_DEPTH_TEST);
-
-    TRSCamera* pCamera = new TRSCamera;
-    double m_fCurTime = 0;
-    double m_fLastTime = 0;
-
-
     // 启动模板测试
     glEnable(GL_STENCIL_TEST); //***
 
+    double rotateAngle = 0.0;
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        m_fCurTime = glfwGetTime();
-        double timeDiff = m_fCurTime - m_fLastTime;
-        if (timeDiff < 15)
+
+        rotateAngle += 0.001;
+        if (rotateAngle > 6.28)
         {
-            Sleep(15 - timeDiff);
+            rotateAngle = 0.0;
         }
-        m_fLastTime = m_fCurTime;
+        double c = cos(rotateAngle);
+        double s = sin(rotateAngle);
+        float viewMatrix[16] = { c,s,0,0,  -s,c,0,0,  0,0,1,0,  0,0,0,1 };
 
         glStencilFunc(GL_ALWAYS, 1, 0xff); //***
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); //***
         //glStencilMask(0xff); //***
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        TRSMatrix projMatrix = pCamera->getProjectMatrix();
-        TRSMatrix viewMatrix = pCamera->getViewMatrix();
-        glUniformMatrix4fv(nPosModelMatrix, 1, GL_FALSE, &(IdentityMatrix[0][0]));
-        glUniformMatrix4fv(nPosViewMatrix, 1, GL_FALSE, &(viewMatrix[0][0]));
-        glUniformMatrix4fv(nPosProjectMatrix, 1, GL_FALSE, &(projMatrix[0][0]));
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, BoxTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, FaceTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glUniformMatrix4fv(nPosModelMatrix, 1, GL_FALSE, &(TranslateMatrix[0][0]));
+        glUniformMatrix4fv(nPosModelMatrix, 1, GL_FALSE, modelMatrix);
+        glUniformMatrix4fv(nPosViewMatrix, 1, GL_FALSE, viewMatrix);
+        glUniformMatrix4fv(nPosProjectMatrix, 1, GL_FALSE, projMatrix);
+        glUniform4f(nPosBaseColor, 0.6f, 0.6f, 1.0f, 1.0f);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glStencilFunc(GL_NOTEQUAL, 1, 0xff); //***
@@ -204,21 +179,13 @@ int E06StencilTest()
         glDisable(GL_DEPTH_TEST); //***
         glBindVertexArray(VAO);
         glUseProgram(shaderBorder);
-        glUniformMatrix4fv(nPosModelMatrix2, 1, GL_FALSE, &(ScaleUpMatrix[0][0]));
-        glUniformMatrix4fv(nPosViewMatrix2, 1, GL_FALSE, &(viewMatrix[0][0]));
-        glUniformMatrix4fv(nPosProjectMatrix2, 1, GL_FALSE, &(projMatrix[0][0]));
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, BoxTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, FaceTexture);
+        glUniformMatrix4fv(nPosModelMatrix2, 1, GL_FALSE, modelMatrixScale);
+        glUniformMatrix4fv(nPosViewMatrix2, 1, GL_FALSE, viewMatrix);
+        glUniformMatrix4fv(nPosProjectMatrix2, 1, GL_FALSE, projMatrix);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        glUniformMatrix4fv(nPosModelMatrix2, 1, GL_FALSE, &(SecondModelScaleUpMatrix[0][0]));
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        
 
         //glStencilMask(0xFF); //***
         glEnable(GL_DEPTH_TEST); //***
-
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
@@ -268,4 +235,3 @@ int createShaderBorder()
     glDeleteShader(fragmentShader);
     return shaderProgram;
 }
-*/

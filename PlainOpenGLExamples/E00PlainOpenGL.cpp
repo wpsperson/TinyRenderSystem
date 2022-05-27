@@ -1,47 +1,11 @@
 #include "E00PlainOpenGL.h"
 #include <iostream>
-#include <fstream>
-#include <sstream>
 
 #include "glad\glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "glfw\glfw3.h"
-
-// now we use OpenGL 4.6
-static const int g_OpenGLVersionMajor = 4;
-static const int g_OpenGLVersionMinor = 6;
-
-static const int DefaultWindowWidth = 1200;
-static const int DefaultWindowHeight = 800;
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
-
-char* readTextFile(const std::string& strFileName)
-{
-    std::ifstream file;
-    file.open(strFileName.c_str());
-    std::stringstream strStream;
-    strStream << file.rdbuf();
-    file.close();
-    std::string strContent = strStream.str();
-
-    int length = strContent.length();
-    char* pChar = new char[length + 1];
-    memcpy(pChar, strContent.c_str(), length);
-    pChar[length] = '\0';
-    return pChar;
-}
-
+#include "BasicUtils.h"
 
 
 
