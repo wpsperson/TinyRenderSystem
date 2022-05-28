@@ -4,6 +4,7 @@ PROJECT(${ProjectName})
 
 SET(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "add a postfix, usually d on windows")
 SET(CMAKE_RELEASE_POSTFIX "" CACHE STRING "add a postfix, usually empty on windows")
+set_property( GLOBAL PROPERTY USE_FOLDERS ON)
 
 ADD_SUBDIRECTORY(TRSCore)
 
