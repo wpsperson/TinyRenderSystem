@@ -10,14 +10,18 @@ ${PlainExamPath}/glad.c
 ${PlainExamPath}/stb_image.h
 ${PlainExamPath}/BasicUtils.h
 ${PlainExamPath}/BasicUtils.cpp
-${PlainExamPath}/${TARGET_NAME}/E00PlainOpenGL.h
-${PlainExamPath}/${TARGET_NAME}/E00PlainOpenGL.cpp
-${PlainExamPath}/${TARGET_NAME}/E06StencilTest.h
-${PlainExamPath}/${TARGET_NAME}/E06StencilTest.cpp
+${PlainExamPath}/${TARGET_NAME}/RenderTriangle.h
+${PlainExamPath}/${TARGET_NAME}/RenderTriangle.cpp
+${PlainExamPath}/${TARGET_NAME}/RenderTexture.h
+${PlainExamPath}/${TARGET_NAME}/RenderTexture.cpp
+${PlainExamPath}/${TARGET_NAME}/StencilTest.h
+${PlainExamPath}/${TARGET_NAME}/StencilTest.cpp
+${PlainExamPath}/${TARGET_NAME}/TessellationOnShader.h
+${PlainExamPath}/${TARGET_NAME}/TessellationOnShader.cpp
 ${PlainExamPath}/${TARGET_NAME}/main.cpp
 )
 
-FILE(GLOB Target_SHADER_LIST ${PlainExamPath}/shaders/*.glsl)
+FILE(GLOB Target_SHADER_LIST ${PlainExamPath}/${TARGET_NAME}/shaders/*.glsl)
 source_group("shader" FILES ${Target_SHADER_LIST})
 add_executable(${TARGET_NAME}  ${Target_HEADER_SRC_LIST} ${Target_SHADER_LIST})
 

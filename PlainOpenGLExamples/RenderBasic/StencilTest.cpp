@@ -1,4 +1,4 @@
-﻿#include "E06StencilTest.h"
+﻿#include "StencilTest.h"
 #include <iostream>
 
 #include <glad\glad.h>
@@ -54,7 +54,7 @@ static float BoxVerticesAndColorAndTex[] =
 };
 
 
-int E06StencilTest()
+int StencilTest()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, g_OpenGLVersionMajor);
@@ -74,44 +74,8 @@ int E06StencilTest()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    char* vertexShaderSource = readTextFile("shaders/DefaultVertex.glsl");
-    char* fragmentShaderSource = readTextFile("shaders/DefaultFragment.glsl");
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    int  success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    }
-    glUseProgram(shaderProgram);
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    unsigned int shaderBorder = createShaderBorder();
+    unsigned int shaderProgram = createProgramUtils("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
+    unsigned int shaderBorder = createProgramUtils("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
 
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
@@ -136,6 +100,7 @@ int E06StencilTest()
     int nPosModelMatrix2 = glGetUniformLocation(shaderBorder, "model");
     int nPosViewMatrix2 = glGetUniformLocation(shaderBorder, "view");
     int nPosProjectMatrix2 = glGetUniformLocation(shaderBorder, "projection");
+    int nPosBaseColor2 = glGetUniformLocation(shaderProgram, "baseColor");
 
     float modelMatrix[16] = { 1,0,0,0,  0,1,0,0,  0,0,1,0,  0,0,0,1 };
     float modelMatrixScale[16] = { 1.05f,0,0,0,  0,1.05f,0,0,  0,0,1.05f,0,  0,0,0,1 };
@@ -182,6 +147,7 @@ int E06StencilTest()
         glUniformMatrix4fv(nPosModelMatrix2, 1, GL_FALSE, modelMatrixScale);
         glUniformMatrix4fv(nPosViewMatrix2, 1, GL_FALSE, viewMatrix);
         glUniformMatrix4fv(nPosProjectMatrix2, 1, GL_FALSE, projMatrix);
+        glUniform4f(nPosBaseColor2, 0.6f, 1.0f, 0.6f, 1.0f);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         //glStencilMask(0xFF); //***
@@ -193,45 +159,4 @@ int E06StencilTest()
     }
     glfwTerminate();
     return 0;
-}
-
-int createShaderBorder()
-{
-    char* vertexShaderSource = readTextFile("shaders/DefaultVertex.glsl");
-    char* fragmentShaderSource = readTextFile("shaders/1_1BasicFragment.glsl");//  
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    int  success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    }
-    glUseProgram(shaderProgram);
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-    return shaderProgram;
 }

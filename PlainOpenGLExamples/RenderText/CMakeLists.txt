@@ -18,7 +18,7 @@ ${PlainExamPath}/${TARGET_NAME}/RenderText.cpp
 ${PlainExamPath}/${TARGET_NAME}/main.cpp
 )
 
-FILE(GLOB Target_SHADER_LIST ${PROJECT_SOURCE_DIR}/${TARGET_NAME}/shaders/*.glsl)
+FILE(GLOB Target_SHADER_LIST ${PlainExamPath}/${TARGET_NAME}/shaders/*.glsl)
 source_group("shader" FILES ${Target_SHADER_LIST})
 add_executable(${TARGET_NAME}  ${Target_HEADER_SRC_LIST} ${Target_SHADER_LIST})
 

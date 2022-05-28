@@ -1,15 +1,17 @@
-#include "E00PlainOpenGL.h"
-#include "E06StencilTest.h"
+#include "RenderTriangle.h"
+#include "RenderTexture.h"
+#include "TessellationOnShader.h"
+#include "StencilTest.h"
 
 int main(int argn, char** argc)
 {
-    CaseFirstTriangle();
-    CaseElementArray();
-    CaseColorAnimation();
-    CaseEachVertexColor();
-    CaseTextureColorBasic();
-    CaseMultiTexture();
-    CaseTessellationOnShader();
-    E06StencilTest();
+    RenderTriangle();
+
+    RenderTexture();
+    RenderMultiTexture();
+
+    TessellationOnShader();
+
+    StencilTest();
     return 0;
 }

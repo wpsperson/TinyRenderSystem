@@ -18,6 +18,7 @@ void processInput(GLFWwindow* window);
 
 char* readTextFile(const std::string& strFileName);
 
+int createProgramUtils(const char* vertFile, const char* fragFile);
 
 void vecAssign(float src[3], float dst[3]);
 void vecScale(float src[3], float scale, float dst[3]);
