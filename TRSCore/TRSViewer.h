@@ -41,8 +41,8 @@ public:
 
 protected:
     virtual void defaultSetting();
+
     void calcFrameTime();
-    void keyboardViewCallBack();
 
 protected:
     std::shared_ptr<TRSNode> m_pSceneNode;

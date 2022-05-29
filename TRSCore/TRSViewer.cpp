@@ -21,16 +21,16 @@
 TRSViewer::TRSViewer()
     : m_BGColor(s_DefaultBGColor)
 {
+    m_polygonModeVisitor = new PolygonModeVisitor;
     m_pEventDispatcher = std::make_shared<TRSEventDispatcher>();
     m_context = new GLFWContext;
     m_context->initContext();
     m_pCamera = new TRSCamera;
     m_pCameraHandler = std::make_shared<TRSDefaultCameraHandler>(m_pCamera);
-    m_pShortcutHandler = std::make_shared<TRSShortcutKeyHandler>(m_context);
+    m_pShortcutHandler = std::make_shared<TRSShortcutKeyHandler>(m_context, m_polygonModeVisitor);
     m_pEventDispatcher->addEventHandler(m_pCameraHandler.get());
     m_pEventDispatcher->addEventHandler(m_pShortcutHandler.get());
     m_context->connectEventDispatcher(m_pEventDispatcher.get());
-    m_polygonModeVisitor = new PolygonModeVisitor;
 
     TRSCharacterTexture::instance()->genTexture();
     std::string errorMsg;
@@ -49,6 +49,7 @@ TRSViewer::~TRSViewer()
 void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
 {
     m_pSceneNode = pSceneNode;
+    m_polygonModeVisitor->setTargetNode(m_pSceneNode.get());
 }
 
 void TRSViewer::defaultSetting()
@@ -150,14 +151,3 @@ void TRSViewer::calcFrameTime()
     m_fLastTime = m_fCurTime;
 }
 
-
-void TRSViewer::keyboardViewCallBack()
-{
-    // to do
-    //if ((glfwGetKey(m_pWindow, GLFW_KEY_F1) == GLFW_PRESS))
-    //{
-    //    m_polygonModeVisitor->switchPolygonMode();
-    //    m_polygonModeVisitor->visit(m_pSceneNode.get());
-    //    Sleep(100); // avoid frame rate so fast to execute this function twice and more.
-    //}
-}

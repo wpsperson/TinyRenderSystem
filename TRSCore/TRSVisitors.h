@@ -6,6 +6,8 @@ class PolygonModeVisitor : public NodeVisitor
 public:
     PolygonModeVisitor();
 
+    void setTargetNode(TRSNode* node);
+
     void setPolygonMode(int mode);
 
     int getPolygonMode();
@@ -16,6 +18,7 @@ public:
 
 private:
     int m_polygonMode;
+    TRSNode* m_targetNode = nullptr;
 };
 
 

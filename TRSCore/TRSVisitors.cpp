@@ -8,6 +8,11 @@ PolygonModeVisitor::PolygonModeVisitor()
 
 }
 
+void PolygonModeVisitor::setTargetNode(TRSNode* node)
+{
+    m_targetNode = node;
+}
+
 void PolygonModeVisitor::setPolygonMode(int mode)
 {
     m_polygonMode = mode;
@@ -42,4 +47,6 @@ void PolygonModeVisitor::switchPolygonMode()
     {
         m_polygonMode = GL_FILL;
     }
+    //recursively visit target node.
+    this->visit(m_targetNode);
 }
