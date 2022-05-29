@@ -17,6 +17,7 @@ class TRSCamera;
 class TRSEventDispatcher;
 class TRSEventHandler;
 class TRSDefaultCameraHandler;
+class TRSShortcutKeyHandler;
 class TRSNode;
 class PolygonModeVisitor;
 
@@ -47,6 +48,7 @@ protected:
     std::shared_ptr<TRSNode> m_pSceneNode;
     std::shared_ptr<TRSEventDispatcher> m_pEventDispatcher;
     std::shared_ptr<TRSDefaultCameraHandler> m_pCameraHandler;
+    std::shared_ptr<TRSShortcutKeyHandler> m_pShortcutHandler;
     TRSContext* m_context = nullptr;
     TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;

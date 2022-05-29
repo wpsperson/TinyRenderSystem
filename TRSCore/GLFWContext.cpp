@@ -58,9 +58,15 @@ void GLFWContext::connectEventDispatcher(TRSEventDispatcher* eventDispatcher)
 }
 
 
+void GLFWContext::setShouldClose(bool close)
+{
+    int nShouldClose = close ? 1 : 0;
+    glfwSetWindowShouldClose(m_window, nShouldClose);
+}
+
 bool GLFWContext::shouldClose()
 {
-    return glfwWindowShouldClose(m_window);
+    return glfwWindowShouldClose(m_window);;
 }
 
 void GLFWContext::swapBuffer()

@@ -15,6 +15,7 @@
 #include "TRSCharacterTexture.h"
 #include "TRSEventDispatcher.h"
 #include "TRSDefaultCameraHandler.h"
+#include "TRSShortcutKeyHandler.h"
 
 
 TRSViewer::TRSViewer()
@@ -25,7 +26,9 @@ TRSViewer::TRSViewer()
     m_context->initContext();
     m_pCamera = new TRSCamera;
     m_pCameraHandler = std::make_shared<TRSDefaultCameraHandler>(m_pCamera);
+    m_pShortcutHandler = std::make_shared<TRSShortcutKeyHandler>(m_context);
     m_pEventDispatcher->addEventHandler(m_pCameraHandler.get());
+    m_pEventDispatcher->addEventHandler(m_pShortcutHandler.get());
     m_context->connectEventDispatcher(m_pEventDispatcher.get());
     m_polygonModeVisitor = new PolygonModeVisitor;
 

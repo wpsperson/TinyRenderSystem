@@ -11,7 +11,7 @@
 int main(int argn, char** argc)
 {
     //E01TextureColorArray();
-    //E01ManyBoxRotate();
+    E01ManyBoxRotate();
 
     //E02Material_AmbientDiffuseSpecular();
     //E02Material_DiffuseNormal();

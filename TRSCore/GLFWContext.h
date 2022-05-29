@@ -20,6 +20,8 @@ public:
 
     void connectEventDispatcher(TRSEventDispatcher* eventDispatcher)  override;
 
+    void setShouldClose(bool close) override;
+
     bool shouldClose() override;
 
     void swapBuffer() override;

@@ -8,6 +8,8 @@ public:
 
     virtual void connectEventDispatcher(TRSEventDispatcher* eventDispatcher) = 0;
 
+    virtual void setShouldClose(bool close) = 0;
+
     virtual bool shouldClose() = 0;
 
     virtual void swapBuffer() = 0;
