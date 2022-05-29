@@ -51,15 +51,17 @@ protected:
 
     void calcDrawCount(EnVertexStruct EnVertType, int verticeSize);
 
+    void deleteOldBuffer();
+
 protected:
-    unsigned int VAO;
-    unsigned int VBO;
-    unsigned int EBO;
-    EnVertexStruct m_EnVertType;///<顶点数组的格式类型
-    int m_nDrawCount;           ///<顶点数组绘制数量
-    int m_nElementCount;        ///<索引数组的绘制数量
-    int m_nDrawType;            ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
-    int m_nPatchParam;          ///<绘制类型为GL_PATCHES时，表示碎片的参数
+    unsigned int VAO = 0;
+    unsigned int VBO = 0;
+    unsigned int EBO = 0;
+    EnVertexStruct m_EnVertType;    ///<顶点数组的格式类型
+    int m_nDrawCount = 0;           ///<顶点数组绘制数量
+    int m_nElementCount = 0;        ///<索引数组的绘制数量
+    int m_nDrawType;                ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
+    int m_nPatchParam;              ///<绘制类型为GL_PATCHES时，表示碎片的参数
 };
 
 

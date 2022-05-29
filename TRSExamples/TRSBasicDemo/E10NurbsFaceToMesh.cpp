@@ -130,6 +130,7 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
     //glPointSize(3);
     viewer->setSecenNode(rootNodes);
     viewer->run();
+    delete handler;
     return 0;
 }
 

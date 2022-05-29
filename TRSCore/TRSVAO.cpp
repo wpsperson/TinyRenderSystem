@@ -5,32 +5,21 @@
 
 
 TRSVAO::TRSVAO()
-    :VAO(0), VBO(0), EBO(0)
-    , m_nDrawCount(0), m_nElementCount(0) ,m_nDrawType(GL_TRIANGLES)
+    : m_nDrawType(GL_TRIANGLES)
 {
 
 }
 
 TRSVAO::~TRSVAO()
 {
-    if (VAO)
-    {
-        glDeleteVertexArrays(1, &VAO);
-    }
-    if (VBO)
-    {
-        glDeleteBuffers(1, &VBO);
-    }
-    if (EBO)
-    {
-        glDeleteBuffers(1, &EBO);
-    }
+    deleteOldBuffer();
 }
 
 
 //rule: 0 aVert 1 aTexture 2 Color
 void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType)
 {
+    deleteOldBuffer();
     genVAO(true);
     createVBO(vertices, verticeSize);
     setVertexAttrib(EnVertType);
@@ -40,6 +29,7 @@ void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertTy
 
 void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount)
 {
+    deleteOldBuffer();
     genVAO(true);
     createVBO(vertices, verticeSize);
     createEBO(indice, indexCount);
@@ -127,6 +117,25 @@ void TRSVAO::calcDrawCount(EnVertexStruct EnVertType, int verticeSize)
         break;
     default:
         break;
+    }
+}
+
+void TRSVAO::deleteOldBuffer()
+{
+    if (VAO)
+    {
+        glDeleteVertexArrays(1, &VAO);
+        VAO = 0;
+    }
+    if (VBO)
+    {
+        glDeleteBuffers(1, &VBO);
+        VBO = 0;
+    }
+    if (EBO)
+    {
+        glDeleteBuffers(1, &EBO);
+        EBO = 0;
     }
 }
 
