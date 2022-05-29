@@ -98,3 +98,9 @@ bool TRSStateSetManager::removeStateSet(int id)
     }
     return false;
 }
+
+void TRSStateSetManager::free()
+{
+    delete m_pInstance;
+    m_pInstance = nullptr;
+}

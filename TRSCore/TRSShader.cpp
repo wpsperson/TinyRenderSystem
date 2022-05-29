@@ -11,7 +11,7 @@ TRSShader::TRSShader()
 
 TRSShader::~TRSShader()
 {
-
+    freeShaderProgram();
 }
 
 void TRSShader::createVertexShader(const std::string vShaderFile)
@@ -34,7 +34,7 @@ void TRSShader::createTessEvaluateShader(const std::string teseShaderFile)
     teseShader = createShader(teseShaderFile, GL_TESS_EVALUATION_SHADER);
 }
 
-unsigned int TRSShader::createProgram(bool delShader)
+unsigned int TRSShader::createProgram()
 {
     if (!vShader || !fShader)
     {
@@ -58,19 +58,14 @@ unsigned int TRSShader::createProgram(bool delShader)
         std::cout << "ERROR::PROGRAM::LINK: " << info << std::endl;
         return 0;
     }
-    if (delShader)//释放Shader内存
-    {
-        glDeleteShader(vShader);
-        glDeleteShader(fShader);
-    }
     return program;
 }
 
-unsigned int TRSShader::createProgram(const std::string vShaderFile, const std::string fShaderFile, bool delShader/* = true*/)
+unsigned int TRSShader::createProgram(const std::string vShaderFile, const std::string fShaderFile)
 {
     createVertexShader(vShaderFile);
     createFragmentShader(fShaderFile);
-    return createProgram(delShader);
+    return createProgram();
 }
 
 void TRSShader::use()
@@ -135,6 +130,35 @@ unsigned int TRSShader::createShader(const std::string vShaderFile, GLenum EnSha
     }
     delete[] source;//释放内存
     return shader;
+}
+
+void TRSShader::freeShaderProgram()
+{
+    if (vShader)
+    {
+        glDetachShader(program, vShader);
+        glDeleteShader(vShader);
+        vShader = 0;
+    }
+    if (fShader)
+    {
+        glDetachShader(program, fShader);
+        glDeleteShader(fShader);
+        fShader = 0;
+    }
+    if (tescShader)
+    {
+        glDetachShader(program, tescShader);
+        glDeleteShader(tescShader);
+        tescShader = 0;
+    }
+    if (teseShader)
+    {
+        glDetachShader(program, teseShader);
+        glDeleteShader(teseShader);
+        teseShader = 0;
+    }
+    glDeleteProgram(program);
 }
 
 void TRSShader::applayAllStaticUniform()

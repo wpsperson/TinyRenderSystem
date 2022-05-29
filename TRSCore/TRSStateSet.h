@@ -55,7 +55,7 @@ public:
     std::shared_ptr<TRSStateSet> findStateSet(int id);
     bool removeStateSet(int id);
 
-
+    static void free();
 
 protected:
     TRSStateSetManager();

@@ -86,9 +86,9 @@ public:
 
     void createTessEvaluateShader(const std::string teseShaderFile);
 
-    unsigned int createProgram(bool delShader = true);
+    unsigned int createProgram();
 
-    unsigned int createProgram(const std::string vShaderFile, const std::string fShaderFile, bool delShader = true);
+    unsigned int createProgram(const std::string vShaderFile, const std::string fShaderFile);
 
     void use();
 
@@ -105,6 +105,8 @@ public:
 private:
     //return 0 when failure
     unsigned int createShader(const std::string vShaderFile, GLenum EnShaderType);
+
+    void freeShaderProgram();
 
 public:
     unsigned int program;

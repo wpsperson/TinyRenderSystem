@@ -75,6 +75,7 @@ void TRSViewer::run()
         drawScene();
         m_context->swapBuffer();
     }
+    TRSStateSetManager::free();
 }
 
 void TRSViewer::updateScene()
