@@ -1,10 +1,6 @@
 ﻿#include "E07TessellationOnShader.h"
 #include <iostream>
 
-#include <glad\glad.h>
-#include <GLFW\glfw3.h>
-
-#include "stb_image.h"
 #include "TRSUtils.h"
 #include "TRSResource.h"
 #include "TRSCamera.h"
@@ -39,7 +35,7 @@ int CaseTessHermiteCurve(int argn, char** argc)
     pNode->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
     std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
-    shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
+    shader->createVertexShader("shaders/PosVertex.glsl");
     shader->createFragmentShader("shaders/DefaultFragment.glsl");
     shader->createTessControlShader("shaders/HermiteTesc.glsl");
     shader->createTessEvaluateShader("shaders/HermiteTese.glsl");
@@ -69,7 +65,7 @@ int CaseTessBezierCurve(int argn, char** argc)
     bezierCurve->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
     std::shared_ptr<TRSStateSet> pSS = bezierCurve->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
-    shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
+    shader->createVertexShader("shaders/PosVertex.glsl");
     shader->createFragmentShader("shaders/DefaultFragment.glsl");
     shader->createTessControlShader("shaders/BezierTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierTese.glsl");
@@ -127,7 +123,7 @@ int CaseTessBezierSurface(int argn, char** argc)
     bezierSurface->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
     std::shared_ptr<TRSStateSet> pSS = bezierSurface->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
-    shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
+    shader->createVertexShader("shaders/PosVertex.glsl");
     shader->createFragmentShader("shaders/PhongFragment.glsl");
     shader->createTessControlShader("shaders/BezierSurFaceTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierSurFaceTese.glsl");
@@ -249,7 +245,7 @@ int CaseTessBSplineCurve(int argn, char** argc)
     BSplineToBezierCurve->readFromVertex(newCtrlPt, newPtNum *3, EnVertex, elementArr, eleCount);
     std::shared_ptr<TRSStateSet> pSS = BSplineToBezierCurve->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
-    shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
+    shader->createVertexShader("shaders/PosVertex.glsl");
     shader->createFragmentShader("shaders/DefaultFragment.glsl");
     shader->createTessControlShader("shaders/BezierTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierTese.glsl");
@@ -411,7 +407,7 @@ int CaseTessBSplineSurface(int argn, char** argc)
     BsplineSurFace->readFromVertex(newCtrlPt, uNum*vNum * 3, EnVertex, surFaceEleArr, eleArrCount);
     std::shared_ptr<TRSStateSet> pSS = BsplineSurFace->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
-    shader->createVertexShader("shaders/DefaultVertexWithoutMVP.glsl");
+    shader->createVertexShader("shaders/PosVertex.glsl");
     shader->createFragmentShader("shaders/PhongFragment.glsl");
     shader->createTessControlShader("shaders/BezierSurFaceTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierSurFaceTese.glsl");

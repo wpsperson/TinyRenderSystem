@@ -19,7 +19,7 @@ void E01TextureColorArray()
     std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
     pSS->getTexture()->createTexture("resources/textures/container.jpg");
     pSS->getTexture()->createTexture("resources/textures/awesomeface.png");
-    pSS->getShader()->createProgram("shaders/1_5MultiTextureVertex.glsl", "shaders/1_5MultiTextureFragment.glsl");
+    pSS->getShader()->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
 
     std::shared_ptr<TRSGeode> pWireFrame = std::make_shared<TRSGeode>(*pNode, false);
     pWireFrame->setPolygonMode(GL_LINE);
@@ -55,7 +55,7 @@ void E01ManyBoxRotate()
     std::shared_ptr<TRSStateSet> pSS = pTemplateNode->getOrCreateStateSet();
     pSS->getTexture()->createTexture("resources/textures/container.jpg");//container.jpg
     pSS->getTexture()->createTexture("resources/textures/awesomeface.png");
-    pSS->getShader()->createProgram("shaders/1_5MultiTextureVertex.glsl", "shaders/1_5MultiTextureFragment.glsl");
+    pSS->getShader()->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
     pTemplateNode->readFromVertex(BoxVerticesAndColorAndTex, sizeof(BoxVerticesAndColorAndTex) / sizeof(float), EnVertexColorTexture);
     int nBoxCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
     for (int i = 0; i < nBoxCount; i++)

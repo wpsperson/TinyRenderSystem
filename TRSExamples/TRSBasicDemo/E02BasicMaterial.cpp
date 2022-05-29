@@ -1,7 +1,7 @@
 #include "E02BasicMaterial.h"
 #include <memory>
+#include <chrono>
 #include "glad\glad.h"
-#include "glfw\glfw3.h"
 #include "TRSViewer.h"
 #include "TRSGeode.h"
 #include "TRSStateSet.h"
@@ -14,10 +14,16 @@
 //第二章 基本光照
 void updateFunc(TRSNode* pNode)
 {
+    static auto start = std::chrono::steady_clock::now();
+    auto current = std::chrono::steady_clock::now();
+    std::chrono::milliseconds result = std::chrono::duration_cast<std::chrono::milliseconds>(current - start);
+    __int64 msElapsed2 = result.count();
+    float fElaps = float(msElapsed2) / 1000;
+
     TRSVec3 lightColor;
-    lightColor[0] = float(sin(glfwGetTime() * 2.0f));
-    lightColor[1] = float(sin(glfwGetTime() * 0.7f));
-    lightColor[2] = float(sin(glfwGetTime() * 1.3f));
+    lightColor[0] = float(sin(fElaps * 2.0f));
+    lightColor[1] = float(sin(fElaps * 0.7f));
+    lightColor[2] = float(sin(fElaps * 1.3f));
 
     TRSVec3 diffuseColor = lightColor * 0.5f; // 降低影响
     TRSVec3 ambientColor = diffuseColor * 0.2f; // 很低的影响

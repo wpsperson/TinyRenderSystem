@@ -51,7 +51,17 @@ std::shared_ptr<TRSVAO> TRSNode::getVAO() const
     return nullptr;
 }
 
+void TRSNode::preProcess()
+{
+
+}
+
 void TRSNode::draw()
+{
+
+}
+
+void TRSNode::postProcess()
 {
 
 }

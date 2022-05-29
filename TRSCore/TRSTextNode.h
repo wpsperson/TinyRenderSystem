@@ -24,7 +24,9 @@ public:
     virtual std::string debugInfo() override;
 
 protected:
-    void preProcess();
+    void preProcess() override;
+    void postProcess() override;
+    void generateText();
 protected:
     std::shared_ptr<TRSVAO> m_pVAO;
     std::wstring m_text;

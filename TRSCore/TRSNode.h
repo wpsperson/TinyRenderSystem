@@ -31,7 +31,11 @@ public:
 
     virtual std::shared_ptr<TRSVAO> getVAO() const;
 
+    virtual void preProcess();
+
     virtual void draw();
+
+    virtual void postProcess();
 
     virtual void traverse(NodeVisitor& visitor);
 

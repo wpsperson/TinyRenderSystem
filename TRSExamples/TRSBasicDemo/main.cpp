@@ -12,6 +12,7 @@ int main(int argn, char** argc)
 {
     //E01TextureColorArray();
     //E01ManyBoxRotate();
+
     //E02Material_AmbientDiffuseSpecular();
     //E02Material_DiffuseNormal();
     //E03DirectionLight();
@@ -19,6 +20,7 @@ int main(int argn, char** argc)
     //E03Spotlight();
     //E03MultiLightSource();
     //E04ElementArray();
+
     //E05LoadModelByAssimp();
 
     //CaseTessHermiteCurve(argn, argc);

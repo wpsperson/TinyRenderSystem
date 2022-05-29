@@ -42,19 +42,14 @@ TRSGroup* TRSAssimpLoader::getGroupNode() const
 
 TRSGroup* TRSAssimpLoader::loadByAssimp(const std::string& file)
 {
-    // read file via ASSIMP
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-    // check for errors
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
-        std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+        std::cout << "loadByAssimp fails: " << importer.GetErrorString() << std::endl;
         return nullptr;
     }
-    // retrieve the directory path of the filepath
     m_strDirectory = file.substr(0, file.find_last_of('/'));
-
-    // process ASSIMP's root node recursively
     recurseNode(scene->mRootNode, scene);
     return m_pGroupNode;
 }
@@ -80,63 +75,36 @@ void TRSAssimpLoader::recurseNode(aiNode* pNode, const aiScene* pScene)
 
 std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene)
 {
-    // data to fill
     vector<Vertex> vertices;
     vector<unsigned int> indices;
-
-    // Walk through each of the mesh's vertices
     for (unsigned int i = 0; i < pMesh->mNumVertices; i++)
     {
         Vertex vertex;
-        TRSVec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to TRSVec3 class so we transfer the data to this placeholder TRSVec3 first.
-                          // positions
-        vector[0] = pMesh->mVertices[i].x;
-        vector[1] = pMesh->mVertices[i].y;
-        vector[2] = pMesh->mVertices[i].z;
-        vertex.Position = vector;
-        // normals
+        vertex.Position[0] = pMesh->mVertices[i].x;
+        vertex.Position[1] = pMesh->mVertices[i].y;
+        vertex.Position[2] = pMesh->mVertices[i].z;
         if (pMesh->mNormals)
         {
-            vector[0] = pMesh->mNormals[i].x;
-            vector[1] = pMesh->mNormals[i].y;
-            vector[2] = pMesh->mNormals[i].z;
-            vertex.Normal = vector;
+            vertex.Normal[0] = pMesh->mNormals[i].x;
+            vertex.Normal[1] = pMesh->mNormals[i].y;
+            vertex.Normal[2] = pMesh->mNormals[i].z;
         }
-        // texture coordinates
-        if (pMesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+        if (pMesh->mTextureCoords[0])
         {
-            TRSVec2 vec;
             // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
             // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
-            vec[0] = pMesh->mTextureCoords[0][i].x;
-            vec[1] = pMesh->mTextureCoords[0][i].y;
-            vertex.TexCoords = vec;
+            vertex.TexCoords[0] = pMesh->mTextureCoords[0][i].x;
+            vertex.TexCoords[1] = pMesh->mTextureCoords[0][i].y;
         }
         else
+        {
             vertex.TexCoords = TRSVec2(0.0f, 0.0f);
-        //// tangent
-        //if (pMesh->mTangents)
-        //{
-        //    vector.x = pMesh->mTangents[i].x;
-        //    vector.y = pMesh->mTangents[i].y;
-        //    vector.z = pMesh->mTangents[i].z;
-        //    vertex.Tangent = vector;
-        //}
-        //// bitangent
-        //if (pMesh->mBitangents)
-        //{
-        //    vector.x = pMesh->mBitangents[i].x;
-        //    vector.y = pMesh->mBitangents[i].y;
-        //    vector.z = pMesh->mBitangents[i].z;
-        //    vertex.Bitangent = vector;
-        //}
+        }
         vertices.push_back(vertex);
     }
-    // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
     for (unsigned int i = 0; i < pMesh->mNumFaces; i++)
     {
         aiFace face = pMesh->mFaces[i];
-        // retrieve all indices of the face and store them in the indices vector
         for (unsigned int j = 0; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
@@ -149,45 +117,16 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
     TRSTexture* pCurTexture = pStateSet->getTexture();
     TRSShader* pShader = pStateSet->getShader();
     createShaderByMesh(pMesh, pShader);
-    // process materials
-    aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
-    // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-    // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-    // Same applies to other texture as the following list summarizes:
-    // diffuse: texture_diffuseN
-    // specular: texture_specularN
-    // normal: texture_normalN
-    aiTextureType arrTexTypes[4] =
-    {
-        aiTextureType_DIFFUSE,
-        aiTextureType_SPECULAR,
-        aiTextureType_HEIGHT,
-        aiTextureType_AMBIENT
-    };
-    std::string arrTexSampleNames[4] =
-    {
-        "texture_diffuse",
-        "texture_specular",
-        "texture_normal",
-        "texture_height"
-    };
-    int nTexTypeCount = sizeof(arrTexTypes) / sizeof(arrTexTypes[0]);
-    for (int i = 0; i < nTexTypeCount; i++)
-    {
-        aiTextureType textype = arrTexTypes[i];
-        loadMaterialTextures(material, textype, arrTexSampleNames[i], pCurTexture);
-    }
-    return pGeode;
-}
 
-void TRSAssimpLoader::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string sampleName, TRSTexture* pCurTexture)
-{
-    int nTypeTexCount = mat->GetTextureCount(type);
-    for (int i=0; i<nTypeTexCount; i++)
+    aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
+    // current stage, we just focus on diffuse texture;
+    std::string strSampleName = "texture_diffuse";
+    int nTypeTexCount = material->GetTextureCount(aiTextureType_DIFFUSE);
+    for (int i = 0; i < nTypeTexCount; i++)
     {
-        aiString str;
-        mat->GetTexture(type, i, &str);
-        std::string strImageFile = m_strDirectory+"/"+ std::string(str.C_Str());
+        aiString imageName;
+        material->GetTexture(aiTextureType_DIFFUSE, i, &imageName);
+        std::string strImageFile = m_strDirectory + "/" + std::string(imageName.C_Str());
         TextureData texData;
         if (m_pGlobalTexture->getTextureDataByName(strImageFile, texData))
         {
@@ -195,13 +134,13 @@ void TRSAssimpLoader::loadMaterialTextures(aiMaterial *mat, aiTextureType type, 
         }
         else
         {
-            int nID = m_pGlobalTexture->createTexture(strImageFile, sampleName);
-            texData = TextureData(nID, strImageFile, sampleName);
+            int nID = m_pGlobalTexture->createTexture(strImageFile, strSampleName);
+            texData = TextureData(nID, strImageFile, strSampleName);
             pCurTexture->addSharedTexture(texData);
         }
     }
+    return pGeode;
 }
-
 
 int TRSAssimpLoader::createShaderByMesh(aiMesh *pMesh, TRSShader* shader)
 {
@@ -215,12 +154,11 @@ int TRSAssimpLoader::createShaderByMesh(aiMesh *pMesh, TRSShader* shader)
     else if (!bHasNormal && bHasTexture)
     {
         throw "to do";
-        //shader->createProgram("shaders/3_1AssimpTextureVertex.glsl", "shaders/3_1AssimpTextureFragment.glsl");
         return EnVertexTexture;
     }
     else if (bHasNormal && bHasTexture)
     {
-        shader->createProgram("shaders/3_1AssimpTextureVertex.glsl", "shaders/3_1AssimpTextureFragment.glsl");
+        shader->createProgram("shaders/PosNormTexVertex.glsl", "shaders/PosNormTexFragment.glsl");
         return EnVertexNormTexture;
     }
 

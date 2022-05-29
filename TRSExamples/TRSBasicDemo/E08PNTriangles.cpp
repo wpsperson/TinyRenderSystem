@@ -12,11 +12,9 @@
 #include "TRSStateset.h"
 #include "TRSVector.h"
 #include "NodeVisitor.h"
-#include "glfw\glfw3.h"
 
 #include <iostream>
 #include "TRSUtils.h"
-#include "stb_image.h"
 #include "Windows.h"
 
 

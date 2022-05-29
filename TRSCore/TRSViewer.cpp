@@ -52,8 +52,6 @@ void TRSViewer::defaultSetting()
 {
     m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void TRSViewer::run()
@@ -118,7 +116,9 @@ void TRSViewer::drawScene()
             }
             pShader->applayAllStaticUniform();//Apply Uniform
             // simple draw call
+            pNode->preProcess();
             pNode->draw();
+            pNode->postProcess();
             pVao->unBind();
         }
 

@@ -44,13 +44,7 @@ TRSGeode::~TRSGeode()
 
 void TRSGeode::draw()
 {
-    preProcess();
-
     drawInternal();
-
-    postProcess();
-
-
 }
 
 void TRSGeode::readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType)

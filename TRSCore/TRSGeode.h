@@ -35,9 +35,9 @@ public:
     virtual std::string debugInfo() override;
 
 protected:
-    void preProcess();
+    void preProcess() override;
+    void postProcess() override;
     void drawInternal();
-    void postProcess();
 
 protected:
     std::shared_ptr<TRSVAO> m_pVAO;

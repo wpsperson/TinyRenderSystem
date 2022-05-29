@@ -8,7 +8,7 @@
 #include "TRSExport.h"
 #include <string>
 #include <memory>
-#include "assimp/material.h"
+
 class TRSGroup;
 class TRSNode;
 class TRSTexture;
@@ -18,6 +18,7 @@ struct aiNode;
 struct aiMesh;
 struct aiScene;
 struct aiMaterial;
+enum aiTextureType;
 
 using std::string;
 
@@ -32,7 +33,6 @@ public:
     TRSGroup*  loadByAssimp(const std::string& file);
     void recurseNode(aiNode* pNode, const aiScene* pScene);
     std::shared_ptr<TRSNode> retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene);
-    void loadMaterialTextures(aiMaterial *mat, aiTextureType type, string sampleName, TRSTexture* pCurTexture);
 
 protected:
     int createShaderByMesh(aiMesh *pMesh, TRSShader* shader);

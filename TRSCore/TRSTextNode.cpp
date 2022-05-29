@@ -73,7 +73,7 @@ void TRSTextNode::draw()
 {
     if (m_dirty)
     {
-        preProcess();
+        generateText();
         m_dirty = false;
     }
     glDrawArrays(GL_TRIANGLES, 0, m_ptCount);
@@ -96,6 +96,17 @@ std::string TRSTextNode::debugInfo()
 }
 
 void TRSTextNode::preProcess()
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void TRSTextNode::postProcess()
+{
+    glDisable(GL_BLEND);
+}
+
+void TRSTextNode::generateText()
 {
     int textureDimension = TRSCharacterTexture::instance()->getTexDimension();
     int fontSize = TRSCharacterTexture::instance()->getSingleFontSize();
