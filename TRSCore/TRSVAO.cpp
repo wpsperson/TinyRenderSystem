@@ -2,10 +2,10 @@
 #include <exception>
 #include <glad/glad.h>
 #include "TRSConst.h"
+#include "TRSMesh.h"
 
 
 TRSVAO::TRSVAO()
-    : m_nDrawType(GL_TRIANGLES)
 {
 
 }
@@ -15,211 +15,90 @@ TRSVAO::~TRSVAO()
     deleteOldBuffer();
 }
 
-
-//rule: 0 aVert 1 aTexture 2 Color
-void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType)
+void TRSVAO::createVAO()
 {
-    deleteOldBuffer();
-    genVAO(true);
-    createVBO(vertices, verticeSize);
-    setVertexAttrib(EnVertType);
-    calcDrawCount(EnVertType, verticeSize);
-    unBind();
+    glGenVertexArrays(1, &m_vao);
 }
 
-void TRSVAO::createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount)
+void TRSVAO::bindVAO()
 {
-    deleteOldBuffer();
-    genVAO(true);
-    createVBO(vertices, verticeSize);
-    createEBO(indice, indexCount);
-    setVertexAttrib(EnVertType);
-    m_nElementCount = indexCount;
-    unBind();
+    glBindVertexArray(m_vao);
 }
 
-void TRSVAO::createVBO(float* vertices, int verticeSize)
+void TRSVAO::unBindVAO()
 {
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindVertexArray(0);
+}
+
+void TRSVAO::createVBO()
+{
+    glGenBuffers(1, &m_vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+}
+
+void TRSVAO::uploadVBO(float* vertices, int verticeSize)
+{
     glBufferData(GL_ARRAY_BUFFER, verticeSize * sizeof(float), vertices, GL_STATIC_DRAW);//注意这里数量的大小就是vertices的内存大小
 }
 
-void TRSVAO::createEBO(unsigned int* indice, int indexCount)
+void TRSVAO::createEBO()
 {
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount*sizeof(unsigned int), indice, GL_STATIC_DRAW);//注意这里数量的大小就是indice的内存大小
+    glGenBuffers(1, &m_elementBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBuffer);
 }
 
-void TRSVAO::setVertexAttrib(EnVertexStruct EnVertType)
+void TRSVAO::uploadEBO(unsigned int* indice, int indexCount)
 {
-    m_EnVertType = EnVertType;
-    switch (EnVertType)
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indice, GL_STATIC_DRAW);//注意这里数量的大小就是indice的内存大小
+}
+
+void TRSVAO::setVertexAttrib(int MeshStructs)
+{
+    int vertexAttribStride = TRSMesh::computeVertexAttribStride(MeshStructs);
+    int stride = vertexAttribStride * sizeof(float);
+    int offset = 0;
+    if (MeshStructs & msVertex)
     {
-    case EnVertex:          // vvv;
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        break;
-    case EnVertexTexture:          // vvvtt;
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-        break;
-    case EnVertexColorTexture:          // vvvccctt;
-    case EnVertexNormTexture:       //vvvnnntt;
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));//Texture
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));//Color
-        glEnableVertexAttribArray(2);
-        break;
-    case EnVertexTextureColor:          // vvvttccc;
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));//Texture
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));//Color
-        glEnableVertexAttribArray(2);
-        break;
-    case EnVertexNormal:          // vvvnnn;
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-        break;
-    default:
-        break;
+        glVertexAttribPointer(VertexIndex, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+        glEnableVertexAttribArray(VertexIndex);
+        offset += 3;
     }
-}
-
-void TRSVAO::calcDrawCount(EnVertexStruct EnVertType, int verticeSize)
-{
-    switch (EnVertType)
+    if (MeshStructs & msNormal)
     {
-    case EnVertex:          // vvv;
-        m_nDrawCount = verticeSize / 3;
-        break;
-    case EnVertexTexture:          // vvvtt;
-        m_nDrawCount = verticeSize / 5;
-        break;
-    case EnVertexColorTexture:          // vvvccctt;
-    case EnVertexNormTexture:           //vvvnnntt;
-        m_nDrawCount = verticeSize / 8;
-        break;
-    case EnVertexTextureColor:          // vvvttccc;
-        m_nDrawCount = verticeSize / 8;
-        break;
-    case EnVertexNormal:          // vvvnnn;
-        m_nDrawCount = verticeSize / 6;
-        break;
-    default:
-        break;
+        glVertexAttribPointer(NormalIndex, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset * sizeof(float)));
+        glEnableVertexAttribArray(NormalIndex);
+        offset += 3;
+    }
+    if (MeshStructs & msUV)
+    {
+        glVertexAttribPointer(TextureCoordIndex0, 2, GL_FLOAT, GL_FALSE, stride, (void*)(offset * sizeof(float)));
+        glEnableVertexAttribArray(TextureCoordIndex0);
+        offset += 2;
+    }
+    if (MeshStructs & msColor)
+    {
+        glVertexAttribPointer(ColorIndex, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset * sizeof(float)));
+        glEnableVertexAttribArray(ColorIndex);
+        offset += 3;
     }
 }
 
 void TRSVAO::deleteOldBuffer()
 {
-    if (VAO)
+    if (m_vao)
     {
-        glDeleteVertexArrays(1, &VAO);
-        VAO = 0;
+        glDeleteVertexArrays(1, &m_vao);
+        m_vao = 0;
     }
-    if (VBO)
+    if (m_vertexBuffer)
     {
-        glDeleteBuffers(1, &VBO);
-        VBO = 0;
+        glDeleteBuffers(1, &m_vertexBuffer);
+        m_vertexBuffer = 0;
     }
-    if (EBO)
+    if (m_elementBuffer)
     {
-        glDeleteBuffers(1, &EBO);
-        EBO = 0;
-    }
-}
-
-unsigned int TRSVAO::getVBO() const
-{
-    return VBO;
-}
-
-EnVertexStruct TRSVAO::getBufferType() const
-{
-    return m_EnVertType;
-}
-
-void TRSVAO::setBuffType(EnVertexStruct buffType)
-{
-    m_EnVertType = buffType;
-    setVertexAttrib(m_EnVertType);
-}
-
-int TRSVAO::getDrawType()
-{
-    return m_nDrawType;
-}
-
-void TRSVAO::setDrawType(int drawType)
-{
-    if (drawType == GL_LINE)
-    {
-        throw std::exception("GL_LINE is not a valid primitive type! use GL_LINES!");
-    }
-    m_nDrawType = drawType;
-}
-
-int TRSVAO::getDrawParam()
-{
-    return m_nPatchParam;
-}
-
-void TRSVAO::setDrawParam(int param)
-{
-    m_nPatchParam = param;
-}
-
-void TRSVAO::setVBO(unsigned int vbo)
-{
-    VBO = vbo;
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-}
-
-void TRSVAO::bind()
-{
-    glBindVertexArray(VAO);
-}
-
-void TRSVAO::unBind()
-{
-    glBindVertexArray(0);
-}
-
-int TRSVAO::getDrawCount() const
-{
-    return m_nDrawCount;
-}
-
-int TRSVAO::getElementCount() const
-{
-    return m_nElementCount;
-}
-
-void TRSVAO::setDrawCount(int nCount)
-{
-    m_nDrawCount = nCount;
-}
-
-void TRSVAO::genVAO(bool bBind /*= true*/)
-{
-    glGenVertexArrays(1, &VAO);
-    if (bBind)
-    {
-        glBindVertexArray(VAO);
+        glDeleteBuffers(1, &m_elementBuffer);
+        m_elementBuffer = 0;
     }
 }
 
-unsigned int TRSVAO::getVAO()
-{
-    return VAO;
-}

@@ -75,7 +75,11 @@ void TRSAssimpLoader::recurseNode(aiNode* pNode, const aiScene* pScene)
 
 std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene)
 {
+    unsigned int numPt = pMesh->mNumVertices;
     vector<Vertex> vertices;
+    vector<TRSVec3> points(numPt);
+    vector<TRSVec3> normals(numPt);
+    vector<TRSVec2> UVs(numPt);
     vector<unsigned int> indices;
     for (unsigned int i = 0; i < pMesh->mNumVertices; i++)
     {
@@ -109,10 +113,12 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
             indices.push_back(face.mIndices[j]);
     }
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
-    float* pData = (float*)(&vertices[0]);
-    unsigned int* pIndice = &indices[0];
     //每个vertex顶点数据中有14个float
-    pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnVertexNormTexture, pIndice, indices.size());
+    //float* pData = (float*)(&vertices[0]);
+    //unsigned int* pIndice = &indices[0];
+    //pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnVertexNormTexture, pIndice, indices.size());
+    pGeode->setMeshData(points, normals, UVs, std::vector<TRSVec3>());
+    pGeode->setIndexArray(indices);
     TRSStateSet* pStateSet = pGeode->getOrCreateStateSet().get();
     TRSTexture* pCurTexture = pStateSet->getTexture();
     TRSShader* pShader = pStateSet->getShader();

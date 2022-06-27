@@ -6,62 +6,41 @@
 
 #pragma once
 #include "TRSExport.h"
+#include "TRSVAOBase.h"
 #include "TRSConst.h"
 
-class TRS_EXPORT TRSVAO
+// interleave vertex attribute to organize the vertex data in VBO
+class TRS_EXPORT TRSVAO : public TRSVAOBase
 {
 public:
     TRSVAO();
     ~TRSVAO();
 
-    void createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType);
+    void bindVAO();
 
-    void createVAO(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount);
+    void unBindVAO();
 
-    //获取VBO
-    unsigned int getVBO() const;
-    //设置VBO
-    void setVBO(unsigned int vbo);
-    //Buff的类型
-    EnVertexStruct getBufferType() const;
-    //设置Buff的类型
-    void setBuffType(EnVertexStruct buffType);
-    int getDrawType();
-    void setDrawType(int drawType);
-    int getDrawParam();
-    void setDrawParam(int param);
+    void createVAO();
 
-    //绘制数组的数量
-    int getDrawCount() const;
-    int getElementCount() const;
-    void setDrawCount(int nCount);
+    void createVBO();
 
-    void genVAO(bool bBind = true);
-    unsigned int getVAO();
-    void bind();
+    void uploadVBO(float* vertices, int verticeSize);
 
-    void unBind();
+    void createEBO();
 
-protected:
-    void createVBO(float* vertices, int verticeSize);
+    void uploadEBO(unsigned int* indice, int indexCount);
 
-    void createEBO(unsigned int* indice, int indexCount);
-
-    void setVertexAttrib(EnVertexStruct EnVertType);
-
-    void calcDrawCount(EnVertexStruct EnVertType, int verticeSize);
+    void setVertexAttrib(int MeshStructs);
 
     void deleteOldBuffer();
 
 protected:
-    unsigned int VAO = 0;
-    unsigned int VBO = 0;
-    unsigned int EBO = 0;
-    EnVertexStruct m_EnVertType;    ///<顶点数组的格式类型
-    int m_nDrawCount = 0;           ///<顶点数组绘制数量
-    int m_nElementCount = 0;        ///<索引数组的绘制数量
-    int m_nDrawType;                ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
-    int m_nPatchParam;              ///<绘制类型为GL_PATCHES时，表示碎片的参数
+    unsigned int m_vao = 0;
+    unsigned int m_elementBuffer = 0;
+    unsigned int m_vertexBuffer = 0;
+    unsigned int m_normalBuffer = 0;
+    unsigned int m_textureCoordBuffer = 0;
+    unsigned int m_colorBuffer = 0;
 };
 
 

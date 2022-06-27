@@ -1,5 +1,6 @@
 ﻿#include "TRSNode.h"
 #include "TRSStateset.h"
+#include "TRSMesh.h"
 
 
 
@@ -8,7 +9,7 @@ TRSNode::TRSNode()
     , m_UpdateFunc(nullptr)
     , m_matColor(s_DefaultNodeColor)
 {
-
+    m_pMesh = std::make_shared<TRSMesh>();
 }
 
 TRSNode::~TRSNode()
@@ -24,6 +25,11 @@ TRSMatrix TRSNode::getMatrix()
 void TRSNode::setMatrix(const TRSMatrix& mat)
 {
     m_mat = mat;
+}
+
+void TRSNode::setActive()
+{
+
 }
 
 TRSVec4 TRSNode::getColor() const
@@ -44,11 +50,6 @@ void TRSNode::setVisible(bool vis)
 bool TRSNode::visible() const
 {
     return m_visible;
-}
-
-std::shared_ptr<TRSVAO> TRSNode::getVAO() const
-{
-    return nullptr;
 }
 
 void TRSNode::preProcess()

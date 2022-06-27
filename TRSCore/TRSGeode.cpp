@@ -1,6 +1,6 @@
 ﻿#include "TRSGeode.h"
-#include "TRSVAO.h"
 #include <iostream>
+#include "TRSMesh.h"
 #include "TRSShader.h"
 #include "TRSTexture.h"
 #include "TRSStateSet.h"
@@ -10,31 +10,7 @@ TRSGeode::TRSGeode()
     : TRSNode()
     , m_polygonMode(GL_FILL)
 {
-    m_pVAO = std::make_shared<TRSVAO>();
-}
 
-TRSGeode::TRSGeode(const TRSGeode& refObj, bool bSameStateset/* = true*/)
-    : TRSNode()
-{
-    m_pVAO = std::make_shared<TRSVAO>();
-    m_pVAO->genVAO(true);
-    m_pVAO->setVBO(refObj.getVAO()->getVBO());
-    m_pVAO->setBuffType(refObj.getVAO()->getBufferType());
-    m_pVAO->setDrawCount(refObj.getVAO()->getDrawCount());
-    m_pVAO->setDrawType(refObj.getVAO()->getDrawType());
-    m_pVAO->setDrawParam(refObj.getVAO()->getDrawParam());
-    m_pVAO->unBind();
-
-    if (bSameStateset)
-    {
-        m_pStateSet = refObj.m_pStateSet;
-        m_UpdateFunc = refObj.m_UpdateFunc;
-    }
-}
-
-TRSGeode::TRSGeode(float* vertices, int verticeSize, EnVertexStruct EnVertType)
-{
-    readFromVertex(vertices, verticeSize, EnVertType);
 }
 
 TRSGeode::~TRSGeode()
@@ -47,19 +23,22 @@ void TRSGeode::draw()
     drawInternal();
 }
 
-void TRSGeode::readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType)
+void TRSGeode::setMeshData(const std::vector<TRSPoint>& vertexs, const std::vector<TRSVec3>& normals, const std::vector<TRSVec2>& UVs, const std::vector<TRSVec3>& colors)
 {
-    m_pVAO->createVAO(vertices, verticeSize, EnVertType);
+    m_pMesh->setVertex(vertexs);
+    m_pMesh->setNormal(normals);
+    m_pMesh->setUV(UVs);
+    m_pMesh->setColor(colors);
 }
 
-void TRSGeode::readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount)
+void TRSGeode::setIndexArray(const std::vector<unsigned int>& indices)
 {
-    m_pVAO->createVAO(vertices, verticeSize, EnVertType, indice, indexCount);
+    m_pMesh->setIndices(indices);
 }
 
-std::shared_ptr<TRSVAO> TRSGeode::getVAO() const
+void TRSGeode::setActive()
 {
-    return m_pVAO;
+    m_pMesh->meshBind();
 }
 
 void TRSGeode::setPolygonMode(int polyMode)
@@ -72,7 +51,6 @@ std::string TRSGeode::debugInfo()
     TRSShader* pShader = m_pStateSet->getShader();
     TRSTexture* pTexture = m_pStateSet->getTexture();
     std::string strDebugInfo;
-    strDebugInfo = "Geode VAO ID: " + std::to_string(m_pVAO->getVAO());
     strDebugInfo += pShader->debugInfo();
     strDebugInfo += pTexture->debugInfo();
     return strDebugInfo;
@@ -80,9 +58,9 @@ std::string TRSGeode::debugInfo()
 
 void TRSGeode::preProcess()
 {
-    if (GL_PATCHES == m_pVAO->getDrawType())
+    if (GL_PATCHES == m_pMesh->getDrawType())
     {
-        glPatchParameteri(GL_PATCH_VERTICES, m_pVAO->getDrawParam());
+        glPatchParameteri(GL_PATCH_VERTICES, m_pMesh->getDrawParam());
     }
 
     if (m_polygonMode != GL_FILL)
@@ -100,15 +78,15 @@ void TRSGeode::preProcess()
 // #define GL_TRIANGLE_FAN 0x0006
 void TRSGeode::drawInternal()
 {
-    int nElementCount = m_pVAO->getElementCount();
-    int OpenGLDrawType = m_pVAO->getDrawType();
+    int nElementCount = m_pMesh->getElementCount();
+    int OpenGLDrawType = m_pMesh->getDrawType();
     if (nElementCount > 0)
     {
-        glDrawElements(OpenGLDrawType, m_pVAO->getElementCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(OpenGLDrawType, m_pMesh->getElementCount(), GL_UNSIGNED_INT, 0);
     }
     else
     {
-        glDrawArrays(OpenGLDrawType, 0, m_pVAO->getDrawCount());
+        glDrawArrays(OpenGLDrawType, 0, m_pMesh->getDrawCount());
     }
 
 }

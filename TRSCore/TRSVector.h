@@ -225,6 +225,7 @@ TRSVector<N> TRSVector<N>::operator=(const TRSVector<N>& vec)
 
 typedef TRSVector<2> TRSVec2;
 typedef TRSVector<3> TRSVec3;
+typedef TRSVector<3> TRSPoint;
 typedef TRSVector<4> TRSVec4;
 
 const TRSVec3 G_ORIGIN(0.0f, 0.0f, 0.0f);

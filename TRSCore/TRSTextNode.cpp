@@ -1,5 +1,5 @@
 ﻿#include "TRSTextNode.h"
-#include "TRSVAO.h"
+#include "TRSMesh.h"
 #include "TRSCharacterTexture.h"
 #include "TRSStateSet.h"
 #include "TRSShader.h"
@@ -13,7 +13,6 @@ TRSTextNode::TRSTextNode()
 {
     m_matColor = TRSVec4(0.5f, 1.0f, 0.5f, 1.0f);
     m_size = 0.1;
-    m_pVAO = std::make_shared<TRSVAO>();
     getOrCreateStateSet();
     m_pStateSet->getShader()->createProgram("shaders/FontsVertex.glsl", "shaders/FontsFragment .glsl");
 
@@ -79,9 +78,9 @@ void TRSTextNode::draw()
     glDrawArrays(GL_TRIANGLES, 0, m_ptCount);
 }
 
-std::shared_ptr<TRSVAO> TRSTextNode::getVAO() const
+void TRSTextNode::setActive()
 {
-    return m_pVAO;
+    m_pMesh->meshBind();
 }
 
 std::string TRSTextNode::debugInfo()
@@ -89,7 +88,6 @@ std::string TRSTextNode::debugInfo()
     TRSShader* pShader = m_pStateSet->getShader();
     TRSTexture* pTexture = m_pStateSet->getTexture();
     std::string strDebugInfo;
-    strDebugInfo = "Geode VAO ID: " + std::to_string(m_pVAO->getVAO());
     strDebugInfo += pShader->debugInfo();
     strDebugInfo += pTexture->debugInfo();
     return strDebugInfo;
@@ -114,7 +112,9 @@ void TRSTextNode::generateText()
     TRSVec3 curPos = pos;
 
     int size = m_text.size();
-    float* vertexArray = new float[size * 6 * 5]; // each character need 6 point(2 triangle), each point need 5 float(3 coordinate and 2 texture coordinate)
+    std::vector<TRSPoint> vertices;
+    std::vector<TRSVec2> UVs;
+    //float* vertexArray = new float[size * 6 * 5]; // each character need 6 point(2 triangle), each point need 5 float(3 coordinate and 2 texture coordinate)
     for (int i = 0; i < size; i++)
     {
         wchar_t c = m_text[i];
@@ -131,19 +131,17 @@ void TRSTextNode::generateText()
         float topTC = float(unichar.y) / textureDimension;
         float rightTC = float(unichar.x + unichar.w) / textureDimension;
         float btmTC = float(unichar.y + unichar.h) / textureDimension;
-        float curSixPtArray[6][5] = {
-            { leftBtm[0], leftBtm[1], leftBtm[2],    leftTC, btmTC },
-            { rightBtm[0], rightBtm[1], rightBtm[2], rightTC, btmTC },
-            { leftTop[0], leftTop[1], leftTop[2],    leftTC, topTC },
+        vertices.push_back(TRSPoint(leftBtm[0], leftBtm[1], leftBtm[2])); UVs.push_back(TRSVec2(leftTC, btmTC));
+        vertices.push_back(TRSPoint(rightBtm[0], rightBtm[1], rightBtm[2])); UVs.push_back(TRSVec2(rightTC, btmTC));
+        vertices.push_back(TRSPoint(leftTop[0], leftTop[1], leftTop[2])); UVs.push_back(TRSVec2(leftTC, topTC));
 
-            { leftTop[0], leftTop[1], leftTop[2],    leftTC, topTC },
-            { rightBtm[0], rightBtm[1], rightBtm[2], rightTC, btmTC },
-            { rightTop[0], rightTop[1], rightTop[2], rightTC, topTC },
-        };
-        std::memcpy(vertexArray + i * 30, curSixPtArray, sizeof(curSixPtArray));
+        vertices.push_back(TRSPoint(leftTop[0], leftTop[1], leftTop[2])); UVs.push_back(TRSVec2(leftTC, topTC));
+        vertices.push_back(TRSPoint(rightBtm[0], rightBtm[1], rightBtm[2])); UVs.push_back(TRSVec2(rightTC, btmTC));
+        vertices.push_back(TRSPoint(rightTop[0], rightTop[1], rightTop[2])); UVs.push_back(TRSVec2(rightTC, topTC));
         curPos += right * (unichar.left + unichar.w) * scale;
     }
     // to do ,this snippet should before draw()
     m_ptCount = size * 6 * 5;
-    m_pVAO->createVAO(vertexArray, m_ptCount, EnVertexTexture);
+    m_pMesh->setVertex(vertices);
+    m_pMesh->setUV(UVs);
 }

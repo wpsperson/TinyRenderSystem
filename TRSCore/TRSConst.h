@@ -10,11 +10,29 @@
 enum EnVertexStruct
 {
     EnVertex,
+    EnVertexNormal,
     EnVertexTexture,
+    EnVertexNormTexture,
     EnVertexTextureColor,
     EnVertexColorTexture,
-    EnVertexNormTexture,
-    EnVertexNormal,
+};
+
+enum VertexAttributeIndex
+{
+    VertexIndex = 0,
+    NormalIndex = 1,
+    TextureCoordIndex0 = 2,
+    ColorIndex = 3,
+    TextureCoordIndex1,
+    TextureCoordIndex2,
+};
+
+enum MeshStruct
+{
+    msVertex = 1,
+    msNormal = 2,
+    msUV = 4,
+    msColor = 8,
 };
 
 // now we use OpenGL 4.6

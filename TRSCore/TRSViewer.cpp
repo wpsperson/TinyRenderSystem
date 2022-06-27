@@ -8,7 +8,6 @@
 #include "CullVisitor.h"
 #include "TRSShader.h"
 #include "TRSGeode.h"
-#include "TRSVAO.h"
 #include "TRSTexture.h"
 #include "Windows.h"
 #include "TRSVisitors.h"
@@ -104,8 +103,7 @@ void TRSViewer::drawScene()
         for (std::vector<TRSNode*>::iterator itrNode = nodeList.begin(); itrNode!=nodeList.end(); itrNode++)
         {
             TRSNode* pNode = *itrNode;
-            std::shared_ptr<TRSVAO> pVao = pNode->getVAO();
-            pVao->bind();
+            pNode->setActive();
             TRSMatrix modelMatrix = pNode->getMatrix();
             TRSMatrix viewMatrix = m_pCamera->getViewMatrix();
             TRSMatrix projectMatrix = m_pCamera->getProjectMatrix();
@@ -124,7 +122,6 @@ void TRSViewer::drawScene()
             pNode->preProcess();
             pNode->draw();
             pNode->postProcess();
-            pVao->unBind();
         }
 
     }

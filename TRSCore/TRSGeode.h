@@ -8,27 +8,25 @@
 #include "TRSExport.h"
 #include "TRSNode.h"
 #include "TRSVector.h"
+#include <vector>
 
 class TRS_EXPORT TRSGeode : public TRSNode
 {
 public:
     TRSGeode();
 
-    //拷贝构造函数就是共享VBO
-    TRSGeode(const TRSGeode& refObj, bool bSameStateset = true);
-
-    TRSGeode(float* vertices, int verticeSize, EnVertexStruct EnVertType);
-
     ~TRSGeode();
 
     virtual void draw() override;
 
     //vertices float point. verticeSize表示有多少个float
-    virtual void readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType);
+    //virtual void readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType);
+    //virtual void readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount);
+    void setMeshData(const std::vector<TRSPoint>& vertexs, const std::vector<TRSVec3>& normals, const std::vector<TRSVec2>& UVs, const std::vector<TRSVec3>& colors);
 
-    virtual void readFromVertex(float* vertices, int verticeSize, EnVertexStruct EnVertType, unsigned int* indice, int indexCount);
+    void setIndexArray(const std::vector<unsigned int>& indices);
 
-    virtual std::shared_ptr<TRSVAO> getVAO() const override;
+    void setActive() override;
 
     void setPolygonMode(int polyMode);
 
@@ -40,7 +38,6 @@ protected:
     void drawInternal();
 
 protected:
-    std::shared_ptr<TRSVAO> m_pVAO;
     int m_polygonMode;
 };
 

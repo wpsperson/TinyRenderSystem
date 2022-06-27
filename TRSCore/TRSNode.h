@@ -14,7 +14,7 @@
 
 class NodeVisitor;
 class TRSStateSet;
-class TRSVAO;
+class TRSMesh;
 class TRSNode;
 
 typedef std::tr1::function<void(TRSNode*)> NodeUpdateFunc;
@@ -29,7 +29,7 @@ public:
 
     void setMatrix(const TRSMatrix& mat);
 
-    virtual std::shared_ptr<TRSVAO> getVAO() const;
+    virtual void setActive();// used to bind vao
 
     virtual void preProcess();
 
@@ -63,6 +63,7 @@ protected:
     TRSMatrix m_mat;
     TRSVec4 m_matColor;
     std::shared_ptr<TRSStateSet> m_pStateSet;
+    std::shared_ptr<TRSMesh> m_pMesh;
     NodeUpdateFunc m_UpdateFunc;
 };
 

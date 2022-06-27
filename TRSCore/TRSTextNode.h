@@ -4,7 +4,6 @@
 #include "TRSVector.h"
 #include <string>
 
-class TRSVAO;
 
 class TRS_EXPORT TRSTextNode : public TRSNode
 {
@@ -19,7 +18,7 @@ public:
 
     virtual void draw() override;
 
-    virtual std::shared_ptr<TRSVAO> getVAO() const override;
+    void setActive() override;
 
     virtual std::string debugInfo() override;
 
@@ -28,7 +27,6 @@ protected:
     void postProcess() override;
     void generateText();
 protected:
-    std::shared_ptr<TRSVAO> m_pVAO;
     std::wstring m_text;
     TRSVec3 pos;
     TRSVec3 right;

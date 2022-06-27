@@ -6,25 +6,25 @@ LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 
 set(Target_INCLUDE_LIST
     ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.h
-    ${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.h
-    ${TRSExamPath}/${TARGET_NAME}/E03BasicLight.h
-    ${TRSExamPath}/${TARGET_NAME}/E04ElementArray.h
-    ${TRSExamPath}/${TARGET_NAME}/E05LoadModelByAssimp.h
-    ${TRSExamPath}/${TARGET_NAME}/E07TessellationOnShader.h
-    ${TRSExamPath}/${TARGET_NAME}/E08PNTriangles.h
-    ${TRSExamPath}/${TARGET_NAME}/E09FreeType.h
-    ${TRSExamPath}/${TARGET_NAME}/E10NurbsFaceToMesh.h
+    #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.h
+    #${TRSExamPath}/${TARGET_NAME}/E03BasicLight.h
+    #${TRSExamPath}/${TARGET_NAME}/E04ElementArray.h
+    #${TRSExamPath}/${TARGET_NAME}/E05LoadModelByAssimp.h
+    #${TRSExamPath}/${TARGET_NAME}/E07TessellationOnShader.h
+    #${TRSExamPath}/${TARGET_NAME}/E08PNTriangles.h
+    #${TRSExamPath}/${TARGET_NAME}/E09FreeType.h
+    #${TRSExamPath}/${TARGET_NAME}/E10NurbsFaceToMesh.h
     )
 set(Target_SRC_LIST
     ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E03BasicLight.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E04ElementArray.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E05LoadModelByAssimp.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E07TessellationOnShader.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E08PNTriangles.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E09FreeType.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E10NurbsFaceToMesh.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E03BasicLight.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E04ElementArray.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E05LoadModelByAssimp.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E07TessellationOnShader.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E08PNTriangles.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E09FreeType.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E10NurbsFaceToMesh.cpp
     ${TRSExamPath}/${TARGET_NAME}/main.cpp
 )
 source_group("include" FILES ${Target_INCLUDE_LIST} )
