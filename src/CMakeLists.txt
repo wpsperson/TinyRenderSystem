@@ -51,28 +51,48 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/glad/glad.h
     ${INCLUDE_DIR}/KHR/khrplatform.h
     )
-set(Target_SRC_LIST2
-    ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E03BasicLight.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E04ElementArray.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E05LoadModelByAssimp.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E07TessellationOnShader.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E08PNTriangles.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E09FreeType.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E10NurbsFaceToMesh.cpp
-    ${TRSExamPath}/${TARGET_NAME}/main.cpp
+
+
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+set(Target_SRC_LIST
+    ${SRC_DIR}/Core/TRSCharacterTexture.cpp
+    ${SRC_DIR}/Core/TRSShader.cpp
+    ${SRC_DIR}/Core/TRSStateSet.cpp
+    ${SRC_DIR}/Core/TRSTexture.cpp
+    ${SRC_DIR}/Core/TRSVAO.cpp
+    ${SRC_DIR}/Core/TRSViewer.cpp
+    ${SRC_DIR}/Core/TRSVisitors.cpp
+    ${SRC_DIR}/DataModel/NodeVisitor.cpp
+    ${SRC_DIR}/DataModel/TRSGeode.cpp
+    ${SRC_DIR}/DataModel/TRSGroup.cpp
+    ${SRC_DIR}/DataModel/TRSMesh.cpp
+    ${SRC_DIR}/DataModel/TRSNode.cpp
+    ${SRC_DIR}/DataModel/TRSTextNode.cpp
+    ${SRC_DIR}/Event/TRSEventDispatcher.cpp
+    ${SRC_DIR}/Event/TRSEventHandler.cpp
+    ${SRC_DIR}/Event/TRSShortcutKeyHandler.cpp
+    ${SRC_DIR}/Geometry/GeometryUtil.cpp    
+    ${SRC_DIR}/IO/TRSAssimpLoader.cpp
+    ${SRC_DIR}/Context/TRSContext.cpp
+    ${SRC_DIR}/Context/GLFWContext.cpp
+    ${SRC_DIR}/Math/BSpline.cpp
+    ${SRC_DIR}/Math/BSplineSurface.cpp
+    ${SRC_DIR}/Math/TRSMathUtil.cpp
+    ${SRC_DIR}/Math/TRSMatrix.cpp
+    ${SRC_DIR}/Util/CullVisitor.cpp
+    ${SRC_DIR}/Util/ObjUtils.cpp
+    ${SRC_DIR}/Util/TRSResource.cpp
+    ${SRC_DIR}/Util/TRSUtils.cpp
+    ${SRC_DIR}/Camera/TRSCamera.cpp
+    ${SRC_DIR}/Camera/TRSDefaultCameraHandler.cpp
+    ${SRC_DIR}/glad/glad.c
 )
 
-FILE(GLOB Target_SRC_LIST ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.c)
 FILE(GLOB Target_SHADER_LIST ${PROJECT_SOURCE_DIR}/shaders/*.glsl)
-#source_group("include" FILES ${Target_INCLUDE_LIST} )
-
 source_group(TREE ${INCLUDE_DIR} FILES ${Target_INCLUDE_LIST})
-
-source_group("src" FILES ${Target_SRC_LIST})
+source_group(TREE ${SRC_DIR} FILES ${Target_SRC_LIST})
 source_group("shader" FILES ${Target_SHADER_LIST})
-#add_executable(${TARGET_NAME}  ${Target_INCLUDE_LIST} ${Target_SRC_LIST} ${Target_SHADER_LIST})
+
 add_library(${TARGET_NAME} SHARED ${Target_INCLUDE_LIST} ${Target_SRC_LIST} ${Target_SHADER_LIST} )
     
 set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin")	
