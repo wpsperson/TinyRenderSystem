@@ -1,6 +1,6 @@
-set(TARGET_NAME TRSBasicDemo)
+set(TARGET_NAME TRSBasicExample)
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/${TRS_CORE})
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 
 
@@ -32,7 +32,7 @@ source_group("src" FILES ${Target_SRC_LIST})
 FILE(GLOB Target_SHADER_LIST ${TRSExamPath}/${TARGET_NAME}/shaders/*.glsl)
 source_group("shader" FILES ${Target_SHADER_LIST})
 add_executable(${TARGET_NAME}  ${Target_INCLUDE_LIST} ${Target_SRC_LIST} ${Target_SHADER_LIST})
-add_dependencies(${TARGET_NAME} ${TRS_CORE})
+add_dependencies(${TARGET_NAME} TinyRenderSystem)
 set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "TRSExamples")
 
 
@@ -43,10 +43,10 @@ set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POS
 set_target_properties(${TARGET_NAME} PROPERTIES RELEASE_POSTFIX "${CMAKE_RELEASE_POSTFIX}")
 
 SET(ADDITIONAL_LIBRARIES_DEBUG
-TRSCored.lib
+TinyRenderSystemd.lib
 )
 SET(ADDITIONAL_LIBRARIES_RELEASE
-TRSCore.lib
+TinyRenderSystem.lib
 )
 TARGET_LINK_LIBRARIES(${TARGET_NAME} debug "${ADDITIONAL_LIBRARIES_DEBUG}" optimized "${ADDITIONAL_LIBRARIES_RELEASE}")
 

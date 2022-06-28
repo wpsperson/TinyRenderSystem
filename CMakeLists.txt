@@ -8,7 +8,7 @@ set_property( GLOBAL PROPERTY USE_FOLDERS ON)
 
 ADD_SUBDIRECTORY(src)
 
-option(BuildTRSExamples "是否构建 TRSExamples?" OFF)
+option(BuildTRSExamples "是否构建 TRSExamples?" ON)
 if (BuildTRSExamples)
 	ADD_SUBDIRECTORY(TRSExamples)
 endif(BuildTRSExamples)
