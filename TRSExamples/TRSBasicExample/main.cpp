@@ -1,12 +1,12 @@
 ﻿#include "E01TextureBox.h"
-#include "E02BasicMaterial.h"
-#include "E03BasicLight.h"
-#include "E04ElementArray.h"
-#include "E05LoadModelByAssimp.h"
-#include "E07TessellationOnShader.h"
-#include "E08PNTriangles.h"
-#include "E09FreeType.h"
-#include "E10NurbsFaceToMesh.h"
+//#include "E02BasicMaterial.h"
+//#include "E03BasicLight.h"
+//#include "E04ElementArray.h"
+//#include "E05LoadModelByAssimp.h"
+//#include "E07TessellationOnShader.h"
+//#include "E08PNTriangles.h"
+//#include "E09FreeType.h"
+//#include "E10NurbsFaceToMesh.h"
 
 int main(int argn, char** argc)
 {

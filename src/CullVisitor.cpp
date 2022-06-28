@@ -1,8 +1,8 @@
-﻿#include "CullVisitor.h"
-#include "TRSNode.h"
-#include "TRSStateset.h"
-#include "TRSGeode.h"
-#include "TRSGroup.h"
+﻿#include "Util\CullVisitor.h"
+#include "DataModel\TRSNode.h"
+#include "Core\TRSStateSet.h"
+#include "DataModel\TRSGeode.h"
+#include "DataModel\TRSGroup.h"
 
 
 CullVisitor::CullVisitor()

@@ -1,6 +1,6 @@
-﻿#include "TRSNode.h"
-#include "TRSStateset.h"
-#include "TRSMesh.h"
+﻿#include "DataModel\TRSNode.h"
+#include "Core\TRSStateSet.h"
+#include "DataModel\TRSMesh.h"
 
 
 

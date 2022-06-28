@@ -1,5 +1,5 @@
-﻿#include "NodeVisitor.h"
-#include "TRSNode.h"
+﻿#include "DataModel\NodeVisitor.h"
+#include "DataModel\TRSNode.h"
 
 
 

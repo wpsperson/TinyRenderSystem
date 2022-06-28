@@ -1,8 +1,8 @@
-﻿#include "TRSDefaultCameraHandler.h"
-#include "TRSCamera.h"
-#include "TRSEventDefine.h"
+﻿#include "Camera\TRSDefaultCameraHandler.h"
+#include "Camera\TRSCamera.h"
+#include "Event\TRSEventDefine.h"
 #include <glad/glad.h>
-#include "TRSUtils.h"
+#include "Util\TRSUtils.h"
 
 
 TRSDefaultCameraHandler::TRSDefaultCameraHandler(TRSCamera* camera)

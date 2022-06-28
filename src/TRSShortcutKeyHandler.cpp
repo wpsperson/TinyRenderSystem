@@ -1,7 +1,7 @@
-#include "TRSShortcutKeyHandler.h"
-#include "TRSEventDefine.h"
-#include "TRSContext.h"
-#include "TRSVisitors.h"
+#include "Event\TRSShortcutKeyHandler.h"
+#include "Event\TRSEventDefine.h"
+#include "Context\TRSContext.h"
+#include "Core\TRSVisitors.h"
 
 
 TRSShortcutKeyHandler::TRSShortcutKeyHandler(TRSContext* context, PolygonModeVisitor* polyModeVisitor)

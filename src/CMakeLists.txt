@@ -9,11 +9,67 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glfw-3.2.1/lib)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/assimp-4.1.0/lib64)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/lib64)
 
+set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+set(Target_INCLUDE_LIST    
+    ${INCLUDE_DIR}/Core/TRSCharacterTexture.h
+    ${INCLUDE_DIR}/Core/TRSConfig.h
+    ${INCLUDE_DIR}/Core/TRSConst.h
+    ${INCLUDE_DIR}/Core/TRSExport.h
+    ${INCLUDE_DIR}/Core/TRSShader.h
+    ${INCLUDE_DIR}/Core/TRSStateSet.h
+    ${INCLUDE_DIR}/Core/TRSTexture.h
+    ${INCLUDE_DIR}/Core/TRSVAO.h
+    ${INCLUDE_DIR}/Core/TRSVAOBase.h
+    ${INCLUDE_DIR}/Core/TRSViewer.h
+    ${INCLUDE_DIR}/Core/TRSVisitors.h
+    ${INCLUDE_DIR}/DataModel/NodeVisitor.h
+    ${INCLUDE_DIR}/DataModel/TRSGeode.h
+    ${INCLUDE_DIR}/DataModel/TRSGroup.h
+    ${INCLUDE_DIR}/DataModel/TRSMesh.h
+    ${INCLUDE_DIR}/DataModel/TRSNode.h
+    ${INCLUDE_DIR}/DataModel/TRSTextNode.h
+    ${INCLUDE_DIR}/Event/TRSEventDefine.h
+    ${INCLUDE_DIR}/Event/TRSEventDispatcher.h
+    ${INCLUDE_DIR}/Event/TRSEventHandler.h
+    ${INCLUDE_DIR}/Event/TRSShortcutKeyHandler.h
+    ${INCLUDE_DIR}/Geometry/GeometryUtil.h    
+    ${INCLUDE_DIR}/IO/TRSAssimpLoader.h
+    ${INCLUDE_DIR}/Context/TRSContext.h
+    ${INCLUDE_DIR}/Context/GLFWContext.h
+    ${INCLUDE_DIR}/Math/BSpline.h
+    ${INCLUDE_DIR}/Math/BSplineSurface.h
+    ${INCLUDE_DIR}/Math/TRSMathUtil.h
+    ${INCLUDE_DIR}/Math/TRSMatrix.h
+    ${INCLUDE_DIR}/Math/TRSVector.h
+    ${INCLUDE_DIR}/Util/CullVisitor.h
+    ${INCLUDE_DIR}/Util/ObjUtils.h
+    ${INCLUDE_DIR}/Util/stb_image.h
+    ${INCLUDE_DIR}/Util/TRSResource.h
+    ${INCLUDE_DIR}/Util/TRSUtils.h
+    ${INCLUDE_DIR}/Camera/TRSCamera.h
+    ${INCLUDE_DIR}/Camera/TRSDefaultCameraHandler.h
+    ${INCLUDE_DIR}/glad/glad.h
+    ${INCLUDE_DIR}/KHR/khrplatform.h
+    )
+set(Target_SRC_LIST2
+    ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E03BasicLight.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E04ElementArray.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E05LoadModelByAssimp.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E07TessellationOnShader.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E08PNTriangles.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E09FreeType.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E10NurbsFaceToMesh.cpp
+    ${TRSExamPath}/${TARGET_NAME}/main.cpp
+)
 
-FILE(GLOB Target_INCLUDE_LIST  ${PROJECT_SOURCE_DIR}/include/*.h )
 FILE(GLOB Target_SRC_LIST ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.c)
 FILE(GLOB Target_SHADER_LIST ${PROJECT_SOURCE_DIR}/shaders/*.glsl)
-source_group("include" FILES ${Target_INCLUDE_LIST} )
+#source_group("include" FILES ${Target_INCLUDE_LIST} )
+
+source_group(TREE ${INCLUDE_DIR} FILES ${Target_INCLUDE_LIST})
+
 source_group("src" FILES ${Target_SRC_LIST})
 source_group("shader" FILES ${Target_SHADER_LIST})
 #add_executable(${TARGET_NAME}  ${Target_INCLUDE_LIST} ${Target_SRC_LIST} ${Target_SHADER_LIST})

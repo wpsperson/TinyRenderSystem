@@ -1,8 +1,8 @@
-﻿#include "TRSCamera.h"
+﻿#include "Camera\TRSCamera.h"
 #include <iostream>
-#include "TRSConst.h"
-#include "TRSConfig.h"
-#include "TRSMathUtil.h"
+#include "Core\TRSConst.h"
+#include "Core\TRSConfig.h"
+#include "Math\TRSMathUtil.h"
 
 TRSCamera::TRSCamera()
 {

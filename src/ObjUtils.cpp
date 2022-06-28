@@ -1,9 +1,9 @@
-﻿#include "ObjUtils.h"
+﻿#include "Util\ObjUtils.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <fstream>
 #include <iostream>
-#include "TRSVector.h"
+#include "Math\TRSVector.h"
 #include <vector>
 
 void outputNormal(std::ofstream& stream, double x, double y, double z)

@@ -1,16 +1,16 @@
-﻿#include "TRSAssimpLoader.h"
+﻿#include "IO\TRSAssimpLoader.h"
 #include <iostream>
 #include <vector>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "TRSGeode.h"
-#include "TRSGroup.h"
-#include "TRSTexture.h"
-#include "TRSStateSet.h"
-#include "TRSNode.h"
-#include "TRSShader.h"
+#include "DataModel\TRSGeode.h"
+#include "DataModel\TRSGroup.h"
+#include "Core\TRSTexture.h"
+#include "Core\TRSStateSet.h"
+#include "DataModel\TRSNode.h"
+#include "Core\TRSShader.h"
 
 using namespace std;
 

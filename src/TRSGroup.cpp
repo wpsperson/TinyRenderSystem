@@ -1,6 +1,6 @@
-﻿#include "TRSGroup.h"
-#include "TRSNode.h"
-#include "NodeVisitor.h"
+﻿#include "DataModel\TRSGroup.h"
+#include "DataModel\TRSNode.h"
+#include "DataModel\NodeVisitor.h"
 
 
 

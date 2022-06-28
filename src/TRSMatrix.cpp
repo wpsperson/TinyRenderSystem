@@ -1,4 +1,4 @@
-﻿#include "TRSMatrix.h"
+﻿#include "Math\TRSMatrix.h"
 #include <cmath>
 
 

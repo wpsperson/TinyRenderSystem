@@ -1,6 +1,6 @@
-﻿#include "TRSVisitors.h"
+﻿#include "Core\TRSVisitors.h"
 #include "glad/glad.h"
-#include "TRSGeode.h"
+#include "DataModel\TRSGeode.h"
 
 PolygonModeVisitor::PolygonModeVisitor()
     :m_polygonMode(GL_FILL)

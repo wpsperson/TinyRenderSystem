@@ -1,5 +1,5 @@
-﻿#include "BSplineSurface.h"
-#include "BSpline.h"
+﻿#include "Math\BSplineSurface.h"
+#include "Math\BSpline.h"
 
 
 BSplineSurface::BSplineSurface()

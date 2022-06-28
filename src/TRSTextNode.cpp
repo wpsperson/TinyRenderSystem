@@ -1,10 +1,10 @@
-﻿#include "TRSTextNode.h"
-#include "TRSMesh.h"
-#include "TRSCharacterTexture.h"
-#include "TRSStateSet.h"
-#include "TRSShader.h"
+﻿#include "DataModel\TRSTextNode.h"
+#include "DataModel\TRSMesh.h"
+#include "Core\TRSCharacterTexture.h"
+#include "Core\TRSStateSet.h"
+#include "Core\TRSShader.h"
 #include "glad/glad.h"
-#include "TRSTexture.h"
+#include "Core\TRSTexture.h"
 
 TRSTextNode::TRSTextNode()
     : pos(G_ORIGIN)

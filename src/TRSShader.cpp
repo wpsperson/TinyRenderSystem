@@ -1,6 +1,6 @@
-﻿#include "TRSShader.h"
-#include "TRSUtils.h"
-#include "TRSConst.h"
+﻿#include "Core\TRSShader.h"
+#include "Util\TRSUtils.h"
+#include "Core\TRSConst.h"
 
 
 TRSShader::TRSShader()

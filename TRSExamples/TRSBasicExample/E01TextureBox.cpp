@@ -1,14 +1,14 @@
 #include "E01TextureBox.h"
 #include <memory>
 #include "glad\glad.h"
-#include "TRSViewer.h"
-#include "TRSGeode.h"
-#include "TRSStateSet.h"
-#include "TRSTexture.h"
-#include "TRSResource.h"
-#include "TRSGroup.h"
-#include "TRSMathUtil.h"
-#include "TRSShader.h"
+#include "Core\TRSViewer.h"
+#include "Core\TRSStateSet.h"
+#include "Core\TRSTexture.h"
+#include "Core\TRSShader.h"
+#include "DataModel\TRSGeode.h"
+#include "DataModel\TRSGroup.h"
+#include "Util\TRSResource.h"
+#include "Math\TRSMathUtil.h"
 
 //开心盒子 shader未开启默认摄像机系统
 void E01TextureColorArray()

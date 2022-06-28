@@ -1,6 +1,6 @@
-﻿#include "TRSStateSet.h"
-#include "TRSShader.h"
-#include "TRSTexture.h"
+﻿#include "Core\TRSStateSet.h"
+#include "Core\TRSShader.h"
+#include "Core\TRSTexture.h"
 
 
 

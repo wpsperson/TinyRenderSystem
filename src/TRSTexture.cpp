@@ -1,10 +1,10 @@
-﻿#include "TRSTexture.h"
+﻿#include "Core\TRSTexture.h"
 #include <iostream>
 #include <cstdarg>
 #include <glad/glad.h>
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#include "TRSConst.h"
+#include "Util\stb_image.h"
+#include "Core\TRSConst.h"
 
 
 using namespace std;

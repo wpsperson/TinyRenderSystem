@@ -1,6 +1,6 @@
-﻿#include "TRSEventDispatcher.h"
-#include "TRSEventHandler.h"
-#include "TRSEventDefine.h"
+﻿#include "Event\TRSEventDispatcher.h"
+#include "Event\TRSEventHandler.h"
+#include "Event\TRSEventDefine.h"
 
 
 

@@ -1,6 +1,6 @@
-#include "TRSMesh.h"
-#include "TRSVector.h"
-#include "TRSVAO.h"
+#include "DataModel\TRSMesh.h"
+#include "Math\TRSVector.h"
+#include "Core\TRSVAO.h"
 #include <glad/glad.h>
 
 

@@ -1,9 +1,9 @@
-﻿#include "GLFWContext.h"
+﻿#include "Context\GLFWContext.h"
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <iostream>
-#include "TRSConst.h"
-#include "TRSEventDispatcher.h"
+#include "Core\TRSConst.h"
+#include "Event\TRSEventDispatcher.h"
 
 TRSEventDispatcher* GLFWContext::m_eventDispatcher = nullptr;
 

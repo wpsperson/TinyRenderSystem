@@ -1,9 +1,9 @@
-﻿#include "TRSGeode.h"
+﻿#include "DataModel\TRSGeode.h"
 #include <iostream>
-#include "TRSMesh.h"
-#include "TRSShader.h"
-#include "TRSTexture.h"
-#include "TRSStateSet.h"
+#include "DataModel\TRSMesh.h"
+#include "Core\TRSShader.h"
+#include "Core\TRSTexture.h"
+#include "Core\TRSStateSet.h"
 
 
 TRSGeode::TRSGeode()

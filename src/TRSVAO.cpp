@@ -1,8 +1,8 @@
-﻿#include "TRSVAO.h"
+﻿#include "Core\TRSVAO.h"
 #include <exception>
 #include <glad/glad.h>
-#include "TRSConst.h"
-#include "TRSMesh.h"
+#include "Core\TRSConst.h"
+#include "DataModel\TRSMesh.h"
 
 
 TRSVAO::TRSVAO()
