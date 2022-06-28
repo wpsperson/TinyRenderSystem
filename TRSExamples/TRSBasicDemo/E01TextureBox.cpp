@@ -17,8 +17,8 @@ void E01TextureColorArray()
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     pNode->setMeshData(s_BoxVertexs, s_EmptyVec3, s_BoxUVs, s_BoxColors);
     std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
-    pSS->getTexture()->createTexture("resources/textures/container.jpg");
-    pSS->getTexture()->createTexture("resources/textures/awesomeface.png");
+    pSS->getTexture()->createTexture("resources/textures/opengl.png");
+    pSS->getTexture()->createTexture("resources/textures/cube.png");
     pSS->getShader()->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
 
     std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
