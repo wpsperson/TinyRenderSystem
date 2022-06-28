@@ -32,7 +32,7 @@ public:
     void setDrawParam(int param);
     void meshBind();
 
-    void updateMesh();
+    void uploadMesh();
 
     static int computeVertexAttribStride(int vertexStructType);
 
@@ -58,9 +58,6 @@ private:
     int m_vertexStructType = msVertex;
     float* m_uploadData = nullptr;
     int m_uploadSize = 0;
-    int m_normalStartPos = 0;
-    int m_uvStartPos = 0;
-    int m_colorStartPos = 0;
 
     int m_nDrawType;                ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
     int m_nPatchParam;              ///<绘制类型为GL_PATCHES时，表示碎片的参数

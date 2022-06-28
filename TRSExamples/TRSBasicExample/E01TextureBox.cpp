@@ -9,13 +9,18 @@
 #include "DataModel\TRSGroup.h"
 #include "Util\TRSResource.h"
 #include "Math\TRSMathUtil.h"
+#include "Geometry\TRSCube.h"
 
 //开心盒子 shader未开启默认摄像机系统
 void E01TextureColorArray()
 {
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
-    pNode->setMeshData(s_BoxVertexs, s_EmptyVec3, s_BoxUVs, s_BoxColors);
+    
+    TRSCube* cube = new TRSCube(true);
+    TRSMesh* mesh = cube->getMesh();
+    pNode->setMesh(mesh);
+    //pNode->setMeshData(s_BoxVertexs, s_EmptyVec3, s_BoxUVs, s_BoxColors);
     std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
     pSS->getTexture()->createTexture("resources/textures/opengl.png");
     pSS->getTexture()->createTexture("resources/textures/cube.png");

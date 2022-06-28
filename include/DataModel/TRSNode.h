@@ -29,6 +29,8 @@ public:
 
     void setMatrix(const TRSMatrix& mat);
 
+    void setMesh(TRSMesh* mesh);
+
     virtual void setActive();// used to bind vao
 
     virtual void preProcess();

@@ -86,11 +86,11 @@ void TRSMesh::setDrawParam(int param)
 
 void TRSMesh::meshBind()
 {
-    updateMesh();
+    uploadMesh();
     m_vao->bindVAO();
 }
 
-void TRSMesh::updateMesh()
+void TRSMesh::uploadMesh()
 {
     if (m_dirty)
     {

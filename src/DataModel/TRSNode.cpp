@@ -27,6 +27,11 @@ void TRSNode::setMatrix(const TRSMatrix& mat)
     m_mat = mat;
 }
 
+void TRSNode::setMesh(TRSMesh* mesh)
+{
+    m_pMesh = std::make_shared<TRSMesh>(*mesh);
+}
+
 void TRSNode::setActive()
 {
 

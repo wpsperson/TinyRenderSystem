@@ -10,7 +10,7 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/assimp-4.1.0/lib64)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/lib64)
 
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
-set(Target_INCLUDE_LIST    
+set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/Core/TRSCharacterTexture.h
     ${INCLUDE_DIR}/Core/TRSConfig.h
     ${INCLUDE_DIR}/Core/TRSConst.h
@@ -32,7 +32,9 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/Event/TRSEventDispatcher.h
     ${INCLUDE_DIR}/Event/TRSEventHandler.h
     ${INCLUDE_DIR}/Event/TRSShortcutKeyHandler.h
-    ${INCLUDE_DIR}/Geometry/GeometryUtil.h    
+    ${INCLUDE_DIR}/Geometry/TRSGeometry.h
+    ${INCLUDE_DIR}/Geometry/TRSCube.h
+    ${INCLUDE_DIR}/Geometry/GeometryUtil.h
     ${INCLUDE_DIR}/IO/TRSAssimpLoader.h
     ${INCLUDE_DIR}/Context/TRSContext.h
     ${INCLUDE_DIR}/Context/GLFWContext.h
@@ -71,7 +73,9 @@ set(Target_SRC_LIST
     ${SRC_DIR}/Event/TRSEventDispatcher.cpp
     ${SRC_DIR}/Event/TRSEventHandler.cpp
     ${SRC_DIR}/Event/TRSShortcutKeyHandler.cpp
-    ${SRC_DIR}/Geometry/GeometryUtil.cpp    
+    ${SRC_DIR}/Geometry/TRSGeometry.cpp
+    ${SRC_DIR}/Geometry/TRSCube.cpp
+    ${SRC_DIR}/Geometry/GeometryUtil.cpp
     ${SRC_DIR}/IO/TRSAssimpLoader.cpp
     ${SRC_DIR}/Context/TRSContext.cpp
     ${SRC_DIR}/Context/GLFWContext.cpp
