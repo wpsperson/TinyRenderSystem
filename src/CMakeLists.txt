@@ -1,7 +1,7 @@
-set(TARGET_NAME TRSCore)
+set(TARGET_NAME TinyRenderSystem)
 
 add_definitions(-DTRSLIB)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/${TARGET_NAME})
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glfw-3.2.1/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/assimp-4.1.0/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/include)
@@ -10,9 +10,9 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/assimp-4.1.0/lib64)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/lib64)
 
 
-FILE(GLOB Target_INCLUDE_LIST  "${PROJECT_SOURCE_DIR}/${TARGET_NAME}/*.h" )
-FILE(GLOB Target_SRC_LIST ${PROJECT_SOURCE_DIR}/${TARGET_NAME}/*.cpp ${PROJECT_SOURCE_DIR}/${TARGET_NAME}/*.c)
-FILE(GLOB Target_SHADER_LIST ${PROJECT_SOURCE_DIR}/${TARGET_NAME}/shaders/*.glsl)
+FILE(GLOB Target_INCLUDE_LIST  ${PROJECT_SOURCE_DIR}/include/*.h )
+FILE(GLOB Target_SRC_LIST ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.c)
+FILE(GLOB Target_SHADER_LIST ${PROJECT_SOURCE_DIR}/shaders/*.glsl)
 source_group("include" FILES ${Target_INCLUDE_LIST} )
 source_group("src" FILES ${Target_SRC_LIST})
 source_group("shader" FILES ${Target_SHADER_LIST})
@@ -46,6 +46,6 @@ add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E 
                 ${CMAKE_SOURCE_DIR}/resources 
                 ${CMAKE_BINARY_DIR}/bin/resources)
 add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory  
-                ${CMAKE_SOURCE_DIR}/${TARGET_NAME}/shaders 
+                ${CMAKE_SOURCE_DIR}/shaders 
                 ${CMAKE_BINARY_DIR}/bin/shaders)
 
