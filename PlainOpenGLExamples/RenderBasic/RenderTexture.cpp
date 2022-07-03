@@ -210,6 +210,11 @@ int RenderMultiTexture()
     glUniform1i(nPosTexture0, 0);// 0 mean GL_TEXTURE0
     glUniform1i(nPosTexture1, 1);// 1 mean GL_TEXTURE1
 
+    glActiveTexture(GL_TEXTURE0);//这句可以不写，因为默认Texture0总是被激活。
+    glBindTexture(GL_TEXTURE_2D, BoxTexture);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, FaceTexture);
+
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
@@ -218,10 +223,6 @@ int RenderMultiTexture()
 
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        glActiveTexture(GL_TEXTURE0);//这句可以不写，因为默认Texture0总是被激活。
-        glBindTexture(GL_TEXTURE_2D, BoxTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, FaceTexture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
         glBindVertexArray(0);
 
