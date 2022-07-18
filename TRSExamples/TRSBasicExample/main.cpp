@@ -3,6 +3,7 @@
 //#include "E03BasicLight.h"
 //#include "E04ElementArray.h"
 //#include "E05LoadModelByAssimp.h"
+#include "E06MeshPerformance.h"
 //#include "E07TessellationOnShader.h"
 //#include "E08PNTriangles.h"
 //#include "E09FreeType.h"
@@ -10,7 +11,8 @@
 
 int main(int argn, char** argc)
 {
-    E01TextureColorArray();
+    //E01TextureColorArray();
+    E06MeshPerformance();
     //E01ManyBoxRotate();
 
     //E02Material_AmbientDiffuseSpecular();
