@@ -96,3 +96,29 @@ void vecAdd(float v1[3], float v2[3], float output[3])
     output[2] = v1[2] + v2[2];
 }
 
+
+FloatPoint::FloatPoint()
+{
+}
+
+FloatPoint::FloatPoint(float _x, float _y, float _z) : x(_x), y(_y), z(_z)
+{
+}
+
+FloatPoint FloatPoint::operator+(const FloatPoint& pt) const
+{
+    return FloatPoint(x + pt.x, y + pt.y, z + pt.z);
+}
+
+FloatPoint FloatPoint::operator*(float scale) const
+{
+    return FloatPoint(x * scale, y * scale, z * scale);
+}
+
+UVCoord::UVCoord()
+{
+}
+
+UVCoord::UVCoord(float _u, float _v) : u(_u), v(_v)
+{
+}

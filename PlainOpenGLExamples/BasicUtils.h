@@ -23,3 +23,27 @@ int createProgramUtils(const char* vertFile, const char* fragFile);
 void vecAssign(float src[3], float dst[3]);
 void vecScale(float src[3], float scale, float dst[3]);
 void vecAdd(float v1[3], float v2[3], float output[3]);
+
+struct FloatPoint
+{
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
+
+    FloatPoint();
+
+    FloatPoint(float _x, float _y, float _z);
+
+    FloatPoint operator+(const FloatPoint& pt) const;
+
+    FloatPoint operator*(float scale) const;
+};
+
+struct UVCoord
+{
+    float u = 0.0f;
+    float v = 0.0f;
+    UVCoord();
+    UVCoord(float _u, float _v);
+};
+
