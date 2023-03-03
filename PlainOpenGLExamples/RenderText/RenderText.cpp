@@ -254,7 +254,7 @@ std::vector<NewCharacter> loadFreeTypeCharacters2(GLuint &texture_id, float &uv_
 std::vector<float> renderText2(std::vector<NewCharacter>& new_chars, float uv_size, const std::string& strText, float textSize)
 {
     std::vector<float> result;
-    FloatPoint curPos(0.0f, 0.0f, 0.0f);
+    FloatPoint curPos(-0.8f, 0.0f, 0.0f);
     for (auto itr = strText.begin(); itr != strText.end(); itr++)
     {
         if (*itr == ' ')
@@ -304,6 +304,7 @@ int RenderAsciiText()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
     char* vertexShaderSource = readTextFile("shaders/FontsVertex.glsl");
     char* fragmentShaderSource = readTextFile("shaders/FontsFragment .glsl");
     unsigned int vertexShader;
@@ -355,7 +356,7 @@ int RenderAsciiText()
     GLuint texture_id;
     float uv_size = 0.0f;
     std::vector<NewCharacter> new_chars = loadFreeTypeCharacters2(texture_id, uv_size);
-    std::vector<float> buffers = renderText2(new_chars, uv_size, "Hello World!", 0.1);
+    std::vector<float> buffers = renderText2(new_chars, uv_size, "Hello World!", 0.2);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * buffers.size(), buffers.data(), GL_STATIC_DRAW);
 # endif
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -374,14 +375,14 @@ int RenderAsciiText()
     glUniformMatrix4fv(nPosModelMatrix, 1, GL_FALSE, IdentityMatrix);
     glUniformMatrix4fv(nPosViewMatrix, 1, GL_FALSE, IdentityMatrix);
     glUniformMatrix4fv(nPosProjectMatrix, 1, GL_FALSE, IdentityMatrix);
-    glUniform4f(nPosBaseColor, 0.5f, 0.9f, 0.5f, 1.0f);
+    glUniform4f(nPosBaseColor, 0.5f, 0.5f, 0.0f, 0.5f);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.125f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glBindVertexArray(VAO);

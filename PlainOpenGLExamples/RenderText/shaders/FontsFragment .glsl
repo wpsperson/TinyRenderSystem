@@ -6,6 +6,11 @@ uniform vec4 baseColor;
 
 void main()
 {
-    vec4 color = vec4(baseColor.xyz, texture(ourTexture, texCoord).r) ;
+    float value = texture(ourTexture, texCoord).r;
+    if (value < 0.5)
+    {
+        discard;
+    }
+    vec4 color = vec4(baseColor.xyz, value * baseColor.w) ;
     FragColor = color;
 } 
