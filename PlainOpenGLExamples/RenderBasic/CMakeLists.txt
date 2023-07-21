@@ -12,6 +12,8 @@ ${PlainExamPath}/BasicUtils.h
 ${PlainExamPath}/BasicUtils.cpp
 ${PlainExamPath}/${TARGET_NAME}/RenderTriangle.h
 ${PlainExamPath}/${TARGET_NAME}/RenderTriangle.cpp
+${PlainExamPath}/${TARGET_NAME}/RenderColorTriangle.h
+${PlainExamPath}/${TARGET_NAME}/RenderColorTriangle.cpp
 ${PlainExamPath}/${TARGET_NAME}/RenderTexture.h
 ${PlainExamPath}/${TARGET_NAME}/RenderTexture.cpp
 ${PlainExamPath}/${TARGET_NAME}/StencilTest.h
