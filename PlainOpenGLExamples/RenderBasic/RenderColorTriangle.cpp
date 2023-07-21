@@ -27,12 +27,33 @@ static const char* const FragmentSource =
 "}                                      \n";
 
 
-static float g_triangleVertices[] = {
+static float g_VerticesColors[] = {
     -0.5f, -0.5f, 0.0f,         1.0f, 0.0f, 0.0f,
     0.5f, -0.5f, 0.0f,         0.0f, 1.0f,0.0f,
     0.0f,  0.5f, 0.0f,        0.0f, 0.0f, 1.0f,
 };
 
+static float g_Vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    0.0f,  0.5f, 0.0f,
+};
+static float g_Colors[] = {
+    1.0f, 0.0f, 0.0f,
+    0.0f, 1.0f,0.0f,
+    0.0f, 0.0f, 1.0f,
+};
+
+
+static float g_Vertices_Append_Colors[] = {
+    -0.5f, -0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    0.0f,  0.5f, 0.0f,
+
+    1.0f, 0.0f, 0.0f,
+    0.0f, 1.0f,0.0f,
+    0.0f, 0.0f, 1.0f,
+};
 
 int RenderColorTriangle()
 {
@@ -97,11 +118,88 @@ int RenderColorTriangle()
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);//bind VAO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_triangleVertices), g_triangleVertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+
+    // initialize, use glBufferStorage instead of glBufferData
+    glBufferStorage(GL_ARRAY_BUFFER, sizeof(g_VerticesColors), g_VerticesColors, GL_MAP_WRITE_BIT);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(g_triangleVertices), g_triangleVertices, GL_STATIC_DRAW);
+
+
+
+    bool old = false;
+    bool InterleaveAttribute = false;
+    bool SeperateAttribute0 = false; // use seperate buffer.
+    bool SeperateAttribute1 = false; // use single buffer but seperate location
+    // void glVertexArrayAttribBinding(GLuint vaobj, GLuint attribindex, GLuint bindingindex);
+    // void glVertexArrayVertexBuffer(GLuint vaobj, GLuint bindingindex, GLuint buffer, GLintptr offset, GLsizei stride);
+    // void glVertexArrayAttribFormat(GLuint vaobj, GLuint attribindex, GLint size, GLenum type, GLboolean normalized, GLuint relativeoffset);
+
+    SeperateAttribute1 = true;
+
+    if (old)
+    {
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+    }
+    else if (InterleaveAttribute)
+    {
+        unsigned int binding0 = 0;
+        glVertexArrayVertexBuffer(VAO, binding0, VBO, 0, 6 * sizeof(float));
+
+        glVertexArrayAttribBinding(VAO, 0, binding0);
+        glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
+        glEnableVertexAttribArray(0);
+
+        glVertexArrayAttribBinding(VAO, 1, binding0);
+        glVertexArrayAttribFormat(VAO, 1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float));
+        glEnableVertexAttribArray(1);
+    }
+    else if (SeperateAttribute0)
+    {
+        unsigned int VBO0 = 0;
+        unsigned int VBO1 = 0;
+        glGenBuffers(1, &VBO0);
+        glGenBuffers(1, &VBO1);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO0);
+        glBufferStorage(GL_ARRAY_BUFFER, sizeof(g_Vertices), g_Vertices, GL_MAP_WRITE_BIT);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+        glBufferStorage(GL_ARRAY_BUFFER, sizeof(g_Colors), g_Colors, GL_MAP_WRITE_BIT);
+        unsigned int binding0 = 0;
+        unsigned int binding1 = 1;
+        glVertexArrayVertexBuffer(VAO, binding0, VBO0, 0, 3 * sizeof(float));
+        glVertexArrayVertexBuffer(VAO, binding1, VBO1, 0, 3 * sizeof(float));
+
+        glVertexArrayAttribBinding(VAO, 0, binding0);
+        glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
+        glEnableVertexAttribArray(0);
+
+        glVertexArrayAttribBinding(VAO, 1, binding1);
+        glVertexArrayAttribFormat(VAO, 1, 3, GL_FLOAT, GL_FALSE, 0);
+        glEnableVertexAttribArray(1);
+    }
+    else if (SeperateAttribute1)
+    {
+        unsigned int SeperateVbo = 0;
+        glGenBuffers(1, &SeperateVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, SeperateVbo);
+        glBufferStorage(GL_ARRAY_BUFFER, sizeof(g_Vertices_Append_Colors), g_Vertices_Append_Colors, GL_MAP_WRITE_BIT);
+
+        int buffer_offset = sizeof(g_Vertices_Append_Colors) / 2;
+        unsigned int binding0 = 0;
+        unsigned int binding1 = 1;
+        glVertexArrayVertexBuffer(VAO, binding0, SeperateVbo, 0,                3 * sizeof(float));
+        glVertexArrayVertexBuffer(VAO, binding1, SeperateVbo, buffer_offset,    3 * sizeof(float));
+
+        glVertexArrayAttribBinding(VAO, 0, binding0);
+        glVertexArrayAttribFormat(VAO, 0, 3, GL_FLOAT, GL_FALSE, 0);
+        glEnableVertexAttribArray(0);
+
+        glVertexArrayAttribBinding(VAO, 1, binding1);
+        glVertexArrayAttribFormat(VAO, 1, 3, GL_FLOAT, GL_FALSE, 0);
+        glEnableVertexAttribArray(1);
+    }
+
     glBindVertexArray(0);//unbind VAO
 
     while (!glfwWindowShouldClose(window))
