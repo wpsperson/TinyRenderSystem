@@ -48,9 +48,9 @@ unsigned int* genWireFrameElementsArray(int n, int m)
     }
     unsigned int *elementArray = new unsigned int[n*m * 6];
     unsigned int *curEle = elementArray;
-    for (unsigned int v = 1; v<m; v++)
+    for (unsigned int v = 1; v < static_cast<unsigned int>(m); v++)
     {
-        for (unsigned int u=1; u<n; u++)
+        for (unsigned int u=1; u< static_cast<unsigned int>(n); u++)
         {
             unsigned int idxRightBtm= v*n + u;
             unsigned int idxLeftBtm = v*n + u - 1;

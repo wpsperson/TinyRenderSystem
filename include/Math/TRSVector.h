@@ -33,7 +33,7 @@ public:
     inline TRSVector<N> cross(const TRSVector<N>& vec) const;
     inline float dot(const TRSVector<N>& vec) const;
 
-    float operator[](int i)const;
+    const float& operator[](int i)const;
     float& operator[](int i);
     float* pointer();
     void set(int i, float value);
@@ -184,7 +184,7 @@ void TRSVector<N>::set(int i, float value)
 }
 
 template<int N>
-float TRSVector<N>::operator[](int i) const
+const float& TRSVector<N>::operator[](int i) const
 {
     return arr[i];
 }

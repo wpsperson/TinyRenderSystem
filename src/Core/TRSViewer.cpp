@@ -2,6 +2,8 @@
 #include "Context\GLFWContext.h"
 #include "Core\TRSConst.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "Camera\TRSCamera.h"
 #include "DataModel\TRSNode.h"
 #include "Core\TRSStateSet.h"
@@ -9,7 +11,6 @@
 #include "Core\TRSShader.h"
 #include "DataModel\TRSGeode.h"
 #include "Core\TRSTexture.h"
-#include "Windows.h"
 #include "Core\TRSVisitors.h"
 #include "Core\TRSCharacterTexture.h"
 #include "Event\TRSEventDispatcher.h"
@@ -144,7 +145,8 @@ void TRSViewer::calcFrameTime()
     long long timeDiff = result.count();
     if (timeDiff < 15)
     {
-        Sleep(15 - timeDiff);
+        std::this_thread::sleep_for(std::chrono::milliseconds(15 - timeDiff));
+        //Sleep(15 - timeDiff); Window API
     }
     m_fLastTime = m_fCurTime;
 }

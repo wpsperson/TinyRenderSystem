@@ -5,10 +5,10 @@
 
 float toRadian(float degree)
 {
-    return degree * M_PI / 180.0f;
+    return static_cast<float>(degree * M_PI / 180.0);
 }
 
 float toDegree(float radians)
 {
-    return radians * 180.0f/ M_PI;
+    return static_cast<float>(radians * 180.0 / M_PI);
 }

@@ -12,7 +12,7 @@ TRSTextNode::TRSTextNode()
     , up(G_YDIR)
 {
     m_matColor = TRSVec4(0.5f, 1.0f, 0.5f, 1.0f);
-    m_size = 0.1;
+    m_size = 0.1f;
     getOrCreateStateSet();
     m_pStateSet->getShader()->createProgram("shaders/FontsVertex.glsl", "shaders/FontsFragment .glsl");
 
@@ -111,7 +111,7 @@ void TRSTextNode::generateText()
     float scale = m_size / fontSize;
     TRSVec3 curPos = pos;
 
-    int size = m_text.size();
+    int size = static_cast<int>(m_text.size());
     std::vector<TRSPoint> vertices;
     std::vector<TRSVec2> UVs;
     //float* vertexArray = new float[size * 6 * 5]; // each character need 6 point(2 triangle), each point need 5 float(3 coordinate and 2 texture coordinate)
@@ -138,7 +138,7 @@ void TRSTextNode::generateText()
         vertices.push_back(TRSPoint(leftTop[0], leftTop[1], leftTop[2])); UVs.push_back(TRSVec2(leftTC, topTC));
         vertices.push_back(TRSPoint(rightBtm[0], rightBtm[1], rightBtm[2])); UVs.push_back(TRSVec2(rightTC, btmTC));
         vertices.push_back(TRSPoint(rightTop[0], rightTop[1], rightTop[2])); UVs.push_back(TRSVec2(rightTC, topTC));
-        curPos += right * (unichar.left + unichar.w) * scale;
+        curPos += right * static_cast<float>(unichar.left + unichar.w) * scale;
     }
     // to do ,this snippet should before draw()
     m_ptCount = size * 6 * 5;

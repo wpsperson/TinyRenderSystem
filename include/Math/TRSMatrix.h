@@ -17,7 +17,7 @@ public:
     ~TRSMatrix();
 
     TRSVec4& operator[](int col_index);
-    TRSVec4 operator[](int col_index) const;
+    const TRSVec4& operator[](int col_index) const;
 
     void makeIdentity();
 

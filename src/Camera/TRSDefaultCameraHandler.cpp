@@ -29,43 +29,43 @@ void TRSDefaultCameraHandler::processWindowSizeChange(int width, int height)
 
 void TRSDefaultCameraHandler::processLeftMousePress(double xpos, double ypos, int mods)
 {
-    m_lastX = xpos;
-    m_lastY = ypos;
+    m_lastX = static_cast<float>(xpos);
+    m_lastY = static_cast<float>(ypos);
 }
 
 void TRSDefaultCameraHandler::processMiddleMousePress(double xpos, double ypos, int mods)
 {
-    m_lastX = xpos;
-    m_lastY = ypos;
+    m_lastX = static_cast<float>(xpos);
+    m_lastY = static_cast<float>(ypos);
 }
 
 void TRSDefaultCameraHandler::processRightMousePress(double xpos, double ypos, int mods)
 {
-    m_lastX = xpos;
-    m_lastY = ypos;
+    m_lastX = static_cast<float>(xpos);
+    m_lastY = static_cast<float>(ypos);
 }
 
 void TRSDefaultCameraHandler::processLeftMouseMove(double xpos, double ypos, int mods)
 {
-    float curX = xpos;
-    float curY = ypos;
-    float deltaX = (curX - m_lastX) / m_camera->getWindowWidth();
-    float delatY = (curY - m_lastY) / m_camera->getWindowHeight();
-    float azimuthAngle = - deltaX * TRS_PI * 2; // deltaX forward right, rotate is clockwise.
-    float elevatAngle = - delatY * TRS_PI * 2;    // deltaY forward down, rotate is clockwise.
+    double curX = xpos;
+    double curY = ypos;
+    double deltaX = (curX - m_lastX) / m_camera->getWindowWidth();
+    double delatY = (curY - m_lastY) / m_camera->getWindowHeight();
+    double azimuthAngle = - deltaX * TRS_PI * 2; // deltaX forward right, rotate is clockwise.
+    double elevatAngle = - delatY * TRS_PI * 2;    // deltaY forward down, rotate is clockwise.
     m_camera->Azimuth(azimuthAngle);
     m_camera->Elevation(elevatAngle);
 
-    m_lastX = curX;
-    m_lastY = curY;
+    m_lastX = static_cast<float>(curX);
+    m_lastY = static_cast<float>(curY);
 }
 
 void TRSDefaultCameraHandler::processMiddleMouseMove(double xpos, double ypos, int mods)
 {
-    float curX = xpos;
-    float curY = ypos;
-    float deltaX = (curX - m_lastX) / m_camera->getWindowWidth();
-    float delatY = (curY - m_lastY) / m_camera->getWindowHeight();
+    float curX = static_cast<float>(xpos);
+    float curY = static_cast<float>(ypos);
+    float deltaX = static_cast<float>((curX - m_lastX) / m_camera->getWindowWidth());
+    float delatY = static_cast<float>((curY - m_lastY) / m_camera->getWindowHeight());
     TRSVec3 pos = m_camera->getPosition();
     TRSVec3 lookAt = m_camera->getLookAt();
     TRSVec3 right = m_camera->getRight();
@@ -89,12 +89,12 @@ void TRSDefaultCameraHandler::processRightMouseMove(double xpos, double ypos, in
 void TRSDefaultCameraHandler::processMouseScroll(double xScroll, double yScroll)
 {
     //yScroll (value is 1/-1) increase, fov decrease, then scene looks bigger;
-    const float coffScroll = 0.1;
+    const float coffScroll = 0.1f;
     TRSVec3 front = m_camera->getFront();
     TRSVec3 pos = m_camera->getPosition();
     TRSVec3 lookAt = m_camera->getLookAt();
     float dist = lookAt.distance(pos);
-    float scrollDist = dist * coffScroll * yScroll;
+    float scrollDist = static_cast<float>(dist * coffScroll * yScroll);
     pos += front * scrollDist;
     m_camera->setPosition(pos);
     // todo if dist is too small, move look At?

@@ -118,7 +118,7 @@ void TRSCamera::setWindowWidth(double width)
 {
     if (m_width != width)
     {
-        m_width = width;
+        m_width = static_cast<float>(width);
         m_projectMatrixNeedUpdate = true;
     }
 }
@@ -127,7 +127,7 @@ void TRSCamera::setWindowHeight(double height)
 {
     if (m_height != height)
     {
-        m_height = height;
+        m_height = static_cast<float>(height);
         m_projectMatrixNeedUpdate = true;
     }
 }
@@ -138,7 +138,7 @@ void TRSCamera::Azimuth(double angle)
     transLookAtToOrigin.makeTranslate(m_lookAt * -1);
 
     TRSMatrix rotateMatrix;
-    rotateMatrix.makeRotate(angle, m_up);
+    rotateMatrix.makeRotate(static_cast<float>(angle), m_up);
 
     TRSMatrix transRestore;
     transRestore.makeTranslate(m_lookAt);
@@ -155,7 +155,7 @@ void TRSCamera::Elevation(double angle)
     transLookAtToOrigin.makeTranslate(m_lookAt * -1);
 
     TRSMatrix rotateMatrix;
-    rotateMatrix.makeRotate(angle, m_right);
+    rotateMatrix.makeRotate(static_cast<float>(angle), m_right);
 
     TRSMatrix transRestore;
     transRestore.makeTranslate(m_lookAt);

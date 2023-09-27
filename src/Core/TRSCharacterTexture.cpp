@@ -16,7 +16,17 @@ TRSCharacterTexture::TRSCharacterTexture()
     , m_textureDimension(0)
     , m_singleFontSize(0)
 {
-    m_fontFile = std::getenv("SystemRoot") + std::string("/Fonts/simfang.ttf");
+    size_t leng;
+    char buffer[256];
+    errno_t err = getenv_s(&leng, buffer, 256, "SystemRoot"); // std::getenv("SystemRoot")
+    if (err == 0)
+    {
+        m_fontFile = std::string(buffer) + std::string("/Fonts/simfang.ttf");
+    }
+    else
+    {
+        m_fontFile = "C:/Windows/Fonts/simfang.ttf";
+    }
 }
 
 TRSCharacterTexture::~TRSCharacterTexture()

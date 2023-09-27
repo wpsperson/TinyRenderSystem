@@ -6,9 +6,9 @@ LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 
 set(Target_INCLUDE_LIST
     ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.h
-    #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.h
-    #${TRSExamPath}/${TARGET_NAME}/E03BasicLight.h
-    #${TRSExamPath}/${TARGET_NAME}/E04ElementArray.h
+    ${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.h
+    ${TRSExamPath}/${TARGET_NAME}/E03BasicLight.h
+    ${TRSExamPath}/${TARGET_NAME}/E04ElementArray.h
     #${TRSExamPath}/${TARGET_NAME}/E05LoadModelByAssimp.h
     ${TRSExamPath}/${TARGET_NAME}/E06MeshPerformance.h
     #${TRSExamPath}/${TARGET_NAME}/E07TessellationOnShader.h
@@ -18,9 +18,9 @@ set(Target_INCLUDE_LIST
     )
 set(Target_SRC_LIST
     ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E03BasicLight.cpp
-    #${TRSExamPath}/${TARGET_NAME}/E04ElementArray.cpp
+    ${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.cpp
+    ${TRSExamPath}/${TARGET_NAME}/E03BasicLight.cpp
+    ${TRSExamPath}/${TARGET_NAME}/E04ElementArray.cpp
     #${TRSExamPath}/${TARGET_NAME}/E05LoadModelByAssimp.cpp
     ${TRSExamPath}/${TARGET_NAME}/E06MeshPerformance.cpp
     #${TRSExamPath}/${TARGET_NAME}/E07TessellationOnShader.cpp

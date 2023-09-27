@@ -40,7 +40,7 @@ void generateSphereObj(double radius, int resolution, const std::string& fileNam
     // output vertex
     int totalVertexNum = 1;
     outputVertex(stream, 0, 0, radius);
-    ptList.push_back(TRSVec3(0, 0, radius));
+    ptList.push_back(TRSVec3(0, 0, static_cast<float>(radius)));
     double elevationStep = M_PI / (resolution - 1);
     double azimuthStep = (M_PI * 2) / (resolution);
     for (int i = 1; i <= resolution - 2; i++)
@@ -55,12 +55,12 @@ void generateSphereObj(double radius, int resolution, const std::string& fileNam
             double x = radius * std::sin(elev) * std::cos(azimuth);
             double y = radius * std::sin(elev) * std::sin(azimuth);
             outputVertex(stream, x, y, z);
-            ptList.push_back(TRSVec3(x, y, z));
+            ptList.push_back(TRSVec3(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)));
             totalVertexNum++;
         }
     }
     outputVertex(stream, 0, 0, -radius);
-    ptList.push_back(TRSVec3(0, 0, -radius));
+    ptList.push_back(TRSVec3(0, 0, static_cast<float>(-radius)));
     totalVertexNum++;
     stream << std::endl;
 

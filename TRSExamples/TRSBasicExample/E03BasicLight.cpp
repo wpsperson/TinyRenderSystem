@@ -1,15 +1,16 @@
 #include "E03BasicLight.h"
 #include <memory>
 #include "glad\glad.h"
-#include "TRSViewer.h"
-#include "TRSGeode.h"
-#include "TRSStateSet.h"
-#include "TRSTexture.h"
-#include "TRSResource.h"
-#include "TRSGroup.h"
-#include "TRSMathUtil.h"
-#include "TRSShader.h"
-#include "TRSCamera.h"
+#include "Core\TRSViewer.h"
+#include "Core\TRSStateSet.h"
+#include "Core\TRSTexture.h"
+#include "Core\TRSShader.h"
+#include "DataModel\TRSGeode.h"
+#include "DataModel\TRSGroup.h"
+#include "Util\TRSResource.h"
+#include "Math\TRSMathUtil.h"
+#include "Geometry\TRSCube.h"
+#include "Camera\TRSCamera.h"
 
 
 void E03DirectionLight()
@@ -32,9 +33,12 @@ void E03DirectionLight()
     std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
 
     TRSVec3 lightDirection = TRSVec3(-0.2f, -1.0f, -0.3f);
-    pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    // pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    TRSCube* cube = new TRSCube(true);
+    TRSMesh* mesh = cube->getMesh();
+    pTemplateNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("shaders/2_3DirectionLightNormVertex.glsl", "shaders/2_3DirectionLightNormFragment.glsl");
+    pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_3DirectionLightNormFragment.glsl");
     pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", TRSVec3(0.5f, 0.5f, 0.5f));
@@ -82,9 +86,12 @@ void E03PointAttenuationLight()
     std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
 
     TRSVec3 lightPos = TRSVec3(0.8f, 0.8f, 2.0f);
-    pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    // pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    TRSCube* cube = new TRSCube(true);
+    TRSMesh* mesh = cube->getMesh();
+    pTemplateNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("shaders/2_4PointAttenuationLightVertex.glsl", "shaders/2_4PointAttenuationLightFragment.glsl");
+    pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_4PointAttenuationLightFragment.glsl");
     pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", TRSVec3(0.5f, 0.5f, 0.5f));
@@ -110,14 +117,6 @@ void E03PointAttenuationLight()
         pTemp->setMatrix(modelMatrix);
         pGroup->addChild(pTemp);
     }
-
-    std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pTemplateNode.get(), false);
-    TRSMatrix lightMat;
-    lightMat.translate(lightPos);
-    lightMat.scale(0.2f);
-    std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
-    pLightStateSet->getShader()->createProgram("shaders/2_1LightNodeVertex.glsl", "shaders/2_1LightNodeFragment.glsl");
-    pGroup->addChild(pLightNode);
 
     viewer->setSecenNode(pGroup);
     viewer->run();
@@ -152,9 +151,12 @@ void E03Spotlight()
     std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
     globalCamera = viewer->getCamera();
     TRSVec3 lightPos = TRSVec3(0.8f, 0.8f, 2.0f);
-    pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    //pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    TRSCube* cube = new TRSCube(true);
+    TRSMesh* mesh = cube->getMesh();
+    pTemplateNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("shaders/2_5SpotLightVertex.glsl", "shaders/2_5SpotLightFragment.glsl");
+    pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_5SpotLightFragment.glsl");
     pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
@@ -208,9 +210,12 @@ void E03MultiLightSource()
     std::shared_ptr<TRSGeode> pTemplateNode = std::make_shared<TRSGeode>();
     globalCamera = viewer->getCamera();
 
-    pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    //pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
+    TRSCube* cube = new TRSCube(true);
+    TRSMesh* mesh = cube->getMesh();
+    pTemplateNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
-    pBoxSS->getShader()->createProgram("shaders/2_6MultiLightSourceVertex.glsl", "shaders/2_6MultiLightSourceFragment.glsl");
+    pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_6MultiLightSourceFragment.glsl");
     pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
@@ -239,16 +244,6 @@ void E03MultiLightSource()
         pBoxSS->getShader()->addUniformf(strLightName + ".constant", 1.0f);
         pBoxSS->getShader()->addUniformf(strLightName + ".linear", 0.09f);
         pBoxSS->getShader()->addUniformf(strLightName + ".quadratic", 0.032f);
-
-        //顺便添加灯光的节点
-        std::shared_ptr<TRSGeode> pLightNode = std::make_shared<TRSGeode>(*pTemplateNode.get(), false);
-        TRSMatrix lightMat;
-        lightMat.translate(pointLightPositions[i]);
-        lightMat.scale(0.2f);
-        pLightNode->setMatrix(lightMat);
-        std::shared_ptr<TRSStateSet> pLightStateSet = pLightNode->getOrCreateStateSet();
-        pLightStateSet->getShader()->createProgram("shaders/2_1LightNodeVertex.glsl", "shaders/2_1LightNodeFragment.glsl");
-        pGroup->addChild(pLightNode);
     }
     // 聚光灯
     pBoxSS->getShader()->addUniform3v("spotLight.ambient", TRSVec3(0.2f, 0.2f, 0.2f));

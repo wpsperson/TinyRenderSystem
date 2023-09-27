@@ -17,7 +17,7 @@ TRSGroup::~TRSGroup()
 
 void TRSGroup::addChild(std::shared_ptr<TRSNode> ptr)
 {
-    TRSGroup::insertChild(m_pChildren.size(), ptr);
+    TRSGroup::insertChild(static_cast<int>(m_pChildren.size()), ptr);
 }
 
 void TRSGroup::removeChild(TRSNode* pNode)

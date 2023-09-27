@@ -52,12 +52,12 @@ void TRSMesh::setIndices(const std::vector<unsigned int>& indices)
 
 int TRSMesh::getDrawCount() const
 {
-    return m_vertexs.size();
+    return static_cast<int>(m_vertexs.size());
 }
 
 int TRSMesh::getElementCount() const
 {
-    return m_indexs.size();
+    return static_cast<int>(m_indexs.size());
 }
 
 int TRSMesh::getDrawType()
@@ -158,7 +158,7 @@ void TRSMesh::upload()
     if (!m_indexs.empty())
     {
         unsigned int* indice = &(m_indexs[0]);
-        int indiceNum = m_indexs.size();
+        int indiceNum = static_cast<int>(m_indexs.size());
         m_vao->createEBO();
         m_vao->uploadEBO(indice, indiceNum);
     }
@@ -186,7 +186,7 @@ bool TRSMesh::combineMeshData()
 
     // compute data size and allocate memory.
     int unitSize = computeVertexAttribStride(m_vertexStructType);
-    int ptNum = m_vertexs.size();
+    int ptNum = static_cast<int>(m_vertexs.size());
     m_uploadSize = ptNum * unitSize;
     if (m_uploadData)
     {

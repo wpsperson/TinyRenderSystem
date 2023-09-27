@@ -8,13 +8,18 @@ using namespace std;
 
 char* getTextFromFile(const char* fileName)
 {
-    FILE* pFile = fopen(fileName, "rt");//这里加载一个PE文件  
+    FILE* pFile = nullptr;
+    errno_t err = fopen_s(&pFile, fileName, "rt");
+    if (err != 0)
+    {
+        return nullptr;
+    }
     fseek(pFile, 0, SEEK_END);
     int len = ftell(pFile);
     char* szBuf = new char[len];
     memset(szBuf, 0, len);
     fseek(pFile, 0, SEEK_SET);
-    int iRead = fread_s(szBuf, len, 1, len, pFile);
+    size_t iRead = fread_s(szBuf, len, 1, len, pFile);
     return szBuf;
 }
 
@@ -27,7 +32,7 @@ char* readTextFile(const std::string& strFileName)
     file.close();
     std::string strContent = strStream.str();
 
-    int length = strContent.length();
+    size_t length = strContent.length();
     char* pChar = new char[length + 1];
     memcpy(pChar, strContent.c_str(), length);
     pChar[length] = '\0';

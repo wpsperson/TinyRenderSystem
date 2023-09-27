@@ -6,7 +6,7 @@
 
 int main(int argn, char** argc)
 {
-    //RenderTriangle();
+    RenderTriangle();
 
     //RenderTexture();
     //RenderMultiTexture();
@@ -15,7 +15,7 @@ int main(int argn, char** argc)
 
     //StencilTest();
 
-    RenderColorTriangle();
+    //RenderColorTriangle();
 
     return 0;
 }

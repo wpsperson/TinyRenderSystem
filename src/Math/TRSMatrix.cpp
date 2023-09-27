@@ -40,7 +40,7 @@ TRSVec4& TRSMatrix::operator[](int col_index)
     return columns[col_index];
 }
 
-TRSVec4 TRSMatrix::operator[](int col_index) const
+const TRSVec4& TRSMatrix::operator[](int col_index) const
 {
     return columns[col_index];
 }

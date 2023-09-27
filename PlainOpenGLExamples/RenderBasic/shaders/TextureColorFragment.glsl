@@ -9,6 +9,11 @@ void main()
 {
     vec4 tex = texture(ourTexture, vTex);
     vec4 color = vec4(vColor, 1.0);
+    if(tex.a == 0.0)
+    {
+        discard;
+        return;
+    }
     //FragColor = tex*0.5 + color*0.5;//颜色较淡的混合
     FragColor = color * tex; //颜色较浓的混合
 } 

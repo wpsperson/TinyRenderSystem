@@ -46,8 +46,8 @@ add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E 
                 ${PlainExamPath}/${TARGET_NAME}/shaders 
                 ${CMAKE_BINARY_DIR}/bin/shaders)
 add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/resources/textures/awesomeface.png
-                ${CMAKE_BINARY_DIR}/bin/resources/textures/awesomeface.png)
+                ${CMAKE_SOURCE_DIR}/resources/textures/opengl.png
+                ${CMAKE_BINARY_DIR}/bin/resources/textures/opengl.png)
 add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/resources/textures/container.jpg
-                ${CMAKE_BINARY_DIR}/bin/resources/textures/container.jpg)
+                ${CMAKE_SOURCE_DIR}/resources/textures/cube.png
+                ${CMAKE_BINARY_DIR}/bin/resources/textures/cube.png)
