@@ -5,22 +5,24 @@
 
 
 #include <iostream>
-#include "TRSViewer.h"
-#include "TRSGeode.h"
-#include "TRSGroup.h"
-#include "TRSTexture.h"
-#include "TRSVAO.h"
-#include "TRSResource.h"
-#include "TRSConst.h"
-#include "TRSCamera.h"
-#include "TRSShader.h"
-#include "TRSStateset.h"
-#include "TRSUtils.h"
-#include "TRSAssimpLoader.h"
-#include "BSpline.h"
-#include "BSplineSurface.h"
+#include "Core/TRSConst.h"
+#include "Core/TRSViewer.h"
+#include "Core/TRSTexture.h"
+#include "Core/TRSVAO.h"
+#include "Core/TRSConst.h"
+#include "Core/TRSShader.h"
+#include "Core/TRSStateset.h"
+#include "DataModel/TRSGeode.h"
+#include "DataModel/TRSGroup.h"
+#include "DataModel/TRSMesh.h"
+#include "Event/TRSEventDefine.h"
+#include "Camera/TRSCamera.h"
+#include "Util/TRSUtils.h"
+#include "Util/TRSResource.h"
+#include "Math/BSpline.h"
+#include "Math/BSplineSurface.h"
+#include "Geometry/TRSGrid.h"
 #include "delaunator.hpp"
-#include "TRSEventDefine.h"
 
 static double parametricDomainTranslate = -1.5;
 
@@ -91,29 +93,36 @@ int CaseNurbsFaceToMesh(int argn, char** argc)
     bsSurface->setCtrlPts(SurfacePts, 6, 5);
     int uResolution = 20;
     int vResolution = 20;
-    float* surface = new float[uResolution * vResolution * 6];
-    memset(surface, 0, uResolution * vResolution * 6 * sizeof(float));
+    float* surface = new float[uResolution * vResolution * 3];
+    float* normals = new float[uResolution * vResolution * 3];
+    memset(surface, 0, uResolution * vResolution * 3 * sizeof(float));
+    memset(normals, 0, uResolution * vResolution * 3 * sizeof(float));
     for (int vIndex = 0; vIndex < vResolution; vIndex++)
     {
         float v = float(vIndex) / (vResolution - 1);
         for (int uIndex = 0; uIndex < uResolution; uIndex++)
         {
             float u = float(uIndex) / (uResolution - 1);
-            float* curPt = surface + (vIndex * uResolution + uIndex) * 6;
+            float* curPt = surface + (vIndex * uResolution + uIndex) * 3;
             bsSurface->interpolatePoint(u, v, curPt);
 
-            float* norm = surface + (vIndex * uResolution + uIndex) * 6 + 3;
+            float* norm = normals + (vIndex * uResolution + uIndex) * 3;
             bsSurface->interpolateNormal(u, v, norm);
         }
     }
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> BsplineSurFace = std::make_shared<TRSGeode>();
     unsigned int* surFaceEleArr = genWireFrameElementsArray(uResolution, vResolution);
-    BsplineSurFace->readFromVertex(surface, uResolution * vResolution * 6, EnVertexNormal, surFaceEleArr, uResolution * vResolution * 6);
+    std::vector<unsigned int> indices(surFaceEleArr, surFaceEleArr + uResolution * vResolution * 6);
+    // BsplineSurFace->readFromVertex(surface, uResolution * vResolution * 6, EnVertexNormal, surFaceEleArr, uResolution * vResolution * 6);
+    TRSMesh* mesh = BsplineSurFace->getMesh();
+    mesh->setVertex(TRSMesh::convertToVec3Array(surface, uResolution * vResolution * 3));
+    mesh->setNormal(TRSMesh::convertToVec3Array(normals, uResolution * vResolution * 3));
+    mesh->setIndices(indices);
+    mesh->setDrawType(GL_TRIANGLES);
     std::shared_ptr<TRSStateSet> pSS = BsplineSurFace->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
-    BsplineSurFace->getVAO()->setDrawType(GL_TRIANGLES);
     BsplineSurFace->setColor(TRSVec4(1, 0.5, 1, 1));
 
     InsertParametricPointHandler* handler = new InsertParametricPointHandler(bsSurface, viewer->getCamera());
@@ -142,12 +151,12 @@ InsertParametricPointHandler::InsertParametricPointHandler(BSplineSurface* nurbs
     TRSMatrix translateMatrix;
     translateMatrix.makeTranslate(parametricDomainTranslate, 0, 0);
     m_triangles2d->setMatrix(translateMatrix);
-    m_triangles2d->getVAO()->setDrawType(GL_TRIANGLES);
+    m_triangles2d->getMesh()->setDrawType(GL_TRIANGLES);
     m_triangles2d->setColor(TRSVec4(0.5, 1, 1, 1));
     m_triangles2d->setPolygonMode(GL_LINE);
 
     m_triangles3d = std::make_shared<TRSGeode>();
-    m_triangles3d->getVAO()->setDrawType(GL_TRIANGLES);
+    m_triangles3d->getMesh()->setDrawType(GL_TRIANGLES);
     m_triangles3d->setColor(TRSVec4(0.5, 1, 1, 1));
     m_triangles3d->setPolygonMode(GL_LINE);
     std::shared_ptr<TRSStateSet> Triangles3dSS = m_triangles3d->getOrCreateStateSet();
@@ -283,6 +292,7 @@ void InsertParametricPointHandler::updateMesh()
 
     // we map those triangles from parametric-domain into 3d-space. and draw those
     m_3DSpacePointsNormals.clear();
+    std::vector<TRSVec3> normals;
     float point[3];
     float normal[3];
     for (size_t i = 0; i < MeshPointNumber; i++)
@@ -294,9 +304,11 @@ void InsertParametricPointHandler::updateMesh()
         m_3DSpacePointsNormals.push_back(point[0]);
         m_3DSpacePointsNormals.push_back(point[1]);
         m_3DSpacePointsNormals.push_back(point[2]);
-        m_3DSpacePointsNormals.push_back(normal[0]);
-        m_3DSpacePointsNormals.push_back(normal[1]);
-        m_3DSpacePointsNormals.push_back(normal[2]);
+        TRSVec3 norm;
+        norm[0] = normal[0];
+        norm[1] = normal[1];
+        norm[2] = normal[2];
+        normals.emplace_back(norm);
     }
 
     // and apply the Delaunay Triangulation to those points to generate triangles in parametric space.
@@ -307,9 +319,12 @@ void InsertParametricPointHandler::updateMesh()
     {
         indexArray2d.push_back(static_cast<unsigned int>(idx));
     }
+    m_triangles2d->getMesh()->setVertex(TRSMesh::convertToVec3Array(m_parametricSpacePoints.data(), m_parametricSpacePoints.size()));
+    m_triangles2d->getMesh()->setIndices(indexArray2d);
+    m_triangles3d->getMesh()->setVertex(TRSMesh::convertToVec3Array(m_3DSpacePointsNormals.data(), m_3DSpacePointsNormals.size()));
+    m_triangles3d->getMesh()->setNormal(normals);
+    m_triangles3d->getMesh()->setIndices(indexArray2d);
 
-    m_triangles2d->readFromVertex(m_parametricSpacePoints.data(), m_parametricSpacePoints.size(), EnVertex, indexArray2d.data(), indexArray2d.size());
-    m_triangles3d->readFromVertex(m_3DSpacePointsNormals.data(), m_3DSpacePointsNormals.size(), EnVertexNormal, indexArray2d.data(), indexArray2d.size());
 }
 
 void InsertParametricPointHandler::saveParameterToFile(const std::string& fileName)

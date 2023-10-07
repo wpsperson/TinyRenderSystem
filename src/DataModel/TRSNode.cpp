@@ -32,6 +32,11 @@ void TRSNode::setMesh(TRSMesh* mesh)
     m_pMesh = std::make_shared<TRSMesh>(*mesh);
 }
 
+TRSMesh* TRSNode::getMesh() const
+{
+    return m_pMesh.get();
+}
+
 void TRSNode::setActive()
 {
 

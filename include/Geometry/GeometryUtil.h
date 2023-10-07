@@ -23,3 +23,4 @@ TRS_EXPORT unsigned int* genWireFrameElementsArray(int n, int m);
 TRS_EXPORT unsigned int* genBS2BezierElementArray(int ptNum);
 
 TRS_EXPORT unsigned int* genBS2BezierPatchEleArr(int ptNumU, int ptNumV);
+

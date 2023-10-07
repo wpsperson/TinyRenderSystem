@@ -5,7 +5,7 @@
 
 
 TRSStateSet::TRSStateSet(TRSStateSetManager* pManager)
-    :m_pManager(m_pManager)
+    :m_pManager(pManager)
 {
     m_nID = pManager->allocateID();
     m_pShader = new TRSShader();

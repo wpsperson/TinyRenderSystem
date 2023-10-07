@@ -43,7 +43,7 @@ void E02Material_AmbientDiffuseSpecular()
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
     // pGeode->readFromVertex(BoxVerticesAndNorm, sizeof(BoxVerticesAndNorm) / sizeof(float), EnVertexNormal);
-    TRSCube* cube = new TRSCube(true);
+    TRSCube* cube = new TRSCube;
     TRSMesh* mesh = cube->getMesh();
     pGeode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pGeodeStateSet = pGeode->getOrCreateStateSet();
@@ -72,12 +72,12 @@ void E02Material_DiffuseNormal()
     std::shared_ptr<TRSGroup> pGroup = std::make_shared<TRSGroup>();
     std::shared_ptr<TRSGeode> pBoxNode = std::make_shared<TRSGeode>();
     // pBoxNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
-    TRSCube* cube = new TRSCube(true);
+    TRSCube* cube = new TRSCube;
     TRSMesh* mesh = cube->getMesh();
     pBoxNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pBoxNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_2DiffuseNormFragment.glsl");
-    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", TRSVec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);

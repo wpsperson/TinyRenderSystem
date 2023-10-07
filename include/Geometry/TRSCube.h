@@ -14,24 +14,22 @@ class TRS_EXPORT TRSCube : public TRSGeometry
 public:
     TRSCube();
 
-    TRSCube(bool atCenter);
-
     ~TRSCube();
 
     void tessellation() override;
 
-    void setLength(float len);
+    void setTwoPos(const TRSVec3& first, const TRSVec3& second);
 
-    void setWidth(float w);
+    void setStartDim(const TRSVec3& start, float length, float width, float height);
 
-    void setHeight(float h);
+    void setCenterDim(const TRSVec3& center, float length, float width, float height);
 
-    void setOriginAtCenter(bool atCenter);
 
 protected:
-    float m_length = 1.0;   // x direction
-    float m_width = 1.0;    // y direction
-    float m_height = 1.0;   // z direction
-    TRSPoint m_origin;
-    bool m_origAtCenter = false;
+    float m_x0 = -0.5f;
+    float m_x1 = 0.5f;
+    float m_y0 = -0.5f;
+    float m_y1 = 0.5f;
+    float m_z0 = -0.5f;
+    float m_z1 = 0.5f;
 };

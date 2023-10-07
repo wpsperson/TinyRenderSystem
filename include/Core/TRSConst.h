@@ -57,3 +57,9 @@ static float DefaultFarDistance = 100.0f;   //远平面
 
 static const char* s_TextUnitPrefix = "texture";
 
+
+constexpr double kMPI = 3.141592653589793;
+
+
+
+

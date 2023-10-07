@@ -1,20 +1,21 @@
 ﻿#include "E08PNTriangles.h"
-#include "TRSTexture.h"
-#include "TRSVAO.h"
-#include "TRSResource.h"
-#include "TRSConst.h"
-#include "TRSCamera.h"
-#include "TRSViewer.h"
-#include "TRSGeode.h"
-#include "TRSGroup.h"
-#include "TRSShader.h"
-#include "TRSAssimpLoader.h"
-#include "TRSStateset.h"
-#include "TRSVector.h"
-#include "NodeVisitor.h"
+#include "Core/TRSConst.h"
+#include "Core/TRSViewer.h"
+#include "Core/TRSStateset.h"
+#include "Core/TRSShader.h"
+#include "Core/TRSTexture.h"
+#include "Core/TRSVAO.h"
+#include "Util/TRSResource.h"
+#include "Util/TRSUtils.h"
+#include "Camera/TRSCamera.h"
+#include "DataModel/TRSMesh.h"
+#include "DataModel/TRSGeode.h"
+#include "DataModel/TRSGroup.h"
+#include "DataModel/NodeVisitor.h"
+#include "IO/TRSAssimpLoader.h"
+#include "Math/TRSVector.h"
 
 #include <iostream>
-#include "TRSUtils.h"
 #include "Windows.h"
 
 
@@ -78,10 +79,10 @@ public:
             shader->createProgram();
             shader->addUniformi("lod", 1);
 
-            PNTriangleGeode->getVAO()->setDrawType(GL_TRIANGLES);
+            TRSMesh* mesh = PNTriangleGeode->getMesh();
+            mesh->setDrawType(GL_PATCHES);
+            mesh->setDrawParam(3);
             PNTriangleGeode->setColor(TRSVec4(1.0, 1.0, 0.5, 1));
-            PNTriangleGeode->getVAO()->setDrawType(GL_PATCHES);
-            PNTriangleGeode->getVAO()->setDrawParam(3);
             PNTriangleGeode->setUpdateCallBack(LodCallBack);
            // PNTriangleGeode->setPolygonMode(GL_LINE);
         }

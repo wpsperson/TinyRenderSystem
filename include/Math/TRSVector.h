@@ -42,6 +42,7 @@ private:
     float arr[N];
 };
 
+
 template<int N>
 bool TRSVector<N>::operator != (const TRSVector<N>& vec) const
 {

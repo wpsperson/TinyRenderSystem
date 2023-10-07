@@ -70,16 +70,16 @@ void TRSTextNode::setSize(float size)
 
 void TRSTextNode::draw()
 {
-    if (m_dirty)
-    {
-        generateText();
-        m_dirty = false;
-    }
     glDrawArrays(GL_TRIANGLES, 0, m_ptCount);
 }
 
 void TRSTextNode::setActive()
 {
+    if (m_dirty)
+    {
+        generateText();
+        m_dirty = false;
+    }
     m_pMesh->meshBind();
 }
 
@@ -141,7 +141,7 @@ void TRSTextNode::generateText()
         curPos += right * static_cast<float>(unichar.left + unichar.w) * scale;
     }
     // to do ,this snippet should before draw()
-    m_ptCount = size * 6 * 5;
+    m_ptCount = size * 6;
     m_pMesh->setVertex(vertices);
     m_pMesh->setUV(UVs);
 }

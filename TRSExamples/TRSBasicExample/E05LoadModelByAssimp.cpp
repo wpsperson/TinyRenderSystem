@@ -1,14 +1,13 @@
 #include "E05LoadModelByAssimp.h"
-#include "TRSViewer.h"
-#include "TRSAssimpLoader.h"
-#include "TRSGroup.h"
+#include "Core/TRSViewer.h"
+#include "IO/TRSAssimpLoader.h"
+#include "DataModel/TRSGroup.h"
 
 
 void E05LoadModelByAssimp()
 {
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     TRSAssimpLoader* pLoader = new TRSAssimpLoader();
-    //"resources/objects/test.obj"; //std::string("resources/objects/nanosuit/nanosuit.obj");
     std::string strFile = std::string("resources/objects/nanosuit/nanosuit.obj");
     TRSGroup* pGroup = pLoader->loadByAssimp(strFile);
     std::string strDebugInfo = pGroup->debugInfo();

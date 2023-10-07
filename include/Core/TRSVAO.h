@@ -38,9 +38,6 @@ protected:
     unsigned int m_vao = 0;
     unsigned int m_elementBuffer = 0;
     unsigned int m_vertexBuffer = 0;
-    unsigned int m_normalBuffer = 0;
-    unsigned int m_textureCoordBuffer = 0;
-    unsigned int m_colorBuffer = 0;
 };
 
 

@@ -16,5 +16,3 @@ TRS_EXPORT char* getTextFromFile(const char* fileName);
 
 //recommend
 TRS_EXPORT char* readTextFile(const std::string& strFileName);
-
-TRS_EXPORT float* createXYGridVertexArray(float interval, int size, int &arraySize);

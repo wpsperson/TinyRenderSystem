@@ -31,6 +31,8 @@ public:
 
     void setMesh(TRSMesh* mesh);
 
+    TRSMesh* getMesh()const;
+
     virtual void setActive();// used to bind vao
 
     virtual void preProcess();

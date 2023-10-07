@@ -34,6 +34,8 @@ public:
 
     void uploadMesh();
 
+    static std::vector<TRSVec3> convertToVec3Array(float* arr, int count);
+
     static int computeVertexAttribStride(int vertexStructType);
 
 protected:

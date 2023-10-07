@@ -103,6 +103,22 @@ void TRSMesh::uploadMesh()
     }
 }
 
+std::vector<TRSVec3> TRSMesh::convertToVec3Array(float* arr, int count)
+{
+    std::vector<TRSVec3> result;
+    int result_count = count / 3;
+    result.reserve(result_count);
+    TRSVec3 pt;
+    for (int ii = 0; ii < result_count; ii++)
+    {
+        pt[0] = arr[ii * 3 + 0];
+        pt[1] = arr[ii * 3 + 1];
+        pt[2] = arr[ii * 3 + 2];
+        result.emplace_back(pt);
+    }
+    return result;
+}
+
 int TRSMesh::computeVertexAttribStride(int vertexStructType)
 {
     int vertexStructSize = 3; // default vertex coordinate.

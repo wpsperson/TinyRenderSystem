@@ -34,12 +34,12 @@ void E03DirectionLight()
 
     TRSVec3 lightDirection = TRSVec3(-0.2f, -1.0f, -0.3f);
     // pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
-    TRSCube* cube = new TRSCube(true);
+    TRSCube* cube = new TRSCube;
     TRSMesh* mesh = cube->getMesh();
     pTemplateNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_3DirectionLightNormFragment.glsl");
-    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", TRSVec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
@@ -87,12 +87,12 @@ void E03PointAttenuationLight()
 
     TRSVec3 lightPos = TRSVec3(0.8f, 0.8f, 2.0f);
     // pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
-    TRSCube* cube = new TRSCube(true);
+    TRSCube* cube = new TRSCube;
     TRSMesh* mesh = cube->getMesh();
     pTemplateNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_4PointAttenuationLightFragment.glsl");
-    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     //pBoxSS->getShader()->addUniform3v("material.specular", TRSVec3(0.5f, 0.5f, 0.5f));
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
@@ -152,12 +152,12 @@ void E03Spotlight()
     globalCamera = viewer->getCamera();
     TRSVec3 lightPos = TRSVec3(0.8f, 0.8f, 2.0f);
     //pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
-    TRSCube* cube = new TRSCube(true);
+    TRSCube* cube = new TRSCube;
     TRSMesh* mesh = cube->getMesh();
     pTemplateNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_5SpotLightFragment.glsl");
-    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     pBoxSS->getShader()->addUniform3v("light.ambient", TRSVec3(0.2f, 0.2f, 0.2f));
@@ -211,12 +211,12 @@ void E03MultiLightSource()
     globalCamera = viewer->getCamera();
 
     //pTemplateNode->readFromVertex(BoxVerticesAndNormAndTex, sizeof(BoxVerticesAndNormAndTex) / sizeof(float), EnVertexNormTexture);
-    TRSCube* cube = new TRSCube(true);
+    TRSCube* cube = new TRSCube;
     TRSMesh* mesh = cube->getMesh();
     pTemplateNode->setMesh(mesh);
     std::shared_ptr<TRSStateSet> pBoxSS = pTemplateNode->getOrCreateStateSet();
     pBoxSS->getShader()->createProgram("shaders/PosNormTexVertex.glsl", "shaders/2_6MultiLightSourceFragment.glsl");
-    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");//container2.png 加载后图片显示雪花转为jpg。
+    pBoxSS->getTexture()->createTexture("resources/textures/container2.jpg", "material.diffuse");
     pBoxSS->getTexture()->createTexture("resources/textures/container2_specular.jpg", "material.specular");
     pBoxSS->getShader()->addUniformf("material.shininess", 32.0f);
     //一个平行光

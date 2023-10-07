@@ -1,38 +1,34 @@
 ﻿#include "E07TessellationOnShader.h"
 #include <iostream>
 
-#include "TRSUtils.h"
-#include "TRSResource.h"
-#include "TRSCamera.h"
-#include "TRSConst.h"
-#include "BSpline.h"
-#include "BSplineSurface.h"
-
-
-#include <iostream>
-#include "TRSViewer.h"
-#include "TRSGeode.h"
-#include "TRSGroup.h"
-#include "TRSTexture.h"
-#include "TRSVAO.h"
-#include "TRSResource.h"
-#include "TRSConst.h"
-#include "TRSCamera.h"
-#include "TRSShader.h"
-#include "TRSStateset.h"
-#include "TRSUtils.h"
-#include "TRSAssimpLoader.h"
+#include "Core/TRSConst.h"
+#include "Core/TRSViewer.h"
+#include "Core/TRSTexture.h"
+#include "Core/TRSVAO.h"
+#include "Core/TRSConst.h"
+#include "Core/TRSShader.h"
+#include "Core/TRSStateset.h"
+#include "DataModel/TRSGeode.h"
+#include "DataModel/TRSGroup.h"
+#include "DataModel/TRSMesh.h"
+#include "Camera/TRSCamera.h"
+#include "Util/TRSUtils.h"
+#include "Util/TRSResource.h"
+#include "Math/BSpline.h"
+#include "Math/BSplineSurface.h"
+#include "Geometry/TRSGrid.h"
 
 int CaseTessHermiteCurve(int argn, char** argc)
 {
-    float vertices[] = {
-        -0.8f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f
-    };
+    std::vector<TRSVec3> vertices = { {-0.8f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 0.0f} };
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
-    pNode->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    TRSMesh* mesh = pNode->getMesh();
+    mesh->setVertex(vertices);
+    mesh->setDrawType(GL_PATCHES);
+    mesh->setDrawParam(2);
     std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createVertexShader("shaders/PosVertex.glsl");
@@ -43,26 +39,24 @@ int CaseTessHermiteCurve(int argn, char** argc)
 
     shader->addUniform3v("vTan0", TRSVec3(0.5f, 0.866f, 0.0f));
     shader->addUniform3v("vTan1", TRSVec3(0.5f, 0.866f, 0.0f));
-    pNode->getVAO()->setDrawType(GL_PATCHES);
-    pNode->getVAO()->setDrawParam(2);
 
     viewer->setSecenNode(pNode);
     viewer->run();
     return 0;
 }
 
+
 int CaseTessBezierCurve(int argn, char** argc)
 {
-    float vertices[] = {
-        -1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f
-    };
+    std::vector<TRSVec3> vertices = { {-1.0f, 0.0f, 0.0f},
+    {0.0f, 1.0f, 0.0f} , {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f} };
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
-
     std::shared_ptr<TRSGeode> bezierCurve = std::make_shared<TRSGeode>();
-    bezierCurve->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    TRSMesh* mesh = bezierCurve->getMesh();
+    mesh->setVertex(vertices);
+    mesh->setDrawType(GL_PATCHES);
+    mesh->setDrawParam(4);
+
     std::shared_ptr<TRSStateSet> pSS = bezierCurve->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createVertexShader("shaders/PosVertex.glsl");
@@ -70,20 +64,19 @@ int CaseTessBezierCurve(int argn, char** argc)
     shader->createTessControlShader("shaders/BezierTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierTese.glsl");
     shader->createProgram();
-    bezierCurve->getVAO()->setDrawType(GL_PATCHES);
-    bezierCurve->getVAO()->setDrawParam(4);
     bezierCurve->setColor(TRSVec4(1, 0.5, 0.5, 1));
 
-    int arraySize;
-    float* grid = createXYGridVertexArray(0.5, 7, arraySize);
     std::shared_ptr<TRSGeode> gridLine = std::make_shared<TRSGeode>();
-    gridLine->readFromVertex(grid, arraySize, EnVertex);
-    gridLine->getVAO()->setDrawType(GL_LINES);
+    TRSGrid* meshGrid = new TRSGrid;
+    meshGrid->setGrid(0.5, 0.5, 10, 10);
+    meshGrid->getMesh()->setDrawType(GL_LINES);
+    gridLine->setMesh(meshGrid->getMesh());
     gridLine->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGeode> polyLine = std::make_shared<TRSGeode>();
-    polyLine->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
-    polyLine->getVAO()->setDrawType(GL_LINE_STRIP);
+    TRSMesh* meshPolyline = polyLine->getMesh();
+    meshPolyline->setVertex(vertices);
+    meshPolyline->setDrawType(GL_LINE_STRIP);
     polyLine->setColor(TRSVec4(1, 1, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
@@ -99,28 +92,31 @@ int CaseTessBezierCurve(int argn, char** argc)
 int CaseTessBezierSurface(int argn, char** argc)
 {
     // 4*4 Bezier surface control pts
-    float vertices[] = {
-        0.0,  0.0,  0.0,
-        1.0,  0.0,  -1.0,
-        2.0,  0.0,  -1.0,
-        3.0,  0.0,  0.0,
-        0.0,  1.0,  2.0,
-        1.0,  1.0,  0.0,
-        2.0,  1.0,  0.0,
-        3.0,  1.0,  2.0,
-        0.0,  2.0,  2.0,
-        1.0,  2.0,  0.0,
-        2.0,  2.0,  0.0,
-        3.0,  2.0,  2.0,
-        0.0,  3.0,  0.0,
-        1.0,  3.0,  -1.0,
-        2.0,  3.0,  -1.0,
-        3.0,  3.0,  0.0,
+    std::vector<TRSVec3> vertices = {
+        {0.0,  0.0,  0.0},
+        {1.0,  0.0,  -1.0},
+        {2.0,  0.0,  -1.0},
+        {3.0,  0.0,  0.0},
+        {0.0,  1.0,  2.0},
+        {1.0,  1.0,  0.0},
+        {2.0,  1.0,  0.0},
+        {3.0,  1.0,  2.0},
+        {0.0,  2.0,  2.0},
+        {1.0,  2.0,  0.0},
+        {2.0,  2.0,  0.0},
+        {3.0,  2.0,  2.0},
+        {0.0,  3.0,  0.0},
+        {1.0,  3.0,  -1.0},
+        {2.0,  3.0,  -1.0},
+        {3.0,  3.0,  0.0},
     };
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
 
     std::shared_ptr<TRSGeode> bezierSurface = std::make_shared<TRSGeode>();
-    bezierSurface->readFromVertex(vertices, sizeof(vertices) / sizeof(float), EnVertex);
+    TRSMesh* mesh = bezierSurface->getMesh();
+    mesh->setVertex(vertices);
+    mesh->setDrawType(GL_PATCHES);
+    mesh->setDrawParam(16);
     std::shared_ptr<TRSStateSet> pSS = bezierSurface->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createVertexShader("shaders/PosVertex.glsl");
@@ -128,25 +124,18 @@ int CaseTessBezierSurface(int argn, char** argc)
     shader->createTessControlShader("shaders/BezierSurFaceTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierSurFaceTese.glsl");
     shader->createProgram();
-    bezierSurface->getVAO()->setDrawType(GL_PATCHES);
-    bezierSurface->getVAO()->setDrawParam(16);
     bezierSurface->setColor(TRSVec4(1, 0.5, 0.5, 1));
 
-    int arraySize;
-    float* grid = createXYGridVertexArray(0.5, 7, arraySize);
     std::shared_ptr<TRSGeode> gridLine = std::make_shared<TRSGeode>();
-    gridLine->readFromVertex(grid, arraySize, EnVertex);
-    gridLine->getVAO()->setDrawType(GL_LINES);
+    TRSGrid* meshGrid = new TRSGrid;
+    meshGrid->setGrid(0.5, 0.5, 10, 10);
+    meshGrid->getMesh()->setDrawType(GL_LINES);
+    gridLine->setMesh(meshGrid->getMesh());
     gridLine->setColor(TRSVec4(0.5, 0.5, 1, 1));
-
-    std::shared_ptr<TRSGeode> bezierSurfaceWireframe = std::make_shared<TRSGeode>(*bezierSurface, true);
-    bezierSurfaceWireframe->setPolygonMode(GL_LINE);
-    bezierSurfaceWireframe->setColor(TRSVec4(0.5, 1.0, 0.5, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(gridLine);
     rootNodes->addChild(bezierSurface);
-    rootNodes->addChild(bezierSurfaceWireframe);
 
     viewer->setSecenNode(rootNodes);
     viewer->run();
@@ -196,18 +185,21 @@ int CaseTraditionalBSplineCurve(int argn, char** argc)
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> Bspline = std::make_shared<TRSGeode>();
-    Bspline->readFromVertex(curve, 303, EnVertex);
-    Bspline->getVAO()->setDrawType(GL_LINE_STRIP);
+    TRSMesh* mesh_bs = Bspline->getMesh();
+    mesh_bs->setVertex(TRSMesh::convertToVec3Array(curve, (num + 1) * 3));
+    mesh_bs->setDrawType(GL_LINE_STRIP);
     Bspline->setColor(TRSVec4(0.9, 0.5, 1, 1));
 
     std::shared_ptr<TRSGeode> BSplineNormPair = std::make_shared<TRSGeode>();
-    BSplineNormPair->readFromVertex(samplePtPair, sampleNum*6, EnVertex);
-    BSplineNormPair->getVAO()->setDrawType(GL_LINES);
+    TRSMesh* mesh_norm = BSplineNormPair->getMesh();
+    mesh_norm->setVertex(TRSMesh::convertToVec3Array(samplePtPair, sampleNum * 6));
+    mesh_norm->setDrawType(GL_LINES);
     BSplineNormPair->setColor(TRSVec4(0.5, 1, 1, 1));
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
-    CtrlPolygon->readFromVertex(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float), EnVertex);
-    CtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
+    TRSMesh* mesh_ctrl_poly = CtrlPolygon->getMesh();
+    mesh_ctrl_poly->setVertex(TRSMesh::convertToVec3Array(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float)));
+    mesh_ctrl_poly->setDrawType(GL_LINE_STRIP);
     CtrlPolygon->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
@@ -219,7 +211,6 @@ int CaseTraditionalBSplineCurve(int argn, char** argc)
     viewer->run();
     return 0;
 }
-
 
 int CaseTessBSplineCurve(int argn, char** argc)
 {
@@ -242,7 +233,7 @@ int CaseTessBSplineCurve(int argn, char** argc)
 
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> BSplineToBezierCurve = std::make_shared<TRSGeode>();
-    BSplineToBezierCurve->readFromVertex(newCtrlPt, newPtNum *3, EnVertex, elementArr, eleCount);
+    std::vector<unsigned int> elements(elementArr, elementArr + eleCount);
     std::shared_ptr<TRSStateSet> pSS = BSplineToBezierCurve->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createVertexShader("shaders/PosVertex.glsl");
@@ -250,18 +241,23 @@ int CaseTessBSplineCurve(int argn, char** argc)
     shader->createTessControlShader("shaders/BezierTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierTese.glsl");
     shader->createProgram();
-    BSplineToBezierCurve->getVAO()->setDrawType(GL_PATCHES);
-    BSplineToBezierCurve->getVAO()->setDrawParam(4);
+    TRSMesh* mesh = BSplineToBezierCurve->getMesh();
+    mesh->setVertex(TRSMesh::convertToVec3Array(newCtrlPt, newPtNum * 3));
+    mesh->setIndices(elements);
+    mesh->setDrawType(GL_PATCHES);
+    mesh->setDrawParam(4);
     BSplineToBezierCurve->setColor(TRSVec4(1, 0.5, 0.5, 1));
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
-    CtrlPolygon->readFromVertex(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float), EnVertex);
-    CtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
+    TRSMesh* meshCtrlPolygon = CtrlPolygon->getMesh();
+    meshCtrlPolygon->setVertex(TRSMesh::convertToVec3Array(vertexBigDipper, sizeof(vertexBigDipper) / sizeof(float)));
+    meshCtrlPolygon->setDrawType(GL_LINE_STRIP);
     CtrlPolygon->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGeode> NewCtrlPolygon = std::make_shared<TRSGeode>();
-    NewCtrlPolygon->readFromVertex(newCtrlPt, newPtNum * 3, EnVertex);
-    NewCtrlPolygon->getVAO()->setDrawType(GL_LINE_STRIP);
+    TRSMesh* meshNewCtrl = NewCtrlPolygon->getMesh();
+    meshNewCtrl->setVertex(TRSMesh::convertToVec3Array(newCtrlPt, newPtNum * 3));
+    meshNewCtrl->setDrawType(GL_LINE_STRIP);
     NewCtrlPolygon->setColor(TRSVec4(1, 1, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
@@ -273,6 +269,7 @@ int CaseTessBSplineCurve(int argn, char** argc)
     viewer->run();
     return 0;
 }
+
 
 int CaseTraditionalBSplineSurface(int argn, char** argc)
 {
@@ -311,8 +308,10 @@ int CaseTraditionalBSplineSurface(int argn, char** argc)
     };
     int uResolution = 20;
     int vResolution = 20;
-    float* surface = new float[uResolution*vResolution*6];
-    memset(surface, 0, uResolution*vResolution * 6 * sizeof(float));
+    float* surface = new float[uResolution*vResolution*3];
+    float* surfNormals = new float[uResolution * vResolution * 3];
+    memset(surface, 0, uResolution * vResolution * 3 * sizeof(float));
+    memset(surfNormals, 0, uResolution*vResolution * 3 * sizeof(float));
     BSplineSurface* bsSurface = new BSplineSurface;
     bsSurface->setCtrlPts(SurfacePts, 6, 5);
     for (int vIndex =0; vIndex<vResolution; vIndex++)
@@ -321,10 +320,10 @@ int CaseTraditionalBSplineSurface(int argn, char** argc)
         for (int uIndex = 0; uIndex<uResolution; uIndex++)
         {
             float u = float(uIndex) / (uResolution - 1);
-            float *curPt = surface + (vIndex*uResolution+uIndex) * 6;
+            float *curPt = surface + (vIndex*uResolution+uIndex) * 3;
             bsSurface->interpolatePoint(u, v, curPt);
 
-            float* norm = surface + (vIndex*uResolution + uIndex) * 6 + 3;
+            float* norm = surfNormals + (vIndex*uResolution + uIndex) * 3;
             bsSurface->interpolateNormal(u, v, norm);
         }
     }
@@ -332,19 +331,27 @@ int CaseTraditionalBSplineSurface(int argn, char** argc)
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> BsplineSurFace = std::make_shared<TRSGeode>();
     unsigned int* surFaceEleArr = genWireFrameElementsArray(uResolution, vResolution);
-    BsplineSurFace->readFromVertex(surface, uResolution*vResolution * 6, EnVertexNormal, surFaceEleArr, uResolution*vResolution * 6);
+    std::vector<unsigned int> surFaceIndices(surFaceEleArr, surFaceEleArr + uResolution * vResolution * 6);
     std::shared_ptr<TRSStateSet> pSS = BsplineSurFace->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
-    BsplineSurFace->getVAO()->setDrawType(GL_TRIANGLES);
+
+    TRSMesh* mesh = BsplineSurFace->getMesh();
+    mesh->setVertex(TRSMesh::convertToVec3Array(surface, uResolution * vResolution * 3));
+    mesh->setNormal(TRSMesh::convertToVec3Array(surfNormals, uResolution * vResolution * 3));
+    mesh->setIndices(surFaceIndices);
+    mesh->setDrawType(GL_TRIANGLES);
     BsplineSurFace->setColor(TRSVec4(0.9, 0.5, 1, 1));
 
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
     unsigned int* ctrlPolygonEleArr = genWireFrameElementsArray(6, 5);
-    CtrlPolygon->readFromVertex(SurfacePts, sizeof(SurfacePts) / sizeof(float), EnVertex, ctrlPolygonEleArr, 180);
+    std::vector<unsigned int> indices(ctrlPolygonEleArr, ctrlPolygonEleArr + 180);
+    TRSMesh* meshCtrlPoly = CtrlPolygon->getMesh();
+    meshCtrlPoly->setVertex(TRSMesh::convertToVec3Array(SurfacePts, sizeof(SurfacePts) / sizeof(float)));
+    meshCtrlPoly->setIndices(indices);
+    meshCtrlPoly->setDrawType(GL_TRIANGLES);
     CtrlPolygon->setPolygonMode(GL_LINE);
-    CtrlPolygon->getVAO()->setDrawType(GL_TRIANGLES);
     CtrlPolygon->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
@@ -356,6 +363,8 @@ int CaseTraditionalBSplineSurface(int argn, char** argc)
     viewer->run();
     return 0;
 }
+
+
 
 int CaseTessBSplineSurface(int argn, char** argc)
 {
@@ -404,7 +413,7 @@ int CaseTessBSplineSurface(int argn, char** argc)
     std::shared_ptr<TRSGeode> BsplineSurFace = std::make_shared<TRSGeode>();
     unsigned int* surFaceEleArr = genBS2BezierPatchEleArr(uNum, vNum);
     int eleArrCount = ((uNum - 1) / 3)*((vNum - 1) / 3) * 16;
-    BsplineSurFace->readFromVertex(newCtrlPt, uNum*vNum * 3, EnVertex, surFaceEleArr, eleArrCount);
+    std::vector<unsigned int> surfaceIndices(surFaceEleArr, surFaceEleArr + eleArrCount);
     std::shared_ptr<TRSStateSet> pSS = BsplineSurFace->getOrCreateStateSet();
     TRSShader* shader = pSS->getShader();
     shader->createVertexShader("shaders/PosVertex.glsl");
@@ -412,23 +421,27 @@ int CaseTessBSplineSurface(int argn, char** argc)
     shader->createTessControlShader("shaders/BezierSurFaceTesc.glsl");
     shader->createTessEvaluateShader("shaders/BezierSurFaceTese.glsl");
     shader->createProgram();
-    BsplineSurFace->getVAO()->setDrawType(GL_PATCHES);
-    BsplineSurFace->getVAO()->setDrawParam(16);
+    TRSMesh* mesh = BsplineSurFace->getMesh();
+    mesh->setVertex(TRSMesh::convertToVec3Array(newCtrlPt, uNum * vNum * 3));
+    mesh->setIndices(surfaceIndices);
+    mesh->setDrawType(GL_PATCHES);
+    mesh->setDrawParam(16);
     BsplineSurFace->setColor(TRSVec4(1, 0.5, 0.5, 1));
-    BsplineSurFace->setPolygonMode(GL_LINE);
+    BsplineSurFace->setPolygonMode(GL_TRIANGLES);
 
     std::shared_ptr<TRSGeode> CtrlPolygon = std::make_shared<TRSGeode>();
     unsigned int* ctrlPolygonEleArr = genWireFrameElementsArray(6, 5);
-    CtrlPolygon->readFromVertex(SurfacePts, sizeof(SurfacePts) / sizeof(float), EnVertex, ctrlPolygonEleArr, 180);
+    std::vector<unsigned int> indices(ctrlPolygonEleArr, ctrlPolygonEleArr + 180);
+    TRSMesh* meshCtrlPoly = CtrlPolygon->getMesh();
+    meshCtrlPoly->setVertex(TRSMesh::convertToVec3Array(SurfacePts, sizeof(SurfacePts) / sizeof(float)));
+    meshCtrlPoly->setIndices(indices);
+    meshCtrlPoly->setDrawType(GL_TRIANGLES);
     CtrlPolygon->setPolygonMode(GL_LINE);
-    CtrlPolygon->getVAO()->setDrawType(GL_TRIANGLES);
     CtrlPolygon->setColor(TRSVec4(0.5, 0.5, 1, 1));
 
     std::shared_ptr<TRSGroup> rootNodes = std::make_shared<TRSGroup>();
     rootNodes->addChild(BsplineSurFace);
     rootNodes->addChild(CtrlPolygon);
-
-    //todo glPointSize(3);
     viewer->setSecenNode(rootNodes);
     viewer->run();
     return 0;

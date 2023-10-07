@@ -34,6 +34,8 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/Event/TRSShortcutKeyHandler.h
     ${INCLUDE_DIR}/Geometry/TRSGeometry.h
     ${INCLUDE_DIR}/Geometry/TRSCube.h
+    ${INCLUDE_DIR}/Geometry/TRSCylinder.h
+    ${INCLUDE_DIR}/Geometry/TRSGrid.h
     ${INCLUDE_DIR}/Geometry/GeometryUtil.h
     ${INCLUDE_DIR}/IO/TRSAssimpLoader.h
     ${INCLUDE_DIR}/Context/TRSContext.h
@@ -75,6 +77,8 @@ set(Target_SRC_LIST
     ${SRC_DIR}/Event/TRSShortcutKeyHandler.cpp
     ${SRC_DIR}/Geometry/TRSGeometry.cpp
     ${SRC_DIR}/Geometry/TRSCube.cpp
+    ${SRC_DIR}/Geometry/TRSCylinder.cpp
+    ${SRC_DIR}/Geometry/TRSGrid.cpp
     ${SRC_DIR}/Geometry/GeometryUtil.cpp
     ${SRC_DIR}/IO/TRSAssimpLoader.cpp
     ${SRC_DIR}/Context/TRSContext.cpp

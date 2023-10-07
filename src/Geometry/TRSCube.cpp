@@ -8,12 +8,6 @@ TRSCube::TRSCube()
 
 }
 
-TRSCube::TRSCube(bool atCenter)
-    :m_origAtCenter(atCenter)
-{
-
-}
-
 TRSCube::~TRSCube()
 {
 
@@ -25,34 +19,14 @@ void TRSCube::tessellation()
     std::vector<TRSPoint> vertices;
     std::vector<TRSVec2> texCoords;
     std::vector<TRSVec3> normals;
-    float x = m_origin[0];
-    float y = m_origin[1];
-    float z = m_origin[2];
-    float l = m_length; // in x direction
-    float w = m_width; // in y direction
-    float h = m_height; // in z direction
-    TRSPoint pt0(x, y, z);
-    TRSPoint pt1(x + l, y, z);
-    TRSPoint pt2(x + l, y + w, z);
-    TRSPoint pt3(x, y + w, z);
-    TRSPoint pt4(x, y, z + h);
-    TRSPoint pt5(x + l, y, z + h);
-    TRSPoint pt6(x + l, y + w, z + h);
-    TRSPoint pt7(x, y + w, z + h);
-    if (m_origAtCenter)
-    {
-        l /= 2;
-        w /= 2;
-        h /= 2;
-        pt0 = TRSPoint(x - l, y - w, z - h);
-        pt1 = TRSPoint(x + l, y - w, z - h);
-        pt2 = TRSPoint(x + l, y + w, z - h);
-        pt3 = TRSPoint(x - l, y + w, z - h);
-        pt4 = TRSPoint(x - l, y - w, z + h);
-        pt5 = TRSPoint(x + l, y - w, z + h);
-        pt6 = TRSPoint(x + l, y + w, z + h);
-        pt7 = TRSPoint(x - l, y + w, z + h);
-    }
+    TRSPoint pt0(m_x0, m_y0, m_z0);
+    TRSPoint pt1(m_x1, m_y0, m_z0);
+    TRSPoint pt2(m_x1, m_y1, m_z0);
+    TRSPoint pt3(m_x0, m_y1, m_z0);
+    TRSPoint pt4(m_x0, m_y0, m_z1);
+    TRSPoint pt5(m_x1, m_y0, m_z1);
+    TRSPoint pt6(m_x1, m_y1, m_z1);
+    TRSPoint pt7(m_x0, m_y1, m_z1);
     TRSVec3 normBottom(0, 0, -1);
     TRSVec3 normTop(0, 0, 1);
     TRSVec3 normFront(0, -1, 0);
@@ -111,38 +85,36 @@ void TRSCube::tessellation()
     m_mesh->setNormal(normals);
 }
 
-void TRSCube::setLength(float len)
+void TRSCube::setTwoPos(const TRSVec3& first, const TRSVec3& second)
 {
-    if (m_length != len)
-    {
-        m_length = len;
-        modified();
-    }
+    m_x0 = std::min(first[0], second[0]);
+    m_x1 = std::max(first[0], second[0]);
+    m_y0 = std::min(first[1], second[1]);
+    m_y1 = std::max(first[1], second[1]);
+    m_z0 = std::min(first[2], second[2]);
+    m_z1 = std::max(first[2], second[2]);
+    modified();
 }
 
-void TRSCube::setWidth(float w)
+void TRSCube::setStartDim(const TRSVec3& start, float length, float width, float height)
 {
-    if (m_width != w)
-    {
-        m_width = w;
-        modified();
-    }
+    m_x0 = start[0];
+    m_y0 = start[1];
+    m_z0 = start[2];
+    m_x1 = m_x0 + length;
+    m_y1 = m_y0 + width;
+    m_z1 = m_z0 + height;
+    modified();
 }
 
-void TRSCube::setHeight(float h)
+void TRSCube::setCenterDim(const TRSVec3& center, float length, float width, float height)
 {
-    if (m_height != h)
-    {
-        m_height = h;
-        modified();
-    }
+    m_x0 = center[0] - length / 2;
+    m_y0 = center[1] - width / 2;
+    m_z0 = center[2] - height / 2;
+    m_x1 = center[0] + length / 2;
+    m_y1 = center[1] + width / 2;
+    m_z1 = center[2] + height / 2;
+    modified();
 }
 
-void TRSCube::setOriginAtCenter(bool atCenter)
-{
-    if (m_origAtCenter != atCenter)
-    {
-        m_origAtCenter = atCenter;
-        modified();
-    }
-}

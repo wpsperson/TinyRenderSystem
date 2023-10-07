@@ -17,7 +17,7 @@ void E01TextureColorArray()
     std::shared_ptr<TRSViewer> viewer = std::make_shared<TRSViewer>();
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     
-    TRSCube* cube = new TRSCube(true);
+    TRSCube* cube = new TRSCube;
     TRSMesh* mesh = cube->getMesh();
     pNode->setMesh(mesh);
     //pNode->setMeshData(s_BoxVertexs, s_EmptyVec3, s_BoxUVs, s_BoxColors);

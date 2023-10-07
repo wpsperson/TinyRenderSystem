@@ -51,10 +51,8 @@ void E06MeshPerformance()
             }
         }
     }
-
-    TRSMesh* mesh = new TRSMesh;
+    TRSMesh* mesh = pNode->getMesh();
     mesh->setVertex(points);
-    pNode->setMesh(mesh);
 
     viewer->setSecenNode(pNode);
     viewer->run();

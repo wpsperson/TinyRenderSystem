@@ -1,8 +1,8 @@
 ﻿#include "E09FreeType.h"
-#include "TRSConst.h"
-#include "TRSViewer.h"
-#include "TRSTextNode.h"
-#include "TRSGroup.h"
+#include "Core/TRSConst.h"
+#include "Core/TRSViewer.h"
+#include "DataModel/TRSTextNode.h"
+#include "DataModel/TRSGroup.h"
 
 int CaseTextNode()
 {
