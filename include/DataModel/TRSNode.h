@@ -51,6 +51,10 @@ public:
 
     bool visible() const;
 
+    void setName(const std::string& name);
+
+    const std::string& name()const;
+
     std::shared_ptr<TRSStateSet> getStateSet() const;
 
     std::shared_ptr<TRSStateSet> getOrCreateStateSet();
@@ -66,6 +70,7 @@ protected:
     bool m_visible = true;
     TRSMatrix m_mat;
     TRSVec4 m_matColor;
+    std::string m_name;
     std::shared_ptr<TRSStateSet> m_pStateSet;
     std::shared_ptr<TRSMesh> m_pMesh;
     NodeUpdateFunc m_UpdateFunc;

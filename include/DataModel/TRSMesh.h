@@ -22,6 +22,7 @@ public:
     void setColor(const std::vector<TRSVec3>& colors);
     void setUV(const std::vector<TRSVec2>& uv);
     void setIndices(const std::vector<unsigned int>& indices);
+    void generateNormals();
 
     //绘制数组的数量
     int getDrawCount() const;

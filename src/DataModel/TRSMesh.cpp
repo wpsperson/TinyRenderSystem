@@ -1,7 +1,12 @@
 #include "DataModel\TRSMesh.h"
+
+#include <map>
+#include <vector>
+
 #include "Math\TRSVector.h"
 #include "Core\TRSVAO.h"
 #include <glad/glad.h>
+
 
 
 TRSMesh::TRSMesh()
@@ -48,6 +53,67 @@ void TRSMesh::setIndices(const std::vector<unsigned int>& indices)
 {
     m_indexs = indices;
     m_dirty = true;
+}
+
+void TRSMesh::generateNormals()
+{
+    if (m_vertexs.empty())
+    {
+        return;
+    }
+    m_normals.reserve(m_vertexs.size());
+    if (m_indexs.empty())
+    {
+        for (std::size_t idx = 0; idx < m_vertexs.size(); idx += 3)
+        {
+            const TRSPoint& pta = m_vertexs[idx + 0];
+            const TRSPoint& ptb = m_vertexs[idx + 1];
+            const TRSPoint& ptc = m_vertexs[idx + 2];
+            TRSVec3 vec_ab = ptb - pta;
+            TRSVec3 vec_ac = ptc - pta;
+            TRSVec3 norm = vec_ab.cross(vec_ac);
+            m_normals.emplace_back(norm);
+            m_normals.emplace_back(norm);
+            m_normals.emplace_back(norm);
+        }
+        return;
+    }
+
+    std::map<int, std::vector<TRSVec3>> vertexToFaceNormalsMap;
+    int index1, index2, index3;
+    for (size_t idx = 0; idx < m_indexs.size(); idx += 3)
+    {
+        index1 = m_indexs[idx];
+        index2 = m_indexs[idx + 1];
+        index3 = m_indexs[idx + 2];
+        const TRSPoint& pta = m_vertexs[index1];
+        const TRSPoint& ptb = m_vertexs[index2];
+        const TRSPoint& ptc = m_vertexs[index3];
+        TRSVec3 vec_ab = ptb - pta;
+        TRSVec3 vec_ac = ptc - pta;
+        TRSVec3 faceNormal = vec_ab.cross(vec_ac);
+
+        vertexToFaceNormalsMap[index1].emplace_back(faceNormal);
+        vertexToFaceNormalsMap[index2].emplace_back(faceNormal);
+        vertexToFaceNormalsMap[index3].emplace_back(faceNormal);
+    }
+
+    for (int idx = 0; idx < m_vertexs.size(); idx++)
+    {
+        if (!vertexToFaceNormalsMap.count(idx))
+        {
+            m_normals.emplace_back(G_ZDIR);
+            continue;
+        }
+        std::vector<TRSVec3>& normals = vertexToFaceNormalsMap[idx];
+        TRSVec3 resultNormal(0, 0, 0);
+        for (auto iter = normals.begin(); iter != normals.end(); iter++)
+        {
+            resultNormal = resultNormal + (*iter);
+        }
+        resultNormal.normalize();
+        m_normals.emplace_back(resultNormal);
+    }
 }
 
 int TRSMesh::getDrawCount() const

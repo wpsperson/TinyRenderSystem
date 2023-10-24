@@ -62,6 +62,16 @@ bool TRSNode::visible() const
     return m_visible;
 }
 
+void TRSNode::setName(const std::string& name)
+{
+    m_name = name;
+}
+
+const std::string& TRSNode::name() const
+{
+    return m_name;
+}
+
 void TRSNode::preProcess()
 {
 
