@@ -19,8 +19,8 @@ public:
     const TRSVec3& getPosition() const;
     const TRSVec3& getLookAt() const;
     const TRSVec3& getUp() const;
-    const TRSVec3& getFront() const;
     const TRSVec3& getRight() const;
+    TRSVec3 getFront() const;
     TRSMatrix getViewMatrix();
     float getNear();
     float getFar();
@@ -51,7 +51,6 @@ protected:
     // view matrix parameter
     TRSVec3 m_pos;        //相机当前位置
     TRSVec3 m_lookAt;       // the center position that camera is looking at.
-    TRSVec3 m_front;      //相机的前向方向，相机当前位置指向观察中心点的向量
     TRSVec3 m_right;      //相机的右手方向，即局部坐标系的X轴向在世界坐标系中的向量
     TRSVec3 m_up;         //相机的头顶方向，即局部坐标系的Y轴向在世界坐标系中的向量
     TRSMatrix m_viewMatrix;

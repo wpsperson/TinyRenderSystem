@@ -8,7 +8,6 @@ TRSCamera::TRSCamera()
 {
     m_pos = s_DefaultCameraPos;
     m_lookAt = TRSVec3(0, 0, 0);
-    m_front = TRSVec3(0, 0, -1);
     m_right = TRSVec3(1, 0, 0);
     m_up = TRSVec3(0, 1, 0);
 
@@ -75,14 +74,16 @@ const TRSVec3& TRSCamera::getLookAt() const
     return m_lookAt;
 }
 
-const TRSVec3& TRSCamera::getFront() const
-{
-    return m_front;
-}
-
 const TRSVec3& TRSCamera::getRight() const
 {
     return m_right;
+}
+
+TRSVec3 TRSCamera::getFront() const
+{
+    TRSVec3 front = m_lookAt - m_pos;
+    front.normalize();
+    return front;
 }
 
 const TRSVec3& TRSCamera::getUp() const
@@ -190,16 +191,14 @@ void TRSCamera::Elevation(double angle)
 
 void TRSCamera::updateViewMatrix()
 {
-    m_front = m_lookAt - m_pos;
-    m_front.normalize();
-
-    m_right = m_front.cross(m_up);
+    TRSVec3 front = getFront();
+    m_right = front.cross(m_up);
     m_right.normalize();
     // because front may be not perpendicular to up; so orthoganalize them.
-    m_up = m_right.cross(m_front);
+    m_up = m_right.cross(front);
     m_up.normalize();
 
-    m_viewMatrix.makeLookat(m_pos, m_front, m_up);
+    m_viewMatrix.makeLookat(m_pos, front, m_up);
 }
 
 void TRSCamera::updateProjectMatrix()
