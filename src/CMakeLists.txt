@@ -22,6 +22,7 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/Core/TRSVAOBase.h
     ${INCLUDE_DIR}/Core/TRSViewer.h
     ${INCLUDE_DIR}/Core/TRSVisitors.h
+    ${INCLUDE_DIR}/Core/TRSBox.h
     ${INCLUDE_DIR}/DataModel/NodeVisitor.h
     ${INCLUDE_DIR}/DataModel/TRSGeode.h
     ${INCLUDE_DIR}/DataModel/TRSGroup.h
@@ -66,6 +67,7 @@ set(Target_SRC_LIST
     ${SRC_DIR}/Core/TRSVAO.cpp
     ${SRC_DIR}/Core/TRSViewer.cpp
     ${SRC_DIR}/Core/TRSVisitors.cpp
+    ${SRC_DIR}/Core/TRSBox.cpp
     ${SRC_DIR}/DataModel/NodeVisitor.cpp
     ${SRC_DIR}/DataModel/TRSGeode.cpp
     ${SRC_DIR}/DataModel/TRSGroup.cpp
