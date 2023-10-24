@@ -16,12 +16,14 @@ public:
     TRSCamera();
     ~TRSCamera();
     // get
-    TRSVec3 getPosition() const;
-    TRSVec3 getLookAt() const;
-    TRSVec3 getUp() const;
-    TRSVec3 getFront() const;
-    TRSVec3 getRight() const;
+    const TRSVec3& getPosition() const;
+    const TRSVec3& getLookAt() const;
+    const TRSVec3& getUp() const;
+    const TRSVec3& getFront() const;
+    const TRSVec3& getRight() const;
     TRSMatrix getViewMatrix();
+    float getNear();
+    float getFar();
     double getWindowWidth() const;
     double getWindowHeight() const;
     TRSMatrix getProjectMatrix();
@@ -30,6 +32,8 @@ public:
     void setPosition(const TRSVec3& pos);
     void setLookAt(const TRSVec3& lookAt);
     void setUp(const TRSVec3& up);
+    void setNear(float near);
+    void setFar(float far);
     void setCameraMode(bool parallelMode);
     void setWindowWidth(double width);
     void setWindowHeight(double height);

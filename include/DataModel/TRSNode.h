@@ -7,6 +7,7 @@
 #pragma once
 #include "Core\TRSExport.h"
 #include "Core\TRSConst.h"
+#include "Core\TRSBox.h"
 #include "Math\TRSMatrix.h"
 #include <memory>
 #include <string>
@@ -42,6 +43,8 @@ public:
     virtual void postProcess();
 
     virtual void traverse(NodeVisitor& visitor);
+
+    virtual TRSBox boundingBox() const;
 
     TRSVec4 getColor() const;
 

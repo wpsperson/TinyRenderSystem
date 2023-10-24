@@ -9,6 +9,7 @@
 #include <vector>
 #include "Math\TRSVector.h"
 #include "Core\TRSConst.h"
+#include "Core\TRSBox.h"
 
 class TRSVAO;
 
@@ -23,7 +24,7 @@ public:
     void setUV(const std::vector<TRSVec2>& uv);
     void setIndices(const std::vector<unsigned int>& indices);
     void generateNormals();
-
+    const TRSBox& boundingBox() const;
     //绘制数组的数量
     int getDrawCount() const;
     int getElementCount() const;
@@ -46,6 +47,8 @@ protected:
 
     bool combineMeshData();
 
+    void updateBoundingBox();
+
 protected:
 
 private:
@@ -54,6 +57,7 @@ private:
     std::vector<TRSVec3> m_colors;
     std::vector<TRSVec2> m_texCoords;
     std::vector<unsigned int> m_indexs;
+    TRSBox m_boundingBox;
     bool m_dirty = false;
     // temp
     TRSVAO* m_vao = nullptr;

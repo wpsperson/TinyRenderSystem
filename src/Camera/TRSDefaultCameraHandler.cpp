@@ -16,6 +16,12 @@ TRSDefaultCameraHandler::~TRSDefaultCameraHandler()
 
 }
 
+void TRSDefaultCameraHandler::setSceneBox(const TRSBox& box)
+{
+    m_sceneBox = box;
+    updateNearFar();
+}
+
 void TRSDefaultCameraHandler::processWindowSizeChange(int width, int height)
 {
     if (height < 2)
@@ -58,6 +64,7 @@ void TRSDefaultCameraHandler::processLeftMouseMove(double xpos, double ypos, int
 
     m_lastX = static_cast<float>(curX);
     m_lastY = static_cast<float>(curY);
+    updateNearFar();
 }
 
 void TRSDefaultCameraHandler::processMiddleMouseMove(double xpos, double ypos, int mods)
@@ -79,6 +86,7 @@ void TRSDefaultCameraHandler::processMiddleMouseMove(double xpos, double ypos, i
     m_camera->setLookAt(lookAt);
     m_lastX = curX;
     m_lastY = curY;
+    updateNearFar();
 }
 
 void TRSDefaultCameraHandler::processRightMouseMove(double xpos, double ypos, int mods)
@@ -97,11 +105,7 @@ void TRSDefaultCameraHandler::processMouseScroll(double xScroll, double yScroll)
     float scrollDist = static_cast<float>(dist * coffScroll * yScroll);
     pos += front * scrollDist;
     m_camera->setPosition(pos);
-    // todo if dist is too small, move look At?
-    if (dist < 0.001)
-    {
-
-    }
+    updateNearFar();
 }
 
 void TRSDefaultCameraHandler::processKeyPress(int key)
@@ -143,4 +147,16 @@ void TRSDefaultCameraHandler::processKeyPress(int key)
         m_camera->setPosition(pos);
         m_camera->setLookAt(lookAt);
     }
+}
+
+void TRSDefaultCameraHandler::updateNearFar()
+{
+    const TRSPoint& pos = m_camera->getPosition();
+    TRSPoint center = m_sceneBox.center();
+    float distance = (pos - center).length();
+    float radius = m_sceneBox.outSphereRadius();
+    float far = (distance + radius) * 1.5f;
+    float near = far * 0.001f;
+    m_camera->setFar(far);
+    m_camera->setNear(near);
 }

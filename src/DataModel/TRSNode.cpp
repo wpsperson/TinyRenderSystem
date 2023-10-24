@@ -92,6 +92,11 @@ void TRSNode::traverse(NodeVisitor& visitor)
 
 }
 
+TRSBox TRSNode::boundingBox() const
+{
+    return m_pMesh->boundingBox();
+}
+
 std::shared_ptr<TRSStateSet> TRSNode::getStateSet() const
 {
     return m_pStateSet;

@@ -28,6 +28,7 @@ TRSMesh::~TRSMesh()
 void TRSMesh::setVertex(const std::vector<TRSVec3>& vertexs)
 {
     m_vertexs = vertexs;
+    updateBoundingBox();
     m_dirty = true;
 }
 
@@ -114,6 +115,11 @@ void TRSMesh::generateNormals()
         resultNormal.normalize();
         m_normals.emplace_back(resultNormal);
     }
+}
+
+const TRSBox& TRSMesh::boundingBox() const
+{
+    return m_boundingBox;
 }
 
 int TRSMesh::getDrawCount() const
@@ -308,4 +314,12 @@ bool TRSMesh::combineMeshData()
         }
     }
     return true;
+}
+
+void TRSMesh::updateBoundingBox()
+{
+    for (const TRSPoint& pt : m_vertexs)
+    {
+        m_boundingBox.mergePoint(pt);
+    }
 }

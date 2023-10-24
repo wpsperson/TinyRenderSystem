@@ -26,6 +26,8 @@ public:
 
     virtual void traverse(NodeVisitor& visitor) override;
 
+    TRSBox boundingBox() const override;
+
     virtual std::string debugInfo() override;
 protected:
     void insertChild(int idx, std::shared_ptr<TRSNode>);

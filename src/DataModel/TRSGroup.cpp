@@ -62,6 +62,16 @@ void TRSGroup::traverse(NodeVisitor& visitor)
     }
 }
 
+TRSBox TRSGroup::boundingBox() const
+{
+    TRSBox box = TRSNode::boundingBox();
+    for (const std::shared_ptr<TRSNode>& node : m_pChildren)
+    {
+        box.mergeBox(node->boundingBox());
+    }
+    return box;
+}
+
 std::string TRSGroup::debugInfo()
 {
     std::string strDebugInfo;

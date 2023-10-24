@@ -35,6 +35,16 @@ TRSMatrix TRSCamera::getViewMatrix()
     return m_viewMatrix;
 }
 
+float TRSCamera::getNear()
+{
+    return m_near;
+}
+
+float TRSCamera::getFar()
+{
+    return m_far;
+}
+
 double TRSCamera::getWindowWidth() const
 {
     return m_width;
@@ -55,27 +65,27 @@ TRSMatrix TRSCamera::getProjectMatrix()
     return m_projectMatrix;
 }
 
-TRSVec3 TRSCamera::getPosition() const
+const TRSVec3& TRSCamera::getPosition() const
 {
     return m_pos;
 }
 
-TRSVec3 TRSCamera::getLookAt() const
+const TRSVec3& TRSCamera::getLookAt() const
 {
     return m_lookAt;
 }
 
-TRSVec3 TRSCamera::getFront() const
+const TRSVec3& TRSCamera::getFront() const
 {
     return m_front;
 }
 
-TRSVec3 TRSCamera::getRight() const
+const TRSVec3& TRSCamera::getRight() const
 {
     return m_right;
 }
 
-TRSVec3 TRSCamera::getUp() const
+const TRSVec3& TRSCamera::getUp() const
 {
     return m_up;
 }
@@ -107,6 +117,18 @@ void TRSCamera::setUp(const TRSVec3& up)
         m_up = normalizedUp;
         m_viewMatrixNeedUpdate = true;
     }
+}
+
+void TRSCamera::setNear(float near)
+{
+    m_near = near;
+    m_projectMatrixNeedUpdate = true;
+}
+
+void TRSCamera::setFar(float far)
+{
+    m_far = far;
+    m_projectMatrixNeedUpdate = true;
 }
 
 void TRSCamera::setCameraMode(bool parallelMode)

@@ -56,6 +56,9 @@ void TRSViewer::defaultSetting()
 {
     m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
     glEnable(GL_DEPTH_TEST);
+
+    TRSBox sceneBox = m_pSceneNode->boundingBox();
+    m_pCameraHandler->setSceneBox(sceneBox);
 }
 
 void TRSViewer::run()
