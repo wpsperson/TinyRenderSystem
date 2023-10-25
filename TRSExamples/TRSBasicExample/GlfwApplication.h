@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <memory>
 
 struct GLFWwindow;
 class TRSViewer;
@@ -28,7 +27,7 @@ public:
 private:
     GLFWwindow* m_window = nullptr;
     TRSViewer* m_viewer = nullptr;
-    std::shared_ptr<TRSDefaultCameraHandler> m_pCameraHandler;
+    TRSDefaultCameraHandler* m_pCameraHandler = nullptr;
 };
 
 

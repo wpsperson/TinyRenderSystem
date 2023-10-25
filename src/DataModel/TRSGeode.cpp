@@ -1,5 +1,8 @@
 ﻿#include "DataModel\TRSGeode.h"
+
 #include <iostream>
+#include <glad/glad.h>
+
 #include "DataModel\TRSMesh.h"
 #include "Core\TRSShader.h"
 #include "Core\TRSTexture.h"

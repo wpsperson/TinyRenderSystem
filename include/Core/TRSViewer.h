@@ -30,9 +30,11 @@ public:
 
     bool loadOpenGLAddress(LoadGLAddress func);
 
+    bool loadOpenGL();
+
+    void initialViewer();
+
     void setSecenNode(std::shared_ptr<TRSNode> pSceneNode);
-    
-    void run();
 
     void frame();
 
@@ -43,8 +45,6 @@ public:
     TRSCamera* getCamera() const;
 
 protected:
-    virtual void defaultSetting();
-
     void calcFrameTime();
 
 protected:

@@ -27,6 +27,19 @@ GlfwApplication::GlfwApplication()
 
 GlfwApplication::~GlfwApplication()
 {
+    TRSStateSetManager::free();
+    if (m_pCameraHandler)
+    {
+        delete m_pCameraHandler;
+    }
+    if (g_EventDispatcher)
+    {
+        delete g_EventDispatcher;
+    }
+    if (m_viewer)
+    {
+        delete m_viewer;
+    }
 }
 
 bool GlfwApplication::initContext(std::string& error)
@@ -60,10 +73,11 @@ bool GlfwApplication::onInitial()
         glfwTerminate();
         return false;
     }
-    g_EventDispatcher = new TRSEventDispatcher();
+    m_viewer->initialViewer();
+    g_EventDispatcher = new TRSEventDispatcher;
     TRSCamera* camera = m_viewer->getCamera();
-    m_pCameraHandler = std::make_shared<TRSDefaultCameraHandler>(camera);
-    g_EventDispatcher->addEventHandler(m_pCameraHandler.get());
+    m_pCameraHandler = new TRSDefaultCameraHandler(camera);
+    g_EventDispatcher->addEventHandler(m_pCameraHandler);
 
     TRSCube* cube = new TRSCube;
     TRSMesh* mesh = cube->getMesh();

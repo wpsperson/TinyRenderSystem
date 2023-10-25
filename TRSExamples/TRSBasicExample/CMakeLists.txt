@@ -7,7 +7,7 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glfw-3.2.1/lib)
 
 set(Target_INCLUDE_LIST
     ${TRSExamPath}/${TARGET_NAME}/GlfwApplication.h
-    ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.h
+    #${TRSExamPath}/${TARGET_NAME}/E01TextureBox.h
     #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.h
     #${TRSExamPath}/${TARGET_NAME}/E03BasicLight.h
     #${TRSExamPath}/${TARGET_NAME}/E04ElementArray.h
@@ -20,7 +20,7 @@ set(Target_INCLUDE_LIST
     )
 set(Target_SRC_LIST
     ${TRSExamPath}/${TARGET_NAME}/GlfwApplication.cpp
-    ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.cpp
+    #${TRSExamPath}/${TARGET_NAME}/E01TextureBox.cpp
     #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.cpp
     #${TRSExamPath}/${TARGET_NAME}/E03BasicLight.cpp
     #${TRSExamPath}/${TARGET_NAME}/E04ElementArray.cpp

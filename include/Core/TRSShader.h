@@ -7,7 +7,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <glad/glad.h>
 #include "Core\TRSExport.h"
 #include "Math\TRSVector.h"
 #include "Math\TRSMatrix.h"
@@ -104,7 +103,7 @@ public:
 
 private:
     //return 0 when failure
-    unsigned int createShader(const std::string vShaderFile, GLenum EnShaderType);
+    unsigned int createShader(const std::string vShaderFile, unsigned int EnShaderType);
 
     void freeShaderProgram();
 

@@ -1,4 +1,7 @@
 ﻿#include "Core\TRSShader.h"
+
+#include <glad/glad.h>
+
 #include "Util\TRSUtils.h"
 #include "Core\TRSConst.h"
 
@@ -113,7 +116,7 @@ void TRSShader::addUniformMatrix4(const std::string& uniformName, TRSMatrix mat)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-unsigned int TRSShader::createShader(const std::string vShaderFile, GLenum EnShaderType)
+unsigned int TRSShader::createShader(const std::string vShaderFile, unsigned int EnShaderType)
 {
     unsigned int shader = glCreateShader(EnShaderType);
     const char* source = readTextFile(vShaderFile);

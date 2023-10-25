@@ -3,6 +3,9 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+
+#include <glad/glad.h>
+
 #include "Camera\TRSCamera.h"
 #include "DataModel\TRSNode.h"
 #include "Core\TRSStateSet.h"
@@ -28,11 +31,24 @@ TRSViewer::~TRSViewer()
 
 bool TRSViewer::loadOpenGLAddress(LoadGLAddress func)
 {
-    int ret = gladLoadGLLoader(func);
-    if (!ret)
+    if (!gladLoadGLLoader(func))
     {
         return false;
     }
+    return true;
+}
+
+bool TRSViewer::loadOpenGL()
+{
+    if (!gladLoadGL())
+    {
+        return false;
+    }
+    return true;
+}
+
+void TRSViewer::initialViewer()
+{
     TRSCharacterTexture::instance()->genTexture();
     std::string errorMsg;
     bool loadSuccess = TRSCharacterTexture::instance()->loadFreeType(errorMsg);
@@ -40,7 +56,8 @@ bool TRSViewer::loadOpenGLAddress(LoadGLAddress func)
     {
         std::cout << errorMsg << std::endl;
     }
-    return true;
+    m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
+    glEnable(GL_DEPTH_TEST);
 }
 
 void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
@@ -49,27 +66,6 @@ void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
     m_polygonModeVisitor->setTargetNode(m_pSceneNode.get());
 }
 
-void TRSViewer::defaultSetting()
-{
-    m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
-    glEnable(GL_DEPTH_TEST);
-}
-
-void TRSViewer::run()
-{
-    //渲染前默认设置
-    defaultSetting();
-    //while (true)
-    //{
-    //    if (m_context->shouldClose())
-    //    {
-    //        break;
-    //    }
-
-    //    m_context->swapBuffer();
-    //}
-    TRSStateSetManager::free();
-}
 
 void TRSViewer::frame()
 {

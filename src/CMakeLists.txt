@@ -2,10 +2,8 @@ set(TARGET_NAME TinyRenderSystem)
 
 add_definitions(-DTRSLIB)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glfw-3.2.1/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/assimp-4.1.0/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/include)
-LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glfw-3.2.1/lib)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/assimp-4.1.0/lib64)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/lib64)
 
@@ -110,12 +108,10 @@ set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POS
 set_target_properties(${TARGET_NAME} PROPERTIES RELEASE_POSTFIX "${CMAKE_RELEASE_POSTFIX}")
 
 SET(ADDITIONAL_LIBRARIES_DEBUG
-glfw3d.lib
 assimp-vc140-mt.lib
 freetyped.lib
 )
 SET(ADDITIONAL_LIBRARIES_RELEASE
-glfw3.lib
 assimp-vc140-mt.lib
 freetype.lib
 )
