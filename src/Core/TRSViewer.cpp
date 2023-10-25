@@ -1,5 +1,4 @@
 ﻿#include "Core\TRSViewer.h"
-#include "Context\GLFWContext.h"
 #include "Core\TRSConst.h"
 #include <iostream>
 #include <thread>
@@ -13,25 +12,27 @@
 #include "Core\TRSTexture.h"
 #include "Core\TRSVisitors.h"
 #include "Core\TRSCharacterTexture.h"
-#include "Event\TRSEventDispatcher.h"
-#include "Camera\TRSDefaultCameraHandler.h"
-#include "Event\TRSShortcutKeyHandler.h"
 
 
 TRSViewer::TRSViewer()
     : m_BGColor(s_DefaultBGColor)
 {
     m_polygonModeVisitor = new PolygonModeVisitor;
-    m_pEventDispatcher = std::make_shared<TRSEventDispatcher>();
-    m_context = new GLFWContext;
-    m_context->initContext();
     m_pCamera = new TRSCamera;
-    m_pCameraHandler = std::make_shared<TRSDefaultCameraHandler>(m_pCamera);
-    m_pShortcutHandler = std::make_shared<TRSShortcutKeyHandler>(m_context, m_polygonModeVisitor);
-    m_pEventDispatcher->addEventHandler(m_pCameraHandler.get());
-    m_pEventDispatcher->addEventHandler(m_pShortcutHandler.get());
-    m_context->connectEventDispatcher(m_pEventDispatcher.get());
+}
 
+TRSViewer::~TRSViewer()
+{
+    delete m_polygonModeVisitor;
+}
+
+bool TRSViewer::loadOpenGLAddress(LoadGLAddress func)
+{
+    int ret = gladLoadGLLoader(func);
+    if (!ret)
+    {
+        return false;
+    }
     TRSCharacterTexture::instance()->genTexture();
     std::string errorMsg;
     bool loadSuccess = TRSCharacterTexture::instance()->loadFreeType(errorMsg);
@@ -39,11 +40,7 @@ TRSViewer::TRSViewer()
     {
         std::cout << errorMsg << std::endl;
     }
-}
-
-TRSViewer::~TRSViewer()
-{
-    delete m_polygonModeVisitor;
+    return true;
 }
 
 void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
@@ -56,29 +53,31 @@ void TRSViewer::defaultSetting()
 {
     m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
     glEnable(GL_DEPTH_TEST);
-
-    TRSBox sceneBox = m_pSceneNode->boundingBox();
-    m_pCameraHandler->setSceneBox(sceneBox);
 }
 
 void TRSViewer::run()
 {
     //渲染前默认设置
     defaultSetting();
-    while (true)
-    {
-        if (m_context->shouldClose())
-        {
-            break;
-        }
-        glClearColor(m_BGColor[0], m_BGColor[1], m_BGColor[2], m_BGColor[3]);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        calcFrameTime();
-        updateScene();
-        drawScene();
-        m_context->swapBuffer();
-    }
+    //while (true)
+    //{
+    //    if (m_context->shouldClose())
+    //    {
+    //        break;
+    //    }
+
+    //    m_context->swapBuffer();
+    //}
     TRSStateSetManager::free();
+}
+
+void TRSViewer::frame()
+{
+    glClearColor(m_BGColor[0], m_BGColor[1], m_BGColor[2], m_BGColor[3]);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    calcFrameTime();
+    updateScene();
+    drawScene();
 }
 
 void TRSViewer::updateScene()
@@ -134,11 +133,6 @@ void TRSViewer::drawScene()
 TRSCamera* TRSViewer::getCamera() const
 {
     return m_pCamera;
-}
-
-void TRSViewer::addEventHandler(TRSEventHandler* eventHandler)
-{
-    m_pEventDispatcher->addEventHandler(eventHandler);
 }
 
 void TRSViewer::calcFrameTime()

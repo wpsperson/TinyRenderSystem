@@ -3,7 +3,7 @@
 #include <array>
 #include "Math/TRSVector.h"
 
-class TRSBox
+class TRS_EXPORT TRSBox
 {
 public:
     TRSBox();

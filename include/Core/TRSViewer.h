@@ -12,7 +12,6 @@
 #include <chrono>
 #include "Math\TRSVector.h"
 
-class TRSContext;
 class TRSCamera;
 class TRSEventDispatcher;
 class TRSEventHandler;
@@ -21,23 +20,27 @@ class TRSShortcutKeyHandler;
 class TRSNode;
 class PolygonModeVisitor;
 
+using LoadGLAddress = void* (*)(const char* name);
+
 class TRS_EXPORT TRSViewer
 {
 public:
     TRSViewer();
     ~TRSViewer();
 
+    bool loadOpenGLAddress(LoadGLAddress func);
+
     void setSecenNode(std::shared_ptr<TRSNode> pSceneNode);
     
     void run();
+
+    void frame();
 
     void updateScene();
 
     void drawScene();
 
     TRSCamera* getCamera() const;
-
-    void addEventHandler(TRSEventHandler* eventHandler);
 
 protected:
     virtual void defaultSetting();
@@ -46,10 +49,6 @@ protected:
 
 protected:
     std::shared_ptr<TRSNode> m_pSceneNode;
-    std::shared_ptr<TRSEventDispatcher> m_pEventDispatcher;
-    std::shared_ptr<TRSDefaultCameraHandler> m_pCameraHandler;
-    std::shared_ptr<TRSShortcutKeyHandler> m_pShortcutHandler;
-    TRSContext* m_context = nullptr;
     TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;
     PolygonModeVisitor* m_polygonModeVisitor;

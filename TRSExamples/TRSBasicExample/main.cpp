@@ -1,19 +1,8 @@
-﻿#include <cstdlib>
-#include <string>
-#include "E01TextureBox.h"
-#include "E02BasicMaterial.h"
-#include "E03BasicLight.h"
-#include "E04ElementArray.h"
-#include "E05LoadModelByAssimp.h"
-#include "E06MeshPerformance.h"
-#include "E07TessellationOnShader.h"
-#include "E08PNTriangles.h"
-#include "E09FreeType.h"
-#include "E10NurbsFaceToMesh.h"
+﻿#include "GlfwApplication.h"
 
 int main(int argn, char** argc)
 {
-    E01TextureColorArray();
+    //E01TextureColorArray();
     //E01ManyBoxRotate();
     //E02Material_AmbientDiffuseSpecular();
     //E02Material_DiffuseNormal();
@@ -36,5 +25,8 @@ int main(int argn, char** argc)
     //CaseTextNode();
     //CaseDelauneyTriangulation();
     //CaseNurbsFaceToMesh(argn, argc);
+
+    GlfwApplication glfwEnv;
+    glfwEnv.run();
     return 0;
 }

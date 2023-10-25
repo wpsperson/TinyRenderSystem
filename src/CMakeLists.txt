@@ -39,8 +39,6 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/Geometry/TRSGrid.h
     ${INCLUDE_DIR}/Geometry/GeometryUtil.h
     ${INCLUDE_DIR}/IO/TRSAssimpLoader.h
-    ${INCLUDE_DIR}/Context/TRSContext.h
-    ${INCLUDE_DIR}/Context/GLFWContext.h
     ${INCLUDE_DIR}/Math/BSpline.h
     ${INCLUDE_DIR}/Math/BSplineSurface.h
     ${INCLUDE_DIR}/Math/TRSMathUtil.h
@@ -83,8 +81,6 @@ set(Target_SRC_LIST
     ${SRC_DIR}/Geometry/TRSGrid.cpp
     ${SRC_DIR}/Geometry/GeometryUtil.cpp
     ${SRC_DIR}/IO/TRSAssimpLoader.cpp
-    ${SRC_DIR}/Context/TRSContext.cpp
-    ${SRC_DIR}/Context/GLFWContext.cpp
     ${SRC_DIR}/Math/BSpline.cpp
     ${SRC_DIR}/Math/BSplineSurface.cpp
     ${SRC_DIR}/Math/TRSMathUtil.cpp

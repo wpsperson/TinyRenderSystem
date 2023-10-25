@@ -3,12 +3,18 @@ set(TARGET_NAME TRSApplication)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+find_package(Qt5 CONFIG REQUIRED COMPONENTS Widgets)
 
 set(Target_INCLUDE_LIST
-    ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.h
+    ${TRSExamPath}/${TARGET_NAME}/MainWindow.h
+    ${TRSExamPath}/${TARGET_NAME}/OpenGLWidget.h
     )
 set(Target_SRC_LIST
-    ${TRSExamPath}/${TARGET_NAME}/E01TextureBox.cpp
+    ${TRSExamPath}/${TARGET_NAME}/MainWindow.cpp
+    ${TRSExamPath}/${TARGET_NAME}/OpenGLWidget.cpp
     ${TRSExamPath}/${TARGET_NAME}/main.cpp
 )
 source_group("include" FILES ${Target_INCLUDE_LIST} )
@@ -16,8 +22,7 @@ source_group("src" FILES ${Target_SRC_LIST})
 source_group("shader" FILES ${Target_SHADER_LIST})
 add_executable(${TARGET_NAME}  ${Target_INCLUDE_LIST} ${Target_SRC_LIST} ${Target_SHADER_LIST})
 add_dependencies(${TARGET_NAME} TinyRenderSystem)
-set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "TRSApplication")
-
+set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "TRSExamples")
 
 set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin")	
 set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/bin")
@@ -32,10 +37,7 @@ SET(ADDITIONAL_LIBRARIES_RELEASE
 TinyRenderSystem.lib
 )
 TARGET_LINK_LIBRARIES(${TARGET_NAME} debug "${ADDITIONAL_LIBRARIES_DEBUG}" optimized "${ADDITIONAL_LIBRARIES_RELEASE}")
+TARGET_LINK_LIBRARIES(${TARGET_NAME} Qt5::Widgets ${CMAKE_DL_LIBS})
 
-
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory  
-                ${TRSExamPath}/${TARGET_NAME}/shaders 
-                ${CMAKE_BINARY_DIR}/bin/shaders)
 
 

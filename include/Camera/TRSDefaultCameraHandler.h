@@ -1,10 +1,10 @@
 ﻿#pragma once
 #include "Event\TRSEventHandler.h"
-#include "Core/TRSBox.h"
+#include "Core\TRSBox.h"
 
 class TRSCamera;
 
-class TRSDefaultCameraHandler : public TRSEventHandler
+class TRS_EXPORT TRSDefaultCameraHandler : public TRSEventHandler
 {
 public:
     TRSDefaultCameraHandler(TRSCamera* camera);

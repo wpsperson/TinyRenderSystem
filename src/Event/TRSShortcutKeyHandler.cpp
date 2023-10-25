@@ -1,6 +1,6 @@
 #include "Event\TRSShortcutKeyHandler.h"
 #include "Event\TRSEventDefine.h"
-#include "Context\TRSContext.h"
+// #include "Context\TRSContext.h"
 #include "Core\TRSVisitors.h"
 
 
@@ -23,6 +23,6 @@ void TRSShortcutKeyHandler::processKeyRelease(int key)
 {
     if (TRS_KEY_ESCAPE == key)
     {
-        m_context->setShouldClose(true);
+        // m_context->setShouldClose(true);
     }
 }

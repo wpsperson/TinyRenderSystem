@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include <list>
+#include "Core\TRSExport.h"
 
 class TRSEventHandler;
 
-class TRSEventDispatcher
+class TRS_EXPORT TRSEventDispatcher
 {
 public:
     TRSEventDispatcher();
