@@ -27,6 +27,7 @@ public:
 private:
     GLFWwindow* m_window = nullptr;
     TRSViewer* m_viewer = nullptr;
+    TRSEventDispatcher* m_dispatcher = nullptr;
     TRSDefaultCameraHandler* m_pCameraHandler = nullptr;
 };
 
