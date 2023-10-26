@@ -32,7 +32,7 @@ void TRSEventDispatcher::dispatchWindowSizeChange(int width, int height)
     }
 }
 
-void TRSEventDispatcher::dispatchLeftMousePress(double xpos, double ypos, int mods)
+void TRSEventDispatcher::dispatchLeftMousePress(int xpos, int ypos, int mods)
 {
     m_leftMouseBtnPressed = true;
     for (TRSEventHandler* handler : m_pEventHandlers)
@@ -41,7 +41,7 @@ void TRSEventDispatcher::dispatchLeftMousePress(double xpos, double ypos, int mo
     }
 }
 
-void TRSEventDispatcher::dispatchLeftMouseRelease(double xpos, double ypos, int mods)
+void TRSEventDispatcher::dispatchLeftMouseRelease(int xpos, int ypos, int mods)
 {
     m_leftMouseBtnPressed = false;
     for (TRSEventHandler* handler : m_pEventHandlers)
@@ -50,7 +50,7 @@ void TRSEventDispatcher::dispatchLeftMouseRelease(double xpos, double ypos, int 
     }
 }
 
-void TRSEventDispatcher::dispatchMiddleMousePress(double xpos, double ypos, int mods)
+void TRSEventDispatcher::dispatchMiddleMousePress(int xpos, int ypos, int mods)
 {
     m_MiddleMouseBtnPressed = true;
     for (TRSEventHandler* handler : m_pEventHandlers)
@@ -59,7 +59,7 @@ void TRSEventDispatcher::dispatchMiddleMousePress(double xpos, double ypos, int 
     }
 }
 
-void TRSEventDispatcher::dispatchMiddleMouseRelease(double xpos, double ypos, int mods)
+void TRSEventDispatcher::dispatchMiddleMouseRelease(int xpos, int ypos, int mods)
 {
     m_MiddleMouseBtnPressed = false;
     for (TRSEventHandler* handler : m_pEventHandlers)
@@ -68,7 +68,7 @@ void TRSEventDispatcher::dispatchMiddleMouseRelease(double xpos, double ypos, in
     }
 }
 
-void TRSEventDispatcher::dispatchRightMousePress(double xpos, double ypos, int mods)
+void TRSEventDispatcher::dispatchRightMousePress(int xpos, int ypos, int mods)
 {
     m_RightMouseBtnPressed = true;
     for (TRSEventHandler* handler : m_pEventHandlers)
@@ -77,7 +77,7 @@ void TRSEventDispatcher::dispatchRightMousePress(double xpos, double ypos, int m
     }
 }
 
-void TRSEventDispatcher::dispatchRightMouseRelease(double xpos, double ypos, int mods)
+void TRSEventDispatcher::dispatchRightMouseRelease(int xpos, int ypos, int mods)
 {
     m_RightMouseBtnPressed = false;
     for (TRSEventHandler* handler : m_pEventHandlers)
@@ -86,7 +86,7 @@ void TRSEventDispatcher::dispatchRightMouseRelease(double xpos, double ypos, int
     }
 }
 
-void TRSEventDispatcher::dispatchMouseMove(double xpos, double ypos)
+void TRSEventDispatcher::dispatchMouseMove(int xpos, int ypos)
 {
     for (TRSEventHandler* handler : m_pEventHandlers)
     {
@@ -110,15 +110,15 @@ void TRSEventDispatcher::dispatchMouseMove(double xpos, double ypos)
     }
 }
 
-void TRSEventDispatcher::dispatchMouseScroll(double xScroll, double yScroll)
+void TRSEventDispatcher::dispatchMouseScroll(int scroll)
 {
     for (TRSEventHandler* handler : m_pEventHandlers)
     {
-        handler->processMouseScroll(xScroll, yScroll);
+        handler->processMouseScroll(scroll);
     }
 }
 
-void TRSEventDispatcher::dispatchKeyPress(int key)
+void TRSEventDispatcher::dispatchKeyPress(int key, int mods)
 {
     // mod modify
     if (key == TRS_KEY_LEFT_SHIFT || key == TRS_KEY_RIGHT_SHIFT)
@@ -139,7 +139,7 @@ void TRSEventDispatcher::dispatchKeyPress(int key)
     }
 }
 
-void TRSEventDispatcher::dispatchKeyRelease(int key)
+void TRSEventDispatcher::dispatchKeyRelease(int key, int mods)
 {
     if (key == TRS_KEY_LEFT_SHIFT || key == TRS_KEY_RIGHT_SHIFT)
     {

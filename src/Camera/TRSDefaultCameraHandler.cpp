@@ -33,76 +33,72 @@ void TRSDefaultCameraHandler::processWindowSizeChange(int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void TRSDefaultCameraHandler::processLeftMousePress(double xpos, double ypos, int mods)
+void TRSDefaultCameraHandler::processLeftMousePress(int xpos, int ypos, int mods)
 {
-    m_lastX = static_cast<float>(xpos);
-    m_lastY = static_cast<float>(ypos);
+    m_lastX = xpos;
+    m_lastY = ypos;
 }
 
-void TRSDefaultCameraHandler::processMiddleMousePress(double xpos, double ypos, int mods)
+void TRSDefaultCameraHandler::processMiddleMousePress(int xpos, int ypos, int mods)
 {
-    m_lastX = static_cast<float>(xpos);
-    m_lastY = static_cast<float>(ypos);
+    m_lastX = xpos;
+    m_lastY = ypos;
 }
 
-void TRSDefaultCameraHandler::processRightMousePress(double xpos, double ypos, int mods)
+void TRSDefaultCameraHandler::processRightMousePress(int xpos, int ypos, int mods)
 {
-    m_lastX = static_cast<float>(xpos);
-    m_lastY = static_cast<float>(ypos);
+    m_lastX = xpos;
+    m_lastY = ypos;
 }
 
-void TRSDefaultCameraHandler::processLeftMouseMove(double xpos, double ypos, int mods)
+void TRSDefaultCameraHandler::processLeftMouseMove(int xpos, int ypos, int mods)
 {
-    double curX = xpos;
-    double curY = ypos;
-    double deltaX = (curX - m_lastX) / m_camera->getWindowWidth();
-    double delatY = (curY - m_lastY) / m_camera->getWindowHeight();
+    double deltaX = static_cast<double>(xpos - m_lastX) / m_camera->getWindowWidth();
+    double delatY = static_cast<double>(ypos - m_lastY) / m_camera->getWindowHeight();
     double azimuthAngle = - deltaX * TRS_PI * 2; // deltaX forward right, rotate is clockwise.
-    double elevatAngle = - delatY * TRS_PI * 2;    // deltaY forward down, rotate is clockwise.
+    double elevatAngle = delatY * TRS_PI * 2;    // deltaY forward down, rotate is clockwise.
     m_camera->Azimuth(azimuthAngle);
     m_camera->Elevation(elevatAngle);
 
-    m_lastX = static_cast<float>(curX);
-    m_lastY = static_cast<float>(curY);
+    m_lastX = xpos;
+    m_lastY = ypos;
     updateNearFar();
 }
 
-void TRSDefaultCameraHandler::processMiddleMouseMove(double xpos, double ypos, int mods)
+void TRSDefaultCameraHandler::processMiddleMouseMove(int xpos, int ypos, int mods)
 {
-    float curX = static_cast<float>(xpos);
-    float curY = static_cast<float>(ypos);
-    float deltaX = static_cast<float>((curX - m_lastX) / m_camera->getWindowWidth());
-    float delatY = static_cast<float>((curY - m_lastY) / m_camera->getWindowHeight());
+    float deltaX = static_cast<float>(xpos - m_lastX) / m_camera->getWindowWidth();
+    float delatY = static_cast<float>(ypos - m_lastY) / m_camera->getWindowHeight();
     TRSVec3 pos = m_camera->getPosition();
     TRSVec3 lookAt = m_camera->getLookAt();
     TRSVec3 right = m_camera->getRight();
     TRSVec3 up = m_camera->getUp();
     float dist = lookAt.distance(pos);
-    TRSVec3 move = right * -deltaX * dist + up * delatY * dist;
+    TRSVec3 move = right * -deltaX * dist + up * -delatY * dist;
 
     pos += move;
     m_camera->setPosition(pos);
     lookAt += move;
     m_camera->setLookAt(lookAt);
-    m_lastX = curX;
-    m_lastY = curY;
+    m_lastX = xpos;
+    m_lastY = ypos;
     updateNearFar();
 }
 
-void TRSDefaultCameraHandler::processRightMouseMove(double xpos, double ypos, int mods)
+void TRSDefaultCameraHandler::processRightMouseMove(int xpos, int ypos, int mods)
 {
 
 }
 
-void TRSDefaultCameraHandler::processMouseScroll(double xScroll, double yScroll)
+void TRSDefaultCameraHandler::processMouseScroll(int scroll)
 {
-    //yScroll (value is 1/-1) increase, fov decrease, then scene looks bigger;
+    //scroll (value is 1/-1) increase, fov decrease, then scene looks bigger;
     const float coffScroll = 0.1f;
     TRSVec3 front = m_camera->getFront();
     TRSVec3 pos = m_camera->getPosition();
     TRSVec3 lookAt = m_camera->getLookAt();
     float dist = lookAt.distance(pos);
-    float scrollDist = static_cast<float>(dist * coffScroll * yScroll);
+    float scrollDist = static_cast<float>(dist * coffScroll * scroll);
     pos += front * scrollDist;
     m_camera->setPosition(pos);
     updateNearFar();

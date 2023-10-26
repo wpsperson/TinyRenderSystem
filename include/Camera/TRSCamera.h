@@ -24,8 +24,8 @@ public:
     TRSMatrix getViewMatrix();
     float getNear();
     float getFar();
-    double getWindowWidth() const;
-    double getWindowHeight() const;
+    int getWindowWidth() const;
+    int getWindowHeight() const;
     TRSMatrix getProjectMatrix();
 
     // set
@@ -35,8 +35,8 @@ public:
     void setNear(float near);
     void setFar(float far);
     void setCameraMode(bool parallelMode);
-    void setWindowWidth(double width);
-    void setWindowHeight(double height);
+    void setWindowWidth(int width);
+    void setWindowHeight(int height);
 
     // operate
     // keep lookat unchanged, rotate camera position about the m_up direction
@@ -56,8 +56,8 @@ protected:
     TRSMatrix m_viewMatrix;
     bool m_viewMatrixNeedUpdate = true;
     // project matrix parameter
-    float m_width;            // keep the aspect with window change
-    float m_height;           // keep the aspect with window change
+    int m_width;            // keep the aspect with window change
+    int m_height;           // keep the aspect with window change
     float m_near;
     float m_far;
     float m_fFov;           // vertical angle, perspective mode only

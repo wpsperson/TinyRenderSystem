@@ -89,22 +89,24 @@ void OpenGLWidget::paintGL()
 void OpenGLWidget::wheelEvent(QWheelEvent* event)
 {
     int delta = event->angleDelta().y();
-    int yscroll = delta > 0 ? 1 : -1;
-    m_dispatcher->dispatchMouseScroll(double(0), yscroll);
+    int scroll = delta > 0 ? 1 : -1;
+    m_dispatcher->dispatchMouseScroll(scroll);
     update();
 }
 
 void OpenGLWidget::keyPressEvent(QKeyEvent* event)
 {
     int key = event->key();
-    m_dispatcher->dispatchKeyPress(key);
+    int modifiers = static_cast<int>(event->modifiers());
+    m_dispatcher->dispatchKeyPress(key, modifiers);
     update();
 }
 
 void OpenGLWidget::keyReleaseEvent(QKeyEvent* event)
 {
     int key = event->key();
-    m_dispatcher->dispatchKeyRelease(key);
+    int modifiers = static_cast<int>(event->modifiers());
+    m_dispatcher->dispatchKeyRelease(key, modifiers);
     update();
 }
 

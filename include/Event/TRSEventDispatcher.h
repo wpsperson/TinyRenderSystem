@@ -18,22 +18,22 @@ public:
     // dispatch all kinds of events:
     void dispatchWindowSizeChange(int width, int height);
 
-    void dispatchLeftMousePress(double xpos, double ypos, int mods);
-    void dispatchLeftMouseRelease(double xpos, double ypos, int mods);
+    void dispatchLeftMousePress(int xpos, int ypos, int mods);
+    void dispatchLeftMouseRelease(int xpos, int ypos, int mods);
 
-    void dispatchMiddleMousePress(double xpos, double ypos, int mods);
-    void dispatchMiddleMouseRelease(double xpos, double ypos, int mods);
+    void dispatchMiddleMousePress(int xpos, int ypos, int mods);
+    void dispatchMiddleMouseRelease(int xpos, int ypos, int mods);
 
-    void dispatchRightMousePress(double xpos, double ypos, int mods);
-    void dispatchRightMouseRelease(double xpos, double ypos, int mods);
+    void dispatchRightMousePress(int xpos, int ypos, int mods);
+    void dispatchRightMouseRelease(int xpos, int ypos, int mods);
 
-    void dispatchMouseMove(double xpos, double ypos);
+    void dispatchMouseMove(int xpos, int ypos);
 
-    void dispatchMouseScroll(double xScroll, double yScroll);
+    void dispatchMouseScroll(int scroll);
 
-    void dispatchKeyPress(int key);
+    void dispatchKeyPress(int key, int mods);
 
-    void dispatchKeyRelease(int key);
+    void dispatchKeyRelease(int key, int mods);
 protected:
     std::list<TRSEventHandler*> m_pEventHandlers;
     int m_modifier = 0;

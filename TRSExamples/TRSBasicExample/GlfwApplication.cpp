@@ -138,42 +138,50 @@ void TRSWindowChangeCallBack(GLFWwindow* window, int w, int h)
 
 void TRSMouseButtonCallBack(GLFWwindow* pWindow, int button, int action, int mods)
 {
-    double xPos = 0, yPos = 0;
-    glfwGetCursorPos(pWindow, &xPos, &yPos);
+    double cursorx = 0, cursory = 0;
+    int width, height;
+    glfwGetCursorPos(pWindow, &cursorx, &cursory);
+    glfwGetWindowSize(pWindow, &width, &height);
+    int xpos = static_cast<int>(cursorx);
+    int ypos = height - static_cast<int>(cursory);   // make sure, ypos is bottom_lower
     if (action == GLFW_PRESS)
     {
         if (button == GLFW_MOUSE_BUTTON_LEFT)
         {
-            g_EventDispatcher->dispatchLeftMousePress(xPos, yPos, mods);
+            g_EventDispatcher->dispatchLeftMousePress(xpos, ypos, mods);
         }
         else if (button == GLFW_MOUSE_BUTTON_MIDDLE)
         {
-            g_EventDispatcher->dispatchMiddleMousePress(xPos, yPos, mods);
+            g_EventDispatcher->dispatchMiddleMousePress(xpos, ypos, mods);
         }
         else if (button == GLFW_MOUSE_BUTTON_RIGHT)
         {
-            g_EventDispatcher->dispatchRightMousePress(xPos, yPos, mods);
+            g_EventDispatcher->dispatchRightMousePress(xpos, ypos, mods);
         }
     }
     else if (action == GLFW_RELEASE)
     {
         if (button == GLFW_MOUSE_BUTTON_LEFT)
         {
-            g_EventDispatcher->dispatchLeftMouseRelease(xPos, yPos, mods);
+            g_EventDispatcher->dispatchLeftMouseRelease(xpos, ypos, mods);
         }
         else if (button == GLFW_MOUSE_BUTTON_MIDDLE)
         {
-            g_EventDispatcher->dispatchMiddleMouseRelease(xPos, yPos, mods);
+            g_EventDispatcher->dispatchMiddleMouseRelease(xpos, ypos, mods);
         }
         else if (button == GLFW_MOUSE_BUTTON_RIGHT)
         {
-            g_EventDispatcher->dispatchRightMouseRelease(xPos, yPos, mods);
+            g_EventDispatcher->dispatchRightMouseRelease(xpos, ypos, mods);
         }
     }
 }
 
-void TRSMouseMoveCallBack(GLFWwindow* pWindow, double xpos, double ypos)
+void TRSMouseMoveCallBack(GLFWwindow* pWindow, double cursorx, double cursory)
 {
+    int width, height;
+    glfwGetWindowSize(pWindow, &width, &height);
+    int xpos = static_cast<int>(cursorx);
+    int ypos = height - static_cast<int>(cursory);   // make sure, ypos is bottom_lower
     g_EventDispatcher->dispatchMouseMove(xpos, ypos);
 }
 
@@ -181,16 +189,16 @@ void TRSKeyboardCallBack(GLFWwindow* pWindow, int key, int scancode, int action,
 {
     if (action == GLFW_PRESS)
     {
-        g_EventDispatcher->dispatchKeyPress(key);
+        g_EventDispatcher->dispatchKeyPress(key, mods);
     }
     else if (action == GLFW_RELEASE)
     {
-        g_EventDispatcher->dispatchKeyRelease(key);
+        g_EventDispatcher->dispatchKeyRelease(key, mods);
     }
 }
 
 void TRSMouseScrollCallBack(GLFWwindow* pWindow, double xScroll, double yScroll)
 {
-    g_EventDispatcher->dispatchMouseScroll(xScroll, yScroll);
+    g_EventDispatcher->dispatchMouseScroll(static_cast<int>(yScroll));
 }
 

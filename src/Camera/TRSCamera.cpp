@@ -44,12 +44,12 @@ float TRSCamera::getFar()
     return m_far;
 }
 
-double TRSCamera::getWindowWidth() const
+int TRSCamera::getWindowWidth() const
 {
     return m_width;
 }
 
-double TRSCamera::getWindowHeight() const
+int TRSCamera::getWindowHeight() const
 {
     return m_height;
 }
@@ -137,20 +137,20 @@ void TRSCamera::setCameraMode(bool parallelMode)
     m_parallelMode = parallelMode;
 }
 
-void TRSCamera::setWindowWidth(double width)
+void TRSCamera::setWindowWidth(int width)
 {
     if (m_width != width)
     {
-        m_width = static_cast<float>(width);
+        m_width = width;
         m_projectMatrixNeedUpdate = true;
     }
 }
 
-void TRSCamera::setWindowHeight(double height)
+void TRSCamera::setWindowHeight(int height)
 {
     if (m_height != height)
     {
-        m_height = static_cast<float>(height);
+        m_height = height;
         m_projectMatrixNeedUpdate = true;
     }
 }
@@ -205,10 +205,15 @@ void TRSCamera::updateProjectMatrix()
 {
     if (m_parallelMode)
     {
-        m_projectMatrix.makeOtho(-m_width / 2, m_width / 2, -m_height / 2, m_height / 2, m_near, m_far);
+        float left = - static_cast<float>(m_width) / 2;
+        float righ = static_cast<float>(m_width) / 2;
+        float bttm = -static_cast<float>(m_height) / 2;
+        float topp = static_cast<float>(m_height) / 2;
+        m_projectMatrix.makeOtho(left, righ, bttm, topp, m_near, m_far);
     }
     else
     {
-        m_projectMatrix.makePerspective(toRadian(m_fFov), m_width / m_height, m_near, m_far);
+        float aspect = static_cast<float>(m_width) / m_height;
+        m_projectMatrix.makePerspective(toRadian(m_fFov), aspect, m_near, m_far);
     }
 }
