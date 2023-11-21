@@ -34,10 +34,15 @@ char* readTextFile(const std::string& strFileName)
 }
 
 
-int createProgramUtils(const char* vertFile, const char* fragFile)
+int createProgramByShaderFiles(const char* vertFile, const char* fragFile)
 {
     char* vertexShaderSource = readTextFile(vertFile);
     char* fragmentShaderSource = readTextFile(fragFile);
+    return createProgramByShaderContent(vertexShaderSource, fragmentShaderSource);
+}
+
+int createProgramByShaderContent(const char* vertexShaderSource, const char* fragmentShaderSource)
+{
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -69,7 +74,6 @@ int createProgramUtils(const char* vertFile, const char* fragFile)
     if (!success) {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
     }
-    glUseProgram(shaderProgram);
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
     return shaderProgram;

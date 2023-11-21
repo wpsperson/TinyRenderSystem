@@ -40,7 +40,7 @@ int RenderTexture()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    unsigned int shaderProgram = createProgramUtils("shaders/PosColorTexVertex.glsl", "shaders/TextureColorFragment.glsl");
+    unsigned int shaderProgram = createProgramByShaderFiles("shaders/PosColorTexVertex.glsl", "shaders/TextureColorFragment.glsl");
 
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
@@ -139,7 +139,7 @@ int RenderMultiTexture()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    unsigned int shaderProgram = createProgramUtils("shaders/PosColorTexVertex.glsl", "shaders/MultiTextureFragment.glsl");
+    unsigned int shaderProgram = createProgramByShaderFiles("shaders/PosColorTexVertex.glsl", "shaders/MultiTextureFragment.glsl");
 
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);

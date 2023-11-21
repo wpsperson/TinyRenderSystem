@@ -1,6 +1,7 @@
 set(TARGET_NAME RenderBasic)
 
 INCLUDE_DIRECTORIES(${PlainExamPath})
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glm-0.9.6.3)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glfw-3.2.1/include)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glfw-3.2.1/lib)
@@ -10,6 +11,11 @@ ${PlainExamPath}/glad.c
 ${PlainExamPath}/stb_image.h
 ${PlainExamPath}/BasicUtils.h
 ${PlainExamPath}/BasicUtils.cpp
+${PROJECT_SOURCE_DIR}/include/Math/TRSVector.h
+${PROJECT_SOURCE_DIR}/include/Math/TRSMatrix.h
+${PROJECT_SOURCE_DIR}/include/Math/TRSMathUtil.h
+${PROJECT_SOURCE_DIR}/src/Math/TRSMatrix.cpp
+${PROJECT_SOURCE_DIR}/src/Math/TRSMathUtil.cpp
 ${PlainExamPath}/${TARGET_NAME}/RenderTriangle.h
 ${PlainExamPath}/${TARGET_NAME}/RenderTriangle.cpp
 ${PlainExamPath}/${TARGET_NAME}/RenderColorTriangle.h
@@ -20,6 +26,8 @@ ${PlainExamPath}/${TARGET_NAME}/StencilTest.h
 ${PlainExamPath}/${TARGET_NAME}/StencilTest.cpp
 ${PlainExamPath}/${TARGET_NAME}/TessellationOnShader.h
 ${PlainExamPath}/${TARGET_NAME}/TessellationOnShader.cpp
+${PlainExamPath}/${TARGET_NAME}/ShadowMapping.h
+${PlainExamPath}/${TARGET_NAME}/ShadowMapping.cpp
 ${PlainExamPath}/${TARGET_NAME}/main.cpp
 )
 

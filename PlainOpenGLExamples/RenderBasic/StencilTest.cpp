@@ -74,8 +74,8 @@ int StencilTest()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    unsigned int shaderProgram = createProgramUtils("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
-    unsigned int shaderBorder = createProgramUtils("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
+    unsigned int shaderProgram = createProgramByShaderFiles("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
+    unsigned int shaderBorder = createProgramByShaderFiles("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
 
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
