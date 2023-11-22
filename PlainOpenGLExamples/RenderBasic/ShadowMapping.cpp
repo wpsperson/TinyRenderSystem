@@ -25,7 +25,7 @@ const char* kGenShadowFrag =
 "{                                          \n"
 "}                                          \n";
 
-const char* kUseShadowVert =
+const char* kDisplayTextureVert =
 "#version 330 core                                                  \n"
 "layout (location = 0) in vec3 aPos;                                \n"
 "layout (location = 1) in vec2 aUV;                                 \n"
@@ -36,7 +36,7 @@ const char* kUseShadowVert =
 "    gl_Position = vec4(aPos, 1.0);                                 \n"
 "}                                                                  \n";
 
-const char* kUseShadowFrag =
+const char* kDisplayTextureFrag =
 "#version 330 core                              \n"
 "out vec4 FragColor;                            \n"
 "in vec2 vUV;                                   \n"
@@ -47,26 +47,66 @@ const char* kUseShadowFrag =
 "    FragColor = vec4(tex, tex, tex, 1.0);      \n"
 "}                                              \n";
 
+const char* kMainVert =
+"#version 330 core                                                  \n"
+"layout (location = 0) in vec3 aPos;                                \n"
+"out vec4 vFragPos;                                                 \n"
+"uniform mat4 ViewProject;                                          \n"
+"uniform mat4 LightViewProject;                                     \n"
+"                                                                   \n"
+"void main()                                                        \n"
+"{                                                                  \n"
+"    gl_Position = ViewProject * vec4(aPos, 1.0);                   \n"
+"    vFragPos =  LightViewProject* vec4(aPos, 1.0);                 \n"
+"}                                                                  \n";
+
+const char* kMainFrag =
+"#version 330 core                                                  \n"
+"out vec4 FragColor;                                                \n"
+"in vec4 vFragPos;                                                  \n"
+"                                                                   \n"
+"uniform vec3 color;                                                \n"
+"uniform sampler2D DepthTexture;                                    \n"
+"                                                                   \n"
+"float isInShadow(vec3 pos)                                         \n"
+"{                                                                  \n"
+"    vec2 uv = pos.xy;                                              \n"
+"    float curDepth = pos.z;                                        \n"
+"    float refDepth = texture(DepthTexture, uv).r;                  \n"
+"    float shadow = (curDepth > refDepth+0.0001) ? 0.5 : 0.0;       \n"
+"    return  shadow;                                                \n"
+"}                                                                  \n"
+"                                                                   \n"
+"void main()                                                        \n"
+"{                                                                  \n"
+"    vec3 ndc = vFragPos.xyz / vFragPos.w;                          \n"
+"    vec3 ndc2 = ndc * 0.5 + 0.5; // range 0~1                      \n"
+"    float shadow = isInShadow(ndc2);                               \n"
+"    vec3 black = vec3(0,0,0);                                      \n"
+"    vec3 result = mix(color, black, shadow);                       \n"
+"    FragColor = vec4(result, 1.0);                                 \n"
+"}                                                                  \n";
+
+
 constexpr float kSize = 100.0f;
 constexpr float kOccludeSize = 20.0f;
-constexpr float kHeight = 40.0f;
 
 float kTopQuadVertices[] = {
+    -kOccludeSize, -kOccludeSize, kOccludeSize,
+    kOccludeSize, -kOccludeSize, kOccludeSize,
+    kOccludeSize,  kOccludeSize, kOccludeSize,
+    kOccludeSize,  kOccludeSize, kOccludeSize,
+    -kOccludeSize, kOccludeSize, kOccludeSize,
+    -kOccludeSize, -kOccludeSize, kOccludeSize,
+};
+
+float kBackGroundQuadVertices[] = {
     -kSize, -kSize, 0.0f,
     kSize, -kSize, 0.0f,
     kSize,  kSize, 0.0f,
     kSize,  kSize, 0.0f,
     -kSize, kSize, 0.0f,
     -kSize, -kSize, 0.0f,
-};
-
-float kBackGroundQuadVertices[] = {
-    -kOccludeSize, -kOccludeSize, kHeight,
-    kOccludeSize, -kOccludeSize, kHeight,
-    kOccludeSize,  kOccludeSize, kHeight,
-    kOccludeSize,  kOccludeSize, kHeight,
-    -kOccludeSize, kOccludeSize, kHeight,
-    -kOccludeSize, -kOccludeSize, kHeight,
 };
 float kDisplayTextureVertices[] = {
     //     ---- vertex ----    - uv -
@@ -106,13 +146,6 @@ int renderShadowMapping()
     {
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
-        //std::vector<float> buffer;
-        //buffer.resize(width * height);
-        //for (int ii = 0; ii < width * height; ii++)
-        //{
-        //    buffer[ii] = static_cast<float>(ii) / (width * height);
-        //}
-        //glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, buffer.data());
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -124,15 +157,17 @@ int renderShadowMapping()
     unsigned int genShadowProgram = createProgramByShaderContent(kGenShadowVert, kGenShadowFrag);
     TRSMatrix view_project;
     {
-        TRSVec3 lightPos(-kOccludeSize * 2.0f, 0.0f, kOccludeSize * 2.0f);
+        float lightOffset = kOccludeSize * 2.0f;
+        TRSVec3 lightPos(-lightOffset, 0.0f, lightOffset);
         TRSVec3 center(0, 0, 0);
         TRSVec3 front = center - lightPos;
-        TRSMatrix model;
         TRSMatrix viewMatrix;
         viewMatrix.makeLookat(lightPos, front, G_YDIR);
         TRSMatrix projectMatrix;
         float xhalf = kSize;
-        projectMatrix.makeOtho(-xhalf, xhalf, -xhalf, xhalf, 0, kSize);
+        float near = (lightOffset * 2 - kSize) * sqrt(2) * 0.5;
+        float far = (lightOffset * 2 + kSize) * sqrt(2) * 0.5;
+        projectMatrix.makeOtho(-xhalf, xhalf, -xhalf, xhalf, near, far);
         view_project = projectMatrix * viewMatrix;
     }
     unsigned int topVAO;
@@ -177,10 +212,9 @@ int renderShadowMapping()
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-
     // now display the texture.
     glViewport(0, 0, DefaultWindowWidth, DefaultWindowHeight);
-    unsigned int useShadowProgram = createProgramByShaderContent(kUseShadowVert, kUseShadowFrag);
+    unsigned int useShadowProgram = createProgramByShaderContent(kDisplayTextureVert, kDisplayTextureFrag);
     unsigned int consumerVAO;
     {
         unsigned int VBO;
@@ -196,18 +230,58 @@ int renderShadowMapping()
         glBindVertexArray(0);//unbind VAO
     }
 
+    unsigned int mainProgram = createProgramByShaderContent(kMainVert, kMainFrag);
+    TRSMatrix mainViewProject;
+    {
+        TRSVec3 cameraPos(0.0f, 0.0f, kOccludeSize * 2);
+        TRSVec3 center(0, 0, 0);
+        TRSVec3 front = center - cameraPos;
+        TRSMatrix viewMatrix;
+        viewMatrix.makeLookat(cameraPos, front, G_YDIR);
+        TRSMatrix projectMatrix;
+        float xhalf = kSize * 1.2f;
+        float near = 0;
+        float far = kSize;
+        projectMatrix.makeOtho(-xhalf, xhalf, -xhalf, xhalf, near, far);
+        mainViewProject = projectMatrix * viewMatrix;
+    }
+
+    int debug = 0;
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(useShadowProgram);
-        int posUniformTex = glGetUniformLocation(useShadowProgram, "ourTexture");
-        glUniform1i(posUniformTex, 0);// 0 mean GL_TEXTURE0
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glBindVertexArray(consumerVAO);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        if (debug)
+        {
+            glUseProgram(useShadowProgram);
+            int posUniformTex = glGetUniformLocation(useShadowProgram, "ourTexture");
+            glUniform1i(posUniformTex, 0);// 0 mean GL_TEXTURE0
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glBindVertexArray(consumerVAO);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        }
+        else
+        {
+            glUseProgram(mainProgram);
+            int locVP = glGetUniformLocation(mainProgram, "ViewProject");
+            glUniformMatrix4fv(locVP, 1, GL_FALSE, &(mainViewProject[0][0]));
+            int locLVP = glGetUniformLocation(mainProgram, "LightViewProject");
+            glUniformMatrix4fv(locLVP, 1, GL_FALSE, &(view_project[0][0]));
+            int locColor = glGetUniformLocation(mainProgram, "color");
+            int locTexture = glGetUniformLocation(mainProgram, "DepthTexture");
+            glUniform1i(locTexture, 0);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture);
+
+            glUniform3f(locColor, 0.8, 0.4, 0.4);
+            glBindVertexArray(topVAO);//bind VAO
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            glUniform3f(locColor, 0.4, 0.8, 0.4);
+            glBindVertexArray(backVAO);//bind VAO
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
