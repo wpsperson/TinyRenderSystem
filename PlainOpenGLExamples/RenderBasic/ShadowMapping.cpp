@@ -6,7 +6,7 @@
 #include "glad\glad.h"
 #include "glfw\glfw3.h"
 #include "BasicUtils.h"
-#include "Math/TRSMatrix.h"
+#include "TRS/TRSMatrix.h"
 
 const char* kGenShadowVert =
 "#version 330 core                                                  \n"

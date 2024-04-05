@@ -9,19 +9,19 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QFileDialog>
 
-#include "Core/TRSViewer.h"
-#include "Core/TRSStateSet.h"
-#include "Event/TRSEventDispatcher.h"
-#include "Camera/TRSDefaultCameraHandler.h"
-#include "Core\TRSConst.h"
-#include "Core\TRSTexture.h"
-#include "Core\TRSShader.h"
-#include "Core\TRSBox.h"
-#include "DataModel\TRSGeode.h"
-#include "DataModel\TRSGroup.h"
-#include "Util\TRSResource.h"
-#include "Math\TRSMathUtil.h"
-#include "Geometry\TRSCube.h"
+#include "TRS/TRSViewer.h"
+#include "TRS/TRSStateSet.h"
+#include "TRS/TRSEventDispatcher.h"
+#include "TRS/TRSDefaultCameraHandler.h"
+#include "TRS/TRSConst.h"
+#include "TRS/TRSTexture.h"
+#include "TRS/TRSShader.h"
+#include "TRS/TRSBox.h"
+#include "TRS/TRSGeode.h"
+#include "TRS/TRSGroup.h"
+#include "TRS/TRSResource.h"
+#include "TRS/TRSMathUtil.h"
+#include "TRS/TRSCube.h"
 
 
 OpenGLWidget::OpenGLWidget()

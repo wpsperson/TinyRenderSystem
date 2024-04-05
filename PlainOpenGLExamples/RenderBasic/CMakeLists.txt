@@ -11,11 +11,11 @@ ${PlainExamPath}/glad.c
 ${PlainExamPath}/stb_image.h
 ${PlainExamPath}/BasicUtils.h
 ${PlainExamPath}/BasicUtils.cpp
-${PROJECT_SOURCE_DIR}/include/Math/TRSVector.h
-${PROJECT_SOURCE_DIR}/include/Math/TRSMatrix.h
-${PROJECT_SOURCE_DIR}/include/Math/TRSMathUtil.h
-${PROJECT_SOURCE_DIR}/src/Math/TRSMatrix.cpp
-${PROJECT_SOURCE_DIR}/src/Math/TRSMathUtil.cpp
+${PROJECT_SOURCE_DIR}/include/TRS/TRSVector.h
+${PROJECT_SOURCE_DIR}/include/TRS/TRSMatrix.h
+${PROJECT_SOURCE_DIR}/include/TRS/TRSMathUtil.h
+${PROJECT_SOURCE_DIR}/src/TRS/TRSMatrix.cpp
+${PROJECT_SOURCE_DIR}/src/TRS/TRSMathUtil.cpp
 ${PlainExamPath}/${TARGET_NAME}/RenderTriangle.h
 ${PlainExamPath}/${TARGET_NAME}/RenderTriangle.cpp
 ${PlainExamPath}/${TARGET_NAME}/RenderColorTriangle.h
