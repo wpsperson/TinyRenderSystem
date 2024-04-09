@@ -9,13 +9,13 @@ class EXPORT_GEOM RefCount
 public:
     RefCount();
 
-    ~RefCount();
+    virtual ~RefCount();
 
     int increase();
 
     int decrease();
 
 private:
-    int m_count;
+    mutable int m_count;
 };
 }

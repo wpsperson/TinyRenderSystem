@@ -7,6 +7,7 @@ set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/Geometry)
 set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/Export.h
     ${INCLUDE_DIR}/RefCount.h
+    ${INCLUDE_DIR}/Ptr.h
     )
 
 
