@@ -13,12 +13,13 @@
 #include <string>
 #include <functional>
 
+
 class NodeVisitor;
 class TRSStateSet;
 class TRSMesh;
 class TRSNode;
 
-typedef std::tr1::function<void(TRSNode*)> NodeUpdateFunc;
+typedef std::function<void(TRSNode*)> NodeUpdateFunc;
 
 class TRS_EXPORT TRSNode
 {

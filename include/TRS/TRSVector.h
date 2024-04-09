@@ -84,8 +84,8 @@ float* TRSVector<N>::pointer()
     return arr;
 }
 
-template<>
-TRSVector<3> TRSVector<3>::cross(const TRSVector<3>& vec) const
+template<int N>
+TRSVector<N> TRSVector<N>::cross(const TRSVector<N>& vec) const
 {
     TRSVector<3> result;
     result[0] = arr[1] * vec[2] - arr[2] * vec[1];
@@ -111,21 +111,21 @@ float TRSVector<N>::length() const
     return std::sqrt(sum);
 }
 
-template <>
-TRSVector<2>::TRSVector(float x, float y)
+template <int N>
+TRSVector<N>::TRSVector(float x, float y)
 {
     arr[0] = x;
     arr[1] = y;
 }
-template <>
-TRSVector<3>::TRSVector(float x, float y, float z)
+template <int N>
+TRSVector<N>::TRSVector(float x, float y, float z)
 {
     arr[0] = x;
     arr[1] = y;
     arr[2] = z;
 }
-template <>
-TRSVector<4>::TRSVector(float x, float y, float z, float w)
+template <int N>
+TRSVector<N>::TRSVector(float x, float y, float z, float w)
 {
     arr[0] = x;
     arr[1] = y;
