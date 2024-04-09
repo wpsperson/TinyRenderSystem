@@ -94,8 +94,10 @@ set(Target_SRC_LIST
 )
 
 FILE(GLOB Target_SHADER_LIST ${PROJECT_SOURCE_DIR}/shaders/*.glsl)
-source_group(TREE ${INCLUDE_DIR} FILES ${Target_INCLUDE_LIST})
-source_group(TREE ${SRC_DIR} FILES ${Target_SRC_LIST})
+#source_group(TREE ${INCLUDE_DIR} FILES ${Target_INCLUDE_LIST})
+#source_group(TREE ${SRC_DIR} FILES ${Target_SRC_LIST})
+source_group(include FILES ${Target_INCLUDE_LIST})
+source_group(src FILES ${Target_SRC_LIST})
 source_group("shader" FILES ${Target_SHADER_LIST})
 
 add_library(${TARGET_NAME} SHARED ${Target_INCLUDE_LIST} ${Target_SRC_LIST} ${Target_SHADER_LIST} )

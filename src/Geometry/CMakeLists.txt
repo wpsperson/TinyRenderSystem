@@ -1,0 +1,31 @@
+set(TARGET_NAME Geometry)
+
+add_definitions(-DGEOMETRY_EXPORTS)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
+
+set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/Geometry)
+set(Target_INCLUDE_LIST
+    ${INCLUDE_DIR}/Export.h
+    ${INCLUDE_DIR}/RefCount.h
+    )
+
+
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/Geometry)
+set(Target_SRC_LIST
+    ${SRC_DIR}/RefCount.cpp
+)
+
+#source_group(TREE ${INCLUDE_DIR} FILES ${Target_INCLUDE_LIST})
+#source_group(TREE ${SRC_DIR} FILES ${Target_SRC_LIST})
+
+source_group(include FILES ${Target_INCLUDE_LIST})
+source_group(src FILES ${Target_SRC_LIST})
+add_library(${TARGET_NAME} SHARED ${Target_INCLUDE_LIST} ${Target_SRC_LIST})
+    
+set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin")	
+set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/bin")
+set_target_properties(${TARGET_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/lib")
+set_target_properties(${TARGET_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/lib")
+set_target_properties(${TARGET_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
+set_target_properties(${TARGET_NAME} PROPERTIES RELEASE_POSTFIX "${CMAKE_RELEASE_POSTFIX}")
