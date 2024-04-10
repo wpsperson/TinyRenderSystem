@@ -2,6 +2,7 @@
 
 namespace geom
 {
-
-
+Geometry::~Geometry()
+{
+}
 }
