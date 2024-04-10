@@ -4,17 +4,11 @@ add_definitions(-DGEOMETRY_EXPORTS)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/Geometry)
-set(Target_INCLUDE_LIST
-    ${INCLUDE_DIR}/Export.h
-    ${INCLUDE_DIR}/RefCount.h
-    ${INCLUDE_DIR}/Ptr.h
-    )
-
-
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/Geometry)
-set(Target_SRC_LIST
-    ${SRC_DIR}/RefCount.cpp
-)
+
+FILE(GLOB Target_INCLUDE_LIST "${INCLUDE_DIR}/*.h")
+FILE(GLOB Target_SRC_LIST "${SRC_DIR}/*.cpp")
+
 
 #source_group(TREE ${INCLUDE_DIR} FILES ${Target_INCLUDE_LIST})
 #source_group(TREE ${SRC_DIR} FILES ${Target_SRC_LIST})
