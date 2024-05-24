@@ -24,7 +24,7 @@
 #include "TRS/TRSCube.h"
 
 
-OpenGLWidget::OpenGLWidget()
+OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
 {
 
 }

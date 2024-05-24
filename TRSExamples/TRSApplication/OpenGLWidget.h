@@ -9,7 +9,7 @@ class TRSShortcutKeyHandler;
 class OpenGLWidget : public QOpenGLWidget
 {
 public:
-    OpenGLWidget();
+    OpenGLWidget(QWidget *parent = nullptr);
     ~OpenGLWidget();
 protected:
     void initializeGL() override;
