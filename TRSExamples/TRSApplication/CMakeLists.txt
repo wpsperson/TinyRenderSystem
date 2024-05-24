@@ -8,19 +8,18 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 find_package(Qt5 CONFIG REQUIRED COMPONENTS Widgets)
 
-set(Target_INCLUDE_LIST
-    ${TRSExamPath}/${TARGET_NAME}/MainWindow.h
-    ${TRSExamPath}/${TARGET_NAME}/OpenGLWidget.h
+set(SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OpenGLWidget.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/OpenGLWidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ImportStep.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ImportStep.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     )
-set(Target_SRC_LIST
-    ${TRSExamPath}/${TARGET_NAME}/MainWindow.cpp
-    ${TRSExamPath}/${TARGET_NAME}/OpenGLWidget.cpp
-    ${TRSExamPath}/${TARGET_NAME}/main.cpp
-)
-source_group("include" FILES ${Target_INCLUDE_LIST} )
-source_group("src" FILES ${Target_SRC_LIST})
-source_group("shader" FILES ${Target_SHADER_LIST})
-add_executable(${TARGET_NAME}  ${Target_INCLUDE_LIST} ${Target_SRC_LIST} ${Target_SHADER_LIST})
+
+
+add_executable(${TARGET_NAME}  ${SOURCE_FILES})
 add_dependencies(${TARGET_NAME} TinyRenderSystem)
 set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "TRSExamples")
 

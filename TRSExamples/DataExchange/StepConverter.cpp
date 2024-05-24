@@ -1,8 +1,8 @@
 #include "StepConverter.h"
 
-#include "DataModel/TRSGeode.h"
-#include "DataModel/TRSGroup.h"
-#include "DataModel/TrsMesh.h"
+#include "TRS/TRSGeode.h"
+#include "TRS/TRSGroup.h"
+#include "TRS/TrsMesh.h"
 
 #include <XCAFApp_Application.hxx>
 #include <XCAFDoc_DocumentTool.hxx>
