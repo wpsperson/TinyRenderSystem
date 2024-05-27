@@ -1,10 +1,6 @@
 #include "StepConverter.h"
 
-#include "TRS/TRSGeode.h"
-#include "TRS/TRSGroup.h"
-#include "TRS/TrsMesh.h"
-#include "TRS/TRSShader.h"
-#include "TRS/TRSStateSet.h"
+#include <cassert>
 
 #include <XCAFApp_Application.hxx>
 #include <XCAFDoc_DocumentTool.hxx>
@@ -16,14 +12,20 @@
 #include <TDataStd_Name.hxx>
 #include <Quantity_Color.hxx>
 #include <XCAFDoc_ColorTool.hxx>
-
 #include <BRepMesh_IncrementalMesh.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <BRep_Tool.hxx>
 
+#include "TRS/TRSGeode.h"
+#include "TRS/TRSGroup.h"
+#include "TRS/TrsMesh.h"
+#include "TRS/TRSShader.h"
+#include "TRS/TRSStateSet.h"
+
 constexpr double GlobalLineDeflection = 0.002;
+static const TRSVec4 DefaultColor(0.8f, 0.8f, 0.8f, 1.0f);
 
 StepConverter::StepConverter()
 {
@@ -35,11 +37,11 @@ StepConverter::~StepConverter()
 
 }
 
-bool StepConverter::readSTEP(const std::string& file_name, TRSGroup* root)
+TRSNode* StepConverter::readStepFile(const char* stepFile)
 {
-    Handle(XCAFApp_Application) anApp = XCAFApp_Application::GetApplication();
-    Handle(TDocStd_Document) doc;
-    anApp->NewDocument("MDTV-XCAF", doc);
+    Handle(XCAFApp_Application) occApplication = XCAFApp_Application::GetApplication();
+    Handle(TDocStd_Document) occDocument;
+    occApplication->NewDocument("MDTV-XCAF", occDocument);
 
     STEPCAFControl_Reader reader;
     reader.SetColorMode(true);
@@ -47,30 +49,39 @@ bool StepConverter::readSTEP(const std::string& file_name, TRSGroup* root)
     reader.SetLayerMode(true);
     reader.SetMatMode(true);
     reader.SetGDTMode(true);
-    IFSelect_ReturnStatus status = reader.ReadFile(file_name.c_str());
-    bool result = reader.Transfer(doc);
+    IFSelect_ReturnStatus status = reader.ReadFile(stepFile);
+    bool result = reader.Transfer(occDocument);
     if (!result)
     {
-        return false;
+        return nullptr;
     }
-    TDF_Label mainLabel = doc->Main();
+    TDF_Label mainLabel = occDocument->Main();
     m_shapeTool = XCAFDoc_DocumentTool::ShapeTool(mainLabel);
     m_colorTool = XCAFDoc_DocumentTool::ColorTool(mainLabel);
 
-    TDF_LabelSequence rootLabels;
-    m_shapeTool->GetFreeShapes(rootLabels);
-    int roots = rootLabels.Length();
+    TDF_LabelSequence freeShapes;
+    m_shapeTool->GetFreeShapes(freeShapes);
+    int freeShapeCount = freeShapes.Length();
+    if (!freeShapeCount)
+    {
+        return nullptr;
+    }
+    TDF_Label rootLabel = freeShapes.Value(1);
 
-    TDF_Label Label = rootLabels.Value(1);
-    auto location = TopLoc_Location();
-
-    createChild(Label, location, root);
-    return true;
-}
-
-bool StepConverter::readIGES(const std::string& file, TRSGroup* root)
-{
-    return false;
+    bool isAssembly = m_shapeTool->IsAssembly(rootLabel);
+    bool isSimpleShp = m_shapeTool->IsSimpleShape(rootLabel);
+    if (isSimpleShp)
+    {
+        TRSGeode* geode = createGeodeNode(rootLabel);
+        return geode;
+    }
+    else if (isAssembly)
+    {
+        TopLoc_Location origin;
+        TRSGroup* group = createGroupNode(rootLabel, origin);
+        return group;
+    }
+    return nullptr;
 }
 
 std::string StepConverter::getLabelName(const TDF_Label& Label)
@@ -88,118 +99,124 @@ std::string StepConverter::getLabelName(const TDF_Label& Label)
     return Name;
 }
 
-TopoDS_Shape StepConverter::getLabelShape(const opencascade::handle<XCAFDoc_ShapeTool>& shapeTool, const TDF_Label& Label)
-{
-    TopoDS_Shape shape;
-    Standard_Boolean Res = shapeTool->GetShape(Label, shape);
-    if (Res == false || shape.IsNull())
-    {
-        throw "we can not get this shape";
-    }
-    return shape;
-}
-
-Quantity_Color StepConverter::getLabelColor(const opencascade::handle<XCAFDoc_ColorTool>& ColorTool, const TDF_Label& Label, const TopoDS_Shape& Shape)
-{
-    NCollection_Vec3<float> color;
-    color.SetValues(0.756f, 0.756f, 0.756f);
-    Quantity_Color aColor = Quantity_Color(color);
-    bool flag1 = ColorTool->GetInstanceColor(Shape, XCAFDoc_ColorType::XCAFDoc_ColorSurf, aColor);
-    bool flag2 = ColorTool->GetInstanceColor(Shape, XCAFDoc_ColorType::XCAFDoc_ColorGen, aColor);
-    bool flag3 = ColorTool->GetInstanceColor(Shape, XCAFDoc_ColorType::XCAFDoc_ColorCurv, aColor);
-    if (flag1 || flag2 || flag3) {
-        return aColor;
-    }
-    ColorTool->GetColor(Label, XCAFDoc_ColorType::XCAFDoc_ColorSurf, aColor);
-    ColorTool->GetColor(Label, XCAFDoc_ColorType::XCAFDoc_ColorGen, aColor);
-    ColorTool->GetColor(Label, XCAFDoc_ColorType::XCAFDoc_ColorCurv, aColor);
-    return aColor;
-}
-
-void StepConverter::createChild(const TDF_Label& Label, TopLoc_Location Location, TRSGroup* group)
+TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Location Location)
 {
     TDF_LabelSequence components;
-    if (m_shapeTool->GetComponents(Label, components))
+    if (!m_shapeTool->GetComponents(assembly, components))
     {
-        TDF_LabelSequence childComponents;
-        for (Standard_Integer compIndex = 1; compIndex <= components.Length(); ++compIndex)
+        return nullptr;
+    }
+
+    TRSGroup* group = new TRSGroup;
+    int componentCount = components.Length();
+    for (Standard_Integer compIndex = 1; compIndex <= componentCount; ++compIndex)
+    {
+        TDF_Label ChildLabel = components.Value(compIndex);
+        TopLoc_Location localLocation = Location * m_shapeTool->GetLocation(ChildLabel);
+        if (m_shapeTool->IsAssembly(ChildLabel))
         {
-            TDF_Label ChildLabel = components.Value(compIndex);
-            if (m_shapeTool->IsReference(ChildLabel))
+            TRSGroup* subGroup = createGroupNode(ChildLabel, localLocation);
+            if (!subGroup)
             {
-                TDF_Label ShapeLabel;
-                if (m_shapeTool->GetReferredShape(ChildLabel, ShapeLabel))
-                {
-                    TopLoc_Location LocalLocation = Location * m_shapeTool->GetLocation(ChildLabel);
-                    std::string name = getLabelName(ChildLabel);
-                    TopoDS_Shape childShape = getLabelShape(m_shapeTool, ChildLabel);
-                    bool isComponent = m_shapeTool->GetComponents(ChildLabel, childComponents);
-                    Quantity_Color color = getLabelColor(m_colorTool, ChildLabel, childShape);
-
-                    if (!isComponent)
-                    {
-                        std::shared_ptr<TRSGeode> geode = std::make_shared<TRSGeode>();
-                        geode->setName(name);
-                        geode->setColor(TRSVec4(color.Red(), color.Green(), color.Blue(), 1.0f));
-                        convertShapeToGeode(childShape, geode.get());
-                        group->addChild(geode);
-
-                        //auto part = new pmGeometryNode(m_document);
-                        //part->setName(name);
-                        //part->setColor(base3::Color3(color.Red(), color.Green(), color.Blue()));
-                        //part->setOccShape(childShape);
-                        //assembly->addNode(part);
-
-                    }
-                    else
-                    {
-                        std::shared_ptr<TRSGroup> subGroup = std::make_shared<TRSGroup>();
-                        subGroup->setName(name);
-                        subGroup->setColor(TRSVec4(color.Red(), color.Green(), color.Blue(), 1.0f));
-                        createChild(ChildLabel, LocalLocation, subGroup.get());
-                        group->addChild(subGroup);
-
-                        //auto childAssembly = new pmGeometryGroup(m_document);
-                        //childAssembly->setName(name);
-                        //childAssembly->setColor(base3::Color3(color.Red(), color.Green(), color.Blue()));
-                        //childAssembly->setOccShape(childShape);
-                        //assembly->addNode(childAssembly);
-                        //createChild(ShapeTool, ColorTool, ChildLabel, LocalLocation, childAssembly);
-                    }
-                }
+                continue;
             }
+            group->addChild(std::shared_ptr<TRSGroup>(subGroup));
+        }
+        else
+        {
+            TRSGeode* geode = createGeodeNode(ChildLabel);
+            if (!geode)
+            {
+                continue;
+            }
+            group->addChild(std::shared_ptr<TRSGeode>(geode));
+        }
+    }
+    if (0 == group->childNum())
+    {
+        delete group;
+        return nullptr;
+    }
+    return group;
+}
+
+TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel)
+{
+    TopoDS_Shape occShape;
+    Standard_Boolean Res = m_shapeTool->GetShape(shapeLabel, occShape);
+    if (!Res || occShape.IsNull())
+    {
+        return nullptr;
+    }
+
+    // get name
+    std::string name;
+    if (m_shapeTool->IsReference(shapeLabel))
+    {
+        TDF_Label referredShape;
+        if (m_shapeTool->GetReferredShape(shapeLabel, referredShape))
+        {
+            name = getLabelName(referredShape);
         }
     }
     else
     {
-        std::string name = getLabelName(Label);
-        TopoDS_Shape shape = getLabelShape(m_shapeTool, Label);
-        Quantity_Color color = getLabelColor(m_colorTool, Label, shape);
-
-        std::shared_ptr<TRSGeode> geode = std::make_shared<TRSGeode>();
-        geode->setName(name);
-        geode->setColor(TRSVec4(color.Red(), color.Green(), color.Blue(), 1.0f));
-        convertShapeToGeode(shape, geode.get());
-        group->addChild(geode);
+        name = getLabelName(shapeLabel);
     }
+
+    // get color
+    TRSVec4 color = DefaultColor;
+    Quantity_Color occColor;
+    if (findNodeColor(shapeLabel, occShape, occColor))
+    {
+        color = toTRSVec4(occColor);
+    }
+
+    // generate Geode and fill the mesh
+    TRSGeode* geode = new TRSGeode;
+    geode->setName(name);
+    geode->setColor(color);
+    // populate mesh
+    TRSMesh* mesh = geode->getMesh();
+    populateMesh(occShape, mesh);
+    // update shader.
+    std::shared_ptr<TRSStateSet> stateSet = geode->getOrCreateStateSet();
+    stateSet->getShader()->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
+    return geode;
 }
 
-void StepConverter::convertShapeToGeode(const TopoDS_Shape& topo_shape, TRSGeode* geode)
+bool StepConverter::findNodeColor(const TDF_Label& Label, const TopoDS_Shape& Shape, Quantity_Color& occColor)
 {
-    if (topo_shape.IsNull())
-        return;
+    if (m_colorTool->GetInstanceColor(Shape, XCAFDoc_ColorType::XCAFDoc_ColorSurf, occColor))
+    {
+        return true;
+    }
+    if (m_colorTool->GetInstanceColor(Shape, XCAFDoc_ColorType::XCAFDoc_ColorGen, occColor))
+    {
+        return true;
+    }
+    if (m_colorTool->GetInstanceColor(Shape, XCAFDoc_ColorType::XCAFDoc_ColorCurv, occColor))
+    {
+        return true;
+    }
+    if (m_colorTool->GetColor(Label, XCAFDoc_ColorType::XCAFDoc_ColorSurf, occColor))
+    {
+        return true;
+    }
+    if (m_colorTool->GetColor(Label, XCAFDoc_ColorType::XCAFDoc_ColorGen, occColor))
+    {
+        return true;
+    }
+    if (m_colorTool->GetColor(Label, XCAFDoc_ColorType::XCAFDoc_ColorCurv, occColor))
+    {
+        return true;
+    }
+    return false;
+}
 
+void StepConverter::populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh)
+{
     BRepMesh_IncrementalMesh incrementalMesh(topo_shape, GlobalLineDeflection, Standard_True, 0.5, Standard_True);
-
-    generateTriangles(topo_shape, geode);
-    // in fact, we should generate all sort of geometry, but so far geode only has one geometry, so to do.
-    //generateLines(topo_shape, geode);
-    //generateVertices(topo_shape, geode);
-
-}
-
-void StepConverter::generateTriangles(const TopoDS_Shape& topo_shape, TRSGeode* geode)
-{
     TopExp_Explorer faceExplorer;
     std::vector<TRSPoint> meshVertexs;
     std::vector<TRSVec3> normals;
@@ -208,12 +225,10 @@ void StepConverter::generateTriangles(const TopoDS_Shape& topo_shape, TRSGeode* 
     std::vector<unsigned int> meshIndexs;
     int nodeLen = 0;
     int triLen = 0;
-    int faceIndex = 0;
     for (faceExplorer.Init(topo_shape, TopAbs_FACE); faceExplorer.More(); faceExplorer.Next())
     {
         TopLoc_Location loc;
         TopoDS_Face aFace = TopoDS::Face(faceExplorer.Current());
-        TopAbs_Orientation orientation = aFace.Orientation();
         Handle_Poly_Triangulation triFace = BRep_Tool::Triangulation(aFace, loc);
         if (triFace.IsNull())
         {
@@ -226,25 +241,27 @@ void StepConverter::generateTriangles(const TopoDS_Shape& topo_shape, TRSGeode* 
         for (int i = 1; i <= nNodes; i++)
         {
             gp_Pnt vertex1 = triFace->Node(i).Transformed(loc.Transformation());
-            meshVertexs.push_back(TRSPoint(vertex1.X(), vertex1.Y(), vertex1.Z()));
+            meshVertexs.push_back(toTRSVec(vertex1));
             if (hasNormal)
             {
                 gp_Dir dir = triFace->Normal(i);
-                normals.emplace_back(dir.X(), dir.Y(), dir.Z());
+                normals.emplace_back(toTRSVec(dir));
             }
             if (hasUV)
             {
                 gp_Pnt2d uv = triFace->UVNode(i);
-                UVs.emplace_back(uv.X(), uv.Y());
+                UVs.emplace_back(toTRSVec2(uv));
             }
         }
-        int nVertexIndex1 = 0;
-        int nVertexIndex2 = 0;
-        int nVertexIndex3 = 0;
+
+        TopAbs_Orientation orientation = aFace.Orientation();
         int  nTriangles = triFace->NbTriangles();
         for (int i = 1; i <= nTriangles; i++)
         {
             Poly_Triangle aTriangle = triFace->Triangle(i);
+            int nVertexIndex1 = 0;
+            int nVertexIndex2 = 0;
+            int nVertexIndex3 = 0;
             aTriangle.Get(nVertexIndex1, nVertexIndex2, nVertexIndex3);
             if (orientation == TopAbs_REVERSED)
             {
@@ -258,11 +275,9 @@ void StepConverter::generateTriangles(const TopoDS_Shape& topo_shape, TRSGeode* 
                 meshIndexs.push_back(nVertexIndex3 + nodeLen - 1);
             }
         }
-
         nodeLen += nNodes;
         triLen += nTriangles;
     }
-    TRSMesh *mesh = geode->getMesh();
     mesh->setVertex(meshVertexs);
     // mesh->setUV(UVs); // do not use UV now
     mesh->setIndices(meshIndexs);
@@ -274,15 +289,28 @@ void StepConverter::generateTriangles(const TopoDS_Shape& topo_shape, TRSGeode* 
     {
         mesh->setNormal(normals);
     }
-    // update shader.
-    std::shared_ptr<TRSStateSet> stateSet = geode->getOrCreateStateSet();
-    stateSet->getShader()->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
 }
 
-void StepConverter::generateLines(const TopoDS_Shape& topo_shape, TRSGeode* geode)
+TRSVec3 StepConverter::toTRSVec(const gp_Pnt& pt)
 {
+    return TRSVec3(static_cast<float>(pt.X()), static_cast<float>(pt.Y()), static_cast<float>(pt.Z()));
 }
 
-void StepConverter::generateVertices(const TopoDS_Shape& topo_shape, TRSGeode* geode)
+TRSVec3 StepConverter::toTRSVec(const gp_Dir& dir)
 {
+    return TRSVec3(static_cast<float>(dir.X()), static_cast<float>(dir.Y()), static_cast<float>(dir.Z()));
 }
+
+TRSVec2 StepConverter::toTRSVec2(const gp_Pnt2d& pt2d)
+{
+    return TRSVec2(static_cast<float>(pt2d.X()), static_cast<float>(pt2d.Y()));
+}
+
+TRSVec4 StepConverter::toTRSVec4(const Quantity_Color& occColor)
+{
+    float red = static_cast<float>(occColor.Red());
+    float green = static_cast<float>(occColor.Green());
+    float blue = static_cast<float>(occColor.Blue());
+    return TRSVec4(red, green, blue, 1.0f);
+}
+

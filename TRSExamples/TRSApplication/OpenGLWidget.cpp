@@ -47,7 +47,7 @@ OpenGLWidget::~OpenGLWidget()
     }
 }
 
-void OpenGLWidget::setScene(std::shared_ptr<TRSGroup> sceneGroup)
+void OpenGLWidget::setScene(std::shared_ptr<TRSNode> sceneGroup)
 {
     m_viewer->setSecenNode(sceneGroup);
     TRSBox box = sceneGroup->boundingBox();

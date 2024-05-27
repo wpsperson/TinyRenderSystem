@@ -4,7 +4,7 @@
 
 #include <QtWidgets/QOpenGLWidget>
 
-class TRSGroup;
+class TRSNode;
 class TRSViewer;
 class TRSEventDispatcher;
 class TRSDefaultCameraHandler;
@@ -16,7 +16,7 @@ public:
     OpenGLWidget(QWidget *parent = nullptr);
     ~OpenGLWidget();
 
-    void setScene(std::shared_ptr<TRSGroup> sceneGroup);
+    void setScene(std::shared_ptr<TRSNode> sceneGroup);
 
 protected:
     void initializeGL() override;

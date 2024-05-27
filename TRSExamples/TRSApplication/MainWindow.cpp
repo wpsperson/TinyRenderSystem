@@ -35,13 +35,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::createActions()
 {
-    m_loadStepAction = new QAction(tr("&New"), this);
+    m_loadStepAction = new QAction(tr("ImportStep"), this);
     connect(m_loadStepAction, SIGNAL(triggered()), this, SLOT(onLoadStep()));
 }
 
 void MainWindow::createMenus()
 {
-    m_fileMenu = menuBar()->addMenu(tr("&File"));
+    m_fileMenu = menuBar()->addMenu(tr("File"));
     m_fileMenu->addAction(m_loadStepAction);
 }
 
@@ -81,13 +81,13 @@ void MainWindow::onLoadStep()
     std::string errorMessage;
     std::string strStepFile = stepFile.toStdString();
     const char *fileName = strStepFile.c_str();
-    TRSGroup* group = ImportStep::readStepFile(fileName, errorMessage);
-    if (!group)
+    TRSNode* stepNode = ImportStep::readStepFile(fileName, errorMessage);
+    if (!stepNode)
     {
         updateStatus(QString::fromStdString(errorMessage));
         return;
     }
-    std::shared_ptr<TRSGroup> root(group);
+    std::shared_ptr<TRSNode> root(stepNode);
     m_canvas->setScene(root);
     updateStatus("Load scene successfully.");
 }

@@ -13,10 +13,10 @@ const char* strTestFunction = "testFunction";
 const char* strLoadStepFile = "loadStepFile";
 
 typedef int (* FuncType)(int, int);
-typedef TRSGroup* (*LoadFuncType)(const char*);
+typedef TRSNode* (*LoadFuncType)(const char*);
 
 
-TRSGroup* ImportStep::readStepFile(const char* file_name, std::string& error)
+TRSNode* ImportStep::readStepFile(const char* file_name, std::string& error)
 {
     HINSTANCE instance = LoadLibrary(strDllFile);
     if (!instance) {
@@ -31,6 +31,6 @@ TRSGroup* ImportStep::readStepFile(const char* file_name, std::string& error)
         return nullptr;
     }
 
-    TRSGroup* result = function(file_name);
+    TRSNode* result = function(file_name);
     return result;
 }

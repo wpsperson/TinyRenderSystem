@@ -115,7 +115,7 @@ void TRSViewer::drawScene()
             pShader->addUniformMatrix4("projection", projectMatrix);
             pShader->addUniform3v("viewPos", m_pCamera->getPosition());
             pShader->addUniform4v("baseColor", pNode->getColor());
-            pShader->addUniform3v("lightPos", s_DefaultLightPos);
+            pShader->addUniform3v("lightPos", m_pCamera->getPosition()); // s_DefaultLightPos
             if (pNode->getUpdateCallBack())
             {
                 pNode->getUpdateCallBack()(pNode);

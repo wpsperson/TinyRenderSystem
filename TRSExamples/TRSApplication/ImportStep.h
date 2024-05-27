@@ -1,10 +1,10 @@
 #pragma once
 
 #include <string>
-class TRSGroup;
+class TRSNode;
 
 class ImportStep
 {
 public:
-    static TRSGroup *readStepFile(const char* file_name, std::string &error);
+    static TRSNode*readStepFile(const char* file_name, std::string &error);
 };
