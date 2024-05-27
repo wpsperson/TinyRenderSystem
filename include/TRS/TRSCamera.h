@@ -10,6 +10,7 @@
 #include "TRS/TRSVector.h"
 #include "TRS/TRSMatrix.h"
 
+class TRSBox;
 class TRS_EXPORT TRSCamera
 {
 public:
@@ -43,6 +44,8 @@ public:
     void Azimuth(double angle);
     // keep lookat unchanged, rotate camera position about the m_right direction
     void Elevation(double angle);
+    // set lookup at center of box, and adjust pos to make camera see entire box
+    void fitToBox(const TRSBox& box);
 
 protected:
     void updateViewMatrix();

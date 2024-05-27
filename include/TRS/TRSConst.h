@@ -52,6 +52,7 @@ static TRSVec3 s_DefaultCameraPos(0, 0, 3.0f);
 
 static TRSVec3 s_DefaultLightPos(0.0f, 0.0f, 100.0f);
 
+static float DefaultFov = 30.0f;
 static float DefaultNearDistance = 0.1f;  //近平面
 static float DefaultFarDistance = 100.0f;   //远平面
 

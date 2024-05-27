@@ -1,6 +1,10 @@
 #pragma once
+
+#include <memory>
+
 #include <QtWidgets/QOpenGLWidget>
 
+class TRSGroup;
 class TRSViewer;
 class TRSEventDispatcher;
 class TRSDefaultCameraHandler;
@@ -11,6 +15,9 @@ class OpenGLWidget : public QOpenGLWidget
 public:
     OpenGLWidget(QWidget *parent = nullptr);
     ~OpenGLWidget();
+
+    void setScene(std::shared_ptr<TRSGroup> sceneGroup);
+
 protected:
     void initializeGL() override;
     void resizeGL(int w, int h) override;

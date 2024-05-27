@@ -23,8 +23,9 @@ MainWindow::MainWindow(QWidget *parent /*= nullptr*/)
     createActions();
     createMenus();
     createDockWidgets();
+    createStatusBar();
 
-    resize(800, 600);
+    resize(1400, 1000);
 }
 
 MainWindow::~MainWindow()
@@ -58,8 +59,35 @@ void MainWindow::createDockWidgets()
     addDockWidget(Qt::RightDockWidgetArea, dock);
 }
 
+void MainWindow::createStatusBar()
+{
+    m_status = new QLabel("Ready");
+    statusBar()->addWidget(m_status, 1);
+}
+
+void MainWindow::updateStatus(const QString& status)
+{
+    m_status->setText(status);
+}
 
 void MainWindow::onLoadStep()
 {
-    // TODO
+    QString stepFile =  QFileDialog::getOpenFileName(this, QString("Load Step"), QString("."), tr("Step File (*.stp *.step)"));
+    if (stepFile.isEmpty())
+    {
+        updateStatus("Please select a step file to load.");
+        return;
+    }
+    std::string errorMessage;
+    std::string strStepFile = stepFile.toStdString();
+    const char *fileName = strStepFile.c_str();
+    TRSGroup* group = ImportStep::readStepFile(fileName, errorMessage);
+    if (!group)
+    {
+        updateStatus(QString::fromStdString(errorMessage));
+        return;
+    }
+    std::shared_ptr<TRSGroup> root(group);
+    m_canvas->setScene(root);
+    updateStatus("Load scene successfully.");
 }

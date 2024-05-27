@@ -2,6 +2,7 @@
 #include <iostream>
 #include "TRS/TRSConst.h"
 #include "TRS/TRSConfig.h"
+#include "TRS/TRSBox.h"
 #include "TRS/TRSMathUtil.h"
 
 TRSCamera::TRSCamera()
@@ -15,7 +16,7 @@ TRSCamera::TRSCamera()
     m_height = DefaultWindowHeight;
     m_near = DefaultNearDistance;
     m_far = DefaultFarDistance;
-    m_fFov = 45.0f;
+    m_fFov = DefaultFov;
     m_parallelMode = false;
 }
 
@@ -187,6 +188,18 @@ void TRSCamera::Elevation(double angle)
     TRSVec3 newPosition = totalMatrix * m_pos;
     this->setPosition(newPosition);
     updateViewMatrix();// in order to update the m_up
+}
+
+void TRSCamera::fitToBox(const TRSBox& box)
+{
+    TRSVec3 front = m_lookAt - m_pos;
+    front.normalize();
+
+    m_lookAt = box.center();
+    float radius = box.outSphereRadius();
+    float best_distance = radius / std::sin(toRadian(m_fFov / 2));
+    m_pos = m_lookAt + front * (-best_distance);
+    m_viewMatrixNeedUpdate = true;
 }
 
 void TRSCamera::updateViewMatrix()

@@ -78,6 +78,10 @@ void TRSViewer::frame()
 
 void TRSViewer::updateScene()
 {
+    if (!m_pSceneNode)
+    {
+        return;
+    }
     m_mapState2Node.clear();
     CullVisitor oCullVisitor;
     oCullVisitor.visit(m_pSceneNode.get());

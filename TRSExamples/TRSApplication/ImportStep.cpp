@@ -24,7 +24,7 @@ TRSGroup* ImportStep::readStepFile(const char* file_name, std::string& error)
         error = "Fail to LoadLibrary, error code: " + std::to_string(code);
         return nullptr;
     }
-    LoadFuncType function = (LoadFuncType)GetProcAddress(instance, strTestFunction);
+    LoadFuncType function = (LoadFuncType)GetProcAddress(instance, strLoadStepFile);
     if (!function) {
         DWORD code = GetLastError();
         error = "Fail to GetProcAddress, error code: " + std::to_string(code);

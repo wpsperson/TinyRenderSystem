@@ -3,6 +3,8 @@
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSGroup.h"
 #include "TRS/TrsMesh.h"
+#include "TRS/TRSShader.h"
+#include "TRS/TRSStateSet.h"
 
 #include <XCAFApp_Application.hxx>
 #include <XCAFDoc_DocumentTool.hxx>
@@ -262,7 +264,7 @@ void StepConverter::generateTriangles(const TopoDS_Shape& topo_shape, TRSGeode* 
     }
     TRSMesh *mesh = geode->getMesh();
     mesh->setVertex(meshVertexs);
-    mesh->setUV(UVs);
+    // mesh->setUV(UVs); // do not use UV now
     mesh->setIndices(meshIndexs);
     if (normals.empty())
     {
@@ -272,6 +274,9 @@ void StepConverter::generateTriangles(const TopoDS_Shape& topo_shape, TRSGeode* 
     {
         mesh->setNormal(normals);
     }
+    // update shader.
+    std::shared_ptr<TRSStateSet> stateSet = geode->getOrCreateStateSet();
+    stateSet->getShader()->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
 }
 
 void StepConverter::generateLines(const TopoDS_Shape& topo_shape, TRSGeode* geode)

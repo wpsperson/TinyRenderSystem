@@ -14,6 +14,7 @@
 #include "TRS/TRSEventDispatcher.h"
 #include "TRS/TRSDefaultCameraHandler.h"
 #include "TRS/TRSConst.h"
+#include "TRS/TRSCamera.h"
 #include "TRS/TRSTexture.h"
 #include "TRS/TRSShader.h"
 #include "TRS/TRSBox.h"
@@ -46,6 +47,14 @@ OpenGLWidget::~OpenGLWidget()
     }
 }
 
+void OpenGLWidget::setScene(std::shared_ptr<TRSGroup> sceneGroup)
+{
+    m_viewer->setSecenNode(sceneGroup);
+    TRSBox box = sceneGroup->boundingBox();
+    m_viewer->getCamera()->fitToBox(box);
+    m_pCameraHandler->setSceneBox(box);
+}
+
 void OpenGLWidget::initializeGL()
 {
     m_viewer = new TRSViewer;
@@ -58,27 +67,29 @@ void OpenGLWidget::initializeGL()
     m_pCameraHandler = new TRSDefaultCameraHandler(m_viewer->getCamera());
     m_dispatcher->addEventHandler(m_pCameraHandler);
 
-    // initialize some scene
-    TRSCube* cube = new TRSCube;
-    TRSMesh* mesh = cube->getMesh();
-    std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
-    pNode->setMesh(mesh);
-    std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
-    pSS->getTexture()->createTexture("resources/textures/opengl.png");
-    pSS->getTexture()->createTexture("resources/textures/cube.png");
-    pSS->getShader()->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
+    //// initialize some scene
+    //TRSCube* cube = new TRSCube;
+    //TRSMesh* mesh = cube->getMesh();
+    //std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
+    //pNode->setMesh(mesh);
+    //std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
+    //pSS->getTexture()->createTexture("resources/textures/opengl.png");
+    //pSS->getTexture()->createTexture("resources/textures/cube.png");
+    //pSS->getShader()->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
 
-    std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
-    root->addChild(pNode);
+    //std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
+    //root->addChild(pNode);
 
-    m_viewer->setSecenNode(root);
-    m_pCameraHandler->setSceneBox(root->boundingBox());
+    //m_viewer->setSecenNode(root);
+    //m_pCameraHandler->setSceneBox(root->boundingBox());
 }
 
-void OpenGLWidget::resizeGL(int w, int h)
+void OpenGLWidget::resizeGL(int width, int height)
 {
-    m_width = w;
-    m_height = h;
+    m_width = width;
+    m_height = height;
+    m_viewer->getCamera()->setWindowWidth(width);
+    m_viewer->getCamera()->setWindowHeight(height);
 }
 
 void OpenGLWidget::paintGL()

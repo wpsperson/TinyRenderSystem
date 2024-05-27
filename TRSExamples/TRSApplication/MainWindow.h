@@ -2,6 +2,7 @@
 #include <QtWidgets/QMainWindow>
 
 class QAction;
+class QLabel;
 class OpenGLWidget;
 
 class  MainWindow : public QMainWindow
@@ -15,6 +16,9 @@ private:
     void createActions();
     void createMenus();
     void createDockWidgets();
+    void createStatusBar();
+
+    void updateStatus(const QString& status);
 
 private slots:
     void onLoadStep();
@@ -22,4 +26,5 @@ private:
     QMenu *m_fileMenu = nullptr;
     QAction *m_loadStepAction = nullptr;
     OpenGLWidget* m_canvas = nullptr;
+    QLabel* m_status = nullptr;
 };
