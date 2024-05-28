@@ -66,20 +66,36 @@ TRSNode* StepConverter::readStepFile(const char* stepFile)
     {
         return nullptr;
     }
-    TDF_Label rootLabel = freeShapes.Value(1);
-
-    bool isAssembly = m_shapeTool->IsAssembly(rootLabel);
-    bool isSimpleShp = m_shapeTool->IsSimpleShape(rootLabel);
-    if (isSimpleShp)
+    std::vector<TRSNode*> rootNodes;
+    TopLoc_Location origin;
+    for(int idx = 1; idx <= freeShapeCount; idx++)
     {
-        TRSGeode* geode = createGeodeNode(rootLabel);
-        return geode;
+        TDF_Label rootLabel = freeShapes.Value(idx);
+        bool isAssembly = m_shapeTool->IsAssembly(rootLabel);
+        bool isSimpleShp = m_shapeTool->IsSimpleShape(rootLabel);
+        if (isSimpleShp)
+        {
+            TRSGeode* geode = createGeodeNode(rootLabel, origin);
+            rootNodes.emplace_back(geode);
+        }
+        else if (isAssembly)
+        {
+            TRSGroup* group = createGroupNode(rootLabel, origin);
+            rootNodes.emplace_back(group);
+        }
     }
-    else if (isAssembly)
+    if (rootNodes.size() == 1)
     {
-        TopLoc_Location origin;
-        TRSGroup* group = createGroupNode(rootLabel, origin);
-        return group;
+        return rootNodes.front();
+    }
+    else if (rootNodes.size() > 1)
+    {
+        TRSGroup* rootGroup = new TRSGroup;
+        for (TRSNode* node : rootNodes)
+        {
+            rootGroup->addChild(std::shared_ptr<TRSNode>(node));
+        }
+        return rootGroup;
     }
     return nullptr;
 }
@@ -99,7 +115,7 @@ std::string StepConverter::getLabelName(const TDF_Label& Label)
     return Name;
 }
 
-TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Location Location)
+TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Location parentLocation)
 {
     TDF_LabelSequence components;
     if (!m_shapeTool->GetComponents(assembly, components))
@@ -111,11 +127,22 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
     int componentCount = components.Length();
     for (Standard_Integer compIndex = 1; compIndex <= componentCount; ++compIndex)
     {
-        TDF_Label ChildLabel = components.Value(compIndex);
-        TopLoc_Location localLocation = Location * m_shapeTool->GetLocation(ChildLabel);
-        if (m_shapeTool->IsAssembly(ChildLabel))
+        TDF_Label childLabel = components.Value(compIndex);
+        TopLoc_Location childLocation = m_shapeTool->GetLocation(childLabel);
+        TopLoc_Location localLocation = parentLocation * childLocation;
+        TDF_Label referredShape;
+        if (m_shapeTool->IsAssembly(childLabel))
         {
-            TRSGroup* subGroup = createGroupNode(ChildLabel, localLocation);
+            TRSGroup* subGroup = createGroupNode(childLabel, localLocation);
+            if (!subGroup)
+            {
+                continue;
+            }
+            group->addChild(std::shared_ptr<TRSGroup>(subGroup));
+        }
+        else if (referToAssembly(childLabel, referredShape))
+        {
+            TRSGroup* subGroup = createGroupNode(referredShape, localLocation);
             if (!subGroup)
             {
                 continue;
@@ -124,7 +151,7 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
         }
         else
         {
-            TRSGeode* geode = createGeodeNode(ChildLabel);
+            TRSGeode* geode = createGeodeNode(childLabel, localLocation);
             if (!geode)
             {
                 continue;
@@ -140,7 +167,7 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
     return group;
 }
 
-TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel)
+TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Location parentLocation)
 {
     TopoDS_Shape occShape;
     Standard_Boolean Res = m_shapeTool->GetShape(shapeLabel, occShape);
@@ -178,7 +205,7 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel)
     geode->setColor(color);
     // populate mesh
     TRSMesh* mesh = geode->getMesh();
-    populateMesh(occShape, mesh);
+    populateMesh(occShape, mesh, parentLocation);
     // update shader.
     std::shared_ptr<TRSStateSet> stateSet = geode->getOrCreateStateSet();
     stateSet->getShader()->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
@@ -214,7 +241,20 @@ bool StepConverter::findNodeColor(const TDF_Label& Label, const TopoDS_Shape& Sh
     return false;
 }
 
-void StepConverter::populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh)
+bool StepConverter::referToAssembly(const TDF_Label& Label, TDF_Label& referredShape)
+{
+    if (m_shapeTool->IsReference(Label))
+    {
+        if (m_shapeTool->GetReferredShape(Label, referredShape))
+        {
+            bool isAssembly = m_shapeTool->IsAssembly(referredShape);
+            return isAssembly;
+        }
+    }
+    return false;
+}
+
+void StepConverter::populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation)
 {
     BRepMesh_IncrementalMesh incrementalMesh(topo_shape, GlobalLineDeflection, Standard_True, 0.5, Standard_True);
     TopExp_Explorer faceExplorer;
@@ -230,6 +270,7 @@ void StepConverter::populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh)
         TopLoc_Location loc;
         TopoDS_Face aFace = TopoDS::Face(faceExplorer.Current());
         Handle_Poly_Triangulation triFace = BRep_Tool::Triangulation(aFace, loc);
+        TopLoc_Location localLocation = loc * parentLocation;
         if (triFace.IsNull())
         {
             continue;
@@ -240,7 +281,8 @@ void StepConverter::populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh)
         bool hasUV = triFace->HasUVNodes();
         for (int i = 1; i <= nNodes; i++)
         {
-            gp_Pnt vertex1 = triFace->Node(i).Transformed(loc.Transformation());
+            gp_Pnt vertex = triFace->Node(i);
+            gp_Pnt vertex1 = vertex.Transformed(localLocation.Transformation());
             meshVertexs.push_back(toTRSVec(vertex1));
             if (hasNormal)
             {

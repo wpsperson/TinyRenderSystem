@@ -27,14 +27,16 @@ public:
 
     static std::string getLabelName(const TDF_Label& Label);
 
-    TRSGroup* createGroupNode(const TDF_Label& assembly, TopLoc_Location Location);
+    TRSGroup* createGroupNode(const TDF_Label& assembly, TopLoc_Location parentLocation);
 
-    TRSGeode* createGeodeNode(const TDF_Label& shapeLabel);
+    TRSGeode* createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Location parentLocation);
 
 private:
     bool findNodeColor(const TDF_Label& Label, const TopoDS_Shape& Shape, Quantity_Color &occColor);
 
-    static void populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh);
+    bool referToAssembly(const TDF_Label& Label, TDF_Label &referredShape);
+
+    static void populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
 
     static TRSVec3 toTRSVec(const gp_Pnt& pt);
 

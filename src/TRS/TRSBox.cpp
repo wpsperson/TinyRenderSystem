@@ -41,7 +41,7 @@ void TRSBox::mergePoint(const TRSPoint& pt)
         miny = pt[1];
         maxy = pt[1];
         minz = pt[2];
-        maxz = pt[3];
+        maxz = pt[2];
         return;
     }
     if (pt[0] < minx)
