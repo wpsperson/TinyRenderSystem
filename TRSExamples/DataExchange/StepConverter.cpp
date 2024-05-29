@@ -102,12 +102,12 @@ TRSNode* StepConverter::readStepFile(const char* stepFile)
 
 std::string StepConverter::getLabelName(const TDF_Label& Label)
 {
-    std::string Name = "Body";
+    std::string Name = "Solid";
     Handle(TDataStd_Name) aName;
     if (Label.FindAttribute(TDataStd_Name::GetID(), aName))
     {
         TCollection_ExtendedString extendedName = aName->Get();
-        Standard_PCharacter pCharacter = new Standard_Character[1000];
+        Standard_PCharacter pCharacter = new Standard_Character[extendedName.LengthOfCString() + 1];
         extendedName.ToUTF8CString(pCharacter);
         Name = pCharacter;
         delete[] pCharacter;
@@ -124,14 +124,41 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
     }
 
     TRSGroup* group = new TRSGroup;
+    TopLoc_Location currentLocation = m_shapeTool->GetLocation(assembly);
+    TopLoc_Location localLocation = parentLocation * currentLocation;
     int componentCount = components.Length();
     for (Standard_Integer compIndex = 1; compIndex <= componentCount; ++compIndex)
     {
         TDF_Label childLabel = components.Value(compIndex);
-        TopLoc_Location childLocation = m_shapeTool->GetLocation(childLabel);
-        TopLoc_Location localLocation = parentLocation * childLocation;
         TDF_Label referredShape;
-        if (m_shapeTool->IsAssembly(childLabel))
+        if (m_shapeTool->GetReferredShape(childLabel, referredShape))
+        {
+            TopLoc_Location instanceLocation = m_shapeTool->GetLocation(childLabel);
+            TopLoc_Location finalLocation = localLocation * instanceLocation;
+            if (m_shapeTool->IsAssembly(referredShape))
+            {
+                TRSGroup* subGroup = createGroupNode(referredShape, finalLocation);
+                if (!subGroup)
+                {
+                    continue;
+                }
+                group->addChild(std::shared_ptr<TRSGroup>(subGroup));
+            }
+            else if(m_shapeTool->IsSimpleShape(referredShape))
+            {
+                TRSGeode* geode = createGeodeNode(referredShape, finalLocation);
+                if (!geode)
+                {
+                    continue;
+                }
+                group->addChild(std::shared_ptr<TRSGeode>(geode));
+            }
+            else
+            {
+                assert(false);
+            }
+        }
+        else if (m_shapeTool->IsAssembly(childLabel))
         {
             TRSGroup* subGroup = createGroupNode(childLabel, localLocation);
             if (!subGroup)
@@ -140,16 +167,7 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
             }
             group->addChild(std::shared_ptr<TRSGroup>(subGroup));
         }
-        else if (referToAssembly(childLabel, referredShape))
-        {
-            TRSGroup* subGroup = createGroupNode(referredShape, localLocation);
-            if (!subGroup)
-            {
-                continue;
-            }
-            group->addChild(std::shared_ptr<TRSGroup>(subGroup));
-        }
-        else
+        else if(m_shapeTool->IsSimpleShape(childLabel))
         {
             TRSGeode* geode = createGeodeNode(childLabel, localLocation);
             if (!geode)
@@ -157,6 +175,10 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
                 continue;
             }
             group->addChild(std::shared_ptr<TRSGeode>(geode));
+        }
+        else
+        {
+            assert(false);
         }
     }
     if (0 == group->childNum())
@@ -205,7 +227,10 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
     geode->setColor(color);
     // populate mesh
     TRSMesh* mesh = geode->getMesh();
-    populateMesh(occShape, mesh, parentLocation);
+
+    TopLoc_Location currentLocation = m_shapeTool->GetLocation(shapeLabel);
+    TopLoc_Location localLocation = parentLocation * currentLocation;
+    populateMesh(occShape, mesh, localLocation);
     // update shader.
     std::shared_ptr<TRSStateSet> stateSet = geode->getOrCreateStateSet();
     stateSet->getShader()->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
@@ -267,10 +292,10 @@ void StepConverter::populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, 
     int triLen = 0;
     for (faceExplorer.Init(topo_shape, TopAbs_FACE); faceExplorer.More(); faceExplorer.Next())
     {
-        TopLoc_Location loc;
+        TopLoc_Location faceLocation;
         TopoDS_Face aFace = TopoDS::Face(faceExplorer.Current());
-        Handle_Poly_Triangulation triFace = BRep_Tool::Triangulation(aFace, loc);
-        TopLoc_Location localLocation = loc * parentLocation;
+        Handle_Poly_Triangulation triFace = BRep_Tool::Triangulation(aFace, faceLocation);
+        TopLoc_Location localLocation =  parentLocation * faceLocation;
         if (triFace.IsNull())
         {
             continue;
