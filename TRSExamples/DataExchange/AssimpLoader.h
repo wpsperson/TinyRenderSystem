@@ -1,11 +1,5 @@
-﻿/*!  
- *@brief    
- *@author   wangps
- *@date     2019年7月8日
- */
+﻿#pragma once
 
-#pragma once
-#include "TRS/TRSExport.h"
 #include <string>
 #include <memory>
 
@@ -22,16 +16,18 @@ enum aiTextureType;
 
 using std::string;
 
-class TRS_EXPORT TRSAssimpLoader
+class AssimpLoader
 {
 public:
-    TRSAssimpLoader();
-    ~TRSAssimpLoader();
+    AssimpLoader();
+    ~AssimpLoader();
 
     TRSGroup* getGroupNode() const;
-    
+
     TRSGroup*  loadByAssimp(const std::string& file);
+
     void recurseNode(aiNode* pNode, const aiScene* pScene);
+
     std::shared_ptr<TRSNode> retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene);
 
 protected:

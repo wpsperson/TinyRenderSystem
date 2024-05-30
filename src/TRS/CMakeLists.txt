@@ -3,9 +3,7 @@ set(TARGET_NAME TinyRenderSystem)
 add_definitions(-DTRSLIB)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/TRS/glad)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/assimp-4.1.0/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/include)
-LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/assimp-4.1.0/lib64)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/lib64)
 
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/TRS)
@@ -37,7 +35,6 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSCylinder.h
     ${INCLUDE_DIR}/TRSGrid.h
     ${INCLUDE_DIR}/GeometryUtil.h
-    ${INCLUDE_DIR}/TRSAssimpLoader.h
     ${INCLUDE_DIR}/BSpline.h
     ${INCLUDE_DIR}/BSplineSurface.h
     ${INCLUDE_DIR}/TRSMathUtil.h
@@ -79,7 +76,6 @@ set(Target_SRC_LIST
     ${SRC_DIR}/TRSCylinder.cpp
     ${SRC_DIR}/TRSGrid.cpp
     ${SRC_DIR}/GeometryUtil.cpp
-    ${SRC_DIR}/TRSAssimpLoader.cpp
     ${SRC_DIR}/BSpline.cpp
     ${SRC_DIR}/BSplineSurface.cpp
     ${SRC_DIR}/TRSMathUtil.cpp
@@ -111,18 +107,13 @@ set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POS
 set_target_properties(${TARGET_NAME} PROPERTIES RELEASE_POSTFIX "${CMAKE_RELEASE_POSTFIX}")
 
 SET(ADDITIONAL_LIBRARIES_DEBUG
-assimp-vc140-mt.lib
 freetyped.lib
 )
 SET(ADDITIONAL_LIBRARIES_RELEASE
-assimp-vc140-mt.lib
 freetype.lib
 )
 TARGET_LINK_LIBRARIES(${TARGET_NAME} debug "${ADDITIONAL_LIBRARIES_DEBUG}" optimized "${ADDITIONAL_LIBRARIES_RELEASE}")
 
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy 
-                ${CMAKE_SOURCE_DIR}/ThirdParty/assimp-4.1.0/bin64/assimp-vc140-mt.dll
-                ${CMAKE_BINARY_DIR}/bin/assimp-vc140-mt.dll)
 add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_SOURCE_DIR}/resources 
                 ${CMAKE_BINARY_DIR}/bin/resources)

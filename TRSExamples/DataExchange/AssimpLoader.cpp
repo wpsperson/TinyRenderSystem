@@ -1,4 +1,4 @@
-﻿#include "TRS/TRSAssimpLoader.h"
+﻿#include "AssimpLoader.h"
 #include <iostream>
 #include <vector>
 #include <assimp/Importer.hpp>
@@ -14,33 +14,25 @@
 
 using namespace std;
 
-//struct Vertex {
-//    // position
-//    TRSVec3 Position;
-//    // normal
-//    TRSVec3 Normal;
-//    // texCoords
-//    TRSVec2 TexCoords;
-//};
 
-TRSAssimpLoader::TRSAssimpLoader()
+AssimpLoader::AssimpLoader()
 {
     m_pGlobalTexture = new TRSTexture();
     m_pGroupNode = new TRSGroup;
 }
 
-TRSAssimpLoader::~TRSAssimpLoader()
+AssimpLoader::~AssimpLoader()
 {
 
 }
 
 
-TRSGroup* TRSAssimpLoader::getGroupNode() const
+TRSGroup* AssimpLoader::getGroupNode() const
 {
     return m_pGroupNode;
 }
 
-TRSGroup* TRSAssimpLoader::loadByAssimp(const std::string& file)
+TRSGroup* AssimpLoader::loadByAssimp(const std::string& file)
 {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
@@ -54,7 +46,7 @@ TRSGroup* TRSAssimpLoader::loadByAssimp(const std::string& file)
     return m_pGroupNode;
 }
 
-void TRSAssimpLoader::recurseNode(aiNode* pNode, const aiScene* pScene)
+void AssimpLoader::recurseNode(aiNode* pNode, const aiScene* pScene)
 {
     // process each mesh located at the current node
     for (unsigned int i = 0; i < pNode->mNumMeshes; i++)
@@ -73,7 +65,7 @@ void TRSAssimpLoader::recurseNode(aiNode* pNode, const aiScene* pScene)
     }
 }
 
-std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene)
+std::shared_ptr<TRSNode> AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene)
 {
     unsigned int vertexCount = pMesh->mNumVertices;
     unsigned int indexCount = pMesh->mNumFaces * 3;
@@ -155,7 +147,7 @@ std::shared_ptr<TRSNode> TRSAssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, con
     return pGeode;
 }
 
-int TRSAssimpLoader::createShaderByMesh(aiMesh *pMesh, TRSShader* shader)
+int AssimpLoader::createShaderByMesh(aiMesh *pMesh, TRSShader* shader)
 {
     bool bHasNormal = pMesh->mNormals;
     bool bHasTexture = (pMesh->mTextureCoords && pMesh->mTextureCoords[0]);
