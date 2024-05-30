@@ -4,10 +4,9 @@
  */
 
 #pragma once
-#include "TRS/GeometryUtil.h"
-#include "TRS/TRSExport.h"
+#include "Geometry/GeometryUtil.h"
 
-class TRS_EXPORT BSpline
+class BSpline
 {
 public:
     BSpline();

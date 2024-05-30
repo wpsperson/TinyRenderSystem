@@ -9,7 +9,6 @@ set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/Geometry)
 FILE(GLOB Target_INCLUDE_LIST "${INCLUDE_DIR}/*.h")
 FILE(GLOB Target_SRC_LIST "${SRC_DIR}/*.cpp")
 
-
 #source_group(TREE ${INCLUDE_DIR} FILES ${Target_INCLUDE_LIST})
 #source_group(TREE ${SRC_DIR} FILES ${Target_SRC_LIST})
 

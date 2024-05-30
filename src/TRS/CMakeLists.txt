@@ -34,9 +34,6 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSCube.h
     ${INCLUDE_DIR}/TRSCylinder.h
     ${INCLUDE_DIR}/TRSGrid.h
-    ${INCLUDE_DIR}/GeometryUtil.h
-    ${INCLUDE_DIR}/BSpline.h
-    ${INCLUDE_DIR}/BSplineSurface.h
     ${INCLUDE_DIR}/TRSMathUtil.h
     ${INCLUDE_DIR}/TRSMatrix.h
     ${INCLUDE_DIR}/TRSVector.h
@@ -50,7 +47,6 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/glad/glad.h
     ${INCLUDE_DIR}/glad/KHR/khrplatform.h
     )
-
 
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/TRS)
 set(Target_SRC_LIST
@@ -75,9 +71,6 @@ set(Target_SRC_LIST
     ${SRC_DIR}/TRSCube.cpp
     ${SRC_DIR}/TRSCylinder.cpp
     ${SRC_DIR}/TRSGrid.cpp
-    ${SRC_DIR}/GeometryUtil.cpp
-    ${SRC_DIR}/BSpline.cpp
-    ${SRC_DIR}/BSplineSurface.cpp
     ${SRC_DIR}/TRSMathUtil.cpp
     ${SRC_DIR}/TRSMatrix.cpp
     ${SRC_DIR}/CullVisitor.cpp
