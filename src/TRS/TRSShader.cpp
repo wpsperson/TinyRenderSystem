@@ -79,7 +79,7 @@ void TRSShader::use()
 void TRSShader::addUniformi(const std::string uniformName, int value)
 {
     UniformData oData;
-    oData.enType = EnInt;
+    oData.enType = EnUniformType::EnInt;
     oData.nValue = value;
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
@@ -87,7 +87,7 @@ void TRSShader::addUniformi(const std::string uniformName, int value)
 void TRSShader::addUniformf(const std::string uniformName, float value)
 {
     UniformData oData;
-    oData.enType = EnFloat;
+    oData.enType = EnUniformType::EnFloat;
     oData.fValue = value;
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
@@ -95,7 +95,7 @@ void TRSShader::addUniformf(const std::string uniformName, float value)
 void TRSShader::addUniform3v(const std::string uniformName, TRSVec3 vec3Color)
 {
     UniformData oData;
-    oData.enType = EnVec3;
+    oData.enType = EnUniformType::EnVec3;
     oData.vec3Value = vec3Color;
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
@@ -103,7 +103,7 @@ void TRSShader::addUniform3v(const std::string uniformName, TRSVec3 vec3Color)
 void TRSShader::addUniform4v(const std::string uniformName, TRSVec4 vec4Color)
 {
     UniformData oData;
-    oData.enType = EnVec4;
+    oData.enType = EnUniformType::EnVec4;
     oData.vec4Value = vec4Color;
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
@@ -111,7 +111,7 @@ void TRSShader::addUniform4v(const std::string uniformName, TRSVec4 vec4Color)
 void TRSShader::addUniformMatrix4(const std::string& uniformName, TRSMatrix mat)
 {
     UniformData oData;
-    oData.enType = EnMat4;
+    oData.enType = EnUniformType::EnMat4;
     oData.mat4Value = mat;
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
@@ -175,22 +175,22 @@ void TRSShader::applayAllStaticUniform()
         UniformData& oData = itr->second;
         switch (oType)
         {
-        case EnFloat:
+        case EnUniformType::EnFloat:
             glUniform1f(loc, oData.fValue);
             break;
-        case EnInt:
+        case EnUniformType::EnInt:
             glUniform1i(loc, oData.nValue);
             break;
-        case EnVec2:
+        case EnUniformType::EnVec2:
             glUniform2f(loc, oData.vec2Value[0], oData.vec2Value[1]);
             break;
-        case EnVec3:
+        case EnUniformType::EnVec3:
             glUniform3f(loc, oData.vec3Value[0], oData.vec3Value[1], oData.vec3Value[2]);
             break;
-        case EnVec4:
+        case EnUniformType::EnVec4:
             glUniform4f(loc, oData.vec4Value[0], oData.vec4Value[1], oData.vec4Value[2], oData.vec4Value[3]);
             break;
-        case EnMat4:
+        case EnUniformType::EnMat4:
             glUniformMatrix4fv(loc, 1, GL_FALSE, &(oData.mat4Value[0][0]));
             break;
         default:

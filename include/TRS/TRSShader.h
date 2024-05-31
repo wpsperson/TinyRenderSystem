@@ -12,7 +12,7 @@
 #include "TRS/TRSMatrix.h"
 #include <map>
 
-enum EnUniformType
+enum class EnUniformType : unsigned char
 {
     EnFloat = 0,
     EnInt,
@@ -35,7 +35,7 @@ struct UniformData
         TRSMatrix mat4Value;
     };
     UniformData()
-        :enType(EnFloat), fValue(0.0f)
+        :enType(EnUniformType::EnFloat), fValue(0.0f)
     {
 
     }
@@ -44,22 +44,22 @@ struct UniformData
         enType = ref.enType;
         switch (enType)
         {
-        case EnFloat:
+        case EnUniformType::EnFloat:
             fValue = ref.fValue;
             break;
-        case EnInt:
+        case EnUniformType::EnInt:
             nValue = ref.nValue;
             break;
-        case EnVec2:
+        case EnUniformType::EnVec2:
             vec2Value = ref.vec2Value;
             break;
-        case EnVec3:
+        case EnUniformType::EnVec3:
             vec3Value = ref.vec3Value;
             break;
-        case EnVec4:
+        case EnUniformType::EnVec4:
             vec4Value = ref.vec4Value;
             break;
-        case EnMat4:
+        case EnUniformType::EnMat4:
             mat4Value = ref.mat4Value;
             break;
         default:
