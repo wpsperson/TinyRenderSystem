@@ -1,33 +1,6 @@
 ﻿#pragma once
 #include "TRS/TRSVector.h"
 
-enum EnVertexStruct
-{
-    EnVertex,
-    EnVertexNormal,
-    EnVertexTexture,
-    EnVertexNormTexture,
-    EnVertexTextureColor,
-    EnVertexColorTexture,
-};
-
-enum VertexAttributeIndex
-{
-    VertexIndex = 0,
-    NormalIndex = 1,
-    TextureCoordIndex0 = 2,
-    ColorIndex = 3,
-    TextureCoordIndex1,
-    TextureCoordIndex2,
-};
-
-enum MeshStruct
-{
-    msVertex = 1,
-    msNormal = 2,
-    msUV = 4,
-    msColor = 8,
-};
 
 // now we use OpenGL 4.6
 static const int g_OpenGLVersionMajor = 4;

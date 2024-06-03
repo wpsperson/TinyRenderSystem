@@ -1,11 +1,11 @@
 ﻿#include "TRS/ObjUtils.h"
 
-#define _USE_MATH_DEFINES
-#include <math.h>
+
 #include <fstream>
 #include <iostream>
 #include <vector>
 
+#include "TRS/TRSMathConst.h"
 #include "TRS/TRSVector.h"
 
 void outputNormal(std::ofstream& stream, double x, double y, double z)
@@ -43,8 +43,8 @@ void generateSphereObj(double radius, int resolution, const std::string& fileNam
     int totalVertexNum = 1;
     outputVertex(stream, 0, 0, radius);
     ptList.push_back(TRSVec3(0, 0, static_cast<float>(radius)));
-    double elevationStep = M_PI / (resolution - 1);
-    double azimuthStep = (M_PI * 2) / (resolution);
+    double elevationStep = kMPI / (resolution - 1);
+    double azimuthStep = kM2PI / (resolution);
     for (int i = 1; i <= resolution - 2; i++)
     {
         double elev = i * elevationStep;

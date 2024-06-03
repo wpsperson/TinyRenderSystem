@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "TRS/TRSExport.h"
-#include "TRS/TRSDefine.h"
+#include "TRS/TRSEnum.h"
 #include "TRS/TRSVector.h"
 #include "TRS/TRSConst.h"
 #include "TRS/TRSBox.h"
