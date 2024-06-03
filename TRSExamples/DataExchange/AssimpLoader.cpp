@@ -5,6 +5,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include "TRS/TRSEnum.h"
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSGroup.h"
 #include "TRS/TRSTexture.h"

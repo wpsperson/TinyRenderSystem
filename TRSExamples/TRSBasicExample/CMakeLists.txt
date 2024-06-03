@@ -6,6 +6,7 @@ LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/glfw-3.2.1/lib)
 
 set(Target_INCLUDE_LIST
+    ${TRSExamPath}/${TARGET_NAME}/VertexData.h
     ${TRSExamPath}/${TARGET_NAME}/GlfwApplication.h
     #${TRSExamPath}/${TARGET_NAME}/E01TextureBox.h
     #${TRSExamPath}/${TARGET_NAME}/E02BasicMaterial.h

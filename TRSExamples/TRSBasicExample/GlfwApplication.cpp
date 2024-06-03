@@ -8,7 +8,6 @@
 #include "TRS/TRSBox.h"
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSGroup.h"
-#include "TRS/TRSResource.h"
 #include "TRS/TRSMathUtil.h"
 #include "TRS/TRSCube.h"
 #include "TRS/TRSEventDispatcher.h"
@@ -17,7 +16,7 @@
 
 #include <glfw/glfw3.h>
 
-
+#include "VertexData.h"
 
 GlfwApplication::GlfwApplication()
 {

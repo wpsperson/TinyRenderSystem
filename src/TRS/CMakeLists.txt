@@ -40,7 +40,6 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/CullVisitor.h
     ${INCLUDE_DIR}/ObjUtils.h
     ${INCLUDE_DIR}/stb_image.h
-    ${INCLUDE_DIR}/TRSResource.h
     ${INCLUDE_DIR}/TRSUtils.h
     ${INCLUDE_DIR}/TRSCamera.h
     ${INCLUDE_DIR}/TRSDefaultCameraHandler.h

@@ -13,16 +13,9 @@
 #include "TRS/TRSStateSet.h"
 #include "TRS/TRSEventDispatcher.h"
 #include "TRS/TRSDefaultCameraHandler.h"
-#include "TRS/TRSConst.h"
 #include "TRS/TRSCamera.h"
-#include "TRS/TRSTexture.h"
-#include "TRS/TRSShader.h"
-#include "TRS/TRSBox.h"
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSGroup.h"
-#include "TRS/TRSResource.h"
-#include "TRS/TRSMathUtil.h"
-#include "TRS/TRSCube.h"
 
 
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
