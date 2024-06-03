@@ -3,9 +3,9 @@
 #include <map>
 #include <vector>
 
+#include "TRS/TRSDefGL.h"
 #include "TRS/TRSVector.h"
 #include "TRS/TRSVAO.h"
-#include "TRS/glad/glad.h"
 
 
 

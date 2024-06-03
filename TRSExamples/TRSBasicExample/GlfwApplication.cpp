@@ -1,6 +1,6 @@
 #include "GlfwApplication.h"
 
-#include "TRS/TRSConst.h"
+#include "TRS/TRSDefConst.h"
 #include "TRS/TRSViewer.h"
 #include "TRS/TRSStateSet.h"
 #include "TRS/TRSTexture.h"

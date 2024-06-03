@@ -5,7 +5,6 @@
 #include <functional>
 
 #include "TRS/TRSExport.h"
-#include "TRS/TRSConst.h"
 #include "TRS/TRSBox.h"
 #include "TRS/TRSMatrix.h"
 

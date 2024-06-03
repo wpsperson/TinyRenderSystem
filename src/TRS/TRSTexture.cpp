@@ -3,10 +3,10 @@
 #include <iostream>
 #include <cstdarg>
 
-#include "TRS/glad/glad.h"
+#include "TRS/TRSDefGL.h"
+#include "TRS/TRSDefConst.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "TRS/stb_image.h"
-#include "TRS/TRSConst.h"
 
 
 using namespace std;

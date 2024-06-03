@@ -1,8 +1,7 @@
 ﻿#include "TRS/TRSShader.h"
 
-#include "TRS/glad/glad.h"
+#include "TRS/TRSDefGL.h"
 #include "TRS/TRSUtils.h"
-#include "TRS/TRSConst.h"
 
 
 TRSShader::TRSShader()

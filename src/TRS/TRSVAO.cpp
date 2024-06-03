@@ -2,8 +2,7 @@
 
 #include <exception>
 
-#include "TRS/glad/glad.h"
-#include "TRS/TRSConst.h"
+#include "TRS/TRSDefGL.h"
 #include "TRS/TRSMesh.h"
 
 

@@ -9,9 +9,10 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/ThirdParty/freetype-2.10.4/lib64)
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/TRS)
 set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSCharacterTexture.h
-    ${INCLUDE_DIR}/TRSConst.h
-    ${INCLUDE_DIR}/TRSMathConst.h
-    ${INCLUDE_DIR}/TRSEnum.h
+    ${INCLUDE_DIR}/TRSDefConst.h
+    ${INCLUDE_DIR}/TRSDefMath.h
+    ${INCLUDE_DIR}/TRSDefEnum.h
+    ${INCLUDE_DIR}/TRSDefGL.h
     ${INCLUDE_DIR}/TRSExport.h
     ${INCLUDE_DIR}/TRSShader.h
     ${INCLUDE_DIR}/TRSStateSet.h

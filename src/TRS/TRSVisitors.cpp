@@ -1,6 +1,6 @@
 ﻿#include "TRS/TRSVisitors.h"
 
-#include "TRS/glad/glad.h"
+#include "TRS/TRSDefGL.h"
 #include "TRS/TRSGeode.h"
 
 PolygonModeVisitor::PolygonModeVisitor()

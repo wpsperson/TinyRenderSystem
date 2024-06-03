@@ -4,8 +4,8 @@
 #include <thread>
 #include <chrono>
 
-#include "TRS/glad/glad.h"
-#include "TRS/TRSConst.h"
+#include "TRS/TRSDefGL.h"
+#include "TRS/TRSDefConst.h"
 #include "TRS/TRSCamera.h"
 #include "TRS/TRSNode.h"
 #include "TRS/TRSStateSet.h"

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 
-#include "TRS/TRSMathConst.h"
+#include "TRS/TRSDefMath.h"
 #include "TRS/TRSVector.h"
 
 void outputNormal(std::ofstream& stream, double x, double y, double z)

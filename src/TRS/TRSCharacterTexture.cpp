@@ -5,7 +5,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "TRS/glad/glad.h"
+#include "TRS/TRSDefGL.h"
 
 
 TRSCharacterTexture* TRSCharacterTexture::m_instance = nullptr;

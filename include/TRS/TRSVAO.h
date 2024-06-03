@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "TRS/TRSExport.h"
-#include "TRS/TRSConst.h"
 
 // interleave vertex attribute to organize the vertex data in VBO
 class TRS_EXPORT TRSVAO

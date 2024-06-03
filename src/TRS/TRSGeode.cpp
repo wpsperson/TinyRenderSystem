@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "TRS/glad/glad.h"
+#include "TRS/TRSDefGL.h"
 #include "TRS/TRSMesh.h"
 #include "TRS/TRSShader.h"
 #include "TRS/TRSTexture.h"

@@ -1,10 +1,10 @@
 ﻿#include "TRS/TRSTextNode.h"
 
+#include "TRS/TRSDefGL.h"
 #include "TRS/TRSMesh.h"
 #include "TRS/TRSCharacterTexture.h"
 #include "TRS/TRSStateSet.h"
 #include "TRS/TRSShader.h"
-#include "TRS/glad/glad.h"
 #include "TRS/TRSTexture.h"
 
 TRSTextNode::TRSTextNode()

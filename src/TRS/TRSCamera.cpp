@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "TRS/TRSConst.h"
+#include "TRS/TRSDefConst.h"
 #include "TRS/TRSBox.h"
 #include "TRS/TRSMathUtil.h"
 

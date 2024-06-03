@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "TRS/TRSMesh.h"
+#include "TRS/TRSDefMath.h"
 
 
 TRSCylinder::TRSCylinder()

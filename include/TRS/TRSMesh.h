@@ -3,9 +3,8 @@
 #include <vector>
 
 #include "TRS/TRSExport.h"
-#include "TRS/TRSEnum.h"
+#include "TRS/TRSDefEnum.h"
 #include "TRS/TRSVector.h"
-#include "TRS/TRSConst.h"
 #include "TRS/TRSBox.h"
 
 class TRSVAO;

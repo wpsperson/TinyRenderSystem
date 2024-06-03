@@ -1,5 +1,5 @@
 ﻿#include "TRS/TRSMathUtil.h"
-#include "TRS/TRSMathConst.h"
+#include "TRS/TRSDefMath.h"
 
 
 float toRadian(float degree)
