@@ -11,6 +11,7 @@
 #include "TRS/TRSStateSet.h"
 #include "TRS/CullVisitor.h"
 #include "TRS/TRSShader.h"
+#include "TRS/TRSTexture.h"
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSTexture.h"
 #include "TRS/TRSVisitors.h"
@@ -22,10 +23,12 @@ TRSViewer::TRSViewer()
 {
     m_polygonModeVisitor = new PolygonModeVisitor;
     m_pCamera = new TRSCamera;
+    m_cullor = new CullVisitor;
 }
 
 TRSViewer::~TRSViewer()
 {
+    delete m_cullor;
     delete m_polygonModeVisitor;
 }
 
@@ -58,6 +61,10 @@ void TRSViewer::initialViewer()
     }
     m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
     glEnable(GL_DEPTH_TEST);
+
+    m_pDefaultStateSet = std::make_shared<TRSStateSet>();
+    m_pDefaultStateSet->getShader()->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
+
 }
 
 void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
@@ -78,22 +85,25 @@ void TRSViewer::frame()
 
 void TRSViewer::updateScene()
 {
-    if (!m_pSceneNode)
+    TRSNode* root = m_pSceneNode.get();
+    if (!root)
     {
         return;
     }
-    m_mapState2Node.clear();
-    CullVisitor oCullVisitor;
-    oCullVisitor.visit(m_pSceneNode.get());
-    m_mapState2Node = oCullVisitor.getMapState2Node();
+    m_cullor->clearUp();
+    m_cullor->visit(root);
 }
 
 void TRSViewer::drawScene()
 {
-    std::map<int, std::vector<TRSNode*>>::iterator itr = m_mapState2Node.begin();
-    for (; itr!=m_mapState2Node.end(); itr++)
+    const std::vector<TRSNode*>& nodes = m_cullor->toRenderNodes();
+    for (TRSNode * pNode : nodes)
     {
-        std::shared_ptr<TRSStateSet> pStateSet = TRSStateSetManager::instance()->findStateSet(itr->first);
+        std::shared_ptr<TRSStateSet> pStateSet = pNode->getStateSet();
+        if (!pStateSet)
+        {
+            pStateSet = m_pDefaultStateSet;
+        }
 
         //渲染组件：shader vao texture camera
         TRSShader* pShader = pStateSet->getShader();
@@ -102,31 +112,26 @@ void TRSViewer::drawScene()
         TRSTexture* pTexture = pStateSet->getTexture();
         pTexture->activeAllTextures(pShader->getProgramId());
 
-        std::vector<TRSNode*>& nodeList = itr->second;
-        for (std::vector<TRSNode*>::iterator itrNode = nodeList.begin(); itrNode!=nodeList.end(); itrNode++)
-        {
-            TRSNode* pNode = *itrNode;
-            pNode->setActive();
-            TRSMatrix modelMatrix = pNode->getMatrix();
-            TRSMatrix viewMatrix = m_pCamera->getViewMatrix();
-            TRSMatrix projectMatrix = m_pCamera->getProjectMatrix();
-            pShader->addUniformMatrix4("model", modelMatrix);
-            pShader->addUniformMatrix4("view", viewMatrix);
-            pShader->addUniformMatrix4("projection", projectMatrix);
-            pShader->addUniform3v("viewPos", m_pCamera->getPosition());
-            pShader->addUniform4v("baseColor", pNode->getColor());
-            pShader->addUniform3v("lightPos", m_pCamera->getPosition()); // s_DefaultLightPos
-            if (pNode->getUpdateCallBack())
-            {
-                pNode->getUpdateCallBack()(pNode);
-            }
-            pShader->applayAllStaticUniform();//Apply Uniform
-            // simple draw call
-            pNode->preProcess();
-            pNode->draw();
-            pNode->postProcess();
-        }
 
+        pNode->setActive();
+        TRSMatrix modelMatrix = pNode->getMatrix();
+        TRSMatrix viewMatrix = m_pCamera->getViewMatrix();
+        TRSMatrix projectMatrix = m_pCamera->getProjectMatrix();
+        pShader->addUniformMatrix4("model", modelMatrix);
+        pShader->addUniformMatrix4("view", viewMatrix);
+        pShader->addUniformMatrix4("projection", projectMatrix);
+        pShader->addUniform3v("viewPos", m_pCamera->getPosition());
+        pShader->addUniform4v("baseColor", pNode->getColor());
+        pShader->addUniform3v("lightPos", m_pCamera->getPosition()); // s_DefaultLightPos
+        if (pNode->getUpdateCallBack())
+        {
+            pNode->getUpdateCallBack()(pNode);
+        }
+        pShader->applayAllStaticUniform();//Apply Uniform
+        // simple draw call
+        pNode->preProcess();
+        pNode->draw();
+        pNode->postProcess();
     }
 }
 

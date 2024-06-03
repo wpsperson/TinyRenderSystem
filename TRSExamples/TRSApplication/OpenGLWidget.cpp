@@ -25,7 +25,6 @@ OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
 
 OpenGLWidget::~OpenGLWidget()
 {
-    TRSStateSetManager::free();
     if (m_pCameraHandler)
     {
         delete m_pCameraHandler;

@@ -108,7 +108,7 @@ std::shared_ptr<TRSStateSet> TRSNode::getOrCreateStateSet()
 {
     if (!m_pStateSet)
     {
-        m_pStateSet = TRSStateSetManager::instance()->createStateSet();
+        m_pStateSet = std::make_shared<TRSStateSet>();
     }
     return m_pStateSet;
 }

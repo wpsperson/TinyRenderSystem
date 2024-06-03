@@ -25,7 +25,6 @@ GlfwApplication::GlfwApplication()
 
 GlfwApplication::~GlfwApplication()
 {
-    TRSStateSetManager::free();
     if (m_pCameraHandler)
     {
         delete m_pCameraHandler;

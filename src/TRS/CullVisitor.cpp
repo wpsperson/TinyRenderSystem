@@ -21,6 +21,11 @@ void CullVisitor::execute(TRSNode* pNode)
 {
     NodeVisitor::execute(pNode);
 
+    if (!pNode)
+    {
+        return;
+    }
+
     if (TRSGroup*pGroup = dynamic_cast<TRSGroup*>(pNode))
     {
         return;
@@ -31,20 +36,19 @@ void CullVisitor::execute(TRSNode* pNode)
         return;
     }
 
-    std::shared_ptr<TRSStateSet> pStateSet = pNode->getStateSet();
-    if (!pStateSet)
+    if (m_useFrustumCull)
     {
-        std::vector<TRSNode*>& nodeList = m_mapState2Node[0];
-        nodeList.push_back(pNode);
+        // TODO Frustum Cull.
     }
-    else
-    {
-        std::vector<TRSNode*>& nodeList = m_mapState2Node[pStateSet->id()];
-        nodeList.push_back(pNode);
-    }
+    m_renderNodes.emplace_back(pNode);
 }
 
-std::map<int, std::vector<TRSNode*>> CullVisitor::getMapState2Node()
+const std::vector<TRSNode*>& CullVisitor::toRenderNodes()
 {
-    return m_mapState2Node;
+    return m_renderNodes;
+}
+
+void CullVisitor::clearUp()
+{
+    m_renderNodes.clear();
 }

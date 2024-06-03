@@ -40,12 +40,9 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSVector.h
     ${INCLUDE_DIR}/CullVisitor.h
     ${INCLUDE_DIR}/ObjUtils.h
-    ${INCLUDE_DIR}/stb_image.h
     ${INCLUDE_DIR}/TRSUtils.h
     ${INCLUDE_DIR}/TRSCamera.h
     ${INCLUDE_DIR}/TRSDefaultCameraHandler.h
-    ${INCLUDE_DIR}/glad/glad.h
-    ${INCLUDE_DIR}/glad/KHR/khrplatform.h
     )
 
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/TRS)
