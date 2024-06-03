@@ -5,8 +5,11 @@
  */
 
 #pragma once
-#include "TRS/TRSExport.h"
+
 #include <vector>
+
+#include "TRS/TRSExport.h"
+#include "TRS/TRSDefine.h"
 #include "TRS/TRSVector.h"
 #include "TRS/TRSConst.h"
 #include "TRS/TRSBox.h"
@@ -28,8 +31,8 @@ public:
     //绘制数组的数量
     int getDrawCount() const;
     int getElementCount() const;
-    int getDrawType();
-    void setDrawType(int drawType);
+    DrawType getDrawType();
+    void setDrawType(DrawType drawType);
     int getDrawParam();
     void setDrawParam(int param);
     void meshBind();
@@ -66,7 +69,7 @@ private:
     float* m_uploadData = nullptr;
     int m_uploadSize = 0;
 
-    int m_nDrawType;                ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
+    DrawType m_nDrawType;                ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
     int m_nPatchParam;              ///<绘制类型为GL_PATCHES时，表示碎片的参数
 };
 #pragma once
