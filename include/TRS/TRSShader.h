@@ -1,16 +1,12 @@
-﻿/*!  
- *@brief    渲染系统的着色器
- *@author   wangps
- *@date     2019年5月3日
- */
+﻿#pragma once
 
-#pragma once
 #include <string>
 #include <vector>
+#include <map>
+
 #include "TRS/TRSExport.h"
 #include "TRS/TRSVector.h"
 #include "TRS/TRSMatrix.h"
-#include <map>
 
 enum class EnUniformType : unsigned char
 {

@@ -1,23 +1,17 @@
-﻿/*!  
- *@brief    各种资源文件
- *@author   wangps
- *@date     2019年5月3日
- */
-
-#pragma once
+﻿#pragma once
 #include <vector>
 #include "TRS/TRSVector.h"
 
 static float Rectangle4Vertices[] = {
-    0.5f, 0.5f, -0.5f,   // 右上角
-    0.5f, -0.5f, -0.5f,  // 右下角
-    -0.5f, -0.5f, -0.5f, // 左下角
-    -0.5f, 0.5f, -0.5f   // 左上角
+    0.5f, 0.5f, -0.5f,   // right up
+    0.5f, -0.5f, -0.5f,  // right bottom
+    -0.5f, -0.5f, -0.5f, // left bottom
+    -0.5f, 0.5f, -0.5f   // left up
 };
 
-static unsigned int Rectangle6Indices[] = { // 注意索引从0开始! 
-    0, 1, 3, // 第一个三角形
-    1, 2, 3  // 第二个三角形
+static unsigned int Rectangle6Indices[] = {
+    0, 1, 3,
+    1, 2, 3
 };
 
 static std::vector<TRSVec3> s_EmptyVec3;

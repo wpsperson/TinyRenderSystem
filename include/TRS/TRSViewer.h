@@ -1,15 +1,11 @@
-﻿/*!
- *@brief     
- *@author     wangps
- *@date       2019年5月11日
- */
+﻿#pragma once
 
-#pragma once
-#include "TRS/TRSExport.h"
 #include <memory>
 #include <map>
 #include <vector>
 #include <chrono>
+
+#include "TRS/TRSExport.h"
 #include "TRS/TRSVector.h"
 
 class TRSCamera;

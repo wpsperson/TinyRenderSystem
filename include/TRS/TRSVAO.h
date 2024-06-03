@@ -1,16 +1,10 @@
-﻿/*!  
- *@brief    VAO
- *@author   wangps
- *@date     2019年5月3日
- */
+﻿#pragma once
 
-#pragma once
 #include "TRS/TRSExport.h"
-#include "TRS/TRSVAOBase.h"
 #include "TRS/TRSConst.h"
 
 // interleave vertex attribute to organize the vertex data in VBO
-class TRS_EXPORT TRSVAO : public TRSVAOBase
+class TRS_EXPORT TRSVAO
 {
 public:
     TRSVAO();

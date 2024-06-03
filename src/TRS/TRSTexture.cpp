@@ -1,6 +1,8 @@
 ﻿#include "TRS/TRSTexture.h"
+
 #include <iostream>
 #include <cstdarg>
+
 #include "TRS/glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "TRS/stb_image.h"

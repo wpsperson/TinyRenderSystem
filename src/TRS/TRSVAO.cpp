@@ -1,5 +1,7 @@
 ﻿#include "TRS/TRSVAO.h"
+
 #include <exception>
+
 #include "TRS/glad/glad.h"
 #include "TRS/TRSConst.h"
 #include "TRS/TRSMesh.h"
@@ -38,7 +40,7 @@ void TRSVAO::createVBO()
 
 void TRSVAO::uploadVBO(float* vertices, int verticeSize)
 {
-    glBufferData(GL_ARRAY_BUFFER, verticeSize * sizeof(float), vertices, GL_STATIC_DRAW);//注意这里数量的大小就是vertices的内存大小
+    glBufferData(GL_ARRAY_BUFFER, verticeSize * sizeof(float), vertices, GL_STATIC_DRAW);
 }
 
 void TRSVAO::createEBO()
@@ -49,7 +51,7 @@ void TRSVAO::createEBO()
 
 void TRSVAO::uploadEBO(unsigned int* indice, int indexCount)
 {
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indice, GL_STATIC_DRAW);//注意这里数量的大小就是indice的内存大小
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indice, GL_STATIC_DRAW);
 }
 
 void TRSVAO::setVertexAttrib(int MeshStructs)

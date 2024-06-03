@@ -1,11 +1,11 @@
 ﻿#include "TRS/TRSViewer.h"
-#include "TRS/TRSConst.h"
+
 #include <iostream>
 #include <thread>
 #include <chrono>
 
 #include "TRS/glad/glad.h"
-
+#include "TRS/TRSConst.h"
 #include "TRS/TRSCamera.h"
 #include "TRS/TRSNode.h"
 #include "TRS/TRSStateSet.h"

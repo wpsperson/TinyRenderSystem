@@ -1,10 +1,4 @@
-﻿/*!  
- *@brief    显示节点组合节点
- *@author   wangps
- *@date     2019年5月5日
- */
-
-#pragma once
+﻿#pragma once
 #include "TRS/TRSExport.h"
 #include "TRS/TRSNode.h"
 #include <vector>

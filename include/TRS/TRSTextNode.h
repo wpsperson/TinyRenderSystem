@@ -1,9 +1,10 @@
 ﻿#pragma once
+
+#include <string>
+
 #include "TRS/TRSExport.h"
 #include "TRS/TRSNode.h"
 #include "TRS/TRSVector.h"
-#include <string>
-
 
 class TRS_EXPORT TRSTextNode : public TRSNode
 {

@@ -1,8 +1,8 @@
 ﻿#include "TRS/TRSGeode.h"
 
 #include <iostream>
-#include "TRS/glad/glad.h"
 
+#include "TRS/glad/glad.h"
 #include "TRS/TRSMesh.h"
 #include "TRS/TRSShader.h"
 #include "TRS/TRSTexture.h"
@@ -41,7 +41,7 @@ void TRSGeode::setIndexArray(const std::vector<unsigned int>& indices)
 
 void TRSGeode::setActive()
 {
-    m_pMesh->meshBind();
+    m_pMesh->bindMesh();
 }
 
 void TRSGeode::setPolygonMode(int polyMode)
@@ -61,7 +61,7 @@ std::string TRSGeode::debugInfo()
 
 void TRSGeode::preProcess()
 {
-    if (GL_PATCHES == m_pMesh->getDrawType())
+    if (DrawType::PATCHES == m_pMesh->getDrawType())
     {
         glPatchParameteri(GL_PATCH_VERTICES, m_pMesh->getDrawParam());
     }
@@ -72,17 +72,10 @@ void TRSGeode::preProcess()
     }
 }
 
-// #define GL_POINTS 0x0000
-// #define GL_LINES 0x0001
-// #define GL_LINE_LOOP 0x0002
-// #define GL_LINE_STRIP 0x0003
-// #define GL_TRIANGLES 0x0004
-// #define GL_TRIANGLE_STRIP 0x0005
-// #define GL_TRIANGLE_FAN 0x0006
 void TRSGeode::drawInternal()
 {
     int nElementCount = m_pMesh->getElementCount();
-    int OpenGLDrawType = m_pMesh->getDrawType();
+    GLenum OpenGLDrawType = static_cast<GLenum>(m_pMesh->getDrawType());
     if (nElementCount > 0)
     {
         glDrawElements(OpenGLDrawType, m_pMesh->getElementCount(), GL_UNSIGNED_INT, 0);

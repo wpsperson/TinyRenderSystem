@@ -1,4 +1,5 @@
 #include "TRS/TRSGeometry.h"
+
 #include "TRS/TRSMesh.h"
 
 
@@ -21,7 +22,7 @@ void TRSGeometry::tessellation()
     {
         m_mesh = new TRSMesh;
     }
-    // overwrite by subclass
+    // override by subclass
     m_dirty = false;
 }
 

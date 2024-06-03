@@ -1,10 +1,4 @@
-﻿/*!  
- *@brief    TinyRenderSystem 的常量
- *@author   wangps
- *@date     2019年5月3日
- */
-
-#pragma once
+﻿#pragma once
 #include "TRS/TRSVector.h"
 
 enum EnVertexStruct

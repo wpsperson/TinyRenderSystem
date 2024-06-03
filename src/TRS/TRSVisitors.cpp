@@ -1,4 +1,5 @@
 ﻿#include "TRS/TRSVisitors.h"
+
 #include "TRS/glad/glad.h"
 #include "TRS/TRSGeode.h"
 

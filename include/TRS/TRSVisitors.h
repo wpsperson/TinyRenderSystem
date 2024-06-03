@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 #include "TRS/NodeVisitor.h"
 
 class PolygonModeVisitor : public NodeVisitor

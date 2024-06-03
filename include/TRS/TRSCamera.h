@@ -1,10 +1,4 @@
-﻿/*!  
- *@brief    相机
- *@author   wangps
- *@date     2019年5月3日
- */
-
-#pragma once
+﻿#pragma once
 #include "TRS/TRSExport.h"
 #include "TRS/TRSMatrix.h"
 #include "TRS/TRSVector.h"
@@ -52,10 +46,10 @@ protected:
     void updateProjectMatrix();
 protected:
     // view matrix parameter
-    TRSVec3 m_pos;        //相机当前位置
+    TRSVec3 m_pos;          // camera position
     TRSVec3 m_lookAt;       // the center position that camera is looking at.
-    TRSVec3 m_right;      //相机的右手方向，即局部坐标系的X轴向在世界坐标系中的向量
-    TRSVec3 m_up;         //相机的头顶方向，即局部坐标系的Y轴向在世界坐标系中的向量
+    TRSVec3 m_right;        // camera right direction
+    TRSVec3 m_up;           // camera up direction
     TRSMatrix m_viewMatrix;
     bool m_viewMatrixNeedUpdate = true;
     // project matrix parameter

@@ -1,6 +1,6 @@
 ﻿#include "TRS/NodeVisitor.h"
-#include "TRS/TRSNode.h"
 
+#include "TRS/TRSNode.h"
 
 
 NodeVisitor::NodeVisitor()

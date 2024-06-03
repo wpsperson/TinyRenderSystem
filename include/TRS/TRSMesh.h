@@ -1,9 +1,3 @@
-/*!  
- *@brief    represent a mesh
- *@author   wangps
- *@date     2022-6-25
- */
-
 #pragma once
 
 #include <vector>
@@ -28,18 +22,14 @@ public:
     void setIndices(const std::vector<unsigned int>& indices);
     void generateNormals();
     const TRSBox& boundingBox() const;
-    //绘制数组的数量
     int getDrawCount() const;
     int getElementCount() const;
     DrawType getDrawType();
     void setDrawType(DrawType drawType);
     int getDrawParam();
     void setDrawParam(int param);
-    void meshBind();
 
-    void uploadMesh();
-
-    static std::vector<TRSVec3> convertToVec3Array(float* arr, int count);
+    void bindMesh();
 
     static int computeVertexAttribStride(int vertexStructType);
 
@@ -48,7 +38,7 @@ protected:
 
     void upload();
 
-    bool combineMeshData();
+    float *combineMeshData(int &bufferSize);
 
     void updateBoundingBox();
 
@@ -61,14 +51,10 @@ private:
     std::vector<TRSVec2> m_texCoords;
     std::vector<unsigned int> m_indexs;
     TRSBox m_boundingBox;
-    bool m_dirty = false;
-    // temp
+    bool m_needUpload = false;
+
     TRSVAO* m_vao = nullptr;
-
     int m_vertexStructType = msVertex;
-    float* m_uploadData = nullptr;
-    int m_uploadSize = 0;
-
     DrawType m_nDrawType;                ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
     int m_nPatchParam;              ///<绘制类型为GL_PATCHES时，表示碎片的参数
 };

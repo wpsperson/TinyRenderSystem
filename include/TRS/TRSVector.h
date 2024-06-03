@@ -1,11 +1,8 @@
-﻿/*!
- *@brief    Define Vector
- *@date     2021-8-30
- */
+﻿#pragma once
 
-#pragma once
-#include "TRS/TRSExport.h"
 #include <cmath>
+
+#include "TRS/TRSExport.h"
 
 template<int N>
 class TRSVector

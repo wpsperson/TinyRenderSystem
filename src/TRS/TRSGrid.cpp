@@ -1,5 +1,7 @@
 #include "TRS/TRSGrid.h"
+
 #include <vector>
+
 #include "TRS/TRSMesh.h"
 
 TRSGrid::TRSGrid()

@@ -1,6 +1,8 @@
 #include "TRS/TRSCube.h"
-#include "TRS/TRSMesh.h"
+
 #include <vector>
+
+#include "TRS/TRSMesh.h"
 
 
 TRSCube::TRSCube()

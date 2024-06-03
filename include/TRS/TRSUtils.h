@@ -1,12 +1,8 @@
-﻿/*!  
- *@brief    工具方法和工具类
- *@author   wangps
- *@date     2019年5月3日
- */
+﻿#pragma once
 
-#pragma once
 #include <iostream>
 #include <string>
+
 #include "TRS/TRSExport.h"
 
 static double TRS_PI = 3.141592653589793238;

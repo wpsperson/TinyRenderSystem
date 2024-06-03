@@ -1,10 +1,12 @@
 ﻿#include "TRS/ObjUtils.h"
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <fstream>
 #include <iostream>
-#include "TRS/TRSVector.h"
 #include <vector>
+
+#include "TRS/TRSVector.h"
 
 void outputNormal(std::ofstream& stream, double x, double y, double z)
 {

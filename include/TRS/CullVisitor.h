@@ -1,10 +1,4 @@
-﻿/*!
- *@brief     
- *@author     wangps
- *@date       2019年5月11日
- */
-
-#pragma once
+﻿#pragma once
 #include "TRS/TRSExport.h"
 #include "TRS/NodeVisitor.h"
 #include <map>

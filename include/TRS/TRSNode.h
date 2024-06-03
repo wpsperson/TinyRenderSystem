@@ -1,18 +1,13 @@
-﻿/*!  
- *@brief    显示节点基类
- *@author   wangps
- *@date     2019年5月5日
- */
+﻿#pragma once
 
-#pragma once
-#include "TRS/TRSExport.h"
-#include "TRS/TRSConst.h"
-#include "TRS/TRSBox.h"
-#include "TRS/TRSMatrix.h"
 #include <memory>
 #include <string>
 #include <functional>
 
+#include "TRS/TRSExport.h"
+#include "TRS/TRSConst.h"
+#include "TRS/TRSBox.h"
+#include "TRS/TRSMatrix.h"
 
 class NodeVisitor;
 class TRSStateSet;

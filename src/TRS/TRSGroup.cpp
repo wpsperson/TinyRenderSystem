@@ -1,7 +1,7 @@
 ﻿#include "TRS/TRSGroup.h"
+
 #include "TRS/TRSNode.h"
 #include "TRS/NodeVisitor.h"
-
 
 
 TRSGroup::TRSGroup()

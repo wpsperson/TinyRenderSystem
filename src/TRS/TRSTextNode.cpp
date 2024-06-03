@@ -1,4 +1,5 @@
 ﻿#include "TRS/TRSTextNode.h"
+
 #include "TRS/TRSMesh.h"
 #include "TRS/TRSCharacterTexture.h"
 #include "TRS/TRSStateSet.h"
@@ -80,7 +81,7 @@ void TRSTextNode::setActive()
         generateText();
         m_dirty = false;
     }
-    m_pMesh->meshBind();
+    m_pMesh->bindMesh();
 }
 
 std::string TRSTextNode::debugInfo()

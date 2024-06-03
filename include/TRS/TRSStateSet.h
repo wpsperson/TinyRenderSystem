@@ -1,14 +1,10 @@
-﻿/*!
-*@brief    渲染状态集 状态集管理器
-*@author   wangps
-*@date     2019年5月5日
-*/
+﻿#pragma once
 
-#pragma once
-#include "TRS/TRSExport.h"
 #include <vector>
 #include <map>
 #include <memory>
+
+#include "TRS/TRSExport.h"
 
 class TRSNode;
 class TRSShader;
@@ -36,7 +32,7 @@ protected:
 
 protected:
     int m_nID;
-    std::vector<TRSNode*> m_pNodes;//共享此状态集的显示节点
+    std::vector<TRSNode*> m_pNodes; // nodes that share this state set.
     TRSStateSetManager* m_pManager;
     TRSShader* m_pShader;
     TRSTexture* m_pTexture;

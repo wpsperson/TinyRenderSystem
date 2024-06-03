@@ -1,9 +1,3 @@
-/*!  
- *@brief    Geometry Base
- *@author   wangps
- *@date     2022-6-28
- */
-
 #pragma once
 #include "TRS/TRSExport.h"
 

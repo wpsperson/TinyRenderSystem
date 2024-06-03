@@ -11,12 +11,12 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSCharacterTexture.h
     ${INCLUDE_DIR}/TRSConfig.h
     ${INCLUDE_DIR}/TRSConst.h
+    ${INCLUDE_DIR}/TRSDefine.h
     ${INCLUDE_DIR}/TRSExport.h
     ${INCLUDE_DIR}/TRSShader.h
     ${INCLUDE_DIR}/TRSStateSet.h
     ${INCLUDE_DIR}/TRSTexture.h
     ${INCLUDE_DIR}/TRSVAO.h
-    ${INCLUDE_DIR}/TRSVAOBase.h
     ${INCLUDE_DIR}/TRSViewer.h
     ${INCLUDE_DIR}/TRSVisitors.h
     ${INCLUDE_DIR}/TRSBox.h
@@ -75,7 +75,6 @@ set(Target_SRC_LIST
     ${SRC_DIR}/TRSMatrix.cpp
     ${SRC_DIR}/CullVisitor.cpp
     ${SRC_DIR}/ObjUtils.cpp
-    ${SRC_DIR}/TRSResource.cpp
     ${SRC_DIR}/TRSUtils.cpp
     ${SRC_DIR}/TRSCamera.cpp
     ${SRC_DIR}/TRSDefaultCameraHandler.cpp

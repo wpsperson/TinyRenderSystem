@@ -1,10 +1,4 @@
-﻿/*!  
- *@brief    user custom config define
- *@author   wangps
- *@date     2021年5月1日
- */
-
-#pragma once
+﻿#pragma once
 
 
 /**

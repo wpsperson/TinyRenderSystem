@@ -10,7 +10,7 @@
 
 
 TRSMesh::TRSMesh()
-    : m_nDrawType(GL_TRIANGLES)
+    : m_nDrawType(DrawType::TRIANGLES)
 {
     m_vao = new TRSVAO();
 }
@@ -18,42 +18,37 @@ TRSMesh::TRSMesh()
 TRSMesh::~TRSMesh()
 {
     delete m_vao;
-    if (m_uploadData)
-    {
-        delete[] m_uploadData;
-        m_uploadData = nullptr;
-    }
 }
 
 void TRSMesh::setVertex(const std::vector<TRSVec3>& vertexs)
 {
     m_vertexs = vertexs;
     updateBoundingBox();
-    m_dirty = true;
+    m_needUpload = true;
 }
 
 void TRSMesh::setNormal(const std::vector<TRSVec3>& normals)
 {
     m_normals = normals;
-    m_dirty = true;
+    m_needUpload = true;
 }
 
 void TRSMesh::setColor(const std::vector<TRSVec3>& colors)
 {
     m_colors = colors;
-    m_dirty = true;
+    m_needUpload = true;
 }
 
 void TRSMesh::setUV(const std::vector<TRSVec2>& uv)
 {
     m_texCoords = uv;
-    m_dirty = true;
+    m_needUpload = true;
 }
 
 void TRSMesh::setIndices(const std::vector<unsigned int>& indices)
 {
     m_indexs = indices;
-    m_dirty = true;
+    m_needUpload = true;
 }
 
 void TRSMesh::generateNormals()
@@ -132,17 +127,13 @@ int TRSMesh::getElementCount() const
     return static_cast<int>(m_indexs.size());
 }
 
-int TRSMesh::getDrawType()
+DrawType TRSMesh::getDrawType()
 {
     return m_nDrawType;
 }
 
-void TRSMesh::setDrawType(int drawType)
+void TRSMesh::setDrawType(DrawType drawType)
 {
-    if (drawType == GL_LINE)
-    {
-        throw std::exception("GL_LINE is not a valid primitive type! use GL_LINES!");
-    }
     m_nDrawType = drawType;
 }
 
@@ -156,39 +147,18 @@ void TRSMesh::setDrawParam(int param)
     m_nPatchParam = param;
 }
 
-void TRSMesh::meshBind()
+void TRSMesh::bindMesh()
 {
-    uploadMesh();
-    m_vao->bindVAO();
-}
-
-void TRSMesh::uploadMesh()
-{
-    if (m_dirty)
+    if (m_needUpload)
     {
         if (!checkValid())
         {
             throw "TRSMesh::updateMesh invalid";
         }
         upload();
-        m_dirty = false;
+        m_needUpload = false;
     }
-}
-
-std::vector<TRSVec3> TRSMesh::convertToVec3Array(float* arr, int count)
-{
-    std::vector<TRSVec3> result;
-    int result_count = count / 3;
-    result.reserve(result_count);
-    TRSVec3 pt;
-    for (int ii = 0; ii < result_count; ii++)
-    {
-        pt[0] = arr[ii * 3 + 0];
-        pt[1] = arr[ii * 3 + 1];
-        pt[2] = arr[ii * 3 + 2];
-        result.emplace_back(pt);
-    }
-    return result;
+    m_vao->bindVAO();
 }
 
 int TRSMesh::computeVertexAttribStride(int vertexStructType)
@@ -240,8 +210,10 @@ void TRSMesh::upload()
     m_vao->createVAO();
     m_vao->bindVAO();
     m_vao->createVBO();
-    combineMeshData();
-    m_vao->uploadVBO(m_uploadData, m_uploadSize);
+    int bufferSize;
+    float* buffer = combineMeshData(bufferSize);
+    m_vao->uploadVBO(buffer, bufferSize);
+    delete[]buffer;
     m_vao->setVertexAttrib(m_vertexStructType);
     if (!m_indexs.empty())
     {
@@ -254,7 +226,7 @@ void TRSMesh::upload()
 }
 
 // we use interleaving method to combine the mesh data.
-bool TRSMesh::combineMeshData()
+float * TRSMesh::combineMeshData(int& bufferSize)
 {
     bool existNormal    = !m_normals.empty();
     bool existUV        = !m_texCoords.empty();
@@ -275,16 +247,11 @@ bool TRSMesh::combineMeshData()
     // compute data size and allocate memory.
     int unitSize = computeVertexAttribStride(m_vertexStructType);
     int ptNum = static_cast<int>(m_vertexs.size());
-    m_uploadSize = ptNum * unitSize;
-    if (m_uploadData)
-    {
-        delete[] m_uploadData;
-        m_uploadData = nullptr;
-    }
-    m_uploadData = new float[m_uploadSize];
 
+    bufferSize = ptNum * unitSize;
+    float *uploadData = new float[bufferSize];
 
-    float* dst = m_uploadData;
+    float* dst = uploadData;
     float* vertexSrc = reinterpret_cast<float*>(&(m_vertexs[0]));
     float* normalSrc = existNormal ? reinterpret_cast<float*>(&(m_normals[0])) : nullptr;
     float* texCoorSrc = existUV ? reinterpret_cast<float*>(&(m_texCoords[0])) : nullptr;
@@ -313,7 +280,7 @@ bool TRSMesh::combineMeshData()
             dst += 3;
         }
     }
-    return true;
+    return uploadData;
 }
 
 void TRSMesh::updateBoundingBox()

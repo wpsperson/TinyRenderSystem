@@ -1,5 +1,7 @@
 ﻿#include "TRS/TRSCamera.h"
+
 #include <iostream>
+
 #include "TRS/TRSConst.h"
 #include "TRS/TRSConfig.h"
 #include "TRS/TRSBox.h"

@@ -1,13 +1,13 @@
-﻿/*!
- *@brief    4x4Matrix(Column-Major Matrix)
- *@date     2021-6-23
- */
+﻿#pragma once
 
-#pragma once
 #include <math.h>
 #include "TRS/TRSExport.h"
 #include "TRS/TRSVector.h"
 
+/*!
+ *@brief    4x4Matrix(Column-Major Matrix)
+ *@date     2021-6-23
+ */
 class TRS_EXPORT TRSMatrix
 {
 public:

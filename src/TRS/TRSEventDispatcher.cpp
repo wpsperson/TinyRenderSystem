@@ -1,7 +1,7 @@
 ﻿#include "TRS/TRSEventDispatcher.h"
+
 #include "TRS/TRSEventHandler.h"
 #include "TRS/TRSEventDefine.h"
-
 
 
 TRSEventDispatcher::TRSEventDispatcher()

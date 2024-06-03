@@ -1,4 +1,0 @@
-﻿#include "TRS/TRSResource.h"
-
-
-

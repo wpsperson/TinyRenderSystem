@@ -1,9 +1,12 @@
 ﻿#include "TRS/TRSCharacterTexture.h"
-#include "TRS/glad/glad.h"
+
 #include <algorithm>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
+#include "TRS/glad/glad.h"
+
 
 TRSCharacterTexture* TRSCharacterTexture::m_instance = nullptr;
 
