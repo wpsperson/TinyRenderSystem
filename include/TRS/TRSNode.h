@@ -9,8 +9,6 @@
 #include "TRS/TRSMatrix.h"
 
 class NodeVisitor;
-class TRSStateSet;
-class TRSMesh;
 class TRSNode;
 
 typedef std::function<void(TRSNode*)> NodeUpdateFunc;
@@ -25,10 +23,6 @@ public:
 
     void setMatrix(const TRSMatrix& mat);
 
-    void setMesh(TRSMesh* mesh);
-
-    TRSMesh* getMesh()const;
-
     virtual void setActive();// used to bind vao
 
     virtual void preProcess();
@@ -39,7 +33,7 @@ public:
 
     virtual void traverse(NodeVisitor& visitor);
 
-    virtual TRSBox boundingBox() const;
+    virtual TRSBox boundingBox() const = 0;
 
     TRSVec4 getColor() const;
 
@@ -63,7 +57,6 @@ protected:
     TRSMatrix m_mat;
     TRSVec4 m_matColor;
     std::string m_name;
-    std::shared_ptr<TRSMesh> m_pMesh;
     NodeUpdateFunc m_UpdateFunc;
 };
 

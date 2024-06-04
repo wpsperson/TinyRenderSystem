@@ -12,7 +12,7 @@ TRSGeode::TRSGeode()
     : TRSNode()
     , m_polygonMode(GL_FILL)
 {
-
+    m_pMesh = std::make_shared<TRSMesh>();
 }
 
 TRSGeode::~TRSGeode()
@@ -23,6 +23,21 @@ TRSGeode::~TRSGeode()
 void TRSGeode::draw()
 {
     drawInternal();
+}
+
+TRSBox TRSGeode::boundingBox() const
+{
+    return m_pMesh->boundingBox();
+}
+
+void TRSGeode::setMesh(TRSMesh* mesh)
+{
+    m_pMesh = std::make_shared<TRSMesh>(*mesh);
+}
+
+TRSMesh* TRSGeode::getMesh() const
+{
+    return m_pMesh.get();
 }
 
 void TRSGeode::setTexture(std::shared_ptr<TRSTexture> texture)

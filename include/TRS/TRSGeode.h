@@ -9,6 +9,7 @@
 
 
 class TRSTexture;
+class TRSMesh;
 
 class TRS_EXPORT TRSGeode : public TRSNode
 {
@@ -17,7 +18,13 @@ public:
 
     ~TRSGeode();
 
-    virtual void draw() override;
+    void draw() override;
+
+    TRSBox boundingBox() const override;
+
+    void setMesh(TRSMesh* mesh);
+
+    TRSMesh* getMesh()const;
 
     void setTexture(std::shared_ptr<TRSTexture> texture);
 
@@ -54,8 +61,9 @@ protected:
 
 protected:
     int m_polygonMode;
-    int m_renderMode;
+    int m_renderMode = RenderMode::Shaded;
     std::shared_ptr<TRSTexture> m_pTexture;
+    std::shared_ptr<TRSMesh> m_pMesh;
     TRSMesh* m_wireframe = nullptr;
     TRSMesh* m_points = nullptr;
 };

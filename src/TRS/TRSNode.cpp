@@ -1,8 +1,6 @@
 ﻿#include "TRS/TRSNode.h"
 
 #include "TRS/TRSDefConst.h"
-#include "TRS/TRSMesh.h"
-
 
 
 TRSNode::TRSNode()
@@ -10,7 +8,6 @@ TRSNode::TRSNode()
     , m_UpdateFunc(nullptr)
     , m_matColor(s_DefaultNodeColor)
 {
-    m_pMesh = std::make_shared<TRSMesh>();
 }
 
 TRSNode::~TRSNode()
@@ -26,16 +23,6 @@ TRSMatrix TRSNode::getMatrix()
 void TRSNode::setMatrix(const TRSMatrix& mat)
 {
     m_mat = mat;
-}
-
-void TRSNode::setMesh(TRSMesh* mesh)
-{
-    m_pMesh = std::make_shared<TRSMesh>(*mesh);
-}
-
-TRSMesh* TRSNode::getMesh() const
-{
-    return m_pMesh.get();
 }
 
 void TRSNode::setActive()
@@ -91,11 +78,6 @@ void TRSNode::postProcess()
 void TRSNode::traverse(NodeVisitor& visitor)
 {
 
-}
-
-TRSBox TRSNode::boundingBox() const
-{
-    return m_pMesh->boundingBox();
 }
 
 void TRSNode::setUpdateCallBack(NodeUpdateFunc func)
