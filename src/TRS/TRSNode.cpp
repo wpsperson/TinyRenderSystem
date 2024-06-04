@@ -1,7 +1,6 @@
 ﻿#include "TRS/TRSNode.h"
 
 #include "TRS/TRSDefConst.h"
-#include "TRS/TRSStateSet.h"
 #include "TRS/TRSMesh.h"
 
 
@@ -37,6 +36,16 @@ void TRSNode::setMesh(TRSMesh* mesh)
 TRSMesh* TRSNode::getMesh() const
 {
     return m_pMesh.get();
+}
+
+void TRSNode::setTexture(std::shared_ptr<TRSTexture> texture)
+{
+    m_pTexture = texture;
+}
+
+TRSTexture* TRSNode::getTexture() const
+{
+    return m_pTexture.get();
 }
 
 void TRSNode::setActive()
@@ -97,25 +106,6 @@ void TRSNode::traverse(NodeVisitor& visitor)
 TRSBox TRSNode::boundingBox() const
 {
     return m_pMesh->boundingBox();
-}
-
-std::shared_ptr<TRSStateSet> TRSNode::getStateSet() const
-{
-    return m_pStateSet;
-}
-
-std::shared_ptr<TRSStateSet> TRSNode::getOrCreateStateSet()
-{
-    if (!m_pStateSet)
-    {
-        m_pStateSet = std::make_shared<TRSStateSet>();
-    }
-    return m_pStateSet;
-}
-
-void TRSNode::setStateSet(std::shared_ptr<TRSStateSet> pStateSet)
-{
-    m_pStateSet = pStateSet;
 }
 
 void TRSNode::setUpdateCallBack(NodeUpdateFunc func)

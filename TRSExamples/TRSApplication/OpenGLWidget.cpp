@@ -10,7 +10,6 @@
 #include <QtWidgets/QFileDialog>
 
 #include "TRS/TRSViewer.h"
-#include "TRS/TRSStateSet.h"
 #include "TRS/TRSEventDispatcher.h"
 #include "TRS/TRSDefaultCameraHandler.h"
 #include "TRS/TRSCamera.h"
@@ -64,7 +63,6 @@ void OpenGLWidget::initializeGL()
     //TRSMesh* mesh = cube->getMesh();
     //std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     //pNode->setMesh(mesh);
-    //std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
     //pSS->getTexture()->createTexture("resources/textures/opengl.png");
     //pSS->getTexture()->createTexture("resources/textures/cube.png");
     //pSS->getShader()->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");

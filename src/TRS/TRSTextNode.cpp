@@ -3,7 +3,6 @@
 #include "TRS/TRSDefGL.h"
 #include "TRS/TRSMesh.h"
 #include "TRS/TRSCharacterTexture.h"
-#include "TRS/TRSStateSet.h"
 #include "TRS/TRSShader.h"
 #include "TRS/TRSTexture.h"
 
@@ -14,13 +13,12 @@ TRSTextNode::TRSTextNode()
 {
     m_matColor = TRSVec4(0.5f, 1.0f, 0.5f, 1.0f);
     m_size = 0.1f;
-    getOrCreateStateSet();
-    m_pStateSet->getShader()->createProgram("shaders/FontsVertex.glsl", "shaders/FontsFragment .glsl");
+
 
     // deal texture
     unsigned int textureID = TRSCharacterTexture::instance()->getTextureID();
     TextureData texData(textureID, "all_unicode_texture", "ourTexture");
-    m_pStateSet->getTexture()->addSharedTexture(texData);
+    getTexture()->addSharedTexture(texData);
 }
 
 TRSTextNode::~TRSTextNode()
@@ -86,11 +84,11 @@ void TRSTextNode::setActive()
 
 std::string TRSTextNode::debugInfo()
 {
-    TRSShader* pShader = m_pStateSet->getShader();
-    TRSTexture* pTexture = m_pStateSet->getTexture();
     std::string strDebugInfo;
-    strDebugInfo += pShader->debugInfo();
-    strDebugInfo += pTexture->debugInfo();
+    if (TRSTexture* pTexture = getTexture())
+    {
+        strDebugInfo += pTexture->debugInfo();
+    }
     return strDebugInfo;
 }
 

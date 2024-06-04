@@ -30,9 +30,6 @@ public:
 
     std::shared_ptr<TRSNode> retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene);
 
-protected:
-    void createShaderByMesh(aiMesh *pMesh, TRSShader* shader);
-
 private:
     TRSGroup* m_pGroupNode;
     std::string m_strDirectory;

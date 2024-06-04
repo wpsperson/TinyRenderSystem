@@ -127,6 +127,11 @@ int TRSMesh::getElementCount() const
     return static_cast<int>(m_indexs.size());
 }
 
+int TRSMesh::getMeshStruct() const
+{
+    return m_vertexStructType;
+}
+
 DrawType TRSMesh::getDrawType()
 {
     return m_nDrawType;

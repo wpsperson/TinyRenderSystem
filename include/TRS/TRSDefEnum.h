@@ -13,14 +13,13 @@ enum class DrawType : unsigned char
     PATCHES = 14,
 };
 
-enum VertexAttributeIndex
+enum class ShaderType : unsigned char
 {
-    VertexIndex = 0,
-    NormalIndex = 1,
-    TextureCoordIndex0 = 2,
-    ColorIndex = 3,
-    TextureCoordIndex1,
-    TextureCoordIndex2,
+    Default = 0,    // only has vertex
+    Phong,          // vertex and normal
+    PhongTexture,   // vertex normal uv, texture
+    DualTexture,    // vertex uv, tex1 tex2
+    FontShader
 };
 
 enum MeshStruct
@@ -29,4 +28,14 @@ enum MeshStruct
     msNormal = 2,
     msUV = 4,
     msColor = 8,
+};
+
+enum VertexAttributeIndex
+{
+    VertexIndex = 0,
+    NormalIndex = 1,
+    TextureCoordIndex0 = 2,
+    ColorIndex = 3,
+    TextureCoordIndex1,
+    TextureCoordIndex2,
 };

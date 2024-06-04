@@ -15,7 +15,6 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSDefGL.h
     ${INCLUDE_DIR}/TRSExport.h
     ${INCLUDE_DIR}/TRSShader.h
-    ${INCLUDE_DIR}/TRSStateSet.h
     ${INCLUDE_DIR}/TRSTexture.h
     ${INCLUDE_DIR}/TRSVAO.h
     ${INCLUDE_DIR}/TRSViewer.h
@@ -49,7 +48,6 @@ set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/TRS)
 set(Target_SRC_LIST
     ${SRC_DIR}/TRSCharacterTexture.cpp
     ${SRC_DIR}/TRSShader.cpp
-    ${SRC_DIR}/TRSStateSet.cpp
     ${SRC_DIR}/TRSTexture.cpp
     ${SRC_DIR}/TRSVAO.cpp
     ${SRC_DIR}/TRSViewer.cpp

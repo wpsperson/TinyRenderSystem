@@ -9,7 +9,6 @@
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSGroup.h"
 #include "TRS/TRSTexture.h"
-#include "TRS/TRSStateSet.h"
 #include "TRS/TRSNode.h"
 #include "TRS/TRSShader.h"
 
@@ -119,10 +118,7 @@ std::shared_ptr<TRSNode> AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const 
     //pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnVertexNormTexture, pIndice, indices.size());
     pGeode->setMeshData(points, normals, UVs, std::vector<TRSVec3>());
     pGeode->setIndexArray(indices);
-    TRSStateSet* pStateSet = pGeode->getOrCreateStateSet().get();
-    TRSTexture* pCurTexture = pStateSet->getTexture();
-    TRSShader* pShader = pStateSet->getShader();
-    createShaderByMesh(pMesh, pShader);
+    TRSTexture* pCurTexture = pGeode->getTexture();
 
     aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
     // current stage, we just focus on diffuse texture;
@@ -146,26 +142,4 @@ std::shared_ptr<TRSNode> AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const 
         }
     }
     return pGeode;
-}
-
-void AssimpLoader::createShaderByMesh(aiMesh *pMesh, TRSShader* shader)
-{
-    bool bHasNormal = pMesh->mNormals;
-    bool bHasTexture = (pMesh->mTextureCoords && pMesh->mTextureCoords[0]);
-    if (bHasNormal && !bHasTexture)
-    {
-        shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
-    }
-    else if (!bHasNormal && bHasTexture)
-    {
-        throw "to do";
-    }
-    else if (bHasNormal && bHasTexture)
-    {
-        shader->createProgram("shaders/PosNormTexVertex.glsl", "shaders/PosNormTexFragment.glsl");
-    }
-    else
-    {
-        shader->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
-    }
 }

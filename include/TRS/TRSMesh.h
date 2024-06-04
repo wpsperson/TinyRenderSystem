@@ -23,6 +23,7 @@ public:
     const TRSBox& boundingBox() const;
     int getDrawCount() const;
     int getElementCount() const;
+    int getMeshStruct() const;
     DrawType getDrawType();
     void setDrawType(DrawType drawType);
     int getDrawParam();

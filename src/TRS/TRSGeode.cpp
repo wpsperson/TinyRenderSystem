@@ -6,7 +6,6 @@
 #include "TRS/TRSMesh.h"
 #include "TRS/TRSShader.h"
 #include "TRS/TRSTexture.h"
-#include "TRS/TRSStateSet.h"
 
 
 TRSGeode::TRSGeode()
@@ -51,11 +50,11 @@ void TRSGeode::setPolygonMode(int polyMode)
 
 std::string TRSGeode::debugInfo()
 {
-    TRSShader* pShader = m_pStateSet->getShader();
-    TRSTexture* pTexture = m_pStateSet->getTexture();
     std::string strDebugInfo;
-    strDebugInfo += pShader->debugInfo();
-    strDebugInfo += pTexture->debugInfo();
+    if (TRSTexture* pTexture = getTexture())
+    {
+        strDebugInfo += pTexture->debugInfo();
+    }
     return strDebugInfo;
 }
 

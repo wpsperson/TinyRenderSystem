@@ -6,14 +6,13 @@
 #include <chrono>
 
 #include "TRS/TRSExport.h"
+#include "TRS/TRSDefEnum.h"
 #include "TRS/TRSVector.h"
 
 class TRSCamera;
 class TRSNode;
 class TRSShader;
-class TRSTexture;
 class CullVisitor;
-class TRSStateSet;
 class PolygonModeVisitor;
 
 using LoadGLAddress = void* (*)(const char* name);
@@ -43,14 +42,16 @@ public:
 protected:
     void calcFrameTime();
 
-    TRSShader* findShader(TRSNode* node, TRSTexture* texture);
+    TRSShader* findShader(TRSNode* node);
+
+    TRSShader* getOrCreateShader(ShaderType type);
 
 protected:
     std::shared_ptr<TRSNode> m_pSceneNode;
     TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;
     CullVisitor* m_cullor;
-    std::shared_ptr<TRSStateSet> m_pDefaultStateSet;
+    std::map<ShaderType, TRSShader*> m_shaders;
     PolygonModeVisitor* m_polygonModeVisitor;
     std::chrono::steady_clock::time_point m_fLastTime;
     std::chrono::steady_clock::time_point m_fCurTime;

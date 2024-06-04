@@ -22,7 +22,6 @@
 #include "TRS/TRSGroup.h"
 #include "TRS/TrsMesh.h"
 #include "TRS/TRSShader.h"
-#include "TRS/TRSStateSet.h"
 
 constexpr double GlobalLineDeflection = 0.002;
 static const TRSVec4 DefaultColor(0.8f, 0.8f, 0.8f, 1.0f);
@@ -231,9 +230,6 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
     TopLoc_Location currentLocation = m_shapeTool->GetLocation(shapeLabel);
     TopLoc_Location localLocation = parentLocation * currentLocation;
     populateMesh(occShape, mesh, localLocation);
-    // update shader.
-    std::shared_ptr<TRSStateSet> stateSet = geode->getOrCreateStateSet();
-    stateSet->getShader()->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
     return geode;
 }
 

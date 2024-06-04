@@ -2,7 +2,6 @@
 
 #include "TRS/TRSDefConst.h"
 #include "TRS/TRSViewer.h"
-#include "TRS/TRSStateSet.h"
 #include "TRS/TRSTexture.h"
 #include "TRS/TRSShader.h"
 #include "TRS/TRSBox.h"
@@ -80,10 +79,9 @@ bool GlfwApplication::onInitial()
     TRSMesh* mesh = cube->getMesh();
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     pNode->setMesh(mesh);
-    std::shared_ptr<TRSStateSet> pSS = pNode->getOrCreateStateSet();
-    pSS->getTexture()->createTexture("resources/textures/opengl.png");
-    pSS->getTexture()->createTexture("resources/textures/cube.png");
-    pSS->getShader()->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
+    pNode->setTexture(std::make_shared<TRSTexture>());
+    pNode->getTexture()->createTexture("resources/textures/opengl.png");
+    pNode->getTexture()->createTexture("resources/textures/cube.png");
 
     std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
     root->addChild(pNode);

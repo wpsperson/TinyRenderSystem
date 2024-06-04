@@ -8,13 +8,13 @@
 #include "TRS/TRSDefConst.h"
 #include "TRS/TRSCamera.h"
 #include "TRS/TRSNode.h"
-#include "TRS/TRSStateSet.h"
 #include "TRS/CullVisitor.h"
 #include "TRS/TRSShader.h"
 #include "TRS/TRSTexture.h"
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSTexture.h"
 #include "TRS/TRSVisitors.h"
+#include "TRS/TRSMesh.h"
 #include "TRS/TRSCharacterTexture.h"
 
 
@@ -61,10 +61,6 @@ void TRSViewer::initialViewer()
     }
     m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
     glEnable(GL_DEPTH_TEST);
-
-    m_pDefaultStateSet = std::make_shared<TRSStateSet>();
-    m_pDefaultStateSet->getShader()->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
-
 }
 
 void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
@@ -99,19 +95,15 @@ void TRSViewer::drawScene()
     const std::vector<TRSNode*>& nodes = m_cullor->toRenderNodes();
     for (TRSNode * pNode : nodes)
     {
-        std::shared_ptr<TRSStateSet> pStateSet = pNode->getStateSet();
-        if (!pStateSet)
-        {
-            pStateSet = m_pDefaultStateSet;
-        }
-
         //渲染组件：shader vao texture camera
-        TRSShader* pShader = pStateSet->getShader();
+        TRSShader* pShader = findShader(pNode);
         pShader->use();
 
-        TRSTexture* pTexture = pStateSet->getTexture();
-        pTexture->activeAllTextures(pShader->getProgramId());
-
+        TRSTexture* pTexture = pNode->getTexture();
+        if (pTexture)
+        {
+            pTexture->activeAllTextures(pShader->getProgramId());
+        }
 
         pNode->setActive();
         TRSMatrix modelMatrix = pNode->getMatrix();
@@ -153,8 +145,62 @@ void TRSViewer::calcFrameTime()
     m_fLastTime = m_fCurTime;
 }
 
-TRSShader* TRSViewer::findShader(TRSNode* node, TRSTexture* texture)
+TRSShader* TRSViewer::findShader(TRSNode* node)
 {
-    return nullptr;
+    TRSMesh* mesh = node->getMesh();
+    TRSTexture *texture = node->getTexture();
+    int meshStruct =  mesh->getMeshStruct();
+    bool hasNormal = (meshStruct && msNormal);
+    bool hasUV = (meshStruct && msUV);
+
+    TRSShader* shader = nullptr;
+    if (hasUV && texture && texture->count() == 2)
+    {
+        shader = getOrCreateShader(ShaderType::DualTexture);
+    }
+    else if (hasUV && texture && hasNormal)
+    {
+        shader = getOrCreateShader(ShaderType::PhongTexture);
+    }
+    else if(hasNormal)
+    {
+        shader = getOrCreateShader(ShaderType::Phong);
+    }
+    else
+    {
+        shader = getOrCreateShader(ShaderType::Default);
+    }
+    return shader;
 }
 
+TRSShader* TRSViewer::getOrCreateShader(ShaderType type)
+{
+    if (m_shaders.count(type))
+    {
+        return m_shaders.at(type);
+    }
+
+    TRSShader* shader = new TRSShader;
+    if (ShaderType::Default == type)
+    {
+        shader->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
+    }
+    else if (ShaderType::Phong == type)
+    {
+        shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
+    }
+    else if (ShaderType::PhongTexture == type)
+    {
+        shader->createProgram("shaders/PosNormTexVertex.glsl", "shaders/PosNormTexFragment.glsl");
+    }
+    else if (ShaderType::DualTexture == type)
+    {
+        shader->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
+    }
+    else if (ShaderType::FontShader == type)
+    {
+        shader->createProgram("shaders/FontsVertex.glsl", "shaders/FontsFragment .glsl");
+    }
+    m_shaders.insert(std::make_pair(type, shader));
+    return shader;
+}
