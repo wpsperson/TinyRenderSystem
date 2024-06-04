@@ -1,6 +1,5 @@
 ﻿#include "TRS/TRSUtils.h"
 
-#include <iostream>
 #include <sstream>
 #include <fstream>
 
@@ -24,10 +23,10 @@ char* getTextFromFile(const char* fileName)
     return szBuf;
 }
 
-char* readTextFile(const std::string& strFileName)
+char* readTextContent(const char* strFileName)
 {
     ifstream file;
-    file.open(strFileName.c_str());
+    file.open(strFileName);
     stringstream strStream;
     strStream << file.rdbuf();
     file.close();

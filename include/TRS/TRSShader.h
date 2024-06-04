@@ -73,24 +73,24 @@ public:
     TRSShader();
     ~TRSShader();
 
-    void createVertexShader(const std::string vShaderFile);
+    void createVertexShader(const char* vShaderFile);
 
-    void createFragmentShader(const std::string fShaderFile);
+    void createFragmentShader(const char* fShaderFile);
 
-    void createTessControlShader(const std::string tescShaderFile);
+    void createTessControlShader(const char* tescShaderFile);
 
-    void createTessEvaluateShader(const std::string teseShaderFile);
+    void createTessEvaluateShader(const char* teseShaderFile);
 
     unsigned int createProgram();
 
-    unsigned int createProgram(const std::string vShaderFile, const std::string fShaderFile);
+    unsigned int createProgram(const char* vShaderFile, const char* fShaderFile);
 
     void use();
 
-    void addUniformi(const std::string uniformName, int value);
-    void addUniformf(const std::string uniformName, float value);
-    void addUniform3v(const std::string uniformName, TRSVec3 vec3Color);
-    void addUniform4v(const std::string uniformName, TRSVec4 vec4Color);
+    void addUniformi(const std::string& uniformName, int value);
+    void addUniformf(const std::string& uniformName, float value);
+    void addUniform3v(const std::string& uniformName, TRSVec3 vec3Color);
+    void addUniform4v(const std::string& uniformName, TRSVec4 vec4Color);
     void addUniformMatrix4(const std::string& uniformName, TRSMatrix mat);
     void applayAllStaticUniform();
 
@@ -99,7 +99,7 @@ public:
 
 private:
     //return 0 when failure
-    unsigned int createShader(const std::string vShaderFile, unsigned int EnShaderType);
+    unsigned int createShader(const char* vShaderFile, unsigned int EnShaderType);
 
     void freeShaderProgram();
 

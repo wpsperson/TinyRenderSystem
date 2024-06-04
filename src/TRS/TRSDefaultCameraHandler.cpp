@@ -1,6 +1,7 @@
 ﻿#include "TRS/TRSDefaultCameraHandler.h"
 
 #include "TRS/TRSDefGL.h"
+#include "TRS/TRSDefMath.h"
 #include "TRS/TRSCamera.h"
 #include "TRS/TRSEventDefine.h"
 #include "TRS/TRSUtils.h"
@@ -56,8 +57,8 @@ void TRSDefaultCameraHandler::processLeftMouseMove(int xpos, int ypos, int mods)
 {
     double deltaX = static_cast<double>(xpos - m_lastX) / m_camera->getWindowWidth();
     double delatY = static_cast<double>(ypos - m_lastY) / m_camera->getWindowHeight();
-    double azimuthAngle = - deltaX * TRS_PI * 2; // deltaX forward right, rotate is clockwise.
-    double elevatAngle = delatY * TRS_PI * 2;    // deltaY forward down, rotate is clockwise.
+    double azimuthAngle = - deltaX * kM2PI; // deltaX forward right, rotate is clockwise.
+    double elevatAngle = delatY * kM2PI;    // deltaY forward down, rotate is clockwise.
     m_camera->Azimuth(azimuthAngle);
     m_camera->Elevation(elevatAngle);
 

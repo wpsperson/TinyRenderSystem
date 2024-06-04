@@ -1,5 +1,7 @@
 ﻿#include "TRS/TRSShader.h"
 
+#include <iostream>
+
 #include "TRS/TRSDefGL.h"
 #include "TRS/TRSUtils.h"
 
@@ -15,22 +17,22 @@ TRSShader::~TRSShader()
     freeShaderProgram();
 }
 
-void TRSShader::createVertexShader(const std::string vShaderFile)
+void TRSShader::createVertexShader(const char* vShaderFile)
 {
     vShader = createShader(vShaderFile, GL_VERTEX_SHADER);
 }
 
-void TRSShader::createFragmentShader(const std::string fShaderFile)
+void TRSShader::createFragmentShader(const char* fShaderFile)
 {
     fShader = createShader(fShaderFile, GL_FRAGMENT_SHADER);
 }
 
-void TRSShader::createTessControlShader(const std::string tescShaderFile)
+void TRSShader::createTessControlShader(const char* tescShaderFile)
 {
     tescShader = createShader(tescShaderFile, GL_TESS_CONTROL_SHADER);
 }
 
-void TRSShader::createTessEvaluateShader(const std::string teseShaderFile)
+void TRSShader::createTessEvaluateShader(const char* teseShaderFile)
 {
     teseShader = createShader(teseShaderFile, GL_TESS_EVALUATION_SHADER);
 }
@@ -62,7 +64,7 @@ unsigned int TRSShader::createProgram()
     return program;
 }
 
-unsigned int TRSShader::createProgram(const std::string vShaderFile, const std::string fShaderFile)
+unsigned int TRSShader::createProgram(const char* vShaderFile, const char* fShaderFile)
 {
     createVertexShader(vShaderFile);
     createFragmentShader(fShaderFile);
@@ -74,7 +76,7 @@ void TRSShader::use()
     glUseProgram(program);
 }
 
-void TRSShader::addUniformi(const std::string uniformName, int value)
+void TRSShader::addUniformi(const std::string& uniformName, int value)
 {
     UniformData oData;
     oData.enType = EnUniformType::EnInt;
@@ -82,7 +84,7 @@ void TRSShader::addUniformi(const std::string uniformName, int value)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-void TRSShader::addUniformf(const std::string uniformName, float value)
+void TRSShader::addUniformf(const std::string& uniformName, float value)
 {
     UniformData oData;
     oData.enType = EnUniformType::EnFloat;
@@ -90,7 +92,7 @@ void TRSShader::addUniformf(const std::string uniformName, float value)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-void TRSShader::addUniform3v(const std::string uniformName, TRSVec3 vec3Color)
+void TRSShader::addUniform3v(const std::string& uniformName, TRSVec3 vec3Color)
 {
     UniformData oData;
     oData.enType = EnUniformType::EnVec3;
@@ -98,7 +100,7 @@ void TRSShader::addUniform3v(const std::string uniformName, TRSVec3 vec3Color)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-void TRSShader::addUniform4v(const std::string uniformName, TRSVec4 vec4Color)
+void TRSShader::addUniform4v(const std::string& uniformName, TRSVec4 vec4Color)
 {
     UniformData oData;
     oData.enType = EnUniformType::EnVec4;
@@ -114,10 +116,10 @@ void TRSShader::addUniformMatrix4(const std::string& uniformName, TRSMatrix mat)
     m_mapUniformValue.insert(std::make_pair(uniformName, oData));
 }
 
-unsigned int TRSShader::createShader(const std::string vShaderFile, unsigned int EnShaderType)
+unsigned int TRSShader::createShader(const char* vShaderFile, unsigned int EnShaderType)
 {
     unsigned int shader = glCreateShader(EnShaderType);
-    const char* source = readTextFile(vShaderFile);
+    const char* source = readTextContent(vShaderFile);
     glShaderSource(shader, 1, &source, nullptr);
     glCompileShader(shader);
     int ret;
