@@ -10,6 +10,8 @@
 
 class TRSCamera;
 class TRSNode;
+class TRSShader;
+class TRSTexture;
 class CullVisitor;
 class TRSStateSet;
 class PolygonModeVisitor;
@@ -40,6 +42,8 @@ public:
 
 protected:
     void calcFrameTime();
+
+    TRSShader* findShader(TRSNode* node, TRSTexture* texture);
 
 protected:
     std::shared_ptr<TRSNode> m_pSceneNode;

@@ -13,16 +13,6 @@ enum class DrawType : unsigned char
     PATCHES = 14,
 };
 
-enum EnVertexStruct
-{
-    EnVertex,
-    EnVertexNormal,
-    EnVertexTexture,
-    EnVertexNormTexture,
-    EnVertexTextureColor,
-    EnVertexColorTexture,
-};
-
 enum VertexAttributeIndex
 {
     VertexIndex = 0,

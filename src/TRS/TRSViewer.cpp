@@ -153,3 +153,8 @@ void TRSViewer::calcFrameTime()
     m_fLastTime = m_fCurTime;
 }
 
+TRSShader* TRSViewer::findShader(TRSNode* node, TRSTexture* texture)
+{
+    return nullptr;
+}
+

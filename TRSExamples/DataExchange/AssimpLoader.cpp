@@ -148,26 +148,24 @@ std::shared_ptr<TRSNode> AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const 
     return pGeode;
 }
 
-int AssimpLoader::createShaderByMesh(aiMesh *pMesh, TRSShader* shader)
+void AssimpLoader::createShaderByMesh(aiMesh *pMesh, TRSShader* shader)
 {
     bool bHasNormal = pMesh->mNormals;
     bool bHasTexture = (pMesh->mTextureCoords && pMesh->mTextureCoords[0]);
     if (bHasNormal && !bHasTexture)
     {
         shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
-        return EnVertexNormal;
     }
     else if (!bHasNormal && bHasTexture)
     {
         throw "to do";
-        return EnVertexTexture;
     }
     else if (bHasNormal && bHasTexture)
     {
         shader->createProgram("shaders/PosNormTexVertex.glsl", "shaders/PosNormTexFragment.glsl");
-        return EnVertexNormTexture;
     }
-
-    shader->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
-    return EnVertex;
+    else
+    {
+        shader->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
+    }
 }
