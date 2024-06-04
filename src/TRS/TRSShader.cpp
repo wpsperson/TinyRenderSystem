@@ -131,7 +131,7 @@ unsigned int TRSShader::createShader(const char* vShaderFile, unsigned int EnSha
         std::cout << "ERROR::SHADER::COMPILE: " << info << std::endl;
         return 0;
     }
-    delete[] source;//释放内存
+    delete[] source;
     return shader;
 }
 

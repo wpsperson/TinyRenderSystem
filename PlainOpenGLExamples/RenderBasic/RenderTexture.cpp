@@ -12,15 +12,15 @@
 int RenderTexture()
 {
     float vertices[] = {
-        //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
+        //     ---- vertex ----       ---- color ----     - uv -
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // right up
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // right bottom
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // left bottom
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // left up
     };
-    unsigned int indices[] = { // 注意索引从0开始! 
-        0, 1, 3, // 第一个三角形
-        1, 2, 3  // 第二个三角形
+    unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
     };
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, g_OpenGLVersionMajor);
@@ -64,12 +64,10 @@ int RenderTexture()
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    // 为当前绑定的纹理对象设置环绕、过滤方式
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // 加载并生成纹理
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load("resources/textures/opengl.png", &width, &height, &nrChannels, 0);
@@ -96,7 +94,7 @@ int RenderTexture()
 
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        glActiveTexture(GL_TEXTURE0);//这句可以不写，因为默认Texture0总是被激活。
+        glActiveTexture(GL_TEXTURE0);   //this line could be removed, because Texture0 always be actived.
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
         glBindVertexArray(0);
@@ -111,15 +109,15 @@ int RenderTexture()
 int RenderMultiTexture()
 {
     float vertices[] = {
-        //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
+        //     ---- vertex ----       ---- color ----     - uv -
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // right up
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // right bottom
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // left bottom
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // left up
     };
-    unsigned int indices[] = { // 注意索引从0开始! 
-        0, 1, 3, // 第一个三角形
-        1, 2, 3  // 第二个三角形
+    unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
     };
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, g_OpenGLVersionMajor);
@@ -163,14 +161,12 @@ int RenderMultiTexture()
     unsigned int BoxTexture;
     glGenTextures(1, &BoxTexture);
     glBindTexture(GL_TEXTURE_2D, BoxTexture);
-    // 为当前绑定的纹理对象设置环绕、过滤方式
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // 加载并生成纹理
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);//加载图片翻转
+    stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load("resources/textures/opengl.png", &width, &height, &nrChannels, 0);
     if (data)
     {
@@ -187,7 +183,6 @@ int RenderMultiTexture()
     unsigned int FaceTexture;
     glGenTextures(1, &FaceTexture);
     glBindTexture(GL_TEXTURE_2D, FaceTexture);
-    // 为当前绑定的纹理对象设置环绕、过滤方式
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -214,7 +209,7 @@ int RenderMultiTexture()
     glUniform1i(nPosTexture0, 0);// 0 mean GL_TEXTURE0
     glUniform1i(nPosTexture1, 1);// 1 mean GL_TEXTURE1
 
-    glActiveTexture(GL_TEXTURE0);//这句可以不写，因为默认Texture0总是被激活。
+    glActiveTexture(GL_TEXTURE0);//default, Texture0 always be actived。
     glBindTexture(GL_TEXTURE_2D, BoxTexture);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, FaceTexture);

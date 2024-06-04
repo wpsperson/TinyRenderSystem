@@ -107,7 +107,6 @@ int StencilTest()
     float projMatrix[16] = { 1,0,0,0,  0,1,0,0,  0,0,1,0,  0,0,0,1 };
 
     glEnable(GL_DEPTH_TEST);
-    // 启动模板测试
     glEnable(GL_STENCIL_TEST); //***
 
     double rotateAngle = 0.0;

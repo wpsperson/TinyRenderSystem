@@ -1,4 +1,3 @@
-//材质片段着色器
 #version 330 core
 out vec4 FragColor;
 in vec3 vNorm;
@@ -19,7 +18,7 @@ struct Light {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-    //对于衰减的点光源的公式中的三个项  光强度 = 1/(Kc + Kl*d + Kq * d*d)
+    //according attenuation of point light, light intensity = 1/(Kc + Kl*d + Kq * d*d)
     float constant;
     float linear;
     float quadratic;
@@ -48,7 +47,7 @@ void main()
     vec3 normColor = texture(material.specular, vTex).rgb;
     float average = (normColor.x + normColor.y + normColor.z) / 3.0f;
     vec3 specular = light.specular * (spec * average);
-    //按照点光源距离衰减
+    // attenuation by distance
     float distance = length(light.position - vFragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance +
         light.quadratic * (distance * distance));

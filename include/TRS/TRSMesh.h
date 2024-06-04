@@ -55,8 +55,8 @@ private:
 
     TRSVAO* m_vao = nullptr;
     int m_vertexStructType = msVertex;
-    DrawType m_nDrawType;                ///<绘制类型例如 GL_TRIANGLES GL_POINTS GL_LINES GL_PATCHES
-    int m_nPatchParam;              ///<绘制类型为GL_PATCHES时，表示碎片的参数
+    DrawType m_nDrawType;
+    int m_nPatchParam;
 };
 #pragma once
 

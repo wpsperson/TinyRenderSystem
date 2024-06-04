@@ -1,4 +1,3 @@
-//材质片段着色器
 #version 330 core
 out vec4 FragColor;
 in vec3 vNorm;
@@ -35,7 +34,7 @@ void main()
 
     //2 diffuse
     vec3 norm = normalize(vNorm);
-    vec3 lightDir = normalize(light.position - vFragPos);//从片段指向光源的向量
+    vec3 lightDir = normalize(light.position - vFragPos);// from fragment to light
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = light.diffuse * (diff * texture(material.diffuse, vTex).rgb);
 
@@ -52,7 +51,6 @@ void main()
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     //if (theta > light.cutOff)
     //{
-    //    // 执行光照计算
     //    vec3 result = ambient + diffuse + specular;
     //    FragColor = vec4(result, 1.0);
     //}

@@ -1,4 +1,3 @@
-//材质片段着色器
 #version 330 core
 out vec4 FragColor;
 in vec3 vNorm;
@@ -25,7 +24,7 @@ struct PointLight
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-    //对于衰减的点光源的公式中的三个项  光强度 = 1/(Kc + Kl*d + Kq * d*d)
+    //according attenuation of point light, light intensity = 1/(Kc + Kl*d + Kq * d*d)
     float constant;
     float linear;
     float quadratic;
@@ -59,10 +58,10 @@ void main()
     vec3 viewDir = normalize(viewPos - vFragPos);
 
     vec3 result = CalcDirLight(dirLight, vNorm, viewDir);
-    // 第二阶段：点光源
+    // point light
     for (int i = 0; i < NR_POINT_LIGHTS; i++)
         result += CalcPointLight(pointLights[i], vNorm, vFragPos, viewDir);
-    // 第三阶段：聚光
+    // spot light
     result += CalcSpotLight(spotLight, vNorm, vFragPos, viewDir);
 
     FragColor = vec4(result, 1.0);
@@ -96,7 +95,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     //3 specular
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    //按照点光源距离衰减
+    // attenuation by distance
     float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance +
         light.quadratic * (distance * distance));
@@ -115,7 +114,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
     //2 diffuse
     vec3 norm = normalize(normal);
-    vec3 lightDir = normalize(light.position - fragPos);//从片段指向光源的向量
+    vec3 lightDir = normalize(light.position - fragPos);// from fragment to light
     float diff = max(dot(norm, lightDir), 0.0);
 
     //3 specular
@@ -131,7 +130,6 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     //if (theta > light.cutOff)
     //{
-    //    // 执行光照计算
     //    vec3 result = ambient + diffuse + specular;
     //    FragColor = vec4(result, 1.0);
     //}

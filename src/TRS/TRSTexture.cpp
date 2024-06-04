@@ -54,7 +54,7 @@ int TRSTexture::createTexture(const std::string& imageFile, const std::string& s
     int width, height, channel;
     stbi_set_flip_vertically_on_load(true);
     unsigned char* source = stbi_load(imageFile.c_str(), &width, &height, &channel, 0);
-    GLenum format = GL_RGB;//默认颜色是RGB格式
+    GLenum format = GL_RGB;// default format is RGB
     if (channel == 1)
         format = GL_RED;
     else if (channel == 3)
@@ -64,7 +64,7 @@ int TRSTexture::createTexture(const std::string& imageFile, const std::string& s
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, source);
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    //最后释放图片内存
+    // free the image memory
     stbi_image_free(source);
     return m_nTextures[index];
 }
@@ -75,11 +75,9 @@ void TRSTexture::activeAllTextures(unsigned int program)
     for (size_t i=0; i<nCount; i++)
     {
         glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + i));
-        //纹理采样器的Uniform
         std::string sampleName = m_sSampleNames[i];
         int loc = glGetUniformLocation(program, sampleName.c_str());
         glUniform1i(loc, static_cast<GLenum>(i));
-        //绑定到纹理id上
         glBindTexture(GL_TEXTURE_2D, m_nTextures[i]);
     }
 }

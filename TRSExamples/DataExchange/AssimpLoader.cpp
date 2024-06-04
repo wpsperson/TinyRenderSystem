@@ -112,7 +112,7 @@ std::shared_ptr<TRSNode> AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const 
             indices.push_back(face.mIndices[j]);
     }
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
-    //每个vertex顶点数据中有14个float
+    //each vertex has 14 float
     //float* pData = (float*)(&vertices[0]);
     //unsigned int* pIndice = &indices[0];
     //pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnVertexNormTexture, pIndice, indices.size());

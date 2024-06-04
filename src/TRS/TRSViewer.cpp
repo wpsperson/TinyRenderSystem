@@ -95,7 +95,7 @@ void TRSViewer::drawScene()
     const std::vector<TRSNode*>& nodes = m_cullor->toRenderNodes();
     for (TRSNode * pNode : nodes)
     {
-        //渲染组件：shader vao texture camera
+        //shader vao texture camera
         TRSShader* pShader = findShader(pNode);
         pShader->use();
 

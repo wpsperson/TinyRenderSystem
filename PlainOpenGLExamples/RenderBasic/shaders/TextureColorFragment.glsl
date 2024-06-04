@@ -14,6 +14,6 @@ void main()
         discard;
         return;
     }
-    //FragColor = tex*0.5 + color*0.5;//颜色较淡的混合
-    FragColor = color * tex; //颜色较浓的混合
+    //FragColor = tex*0.5 + color*0.5;  // light color blend
+    FragColor = color * tex;            // deep color blend
 } 

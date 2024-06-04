@@ -119,24 +119,24 @@ std::map<GLchar, Character> loadFreeTypeCharacters(unsigned int BitMapWeidth, un
     std::map<GLchar, Character> Characters;
     for (GLubyte c = 0; c < 128; c++)
     {
-        // 加载字符的字形 
+        // load the char
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
         {
             std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
             continue;
         }
-        // 生成纹理
+        // generate the texture
         GLuint texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width,
             face->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
-        // 设置纹理选项
+        // setup texture
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // 储存字符供之后使用
+        // cache
         Character character = {
             texture,
             ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
@@ -198,12 +198,12 @@ std::vector<NewCharacter> loadFreeTypeCharacters2(GLuint &texture_id, float &uv_
     FT_Set_Pixel_Sizes(face, 0, singleFontSize); // here, we assign pixel size to texture font size.
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    // 生成纹理
+    // generate the texture
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, textureDimension, textureDimension, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
-    // 设置纹理选项
+    // setup texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -215,7 +215,7 @@ std::vector<NewCharacter> loadFreeTypeCharacters2(GLuint &texture_id, float &uv_
     int current_y = 0;
     for (GLubyte ch = 0; ch < 128; ch++)
     {
-        // 加载字符的字形 
+        // load the char
         if (FT_Load_Char(face, ch, FT_LOAD_RENDER))
         {
             std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
@@ -223,7 +223,6 @@ std::vector<NewCharacter> loadFreeTypeCharacters2(GLuint &texture_id, float &uv_
         }
         glTexSubImage2D(GL_TEXTURE_2D, 0, current_x, current_y, face->glyph->bitmap.width, face->glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
 
-        // 储存字符供之后使用
         NewCharacter newCharacter;
         // from 0.0f to 1.0f
         newCharacter.uv_min_x = float(current_x) / textureDimension;
@@ -387,7 +386,7 @@ int RenderAsciiText()
 
         glBindVertexArray(VAO);
         glUseProgram(shaderProgram);
-        glActiveTexture(GL_TEXTURE0);//这句可以不写，因为默认Texture0总是被激活。
+        glActiveTexture(GL_TEXTURE0); // default
 #ifdef RenderTextOrigin
         float origin[3] = { 0,0,0 };
         float rightDir[3] = { 1,0,0 };
