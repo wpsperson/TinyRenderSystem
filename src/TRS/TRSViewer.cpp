@@ -92,8 +92,8 @@ void TRSViewer::updateScene()
 
 void TRSViewer::drawScene()
 {
-    const std::vector<TRSNode*>& nodes = m_cullor->toRenderNodes();
-    for (TRSNode * pNode : nodes)
+    const std::vector<TRSGeode*>& nodes = m_cullor->toRenderNodes();
+    for (TRSGeode* pNode : nodes)
     {
         //shader vao texture camera
         TRSShader* pShader = findShader(pNode);
@@ -145,10 +145,11 @@ void TRSViewer::calcFrameTime()
     m_fLastTime = m_fCurTime;
 }
 
-TRSShader* TRSViewer::findShader(TRSNode* node)
+TRSShader* TRSViewer::findShader(TRSGeode* node)
 {
     TRSMesh* mesh = node->getMesh();
-    TRSTexture *texture = node->getTexture();
+    TRSTexture* texture = nullptr;
+    texture = node->getTexture();
     int meshStruct =  mesh->getMeshStruct();
     bool hasNormal = (meshStruct && msNormal);
     bool hasUV = (meshStruct && msUV);

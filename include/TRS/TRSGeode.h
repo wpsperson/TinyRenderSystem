@@ -1,8 +1,14 @@
 ﻿#pragma once
+
+#include <vector>
+
 #include "TRS/TRSExport.h"
 #include "TRS/TRSNode.h"
 #include "TRS/TRSVector.h"
-#include <vector>
+#include <TRS/TRSDefEnum.h>
+
+
+class TRSTexture;
 
 class TRS_EXPORT TRSGeode : public TRSNode
 {
@@ -13,22 +19,44 @@ public:
 
     virtual void draw() override;
 
-    void setMeshData(const std::vector<TRSPoint>& vertexs, const std::vector<TRSVec3>& normals, const std::vector<TRSVec2>& UVs, const std::vector<TRSVec3>& colors);
+    void setTexture(std::shared_ptr<TRSTexture> texture);
 
-    void setIndexArray(const std::vector<unsigned int>& indices);
+    TRSTexture* getTexture() const;
+
+    void setShadedVertice(const std::vector<TRSPoint>& vertexs);
+
+    void setShadedNormals(const std::vector<TRSVec3>& normals);
+
+    void setShadedUVs(const std::vector<TRSVec2>& UVs);
+
+    void setShadedIndice(const std::vector<unsigned int>& indices);
 
     void setActive() override;
 
     void setPolygonMode(int polyMode);
 
-    virtual std::string debugInfo() override;
+    void setRenderMode(int renderMode);
+
+    void addRenderMode(RenderMode mode);
+
+    void removeRenderMode(RenderMode mode);
+
+    bool hasRenderMode(RenderMode mode);
+
+    std::string debugInfo() override;
+
+    void preProcess() override;
+
+    void postProcess() override;
 
 protected:
-    void preProcess() override;
-    void postProcess() override;
     void drawInternal();
 
 protected:
     int m_polygonMode;
+    int m_renderMode;
+    std::shared_ptr<TRSTexture> m_pTexture;
+    TRSMesh* m_wireframe = nullptr;
+    TRSMesh* m_points = nullptr;
 };
 

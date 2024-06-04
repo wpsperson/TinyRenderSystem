@@ -3,10 +3,10 @@
 #include <string>
 
 #include "TRS/TRSExport.h"
-#include "TRS/TRSNode.h"
+#include "TRS/TRSGeode.h"
 #include "TRS/TRSVector.h"
 
-class TRS_EXPORT TRSTextNode : public TRSNode
+class TRS_EXPORT TRSTextNode : public TRSGeode
 {
 public:
     TRSTextNode();

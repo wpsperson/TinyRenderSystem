@@ -5,7 +5,7 @@
 #include "TRS/TRSExport.h"
 #include "TRS/NodeVisitor.h"
 
-
+class TRSGeode;
 class TRS_EXPORT CullVisitor : public NodeVisitor
 {
 public:
@@ -14,11 +14,11 @@ public:
 
     virtual void execute(TRSNode* pNode) override;
 
-    const std::vector<TRSNode*>& toRenderNodes();
+    const std::vector<TRSGeode*>& toRenderNodes();
 
     void clearUp();
 
 protected:
     bool m_useFrustumCull = false;
-    std::vector<TRSNode*> m_renderNodes;
+    std::vector<TRSGeode*> m_renderNodes;
 };

@@ -11,7 +11,6 @@
 class NodeVisitor;
 class TRSStateSet;
 class TRSMesh;
-class TRSTexture;
 class TRSNode;
 
 typedef std::function<void(TRSNode*)> NodeUpdateFunc;
@@ -29,10 +28,6 @@ public:
     void setMesh(TRSMesh* mesh);
 
     TRSMesh* getMesh()const;
-
-    void setTexture(std::shared_ptr<TRSTexture> texture);
-
-    TRSTexture* getTexture() const;
 
     virtual void setActive();// used to bind vao
 
@@ -69,7 +64,6 @@ protected:
     TRSVec4 m_matColor;
     std::string m_name;
     std::shared_ptr<TRSMesh> m_pMesh;
-    std::shared_ptr<TRSTexture> m_pTexture;
     NodeUpdateFunc m_UpdateFunc;
 };
 

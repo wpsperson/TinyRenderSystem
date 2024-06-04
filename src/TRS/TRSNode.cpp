@@ -38,16 +38,6 @@ TRSMesh* TRSNode::getMesh() const
     return m_pMesh.get();
 }
 
-void TRSNode::setTexture(std::shared_ptr<TRSTexture> texture)
-{
-    m_pTexture = texture;
-}
-
-TRSTexture* TRSNode::getTexture() const
-{
-    return m_pTexture.get();
-}
-
 void TRSNode::setActive()
 {
 

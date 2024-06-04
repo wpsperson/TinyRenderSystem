@@ -112,13 +112,12 @@ std::shared_ptr<TRSNode> AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const 
             indices.push_back(face.mIndices[j]);
     }
     std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
-    //each vertex has 14 float
-    //float* pData = (float*)(&vertices[0]);
-    //unsigned int* pIndice = &indices[0];
-    //pGeode->readFromVertex(pData, vertices.size() * sizeof(Vertex)/sizeof(float), EnVertexNormTexture, pIndice, indices.size());
-    pGeode->setMeshData(points, normals, UVs, std::vector<TRSVec3>());
-    pGeode->setIndexArray(indices);
-    TRSTexture* pCurTexture = pGeode->getTexture();
+    pGeode->setShadedVertice(points);
+    pGeode->setShadedNormals(normals);
+    pGeode->setShadedUVs(UVs);
+    pGeode->setShadedIndice(indices);
+    std::shared_ptr<TRSTexture> pCurTexture = std::make_shared<TRSTexture>();
+    pGeode->setTexture(pCurTexture);
 
     aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
     // current stage, we just focus on diffuse texture;

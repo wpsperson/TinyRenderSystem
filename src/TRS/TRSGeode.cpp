@@ -25,15 +25,32 @@ void TRSGeode::draw()
     drawInternal();
 }
 
-void TRSGeode::setMeshData(const std::vector<TRSPoint>& vertexs, const std::vector<TRSVec3>& normals, const std::vector<TRSVec2>& UVs, const std::vector<TRSVec3>& colors)
+void TRSGeode::setTexture(std::shared_ptr<TRSTexture> texture)
 {
-    m_pMesh->setVertex(vertexs);
-    m_pMesh->setNormal(normals);
-    m_pMesh->setUV(UVs);
-    m_pMesh->setColor(colors);
+    m_pTexture = texture;
 }
 
-void TRSGeode::setIndexArray(const std::vector<unsigned int>& indices)
+TRSTexture* TRSGeode::getTexture() const
+{
+    return m_pTexture.get();
+}
+
+void TRSGeode::setShadedVertice(const std::vector<TRSPoint>& vertexs)
+{
+    m_pMesh->setVertex(vertexs);
+}
+
+void TRSGeode::setShadedNormals(const std::vector<TRSVec3>& normals)
+{
+    m_pMesh->setNormal(normals);
+}
+
+void TRSGeode::setShadedUVs(const std::vector<TRSVec2>& UVs)
+{
+    m_pMesh->setUV(UVs);
+}
+
+void TRSGeode::setShadedIndice(const std::vector<unsigned int>& indices)
 {
     m_pMesh->setIndices(indices);
 }
@@ -46,6 +63,32 @@ void TRSGeode::setActive()
 void TRSGeode::setPolygonMode(int polyMode)
 {
     m_polygonMode = polyMode;
+}
+
+void TRSGeode::setRenderMode(int renderMode)
+{
+    m_renderMode = renderMode;
+}
+
+void TRSGeode::addRenderMode(RenderMode mode)
+{
+    if (!hasRenderMode(mode))
+    {
+        m_renderMode = (m_renderMode | mode);
+    }
+}
+
+void TRSGeode::removeRenderMode(RenderMode mode)
+{
+    if (hasRenderMode(mode))
+    {
+        m_renderMode = (m_renderMode ^ mode);
+    }
+}
+
+bool TRSGeode::hasRenderMode(RenderMode mode)
+{
+    return m_renderMode & mode;
 }
 
 std::string TRSGeode::debugInfo()
@@ -83,7 +126,6 @@ void TRSGeode::drawInternal()
     {
         glDrawArrays(OpenGLDrawType, 0, m_pMesh->getDrawCount());
     }
-
 }
 
 void TRSGeode::postProcess()

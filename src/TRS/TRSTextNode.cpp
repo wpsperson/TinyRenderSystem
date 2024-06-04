@@ -18,7 +18,7 @@ TRSTextNode::TRSTextNode()
     // deal texture
     unsigned int textureID = TRSCharacterTexture::instance()->getTextureID();
     TextureData texData(textureID, "all_unicode_texture", "ourTexture");
-    getTexture()->addSharedTexture(texData);
+    m_pTexture->addSharedTexture(texData);
 }
 
 TRSTextNode::~TRSTextNode()
@@ -85,9 +85,9 @@ void TRSTextNode::setActive()
 std::string TRSTextNode::debugInfo()
 {
     std::string strDebugInfo;
-    if (TRSTexture* pTexture = getTexture())
+    if (m_pTexture)
     {
-        strDebugInfo += pTexture->debugInfo();
+        strDebugInfo += m_pTexture->debugInfo();
     }
     return strDebugInfo;
 }

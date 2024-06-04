@@ -22,6 +22,14 @@ enum class ShaderType : unsigned char
     FontShader
 };
 
+enum RenderMode : unsigned char
+{
+    Shaded = 1,
+    WireFrame = 2,
+    Points = 4,
+};
+
+
 enum MeshStruct
 {
     msVertex = 1,

@@ -24,13 +24,13 @@ void CullVisitor::execute(TRSNode* pNode)
     {
         return;
     }
-
-    if (TRSGroup*pGroup = dynamic_cast<TRSGroup*>(pNode))
+    TRSGeode* geode = dynamic_cast<TRSGeode*>(pNode);
+    if (!geode)
     {
         return;
     }
 
-    if (!pNode->visible())
+    if (!geode->visible())
     {
         return;
     }
@@ -39,10 +39,10 @@ void CullVisitor::execute(TRSNode* pNode)
     {
         // TODO Frustum Cull.
     }
-    m_renderNodes.emplace_back(pNode);
+    m_renderNodes.emplace_back(geode);
 }
 
-const std::vector<TRSNode*>& CullVisitor::toRenderNodes()
+const std::vector<TRSGeode*>& CullVisitor::toRenderNodes()
 {
     return m_renderNodes;
 }

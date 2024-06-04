@@ -11,6 +11,7 @@
 
 class TRSCamera;
 class TRSNode;
+class TRSGeode;
 class TRSShader;
 class CullVisitor;
 class PolygonModeVisitor;
@@ -42,7 +43,7 @@ public:
 protected:
     void calcFrameTime();
 
-    TRSShader* findShader(TRSNode* node);
+    TRSShader* findShader(TRSGeode* node);
 
     TRSShader* getOrCreateShader(ShaderType type);
 
