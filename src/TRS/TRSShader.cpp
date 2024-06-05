@@ -1,6 +1,7 @@
 ﻿#include "TRS/TRSShader.h"
 
 #include <iostream>
+#include <string>
 
 #include "TRS/TRSDefGL.h"
 #include "TRS/TRSUtils.h"
@@ -76,44 +77,49 @@ void TRSShader::use()
     glUseProgram(program);
 }
 
-void TRSShader::addUniformi(const std::string& uniformName, int value)
+void TRSShader::addUniformi(const char* uniformName, int value)
 {
-    UniformData oData;
-    oData.enType = EnUniformType::EnInt;
-    oData.nValue = value;
-    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+    int loc = glGetUniformLocation(program, uniformName);
+    if (loc >= 0)
+    {
+        glUniform1i(loc, value);
+    }
 }
 
-void TRSShader::addUniformf(const std::string& uniformName, float value)
+void TRSShader::addUniformf(const char* uniformName, float value)
 {
-    UniformData oData;
-    oData.enType = EnUniformType::EnFloat;
-    oData.fValue = value;
-    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+    int loc = glGetUniformLocation(program, uniformName);
+    if (loc >= 0)
+    {
+        glUniform1f(loc, value);
+    }
 }
 
-void TRSShader::addUniform3v(const std::string& uniformName, TRSVec3 vec3Color)
+void TRSShader::addUniform3v(const char* uniformName, TRSVec3 vec3Color)
 {
-    UniformData oData;
-    oData.enType = EnUniformType::EnVec3;
-    oData.vec3Value = vec3Color;
-    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+    int loc = glGetUniformLocation(program, uniformName);
+    if (loc >= 0)
+    {
+        glUniform3f(loc, vec3Color[0], vec3Color[1], vec3Color[2]);
+    }
 }
 
-void TRSShader::addUniform4v(const std::string& uniformName, TRSVec4 vec4Color)
+void TRSShader::addUniform4v(const char* uniformName, TRSVec4 vec4Color)
 {
-    UniformData oData;
-    oData.enType = EnUniformType::EnVec4;
-    oData.vec4Value = vec4Color;
-    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+    int loc = glGetUniformLocation(program, uniformName);
+    if (loc >= 0)
+    {
+        glUniform4f(loc, vec4Color[0], vec4Color[1], vec4Color[2], vec4Color[3]);
+    }
 }
 
-void TRSShader::addUniformMatrix4(const std::string& uniformName, TRSMatrix mat)
+void TRSShader::addUniformMatrix4(const char* uniformName, TRSMatrix mat)
 {
-    UniformData oData;
-    oData.enType = EnUniformType::EnMat4;
-    oData.mat4Value = mat;
-    m_mapUniformValue.insert(std::make_pair(uniformName, oData));
+    int loc = glGetUniformLocation(program, uniformName);
+    if (loc >= 0)
+    {
+        glUniformMatrix4fv(loc, 1, GL_FALSE, &(mat[0][0]));
+    }
 }
 
 unsigned int TRSShader::createShader(const char* vShaderFile, unsigned int EnShaderType)
@@ -162,42 +168,6 @@ void TRSShader::freeShaderProgram()
         teseShader = 0;
     }
     glDeleteProgram(program);
-}
-
-void TRSShader::applayAllStaticUniform()
-{
-    std::map<std::string, UniformData>::iterator itr = m_mapUniformValue.begin();
-    for (; itr!=m_mapUniformValue.end(); itr++)
-    {
-        std::string strName = itr->first;
-        int loc = glGetUniformLocation(program, strName.c_str());
-        EnUniformType oType = itr->second.enType;
-        UniformData& oData = itr->second;
-        switch (oType)
-        {
-        case EnUniformType::EnFloat:
-            glUniform1f(loc, oData.fValue);
-            break;
-        case EnUniformType::EnInt:
-            glUniform1i(loc, oData.nValue);
-            break;
-        case EnUniformType::EnVec2:
-            glUniform2f(loc, oData.vec2Value[0], oData.vec2Value[1]);
-            break;
-        case EnUniformType::EnVec3:
-            glUniform3f(loc, oData.vec3Value[0], oData.vec3Value[1], oData.vec3Value[2]);
-            break;
-        case EnUniformType::EnVec4:
-            glUniform4f(loc, oData.vec4Value[0], oData.vec4Value[1], oData.vec4Value[2], oData.vec4Value[3]);
-            break;
-        case EnUniformType::EnMat4:
-            glUniformMatrix4fv(loc, 1, GL_FALSE, &(oData.mat4Value[0][0]));
-            break;
-        default:
-            break;
-        }
-    }
-    m_mapUniformValue.clear();
 }
 
 unsigned int TRSShader::getProgramId()

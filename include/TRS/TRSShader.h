@@ -1,71 +1,10 @@
 ﻿#pragma once
 
 #include <string>
-#include <vector>
-#include <map>
 
 #include "TRS/TRSExport.h"
 #include "TRS/TRSVector.h"
 #include "TRS/TRSMatrix.h"
-
-enum class EnUniformType : unsigned char
-{
-    EnFloat = 0,
-    EnInt,
-    EnVec2,
-    EnVec3,
-    EnVec4,
-    EnMat4
-};
-
-struct UniformData
-{
-    EnUniformType enType;
-    union
-    {
-        float fValue;
-        int  nValue;
-        TRSVec2 vec2Value;
-        TRSVec3 vec3Value;
-        TRSVec4 vec4Value;
-        TRSMatrix mat4Value;
-    };
-    UniformData()
-        :enType(EnUniformType::EnFloat), fValue(0.0f)
-    {
-
-    }
-    UniformData(const UniformData& ref)
-    {
-        enType = ref.enType;
-        switch (enType)
-        {
-        case EnUniformType::EnFloat:
-            fValue = ref.fValue;
-            break;
-        case EnUniformType::EnInt:
-            nValue = ref.nValue;
-            break;
-        case EnUniformType::EnVec2:
-            vec2Value = ref.vec2Value;
-            break;
-        case EnUniformType::EnVec3:
-            vec3Value = ref.vec3Value;
-            break;
-        case EnUniformType::EnVec4:
-            vec4Value = ref.vec4Value;
-            break;
-        case EnUniformType::EnMat4:
-            mat4Value = ref.mat4Value;
-            break;
-        default:
-            break;
-        }
-    }
-    ~UniformData()
-    {
-    }
-};
 
 class TRS_EXPORT TRSShader
 {
@@ -87,14 +26,18 @@ public:
 
     void use();
 
-    void addUniformi(const std::string& uniformName, int value);
-    void addUniformf(const std::string& uniformName, float value);
-    void addUniform3v(const std::string& uniformName, TRSVec3 vec3Color);
-    void addUniform4v(const std::string& uniformName, TRSVec4 vec4Color);
-    void addUniformMatrix4(const std::string& uniformName, TRSMatrix mat);
-    void applayAllStaticUniform();
+    void addUniformi(const char* uniformName, int value);
+
+    void addUniformf(const char* uniformName, float value);
+
+    void addUniform3v(const char* uniformName, TRSVec3 vec3Color);
+
+    void addUniform4v(const char* uniformName, TRSVec4 vec4Color);
+
+    void addUniformMatrix4(const char* uniformName, TRSMatrix mat);
 
     unsigned int getProgramId();
+
     std::string debugInfo();
 
 private:
@@ -109,6 +52,5 @@ public:
     unsigned int fShader;
     unsigned int tescShader;
     unsigned int teseShader;
-    std::map<std::string, UniformData> m_mapUniformValue;
 };
 

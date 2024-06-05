@@ -147,7 +147,6 @@ void TRSViewer::drawScene()
             TRSMatrix modelMatrix = geode->getMatrix();
             shader->addUniformMatrix4("model", modelMatrix);
             shader->addUniform4v("baseColor", geode->getColor());
-            shader->applayAllStaticUniform();
 
             geode->setActive();
             TRSTexture* pTexture = geode->getTexture();
