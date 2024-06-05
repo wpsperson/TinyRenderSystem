@@ -9,6 +9,7 @@
 #include "TRS/TRSDefEnum.h"
 #include "TRS/TRSVector.h"
 
+class TRSSettings;
 class TRSCamera;
 class TRSNode;
 class TRSGeode;
@@ -48,6 +49,7 @@ protected:
     TRSShader* getOrCreateShader(ShaderType type);
 
 protected:
+    TRSSettings* m_setting = nullptr;
     std::shared_ptr<TRSNode> m_pSceneNode;
     TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;

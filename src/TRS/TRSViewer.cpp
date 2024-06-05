@@ -6,6 +6,7 @@
 
 #include "TRS/TRSDefGL.h"
 #include "TRS/TRSDefConst.h"
+#include "TRS/TRSSettings.h"
 #include "TRS/TRSCamera.h"
 #include "TRS/TRSNode.h"
 #include "TRS/CullVisitor.h"
@@ -21,6 +22,7 @@
 TRSViewer::TRSViewer()
     : m_BGColor(s_DefaultBGColor)
 {
+    m_setting = new TRSSettings;
     m_polygonModeVisitor = new PolygonModeVisitor;
     m_pCamera = new TRSCamera;
     m_cullor = new CullVisitor;
@@ -30,6 +32,7 @@ TRSViewer::~TRSViewer()
 {
     delete m_cullor;
     delete m_polygonModeVisitor;
+    delete m_setting;
 }
 
 bool TRSViewer::loadOpenGLAddress(LoadGLAddress func)

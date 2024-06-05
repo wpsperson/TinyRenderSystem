@@ -30,6 +30,8 @@ public:
 
     TRSMesh* usePointsMesh();
 
+    TRSMesh* getMeshByMode(RenderMode mode) const;
+
     void setTexture(std::shared_ptr<TRSTexture> texture);
 
     TRSTexture* getTexture() const;

@@ -79,6 +79,22 @@ TRSMesh* TRSGeode::usePointsMesh()
     return m_points;
 }
 
+TRSMesh* TRSGeode::getMeshByMode(RenderMode mode) const
+{
+    if (RenderMode::Shaded == mode)
+    {
+        return m_shaded;
+    }
+    else if (RenderMode::WireFrame == mode)
+    {
+        return m_wireframe;
+    }
+    else
+    {
+        return m_points;
+    }
+}
+
 void TRSGeode::setTexture(std::shared_ptr<TRSTexture> texture)
 {
     m_pTexture = texture;
