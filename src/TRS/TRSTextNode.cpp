@@ -98,13 +98,13 @@ std::string TRSTextNode::debugInfo()
     return strDebugInfo;
 }
 
-void TRSTextNode::preProcess()
+void TRSTextNode::preProcess(RenderMode mode)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void TRSTextNode::postProcess()
+void TRSTextNode::postProcess(RenderMode mode)
 {
     glDisable(GL_BLEND);
 }

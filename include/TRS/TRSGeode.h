@@ -22,9 +22,9 @@ public:
 
     virtual void draw(RenderMode mode);
 
-    virtual void preProcess();
+    virtual void preProcess(RenderMode mode);
 
-    virtual void postProcess();
+    virtual void postProcess(RenderMode mode);
 
     TRSBox boundingBox() const override;
 

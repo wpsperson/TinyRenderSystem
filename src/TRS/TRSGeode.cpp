@@ -44,13 +44,25 @@ void TRSGeode::setActive()
     }
 }
 
-void TRSGeode::preProcess()
+void TRSGeode::preProcess(RenderMode mode)
 {
+    if (RenderMode::Shaded == mode)
+    {
+        glEnable(GL_POLYGON_OFFSET_FILL);
+        glPolygonOffset(1.0f, 1.0f); // more away to camera.
+    }
+    else if (RenderMode::WireFrame == mode)
+    {
+    }
+    else
+    {
+        glPointSize(4.0);
+    }
+
     if (DrawType::PATCHES == m_shaded->getDrawType())
     {
         glPatchParameteri(GL_PATCH_VERTICES, m_shaded->getDrawParam());
     }
-
     if (m_polygonMode != GL_FILL)
     {
         glPolygonMode(GL_FRONT_AND_BACK, m_polygonMode);
@@ -76,8 +88,19 @@ void TRSGeode::draw(RenderMode mode)
     }
 }
 
-void TRSGeode::postProcess()
+void TRSGeode::postProcess(RenderMode mode)
 {
+    if (RenderMode::Shaded == mode)
+    {
+        glDisable(GL_POLYGON_OFFSET_FILL);
+    }
+    else if (RenderMode::WireFrame == mode)
+    {
+    }
+    else
+    {
+
+    }
     if (m_polygonMode != GL_FILL)
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

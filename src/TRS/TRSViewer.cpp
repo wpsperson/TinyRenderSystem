@@ -136,17 +136,17 @@ void TRSViewer::drawScene()
         shader->use();
         TRSMatrix viewMatrix = m_pCamera->getViewMatrix();
         TRSMatrix projectMatrix = m_pCamera->getProjectMatrix();
-        shader->addUniformMatrix4("view", viewMatrix);
-        shader->addUniformMatrix4("projection", projectMatrix);
-        shader->addUniform3v("viewPos", m_pCamera->getPosition());
-        shader->addUniform3v("lightPos", m_pCamera->getPosition()); // s_DefaultLightPos
+        shader->setUniformMatrix4("view", viewMatrix);
+        shader->setUniformMatrix4("projection", projectMatrix);
+        shader->setUniform3v("viewPos", m_pCamera->getPosition());
+        shader->setUniform3v("lightPos", m_pCamera->getPosition()); // s_DefaultLightPos
         for (const DrawItem &item : items)
         {
             TRSGeode* geode = item.geode;
             RenderMode mode = item.mode;
             TRSMatrix modelMatrix = geode->getMatrix();
-            shader->addUniformMatrix4("model", modelMatrix);
-            shader->addUniform4v("baseColor", geode->getColor());
+            shader->setUniformMatrix4("model", modelMatrix);
+            shader->setUniform4v("baseColor", geode->getColor());
 
             geode->setActive();
             TRSTexture* pTexture = geode->getTexture();
@@ -159,9 +159,9 @@ void TRSViewer::drawScene()
                 geode->getUpdateCallBack()(geode);
             }
 
-            geode->preProcess();
+            geode->preProcess(mode);
             geode->draw(mode);
-            geode->postProcess();
+            geode->postProcess(mode);
         }
 
     }

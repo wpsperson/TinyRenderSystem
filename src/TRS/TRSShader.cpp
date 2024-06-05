@@ -77,7 +77,7 @@ void TRSShader::use()
     glUseProgram(program);
 }
 
-void TRSShader::addUniformi(const char* uniformName, int value)
+void TRSShader::setUniformi(const char* uniformName, int value)
 {
     int loc = glGetUniformLocation(program, uniformName);
     if (loc >= 0)
@@ -86,7 +86,7 @@ void TRSShader::addUniformi(const char* uniformName, int value)
     }
 }
 
-void TRSShader::addUniformf(const char* uniformName, float value)
+void TRSShader::setUniformf(const char* uniformName, float value)
 {
     int loc = glGetUniformLocation(program, uniformName);
     if (loc >= 0)
@@ -95,7 +95,7 @@ void TRSShader::addUniformf(const char* uniformName, float value)
     }
 }
 
-void TRSShader::addUniform3v(const char* uniformName, TRSVec3 vec3Color)
+void TRSShader::setUniform3v(const char* uniformName, TRSVec3 vec3Color)
 {
     int loc = glGetUniformLocation(program, uniformName);
     if (loc >= 0)
@@ -104,7 +104,7 @@ void TRSShader::addUniform3v(const char* uniformName, TRSVec3 vec3Color)
     }
 }
 
-void TRSShader::addUniform4v(const char* uniformName, TRSVec4 vec4Color)
+void TRSShader::setUniform4v(const char* uniformName, TRSVec4 vec4Color)
 {
     int loc = glGetUniformLocation(program, uniformName);
     if (loc >= 0)
@@ -113,7 +113,7 @@ void TRSShader::addUniform4v(const char* uniformName, TRSVec4 vec4Color)
     }
 }
 
-void TRSShader::addUniformMatrix4(const char* uniformName, TRSMatrix mat)
+void TRSShader::setUniformMatrix4(const char* uniformName, TRSMatrix mat)
 {
     int loc = glGetUniformLocation(program, uniformName);
     if (loc >= 0)

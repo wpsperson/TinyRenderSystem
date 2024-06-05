@@ -26,15 +26,15 @@ public:
 
     void use();
 
-    void addUniformi(const char* uniformName, int value);
+    void setUniformi(const char* uniformName, int value);
 
-    void addUniformf(const char* uniformName, float value);
+    void setUniformf(const char* uniformName, float value);
 
-    void addUniform3v(const char* uniformName, TRSVec3 vec3Color);
+    void setUniform3v(const char* uniformName, TRSVec3 vec3Color);
 
-    void addUniform4v(const char* uniformName, TRSVec4 vec4Color);
+    void setUniform4v(const char* uniformName, TRSVec4 vec4Color);
 
-    void addUniformMatrix4(const char* uniformName, TRSMatrix mat);
+    void setUniformMatrix4(const char* uniformName, TRSMatrix mat);
 
     unsigned int getProgramId();
 

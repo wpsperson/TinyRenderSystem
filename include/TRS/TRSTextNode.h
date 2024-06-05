@@ -24,8 +24,8 @@ public:
     virtual std::string debugInfo() override;
 
 protected:
-    void preProcess() override;
-    void postProcess() override;
+    void preProcess(RenderMode mode) override;
+    void postProcess(RenderMode mode) override;
     void generateText();
 protected:
     std::wstring m_text;
