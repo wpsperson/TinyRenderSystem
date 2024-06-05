@@ -60,7 +60,7 @@ void OpenGLWidget::initializeGL()
 
     //// initialize some scene
     //TRSCube* cube = new TRSCube;
-    //TRSMesh* mesh = cube->getShadedMesh();
+    //TRSMesh* mesh = cube->useShadedMesh();
     //std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     //pNode->copyShadedMesh(mesh);
     //pSS->getTexture()->createTexture("resources/textures/opengl.png");

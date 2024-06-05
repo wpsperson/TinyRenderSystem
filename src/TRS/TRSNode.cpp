@@ -25,11 +25,6 @@ void TRSNode::setMatrix(const TRSMatrix& mat)
     m_mat = mat;
 }
 
-void TRSNode::setActive()
-{
-
-}
-
 TRSVec4 TRSNode::getColor() const
 {
     return m_matColor;
@@ -58,21 +53,6 @@ void TRSNode::setName(const std::string& name)
 const std::string& TRSNode::name() const
 {
     return m_name;
-}
-
-void TRSNode::preProcess()
-{
-
-}
-
-void TRSNode::draw()
-{
-
-}
-
-void TRSNode::postProcess()
-{
-
 }
 
 void TRSNode::traverse(NodeVisitor& visitor)

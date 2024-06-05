@@ -23,14 +23,6 @@ public:
 
     void setMatrix(const TRSMatrix& mat);
 
-    virtual void setActive();// used to bind vao
-
-    virtual void preProcess();
-
-    virtual void draw();
-
-    virtual void postProcess();
-
     virtual void traverse(NodeVisitor& visitor);
 
     virtual TRSBox boundingBox() const;

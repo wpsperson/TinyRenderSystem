@@ -1,12 +1,14 @@
 ﻿#pragma once
 
+#include <chrono>
 #include <memory>
 #include <map>
 #include <vector>
-#include <chrono>
+#include <unordered_map>
 
 #include "TRS/TRSExport.h"
 #include "TRS/TRSDefEnum.h"
+#include "TRS/TRSDefStruct.h"
 #include "TRS/TRSVector.h"
 
 class TRSSettings;
@@ -35,7 +37,9 @@ public:
 
     void frame();
 
-    void updateScene();
+    void cullScene();
+
+    void classify();
 
     void drawScene();
 
@@ -43,6 +47,8 @@ public:
 
 protected:
     void calcFrameTime();
+
+    TRSShader* find2Shader(TRSGeode* node, RenderMode mode);
 
     TRSShader* findShader(TRSGeode* node);
 
@@ -54,6 +60,7 @@ protected:
     TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;
     CullVisitor* m_cullor;
+    std::unordered_map<TRSShader*, std::vector<DrawItem> > m_drawItems;
     std::map<ShaderType, TRSShader*> m_shaders;
     PolygonModeVisitor* m_polygonModeVisitor;
     std::chrono::steady_clock::time_point m_fLastTime;

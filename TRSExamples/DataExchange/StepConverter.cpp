@@ -223,12 +223,13 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
 
     // generate Geode and fill the mesh
     TRSGeode* geode = new TRSGeode;
+    geode->setRenderMode(RenderMode::Shaded | RenderMode::WireFrame | RenderMode::Points);
     geode->setName(name);
     geode->setColor(color);
     // populate mesh
     TopLoc_Location currentLocation = m_shapeTool->GetLocation(shapeLabel);
     TopLoc_Location localLocation = parentLocation * currentLocation;
-    TRSMesh* shadedMesh = geode->getShadedMesh();
+    TRSMesh* shadedMesh = geode->useShadedMesh();
     populateShadedMesh(occShape, shadedMesh, localLocation);
     TRSMesh* wireMesh = geode->useWireframeMesh();
     populateWireframeMesh(occShape, wireMesh, localLocation);

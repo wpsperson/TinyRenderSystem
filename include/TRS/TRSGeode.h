@@ -18,19 +18,25 @@ public:
 
     ~TRSGeode();
 
-    void draw() override;
+    virtual void setActive();
+
+    virtual void draw(RenderMode mode);
+
+    virtual void preProcess();
+
+    virtual void postProcess();
 
     TRSBox boundingBox() const override;
 
     void copyShadedMesh(TRSMesh* mesh);
 
-    TRSMesh* getShadedMesh()const;
+    TRSMesh* useShadedMesh();
 
     TRSMesh* useWireframeMesh();
 
     TRSMesh* usePointsMesh();
 
-    TRSMesh* getMeshByMode(RenderMode mode) const;
+    TRSMesh* getComponentMesh(RenderMode mode) const;
 
     void setTexture(std::shared_ptr<TRSTexture> texture);
 
@@ -44,8 +50,6 @@ public:
 
     void setShadedIndice(const std::vector<unsigned int>& indices);
 
-    void setActive() override;
-
     void setPolygonMode(int polyMode);
 
     void setRenderMode(int renderMode);
@@ -54,14 +58,11 @@ public:
 
     void removeRenderMode(RenderMode mode);
 
-    bool hasRenderMode(RenderMode mode);
+    bool hasRenderMode(RenderMode mode) const;
+
+    bool hasComponent(RenderMode mode) const;
 
     std::string debugInfo() override;
-
-    void preProcess() override;
-
-    void postProcess() override;
-
 
 protected:
     int m_polygonMode;

@@ -17,7 +17,7 @@ public:
     void setUp(const TRSVec3& textUp);
     void setSize(float size);
 
-    virtual void draw() override;
+    virtual void draw(RenderMode mode) override;
 
     void setActive() override;
 

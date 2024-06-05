@@ -28,19 +28,59 @@ TRSGeode::~TRSGeode()
     }
 }
 
-void TRSGeode::draw()
+void TRSGeode::setActive()
 {
-    m_shaded->bindMesh();
-    m_shaded->drawMesh();
-    if (hasRenderMode(RenderMode::WireFrame) && m_wireframe)
+    if (hasComponent(RenderMode::Shaded))
+    {
+        m_shaded->uploadOnce();
+    }
+    if (hasComponent(RenderMode::WireFrame))
+    {
+        m_wireframe->uploadOnce();
+    }
+    if (hasComponent(RenderMode::Points))
+    {
+        m_points->uploadOnce();
+    }
+}
+
+void TRSGeode::preProcess()
+{
+    if (DrawType::PATCHES == m_shaded->getDrawType())
+    {
+        glPatchParameteri(GL_PATCH_VERTICES, m_shaded->getDrawParam());
+    }
+
+    if (m_polygonMode != GL_FILL)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, m_polygonMode);
+    }
+}
+
+void TRSGeode::draw(RenderMode mode)
+{
+    if (RenderMode::Shaded == mode)
+    {
+        m_shaded->bindMesh();
+        m_shaded->drawMesh();
+    }
+    else if (RenderMode::WireFrame == mode)
     {
         m_wireframe->bindMesh();
         m_wireframe->drawMesh();
     }
-    if (hasRenderMode(RenderMode::Points) && m_points)
+    else if (RenderMode::Points == mode)
     {
         m_points->bindMesh();
         m_points->drawMesh();
+    }
+}
+
+void TRSGeode::postProcess()
+{
+    if (m_polygonMode != GL_FILL)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 }
 
@@ -54,8 +94,13 @@ void TRSGeode::copyShadedMesh(TRSMesh* mesh)
     m_shaded->copyMesh(mesh);
 }
 
-TRSMesh* TRSGeode::getShadedMesh() const
+TRSMesh* TRSGeode::useShadedMesh()
 {
+    if (!m_shaded)
+    {
+        m_shaded = new TRSMesh;
+        m_shaded->setDrawType(DrawType::TRIANGLES);
+    }
     return m_shaded;
 }
 
@@ -79,7 +124,7 @@ TRSMesh* TRSGeode::usePointsMesh()
     return m_points;
 }
 
-TRSMesh* TRSGeode::getMeshByMode(RenderMode mode) const
+TRSMesh* TRSGeode::getComponentMesh(RenderMode mode) const
 {
     if (RenderMode::Shaded == mode)
     {
@@ -125,19 +170,6 @@ void TRSGeode::setShadedIndice(const std::vector<unsigned int>& indices)
     m_shaded->setIndices(indices);
 }
 
-void TRSGeode::setActive()
-{
-    m_shaded->uploadOnce();
-    if (hasRenderMode(RenderMode::WireFrame) && m_wireframe)
-    {
-        m_wireframe->uploadOnce();
-    }
-    if (hasRenderMode(RenderMode::Points) && m_points)
-    {
-        m_points->uploadOnce();
-    }
-}
-
 void TRSGeode::setPolygonMode(int polyMode)
 {
     m_polygonMode = polyMode;
@@ -164,9 +196,31 @@ void TRSGeode::removeRenderMode(RenderMode mode)
     }
 }
 
-bool TRSGeode::hasRenderMode(RenderMode mode)
+bool TRSGeode::hasRenderMode(RenderMode mode) const
 {
     return m_renderMode & mode;
+}
+
+bool TRSGeode::hasComponent(RenderMode mode) const
+{
+    // first check the mode
+    if (!hasRenderMode(mode))
+    {
+        return false;
+    }
+    // second check mesh exist.
+    if (RenderMode::Shaded == mode)
+    {
+        return (m_shaded != nullptr);
+    }
+    else if (RenderMode::WireFrame == mode)
+    {
+        return (m_wireframe != nullptr);;
+    }
+    else
+    {
+        return (m_points != nullptr);
+    }
 }
 
 std::string TRSGeode::debugInfo()
@@ -177,25 +231,4 @@ std::string TRSGeode::debugInfo()
         strDebugInfo += pTexture->debugInfo();
     }
     return strDebugInfo;
-}
-
-void TRSGeode::preProcess()
-{
-    if (DrawType::PATCHES == m_shaded->getDrawType())
-    {
-        glPatchParameteri(GL_PATCH_VERTICES, m_shaded->getDrawParam());
-    }
-
-    if (m_polygonMode != GL_FILL)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, m_polygonMode);
-    }
-}
-
-void TRSGeode::postProcess()
-{
-    if (m_polygonMode != GL_FILL)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
 }

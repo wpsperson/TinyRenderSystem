@@ -13,6 +13,7 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSDefMath.h
     ${INCLUDE_DIR}/TRSDefEnum.h
     ${INCLUDE_DIR}/TRSDefGL.h
+    ${INCLUDE_DIR}/TRSDefStruct.h
     ${INCLUDE_DIR}/TRSExport.h
     ${INCLUDE_DIR}/TRSShader.h
     ${INCLUDE_DIR}/TRSTexture.h
@@ -47,6 +48,7 @@ set(Target_INCLUDE_LIST
 
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/TRS)
 set(Target_SRC_LIST
+    ${SRC_DIR}/TRSDefStruct.cpp
     ${SRC_DIR}/TRSCharacterTexture.cpp
     ${SRC_DIR}/TRSShader.cpp
     ${SRC_DIR}/TRSTexture.cpp

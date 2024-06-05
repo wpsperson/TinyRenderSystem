@@ -67,8 +67,13 @@ void TRSTextNode::setSize(float size)
     m_size = size;
 }
 
-void TRSTextNode::draw()
+void TRSTextNode::draw(RenderMode mode)
 {
+    if (RenderMode::Shaded != mode)
+    {
+        return;
+    }
+
     m_shaded->bindMesh();
     glDrawArrays(GL_TRIANGLES, 0, m_ptCount);
 }

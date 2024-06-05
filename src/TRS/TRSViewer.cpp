@@ -1,5 +1,6 @@
 ﻿#include "TRS/TRSViewer.h"
 
+#include <array>
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -78,11 +79,12 @@ void TRSViewer::frame()
     glClearColor(m_BGColor[0], m_BGColor[1], m_BGColor[2], m_BGColor[3]);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     calcFrameTime();
-    updateScene();
+    cullScene();
+    classify();
     drawScene();
 }
 
-void TRSViewer::updateScene()
+void TRSViewer::cullScene()
 {
     TRSNode* root = m_pSceneNode.get();
     if (!root)
@@ -93,40 +95,76 @@ void TRSViewer::updateScene()
     m_cullor->visit(root);
 }
 
+void TRSViewer::classify()
+{
+    m_drawItems.clear();
+    const std::vector<TRSGeode*>& nodes = m_cullor->toRenderNodes();
+    std::vector<RenderMode> renderModes;
+    if (m_setting->displayShaded())
+    {
+        renderModes.emplace_back(RenderMode::Shaded);
+    }
+    if (m_setting->displayWireframe())
+    {
+        renderModes.emplace_back(RenderMode::WireFrame);
+    }
+    if (m_setting->displayPoints())
+    {
+        renderModes.emplace_back(RenderMode::Points);
+    }
+
+    for (TRSGeode* geode : nodes)
+    {
+        DrawItem item;
+        item.geode = geode;
+        for (RenderMode mode : renderModes)
+        {
+            if (geode->hasRenderMode(mode))
+            {
+                item.mode = mode;
+                TRSShader * shader = find2Shader(geode, mode);
+                m_drawItems[shader].emplace_back(item);
+            }
+        }
+    }
+}
+
 void TRSViewer::drawScene()
 {
-    const std::vector<TRSGeode*>& nodes = m_cullor->toRenderNodes();
-    for (TRSGeode* pNode : nodes)
+    for (const auto& [shader, items] : m_drawItems)
     {
-        //shader vao texture camera
-        TRSShader* pShader = findShader(pNode);
-        pShader->use();
-
-        TRSTexture* pTexture = pNode->getTexture();
-        if (pTexture)
-        {
-            pTexture->activeAllTextures(pShader->getProgramId());
-        }
-
-        pNode->setActive();
-        TRSMatrix modelMatrix = pNode->getMatrix();
+        shader->use();
         TRSMatrix viewMatrix = m_pCamera->getViewMatrix();
         TRSMatrix projectMatrix = m_pCamera->getProjectMatrix();
-        pShader->addUniformMatrix4("model", modelMatrix);
-        pShader->addUniformMatrix4("view", viewMatrix);
-        pShader->addUniformMatrix4("projection", projectMatrix);
-        pShader->addUniform3v("viewPos", m_pCamera->getPosition());
-        pShader->addUniform4v("baseColor", pNode->getColor());
-        pShader->addUniform3v("lightPos", m_pCamera->getPosition()); // s_DefaultLightPos
-        if (pNode->getUpdateCallBack())
+        shader->addUniformMatrix4("view", viewMatrix);
+        shader->addUniformMatrix4("projection", projectMatrix);
+        shader->addUniform3v("viewPos", m_pCamera->getPosition());
+        shader->addUniform3v("lightPos", m_pCamera->getPosition()); // s_DefaultLightPos
+        for (const DrawItem &item : items)
         {
-            pNode->getUpdateCallBack()(pNode);
+            TRSGeode* geode = item.geode;
+            RenderMode mode = item.mode;
+            TRSMatrix modelMatrix = geode->getMatrix();
+            shader->addUniformMatrix4("model", modelMatrix);
+            shader->addUniform4v("baseColor", geode->getColor());
+            shader->applayAllStaticUniform();
+
+            geode->setActive();
+            TRSTexture* pTexture = geode->getTexture();
+            if (pTexture)
+            {
+                pTexture->activeAllTextures(shader->getProgramId());
+            }
+            if (geode->getUpdateCallBack())
+            {
+                geode->getUpdateCallBack()(geode);
+            }
+
+            geode->preProcess();
+            geode->draw(mode);
+            geode->postProcess();
         }
-        pShader->applayAllStaticUniform();//Apply Uniform
-        // simple draw call
-        pNode->preProcess();
-        pNode->draw();
-        pNode->postProcess();
+
     }
 }
 
@@ -148,9 +186,51 @@ void TRSViewer::calcFrameTime()
     m_fLastTime = m_fCurTime;
 }
 
+TRSShader* TRSViewer::find2Shader(TRSGeode* geode, RenderMode mode)
+{
+    TRSMesh* mesh = geode->getComponentMesh(mode);
+    int meshStruct = mesh->getMeshStruct();
+    bool hasNormal = (meshStruct & msNormal);
+    bool hasUV = (meshStruct & msUV);
+
+    TRSShader* shader = nullptr;
+    if (RenderMode::Shaded == mode)
+    {
+        TRSTexture* texture = geode->getTexture();
+        if (hasUV && texture && texture->count() == 2)
+        {
+            shader = getOrCreateShader(ShaderType::DualTexture);
+        }
+        else if (hasUV && texture && hasNormal)
+        {
+            shader = getOrCreateShader(ShaderType::PhongTexture);
+        }
+        else if (hasNormal)
+        {
+            shader = getOrCreateShader(ShaderType::Phong);
+        }
+        else
+        {
+            shader = getOrCreateShader(ShaderType::Default);
+        }
+    }
+    else
+    {
+        if (hasNormal)
+        {
+            shader = getOrCreateShader(ShaderType::Phong);
+        }
+        else
+        {
+            shader = getOrCreateShader(ShaderType::Default);
+        }
+    }
+    return shader;
+}
+
 TRSShader* TRSViewer::findShader(TRSGeode* node)
 {
-    TRSMesh* mesh = node->getShadedMesh();
+    TRSMesh* mesh = node->useShadedMesh();
     TRSTexture* texture = nullptr;
     texture = node->getTexture();
     int meshStruct =  mesh->getMeshStruct();
