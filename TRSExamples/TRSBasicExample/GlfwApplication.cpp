@@ -78,7 +78,7 @@ bool GlfwApplication::onInitial()
     TRSCube cube;
     TRSMesh* mesh = cube.getMesh();
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
-    pNode->setMesh(mesh);
+    pNode->copyShadedMesh(mesh);
     pNode->setTexture(std::make_shared<TRSTexture>());
     pNode->getTexture()->createTexture("resources/textures/opengl.png");
     pNode->getTexture()->createTexture("resources/textures/cube.png");

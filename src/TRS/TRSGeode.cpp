@@ -38,14 +38,34 @@ TRSBox TRSGeode::boundingBox() const
     return m_shaded->boundingBox();
 }
 
-void TRSGeode::setMesh(TRSMesh* mesh)
+void TRSGeode::copyShadedMesh(TRSMesh* mesh)
 {
     m_shaded->copyMesh(mesh);
 }
 
-TRSMesh* TRSGeode::getMesh() const
+TRSMesh* TRSGeode::getShadedMesh() const
 {
     return m_shaded;
+}
+
+TRSMesh* TRSGeode::useWireframeMesh()
+{
+    if (!m_wireframe)
+    {
+        m_wireframe = new TRSMesh;
+        m_wireframe->setDrawType(DrawType::LINES);
+    }
+    return m_wireframe;
+}
+
+TRSMesh* TRSGeode::usePointsMesh()
+{
+    if (!m_points)
+    {
+        m_points = new TRSMesh;
+        m_points->setDrawType(DrawType::POINTS);
+    }
+    return m_points;
 }
 
 void TRSGeode::setTexture(std::shared_ptr<TRSTexture> texture)
@@ -80,7 +100,15 @@ void TRSGeode::setShadedIndice(const std::vector<unsigned int>& indices)
 
 void TRSGeode::setActive()
 {
-    m_shaded->bindMesh();
+    m_shaded->uploadOnce();
+    if (hasRenderMode(RenderMode::WireFrame) && m_wireframe)
+    {
+        m_wireframe->uploadOnce();
+    }
+    if (hasRenderMode(RenderMode::Points) && m_points)
+    {
+        m_points->uploadOnce();
+    }
 }
 
 void TRSGeode::setPolygonMode(int polyMode)
@@ -139,15 +167,17 @@ void TRSGeode::preProcess()
 
 void TRSGeode::drawInternal()
 {
-    int nElementCount = m_shaded->getElementCount();
-    GLenum OpenGLDrawType = static_cast<GLenum>(m_shaded->getDrawType());
-    if (nElementCount > 0)
+    m_shaded->bindMesh();
+    m_shaded->drawMesh();
+    if (hasRenderMode(RenderMode::WireFrame) && m_wireframe)
     {
-        glDrawElements(OpenGLDrawType, m_shaded->getElementCount(), GL_UNSIGNED_INT, 0);
+        m_wireframe->bindMesh();
+        m_wireframe->drawMesh();
     }
-    else
+    if (hasRenderMode(RenderMode::Points) && m_points)
     {
-        glDrawArrays(OpenGLDrawType, 0, m_shaded->getDrawCount());
+        m_points->bindMesh();
+        m_points->drawMesh();
     }
 }
 

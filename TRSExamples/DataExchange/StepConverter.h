@@ -36,7 +36,7 @@ private:
 
     bool referToAssembly(const TDF_Label& Label, TDF_Label &referredShape);
 
-    static void populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
+    static void populateShadedMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
 
     static TRSVec3 toTRSVec(const gp_Pnt& pt);
 

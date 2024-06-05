@@ -225,11 +225,10 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
     geode->setName(name);
     geode->setColor(color);
     // populate mesh
-    TRSMesh* mesh = geode->getMesh();
-
     TopLoc_Location currentLocation = m_shapeTool->GetLocation(shapeLabel);
     TopLoc_Location localLocation = parentLocation * currentLocation;
-    populateMesh(occShape, mesh, localLocation);
+    TRSMesh* shadedMesh = geode->getShadedMesh();
+    populateShadedMesh(occShape, shadedMesh, localLocation);
     return geode;
 }
 
@@ -275,7 +274,7 @@ bool StepConverter::referToAssembly(const TDF_Label& Label, TDF_Label& referredS
     return false;
 }
 
-void StepConverter::populateMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation)
+void StepConverter::populateShadedMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation)
 {
     BRepMesh_IncrementalMesh incrementalMesh(topo_shape, GlobalLineDeflection, Standard_True, 0.5, Standard_True);
     TopExp_Explorer faceExplorer;

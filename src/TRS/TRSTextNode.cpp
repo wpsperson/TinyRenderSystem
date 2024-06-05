@@ -69,6 +69,7 @@ void TRSTextNode::setSize(float size)
 
 void TRSTextNode::draw()
 {
+    m_shaded->bindMesh();
     glDrawArrays(GL_TRIANGLES, 0, m_ptCount);
 }
 
@@ -79,7 +80,7 @@ void TRSTextNode::setActive()
         generateText();
         m_dirty = false;
     }
-    m_shaded->bindMesh();
+    m_shaded->uploadOnce();
 }
 
 std::string TRSTextNode::debugInfo()

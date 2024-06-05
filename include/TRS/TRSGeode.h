@@ -22,9 +22,13 @@ public:
 
     TRSBox boundingBox() const override;
 
-    void setMesh(TRSMesh* mesh);
+    void copyShadedMesh(TRSMesh* mesh);
 
-    TRSMesh* getMesh()const;
+    TRSMesh* getShadedMesh()const;
+
+    TRSMesh* useWireframeMesh();
+
+    TRSMesh* usePointsMesh();
 
     void setTexture(std::shared_ptr<TRSTexture> texture);
 

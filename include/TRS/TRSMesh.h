@@ -46,7 +46,11 @@ public:
 
     void setDrawParam(int param);
 
+    void uploadOnce();
+
     void bindMesh();
+
+    void drawMesh();
 
     static int computeVertexAttribStride(int vertexStructType);
 

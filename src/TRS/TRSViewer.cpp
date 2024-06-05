@@ -147,7 +147,7 @@ void TRSViewer::calcFrameTime()
 
 TRSShader* TRSViewer::findShader(TRSGeode* node)
 {
-    TRSMesh* mesh = node->getMesh();
+    TRSMesh* mesh = node->getShadedMesh();
     TRSTexture* texture = nullptr;
     texture = node->getTexture();
     int meshStruct =  mesh->getMeshStruct();

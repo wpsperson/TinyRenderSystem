@@ -162,7 +162,7 @@ void TRSMesh::setDrawParam(int param)
     m_nPatchParam = param;
 }
 
-void TRSMesh::bindMesh()
+void TRSMesh::uploadOnce()
 {
     if (m_needUpload)
     {
@@ -173,7 +173,26 @@ void TRSMesh::bindMesh()
         upload();
         m_needUpload = false;
     }
+}
+
+void TRSMesh::bindMesh()
+{
     m_vao->bindVAO();
+}
+
+void TRSMesh::drawMesh()
+{
+    GLenum OpenGLDrawType = static_cast<GLenum>(getDrawType());
+    if (!m_indexs.empty())
+    {
+        int nElementCount = static_cast<int>(m_indexs.size());
+        glDrawElements(OpenGLDrawType, nElementCount, GL_UNSIGNED_INT, 0);
+    }
+    else
+    {
+        int nDrawCount = static_cast<int>(m_vertexs.size());
+        glDrawArrays(OpenGLDrawType, 0, nDrawCount);
+    }
 }
 
 int TRSMesh::computeVertexAttribStride(int vertexStructType)
