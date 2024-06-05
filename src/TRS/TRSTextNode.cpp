@@ -79,7 +79,7 @@ void TRSTextNode::setActive()
         generateText();
         m_dirty = false;
     }
-    m_pMesh->bindMesh();
+    m_shaded->bindMesh();
 }
 
 std::string TRSTextNode::debugInfo()
@@ -141,6 +141,6 @@ void TRSTextNode::generateText()
     }
     // to do ,this snippet should before draw()
     m_ptCount = size * 6;
-    m_pMesh->setVertex(vertices);
-    m_pMesh->setUV(UVs);
+    m_shaded->setVertex(vertices);
+    m_shaded->setUV(UVs);
 }

@@ -51,6 +51,16 @@ void TRSMesh::setIndices(const std::vector<unsigned int>& indices)
     m_needUpload = true;
 }
 
+void TRSMesh::copyMesh(TRSMesh* rhs)
+{
+    m_vertexs = rhs->m_vertexs;
+    m_normals = rhs->m_normals;
+    m_colors = rhs->m_colors;
+    m_texCoords = rhs->m_texCoords;
+    updateBoundingBox();
+    m_needUpload = true;
+}
+
 void TRSMesh::generateNormals()
 {
     if (m_vertexs.empty())

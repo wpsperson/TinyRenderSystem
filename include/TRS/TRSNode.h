@@ -33,7 +33,7 @@ public:
 
     virtual void traverse(NodeVisitor& visitor);
 
-    virtual TRSBox boundingBox() const = 0;
+    virtual TRSBox boundingBox() const;
 
     TRSVec4 getColor() const;
 

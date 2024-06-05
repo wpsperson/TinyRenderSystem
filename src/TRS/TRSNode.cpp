@@ -80,6 +80,11 @@ void TRSNode::traverse(NodeVisitor& visitor)
 
 }
 
+TRSBox TRSNode::boundingBox() const
+{
+    return TRSBox();
+}
+
 void TRSNode::setUpdateCallBack(NodeUpdateFunc func)
 {
     m_UpdateFunc = func;

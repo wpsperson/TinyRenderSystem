@@ -63,7 +63,7 @@ protected:
     int m_polygonMode;
     int m_renderMode = RenderMode::Shaded;
     std::shared_ptr<TRSTexture> m_pTexture;
-    std::shared_ptr<TRSMesh> m_pMesh;
+    TRSMesh* m_shaded = nullptr;
     TRSMesh* m_wireframe = nullptr;
     TRSMesh* m_points = nullptr;
 };

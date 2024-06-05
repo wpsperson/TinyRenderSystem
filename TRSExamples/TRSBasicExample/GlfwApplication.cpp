@@ -75,8 +75,8 @@ bool GlfwApplication::onInitial()
     m_pCameraHandler = new TRSDefaultCameraHandler(camera);
     m_dispatcher->addEventHandler(m_pCameraHandler);
 
-    TRSCube* cube = new TRSCube;
-    TRSMesh* mesh = cube->getMesh();
+    TRSCube cube;
+    TRSMesh* mesh = cube.getMesh();
     std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
     pNode->setMesh(mesh);
     pNode->setTexture(std::make_shared<TRSTexture>());

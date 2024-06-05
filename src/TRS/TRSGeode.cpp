@@ -12,12 +12,20 @@ TRSGeode::TRSGeode()
     : TRSNode()
     , m_polygonMode(GL_FILL)
 {
-    m_pMesh = std::make_shared<TRSMesh>();
+    m_shaded = new TRSMesh;
 }
 
 TRSGeode::~TRSGeode()
 {
-
+    delete m_shaded;
+    if (m_wireframe)
+    {
+        delete m_wireframe;
+    }
+    if (m_points)
+    {
+        delete m_points;
+    }
 }
 
 void TRSGeode::draw()
@@ -27,17 +35,17 @@ void TRSGeode::draw()
 
 TRSBox TRSGeode::boundingBox() const
 {
-    return m_pMesh->boundingBox();
+    return m_shaded->boundingBox();
 }
 
 void TRSGeode::setMesh(TRSMesh* mesh)
 {
-    m_pMesh = std::make_shared<TRSMesh>(*mesh);
+    m_shaded->copyMesh(mesh);
 }
 
 TRSMesh* TRSGeode::getMesh() const
 {
-    return m_pMesh.get();
+    return m_shaded;
 }
 
 void TRSGeode::setTexture(std::shared_ptr<TRSTexture> texture)
@@ -52,27 +60,27 @@ TRSTexture* TRSGeode::getTexture() const
 
 void TRSGeode::setShadedVertice(const std::vector<TRSPoint>& vertexs)
 {
-    m_pMesh->setVertex(vertexs);
+    m_shaded->setVertex(vertexs);
 }
 
 void TRSGeode::setShadedNormals(const std::vector<TRSVec3>& normals)
 {
-    m_pMesh->setNormal(normals);
+    m_shaded->setNormal(normals);
 }
 
 void TRSGeode::setShadedUVs(const std::vector<TRSVec2>& UVs)
 {
-    m_pMesh->setUV(UVs);
+    m_shaded->setUV(UVs);
 }
 
 void TRSGeode::setShadedIndice(const std::vector<unsigned int>& indices)
 {
-    m_pMesh->setIndices(indices);
+    m_shaded->setIndices(indices);
 }
 
 void TRSGeode::setActive()
 {
-    m_pMesh->bindMesh();
+    m_shaded->bindMesh();
 }
 
 void TRSGeode::setPolygonMode(int polyMode)
@@ -118,9 +126,9 @@ std::string TRSGeode::debugInfo()
 
 void TRSGeode::preProcess()
 {
-    if (DrawType::PATCHES == m_pMesh->getDrawType())
+    if (DrawType::PATCHES == m_shaded->getDrawType())
     {
-        glPatchParameteri(GL_PATCH_VERTICES, m_pMesh->getDrawParam());
+        glPatchParameteri(GL_PATCH_VERTICES, m_shaded->getDrawParam());
     }
 
     if (m_polygonMode != GL_FILL)
@@ -131,15 +139,15 @@ void TRSGeode::preProcess()
 
 void TRSGeode::drawInternal()
 {
-    int nElementCount = m_pMesh->getElementCount();
-    GLenum OpenGLDrawType = static_cast<GLenum>(m_pMesh->getDrawType());
+    int nElementCount = m_shaded->getElementCount();
+    GLenum OpenGLDrawType = static_cast<GLenum>(m_shaded->getDrawType());
     if (nElementCount > 0)
     {
-        glDrawElements(OpenGLDrawType, m_pMesh->getElementCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(OpenGLDrawType, m_shaded->getElementCount(), GL_UNSIGNED_INT, 0);
     }
     else
     {
-        glDrawArrays(OpenGLDrawType, 0, m_pMesh->getDrawCount());
+        glDrawArrays(OpenGLDrawType, 0, m_shaded->getDrawCount());
     }
 }
 

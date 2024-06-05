@@ -13,20 +13,37 @@ class TRS_EXPORT TRSMesh
 {
 public:
     TRSMesh();
+
     ~TRSMesh();
+
     void setVertex(const std::vector<TRSVec3>& vertexs);
+
     void setNormal(const std::vector<TRSVec3>& normals);
+
     void setColor(const std::vector<TRSVec3>& colors);
+
     void setUV(const std::vector<TRSVec2>& uv);
+
     void setIndices(const std::vector<unsigned int>& indices);
+
+    void copyMesh(TRSMesh* rhs);
+
     void generateNormals();
+
     const TRSBox& boundingBox() const;
+
     int getDrawCount() const;
+
     int getElementCount() const;
+
     int getMeshStruct() const;
+
     DrawType getDrawType();
+
     void setDrawType(DrawType drawType);
+
     int getDrawParam();
+
     void setDrawParam(int param);
 
     void bindMesh();
@@ -56,7 +73,7 @@ private:
     TRSVAO* m_vao = nullptr;
     int m_vertexStructType = msVertex;
     DrawType m_nDrawType;
-    int m_nPatchParam;
+    int m_nPatchParam = 0;
 };
 #pragma once
 
