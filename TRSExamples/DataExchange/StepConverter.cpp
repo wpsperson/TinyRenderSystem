@@ -232,6 +232,8 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
     populateShadedMesh(occShape, shadedMesh, localLocation);
     TRSMesh* wireMesh = geode->useWireframeMesh();
     populateWireframeMesh(occShape, wireMesh, localLocation);
+    TRSMesh* pointMesh = geode->usePointsMesh();
+    populatePointsMesh(occShape, pointMesh, localLocation);
     return geode;
 }
 
@@ -277,9 +279,9 @@ bool StepConverter::referToAssembly(const TDF_Label& Label, TDF_Label& referredS
     return false;
 }
 
-void StepConverter::populateShadedMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation)
+void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* mesh, TopLoc_Location parentLocation)
 {
-    BRepMesh_IncrementalMesh incrementalMesh(topo_shape, GlobalLineDeflection, Standard_True, 0.5, Standard_True);
+    BRepMesh_IncrementalMesh incrementalMesh(occShape, GlobalLineDeflection, Standard_True, 0.5, Standard_True);
     TopExp_Explorer faceExplorer;
     std::vector<TRSPoint> meshVertexs;
     std::vector<TRSVec3> normals;
@@ -288,7 +290,7 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& topo_shape, TRSMesh* 
     std::vector<unsigned int> meshIndexs;
     int nodeLen = 0;
     int triLen = 0;
-    for (faceExplorer.Init(topo_shape, TopAbs_FACE); faceExplorer.More(); faceExplorer.Next())
+    for (faceExplorer.Init(occShape, TopAbs_FACE); faceExplorer.More(); faceExplorer.Next())
     {
         TopLoc_Location faceLocation;
         TopoDS_Face aFace = TopoDS::Face(faceExplorer.Current());
@@ -356,13 +358,13 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& topo_shape, TRSMesh* 
     }
 }
 
-void StepConverter::populateWireframeMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation)
+void StepConverter::populateWireframeMesh(const TopoDS_Shape& occShape, TRSMesh* mesh, TopLoc_Location parentLocation)
 {
     TopExp_Explorer edgeExplorer;
     std::vector<TRSPoint> edgeVertexs;
     std::vector<unsigned int>  edgeIndexs;
     int nodeLen = 0;
-    for (edgeExplorer.Init(topo_shape, TopAbs_EDGE); edgeExplorer.More(); edgeExplorer.Next())
+    for (edgeExplorer.Init(occShape, TopAbs_EDGE); edgeExplorer.More(); edgeExplorer.Next())
     {
         TopLoc_Location lineLocation;
         TopoDS_Edge occEdge = TopoDS::Edge(edgeExplorer.Current());
@@ -370,7 +372,7 @@ void StepConverter::populateWireframeMesh(const TopoDS_Shape& topo_shape, TRSMes
         {
             continue;
         }
-        auto orientation = occEdge.Orientation();
+        TopAbs_Orientation orientation = occEdge.Orientation();
         if (orientation == TopAbs_REVERSED)
         {
             continue;
@@ -397,8 +399,28 @@ void StepConverter::populateWireframeMesh(const TopoDS_Shape& topo_shape, TRSMes
     mesh->setIndices(edgeIndexs);
 }
 
-void StepConverter::populatePointsMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation)
+void StepConverter::populatePointsMesh(const TopoDS_Shape& occShape, TRSMesh* mesh, TopLoc_Location parentLocation)
 {
+    TopExp_Explorer vertexExplorer;
+    std::vector<TRSPoint> vertices;
+    std::vector<unsigned int> indices;
+    int k = 0;
+    for (vertexExplorer.Init(occShape, TopAbs_VERTEX); vertexExplorer.More(); vertexExplorer.Next())
+    {
+        TopLoc_Location loc;
+        TopoDS_Vertex vertex = TopoDS::Vertex(vertexExplorer.Current());
+        TopAbs_Orientation orientation = vertex.Orientation();
+        if (orientation == TopAbs_REVERSED)
+        {
+            continue;
+        }
+        gp_Pnt point = BRep_Tool::Pnt(vertex);
+        TRSPoint pt = toTRSVec(point);
+        vertices.push_back(pt);
+        indices.push_back(k++);
+    }
+    mesh->setVertex(vertices);
+    mesh->setIndices(indices);
 }
 
 TRSVec3 StepConverter::toTRSVec(const gp_Pnt& pt)
