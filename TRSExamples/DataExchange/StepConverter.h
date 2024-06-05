@@ -38,6 +38,10 @@ private:
 
     static void populateShadedMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
 
+    static void populateWireframeMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
+
+    static void populatePointsMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
+
     static TRSVec3 toTRSVec(const gp_Pnt& pt);
 
     static TRSVec3 toTRSVec(const gp_Dir& dir);

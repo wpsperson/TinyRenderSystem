@@ -30,7 +30,18 @@ TRSGeode::~TRSGeode()
 
 void TRSGeode::draw()
 {
-    drawInternal();
+    m_shaded->bindMesh();
+    m_shaded->drawMesh();
+    if (hasRenderMode(RenderMode::WireFrame) && m_wireframe)
+    {
+        m_wireframe->bindMesh();
+        m_wireframe->drawMesh();
+    }
+    if (hasRenderMode(RenderMode::Points) && m_points)
+    {
+        m_points->bindMesh();
+        m_points->drawMesh();
+    }
 }
 
 TRSBox TRSGeode::boundingBox() const
@@ -162,22 +173,6 @@ void TRSGeode::preProcess()
     if (m_polygonMode != GL_FILL)
     {
         glPolygonMode(GL_FRONT_AND_BACK, m_polygonMode);
-    }
-}
-
-void TRSGeode::drawInternal()
-{
-    m_shaded->bindMesh();
-    m_shaded->drawMesh();
-    if (hasRenderMode(RenderMode::WireFrame) && m_wireframe)
-    {
-        m_wireframe->bindMesh();
-        m_wireframe->drawMesh();
-    }
-    if (hasRenderMode(RenderMode::Points) && m_points)
-    {
-        m_points->bindMesh();
-        m_points->drawMesh();
     }
 }
 

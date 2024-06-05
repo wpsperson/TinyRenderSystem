@@ -17,6 +17,7 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <BRep_Tool.hxx>
+#include <TopoDS_Edge.hxx>
 
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSGroup.h"
@@ -229,6 +230,8 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
     TopLoc_Location localLocation = parentLocation * currentLocation;
     TRSMesh* shadedMesh = geode->getShadedMesh();
     populateShadedMesh(occShape, shadedMesh, localLocation);
+    TRSMesh* wireMesh = geode->useWireframeMesh();
+    populateWireframeMesh(occShape, wireMesh, localLocation);
     return geode;
 }
 
@@ -351,6 +354,51 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& topo_shape, TRSMesh* 
     {
         mesh->setNormal(normals);
     }
+}
+
+void StepConverter::populateWireframeMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation)
+{
+    TopExp_Explorer edgeExplorer;
+    std::vector<TRSPoint> edgeVertexs;
+    std::vector<unsigned int>  edgeIndexs;
+    int nodeLen = 0;
+    for (edgeExplorer.Init(topo_shape, TopAbs_EDGE); edgeExplorer.More(); edgeExplorer.Next())
+    {
+        TopLoc_Location lineLocation;
+        TopoDS_Edge occEdge = TopoDS::Edge(edgeExplorer.Current());
+        if (!BRep_Tool::IsGeometric(occEdge))
+        {
+            continue;
+        }
+        auto orientation = occEdge.Orientation();
+        if (orientation == TopAbs_REVERSED)
+        {
+            continue;
+        }
+        BRepMesh_IncrementalMesh tempMesh(occEdge, GlobalLineDeflection);
+        Handle_Poly_Polygon3D polyline = BRep_Tool::Polygon3D(occEdge, lineLocation);
+        TopLoc_Location localLocation = parentLocation * lineLocation;
+        int nodeNum = polyline->NbNodes();
+        for (int i = 1; i <= nodeNum; i++)
+        {
+            gp_Pnt point = polyline->Nodes().Value(i).Transformed(localLocation.Transformation());
+            TRSPoint vertex = toTRSVec(point);
+            edgeVertexs.push_back(vertex);
+        }
+        for (int i = 0; i < nodeNum - 1; i++)
+        {
+            edgeIndexs.push_back(i + nodeLen);
+            edgeIndexs.push_back(i + nodeLen + 1);
+        }
+
+        nodeLen += nodeNum;
+    }
+    mesh->setVertex(edgeVertexs);
+    mesh->setIndices(edgeIndexs);
+}
+
+void StepConverter::populatePointsMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation)
+{
 }
 
 TRSVec3 StepConverter::toTRSVec(const gp_Pnt& pt)

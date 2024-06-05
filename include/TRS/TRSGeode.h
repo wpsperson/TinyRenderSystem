@@ -60,8 +60,6 @@ public:
 
     void postProcess() override;
 
-protected:
-    void drawInternal();
 
 protected:
     int m_polygonMode;
