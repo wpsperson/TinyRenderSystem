@@ -19,6 +19,18 @@ MainWindow::MainWindow(QWidget *parent /*= nullptr*/)
 {
     m_canvas = new OpenGLWidget(this);
     setCentralWidget(m_canvas);
+    
+    // m_mdiArea = new QMdiArea(this);
+    // setCentralWidget(m_mdiArea);
+    // m_mdiArea->setViewMode(QMdiArea::TabbedView);
+	// m_mdiArea->setTabPosition(QTabWidget::TabPosition::South);
+	// m_mdiArea->setTabShape(QTabWidget::TabShape::Rounded);
+	// m_mdiArea->setTabsMovable(true);
+	// m_mdiArea->setDocumentMode(true);
+	// m_mdiArea->setTabsClosable(true);
+	// connect(m_internals->m_mdiArea, &QMdiArea::subWindowActivated, this, &pmMainWindow::subWindowActivated);    
+    // QMdiSubWindow *subwindow = m_mdiArea->addSubWindow(xxxWidget);
+    // subwindow->setWindowTitle("first");
 
     createActions();
     createMenus();
