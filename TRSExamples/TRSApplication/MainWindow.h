@@ -22,9 +22,11 @@ private:
 
 private slots:
     void onLoadStep();
+    void onLoadSTL();
 private:
     QMenu *m_fileMenu = nullptr;
     QAction *m_loadStepAction = nullptr;
+    QAction* m_loadStlAction = nullptr;
     OpenGLWidget* m_canvas = nullptr;
     QLabel* m_status = nullptr;
 };

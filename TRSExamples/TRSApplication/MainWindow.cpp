@@ -49,12 +49,15 @@ void MainWindow::createActions()
 {
     m_loadStepAction = new QAction(tr("ImportStep"), this);
     connect(m_loadStepAction, SIGNAL(triggered()), this, SLOT(onLoadStep()));
+    m_loadStlAction = new QAction(tr("ImportSTL"), this);
+    connect(m_loadStlAction, SIGNAL(triggered()), this, SLOT(onLoadSTL()));
 }
 
 void MainWindow::createMenus()
 {
     m_fileMenu = menuBar()->addMenu(tr("File"));
     m_fileMenu->addAction(m_loadStepAction);
+    m_fileMenu->addAction(m_loadStlAction);
 }
 
 void MainWindow::createDockWidgets()
@@ -94,6 +97,28 @@ void MainWindow::onLoadStep()
     std::string strStepFile = stepFile.toStdString();
     const char *fileName = strStepFile.c_str();
     TRSNode* stepNode = ImportStep::readStepFile(fileName, errorMessage);
+    if (!stepNode)
+    {
+        updateStatus(QString::fromStdString(errorMessage));
+        return;
+    }
+    std::shared_ptr<TRSNode> root(stepNode);
+    m_canvas->setScene(root);
+    updateStatus("Load scene successfully.");
+}
+
+void MainWindow::onLoadSTL()
+{
+    QString stepFile = QFileDialog::getOpenFileName(this, QString("Load STL"), QString("."), tr("Obj File (*.obj *.OBJ);;STL File(*.stl *.stl);;FBX File(*.fbx *.FBX);;Other(*.*)"));
+    if (stepFile.isEmpty())
+    {
+        updateStatus("Please select a step file to load.");
+        return;
+    }
+    std::string errorMessage;
+    std::string strStepFile = stepFile.toStdString();
+    const char* fileName = strStepFile.c_str();
+    TRSNode* stepNode = ImportStep::readSTLFile(fileName, errorMessage);
     if (!stepNode)
     {
         updateStatus(QString::fromStdString(errorMessage));
