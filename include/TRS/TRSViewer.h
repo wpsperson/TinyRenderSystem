@@ -13,6 +13,7 @@
 
 class TRSSettings;
 class TRSCamera;
+class TRSFontManager;
 class TRSNode;
 class TRSGeode;
 class TRSShader;
@@ -56,6 +57,7 @@ protected:
 
 protected:
     TRSSettings* m_setting = nullptr;
+    TRSFontManager* m_fontMgr = nullptr;
     std::shared_ptr<TRSNode> m_pSceneNode;
     TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;

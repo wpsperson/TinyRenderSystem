@@ -44,6 +44,7 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSCamera.h
     ${INCLUDE_DIR}/TRSDefaultCameraHandler.h
     ${INCLUDE_DIR}/TRSSettings.h
+    ${INCLUDE_DIR}/TRSFontManager.h
     )
 
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/TRS)
@@ -78,6 +79,7 @@ set(Target_SRC_LIST
     ${SRC_DIR}/TRSDefaultCameraHandler.cpp
     ${SRC_DIR}/glad.c
     ${SRC_DIR}/TRSSettings.cpp
+    ${SRC_DIR}/TRSFontManager.cpp
 )
 
 FILE(GLOB Target_SHADER_LIST ${PROJECT_SOURCE_DIR}/shaders/*.glsl)

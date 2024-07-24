@@ -18,6 +18,7 @@
 #include "TRS/TRSVisitors.h"
 #include "TRS/TRSMesh.h"
 #include "TRS/TRSCharacterTexture.h"
+#include "TRS/TRSFontManager.h"
 
 
 TRSViewer::TRSViewer()
@@ -26,6 +27,7 @@ TRSViewer::TRSViewer()
     m_setting = new TRSSettings;
     m_polygonModeVisitor = new PolygonModeVisitor;
     m_pCamera = new TRSCamera;
+    m_fontMgr = new TRSFontManager;
     m_cullor = new CullVisitor;
 }
 
@@ -60,6 +62,10 @@ void TRSViewer::initialViewer()
     std::string errorMsg;
     bool loadSuccess = TRSCharacterTexture::instance()->loadFreeType(errorMsg);
     if (!loadSuccess)
+    {
+        std::cout << errorMsg << std::endl;
+    }
+    if (!m_fontMgr->loadAsciiCharInfo(errorMsg))
     {
         std::cout << errorMsg << std::endl;
     }

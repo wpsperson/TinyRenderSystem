@@ -9,3 +9,16 @@ struct DrawItem
     RenderMode mode;
 };
 
+struct AsciiCharInfo
+{
+    float width = 0.0f;
+    float height = 0.0f;
+    float offset_x = 0.0f;
+    float offset_y = 0.0f;
+    float stride = 0.0f;
+
+    float uv_min_x = 0.0f;
+    float uv_max_x = 0.0f;
+    float uv_min_y = 0.0f;
+    float uv_max_y = 0.0f;
+};
