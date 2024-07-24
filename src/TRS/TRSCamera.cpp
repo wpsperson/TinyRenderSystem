@@ -18,7 +18,8 @@ TRSCamera::TRSCamera()
     m_near = DefaultNearDistance;
     m_far = DefaultFarDistance;
     m_fFov = DefaultFov;
-    m_parallelMode = false;
+    m_cameraWidth = 1.0f;
+    m_projectionMode = ProjectionMode::Perspective;
 }
 
 
@@ -36,14 +37,19 @@ TRSMatrix TRSCamera::getViewMatrix()
     return m_viewMatrix;
 }
 
-float TRSCamera::getNear()
+float TRSCamera::getNear() const
 {
     return m_near;
 }
 
-float TRSCamera::getFar()
+float TRSCamera::getFar() const
 {
     return m_far;
+}
+
+float TRSCamera::cameraWidth() const
+{
+    return m_cameraWidth;
 }
 
 int TRSCamera::getWindowWidth() const
@@ -54,6 +60,11 @@ int TRSCamera::getWindowWidth() const
 int TRSCamera::getWindowHeight() const
 {
     return m_height;
+}
+
+ProjectionMode TRSCamera::projectionMode() const
+{
+    return m_projectionMode;
 }
 
 TRSMatrix TRSCamera::getProjectMatrix()
@@ -134,9 +145,20 @@ void TRSCamera::setFar(float far)
     m_projectMatrixNeedUpdate = true;
 }
 
-void TRSCamera::setCameraMode(bool parallelMode)
+void TRSCamera::setCameraWidth(float value)
 {
-    m_parallelMode = parallelMode;
+    m_cameraWidth = value;
+    m_projectMatrixNeedUpdate = true;
+}
+
+void TRSCamera::setProjectionMode(ProjectionMode mode)
+{
+    if (mode == m_projectionMode)
+    {
+        return;
+    }
+    m_projectionMode = mode;
+    m_projectMatrixNeedUpdate = true;
 }
 
 void TRSCamera::setWindowWidth(int width)
@@ -200,6 +222,7 @@ void TRSCamera::fitToBox(const TRSBox& box)
     float radius = box.outSphereRadius();
     float best_distance = radius / std::sin(toRadian(m_fFov / 2));
     m_pos = m_lookAt + front * (-best_distance);
+    m_cameraWidth = radius * 2 * 1.25f;
     m_viewMatrixNeedUpdate = true;
 }
 
@@ -217,12 +240,13 @@ void TRSCamera::updateViewMatrix()
 
 void TRSCamera::updateProjectMatrix()
 {
-    if (m_parallelMode)
+    if (ProjectionMode::Parallel == m_projectionMode)
     {
-        float left = - static_cast<float>(m_width) / 2;
-        float righ = static_cast<float>(m_width) / 2;
-        float bttm = -static_cast<float>(m_height) / 2;
-        float topp = static_cast<float>(m_height) / 2;
+        float ratio = static_cast<float>(m_height) / m_width;
+        float left = -m_cameraWidth / 2;
+        float righ = m_cameraWidth / 2;
+        float bttm = -(m_cameraWidth * ratio) / 2;
+        float topp = (m_cameraWidth * ratio) / 2;
         m_projectMatrix.makeOtho(left, righ, bttm, topp, m_near, m_far);
     }
     else

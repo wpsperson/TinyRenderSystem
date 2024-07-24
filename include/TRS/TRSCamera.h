@@ -4,6 +4,12 @@
 #include "TRS/TRSVector.h"
 #include "TRS/TRSMatrix.h"
 
+enum class ProjectionMode : unsigned char
+{
+    Parallel = 0,
+    Perspective = 1,
+};
+
 class TRSBox;
 class TRS_EXPORT TRSCamera
 {
@@ -17,10 +23,12 @@ public:
     const TRSVec3& getRight() const;
     TRSVec3 getFront() const;
     TRSMatrix getViewMatrix();
-    float getNear();
-    float getFar();
+    float getNear() const;
+    float getFar() const;
+    float cameraWidth() const;
     int getWindowWidth() const;
     int getWindowHeight() const;
+    ProjectionMode projectionMode() const;
     TRSMatrix getProjectMatrix();
 
     // set
@@ -29,7 +37,8 @@ public:
     void setUp(const TRSVec3& up);
     void setNear(float near);
     void setFar(float far);
-    void setCameraMode(bool parallelMode);
+    void setCameraWidth(float value);
+    void setProjectionMode(ProjectionMode mode);
     void setWindowWidth(int width);
     void setWindowHeight(int height);
 
@@ -55,10 +64,11 @@ protected:
     // project matrix parameter
     int m_width;            // keep the aspect with window change
     int m_height;           // keep the aspect with window change
+    float m_cameraWidth;    // only used in parallel mode. frustrum width.
     float m_near;
     float m_far;
     float m_fFov;           // vertical angle, perspective mode only
-    bool m_parallelMode;    // whether it is parallel project or perspective project.
+    ProjectionMode m_projectionMode;    // whether it is parallel project or perspective project.
     TRSMatrix m_projectMatrix;
     bool m_projectMatrixNeedUpdate = true;
 };

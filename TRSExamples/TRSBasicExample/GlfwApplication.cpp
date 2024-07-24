@@ -9,6 +9,7 @@
 #include "TRS/TRSGroup.h"
 #include "TRS/TRSMathUtil.h"
 #include "TRS/TRSCube.h"
+#include "TRS/TRSCamera.h"
 #include "TRS/TRSEventDispatcher.h"
 #include "TRS/TRSShortcutKeyHandler.h"
 #include "TRS/TRSDefaultCameraHandler.h"
@@ -87,6 +88,8 @@ bool GlfwApplication::onInitial()
     root->addChild(pNode);
 
     m_viewer->setSecenNode(root);
+    m_viewer->getCamera()->setProjectionMode(ProjectionMode::Parallel);
+    m_viewer->getCamera()->fitToBox(root->boundingBox());
     m_pCameraHandler->setSceneBox(root->boundingBox());
     return true;
 }

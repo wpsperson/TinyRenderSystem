@@ -94,15 +94,26 @@ void TRSDefaultCameraHandler::processRightMouseMove(int xpos, int ypos, int mods
 
 void TRSDefaultCameraHandler::processMouseScroll(int scroll)
 {
-    //scroll (value is 1/-1) increase, fov decrease, then scene looks bigger;
-    const float coffScroll = 0.1f;
-    TRSVec3 front = m_camera->getFront();
-    TRSVec3 pos = m_camera->getPosition();
-    TRSVec3 lookAt = m_camera->getLookAt();
-    float dist = lookAt.distance(pos);
-    float scrollDist = static_cast<float>(dist * coffScroll * scroll);
-    pos += front * scrollDist;
-    m_camera->setPosition(pos);
+    // scroll value is 1/-1
+    if (ProjectionMode::Parallel == m_camera->projectionMode())
+    {
+        // scroll increase, cameWidth decrease, then scene looks bigger;
+        float cameraWidth = m_camera->cameraWidth();
+        float newWidth = cameraWidth * (1.0f - scroll * 0.1f);
+        m_camera->setCameraWidth(newWidth);
+    }
+    else
+    {
+        // scroll increase, distance decrease, then scene looks bigger;
+        const float coffScroll = 0.1f;
+        TRSVec3 front = m_camera->getFront();
+        TRSVec3 pos = m_camera->getPosition();
+        TRSVec3 lookAt = m_camera->getLookAt();
+        float dist = lookAt.distance(pos);
+        float scrollDist = static_cast<float>(dist * coffScroll * scroll);
+        pos += front * scrollDist;
+        m_camera->setPosition(pos);
+    }
     updateNearFar();
 }
 
