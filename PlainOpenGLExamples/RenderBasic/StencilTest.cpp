@@ -122,8 +122,8 @@ int StencilTest()
         {
             rotateAngle = 0.0;
         }
-        double c = cos(rotateAngle);
-        double s = sin(rotateAngle);
+        float c = static_cast<float>(cos(rotateAngle));
+        float s = static_cast<float>(sin(rotateAngle));
         float viewMatrix[16] = { c,s,0,0,  -s,c,0,0,  0,0,1,0,  0,0,0,1 };
 
         glStencilFunc(GL_ALWAYS, 1, 0xff); //***

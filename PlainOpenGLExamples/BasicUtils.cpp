@@ -26,7 +26,7 @@ char* readTextFile(const std::string& strFileName)
     file.close();
     std::string strContent = strStream.str();
 
-    int length = strContent.length();
+    std::size_t length = strContent.length();
     char* pChar = new char[length + 1];
     memcpy(pChar, strContent.c_str(), length);
     pChar[length] = '\0';

@@ -18,7 +18,8 @@ int main(int argn, char** argc)
     if (argument == "RenderTexture")
     {
         RenderTexture();
-    }else if(argument == "RenderMultiTexture")
+    }
+    else if(argument == "RenderMultiTexture")
     {
         RenderMultiTexture();
     }

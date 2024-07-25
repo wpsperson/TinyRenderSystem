@@ -165,8 +165,8 @@ int renderShadowMapping()
         viewMatrix.makeLookat(lightPos, front, G_YDIR);
         TRSMatrix projectMatrix;
         float xhalf = kSize;
-        float near = (lightOffset * 2 - kSize) * sqrt(2) * 0.5;
-        float far = (lightOffset * 2 + kSize) * sqrt(2) * 0.5;
+        float near = float(lightOffset * 2 - kSize) * sqrtf(2) * 0.5f;
+        float far = float(lightOffset * 2 + kSize) * sqrtf(2) * 0.5f;
         projectMatrix.makeOtho(-xhalf, xhalf, -xhalf, xhalf, near, far);
         view_project = projectMatrix * viewMatrix;
     }
@@ -275,10 +275,10 @@ int renderShadowMapping()
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture);
 
-            glUniform3f(locColor, 0.8, 0.4, 0.4);
+            glUniform3f(locColor, 0.8f, 0.4f, 0.4f);
             glBindVertexArray(topVAO);//bind VAO
             glDrawArrays(GL_TRIANGLES, 0, 6);
-            glUniform3f(locColor, 0.4, 0.8, 0.4);
+            glUniform3f(locColor, 0.4f, 0.8f, 0.4f);
             glBindVertexArray(backVAO);//bind VAO
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }

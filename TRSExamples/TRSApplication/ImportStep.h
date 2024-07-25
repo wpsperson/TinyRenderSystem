@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include "TRS/TRSNode.h"
+
 class TRSNode;
 
 class ImportStep
