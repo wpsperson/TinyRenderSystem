@@ -75,7 +75,6 @@ private:
     bool m_needUpload = false;
 
     TRSVAO* m_vao = nullptr;
-    int m_vertexStructType = msVertex;
     DrawType m_nDrawType;
     int m_nPatchParam = 0;
 };

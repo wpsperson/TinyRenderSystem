@@ -1,4 +1,4 @@
-#include "OpenGLWidget.h"
+﻿#include "OpenGLWidget.h"
 
 #include <iostream>
 
@@ -15,6 +15,9 @@
 #include "TRS/TRSCamera.h"
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSGroup.h"
+#include "TRS/TRSTexture.h"
+#include "TRS/TRSTextNode.h"
+#include "TRS/TRSCube.h"
 
 
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
@@ -46,6 +49,29 @@ void OpenGLWidget::setScene(std::shared_ptr<TRSNode> sceneGroup)
     m_pCameraHandler->setSceneBox(box);
 }
 
+void OpenGLWidget::setupDemo()
+{
+    // initialize some scene
+    //TRSCube cube;
+    //TRSMesh* mesh = cube.getMesh();
+    //std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
+    //pNode->copyShadedMesh(mesh);
+    //pNode->setTexture(std::make_shared<TRSTexture>());
+    //pNode->getTexture()->createTexture("resources/textures/opengl.png");
+    //pNode->getTexture()->createTexture("resources/textures/cube.png");
+    std::wstring text(L"中华人民共和国");
+    std::shared_ptr<TRSTextNode> textNode = std::make_shared<TRSTextNode>();
+    textNode->setText(text);
+    textNode->setPos(G_ORIGIN);
+    textNode->setDir(G_XDIR);
+
+    std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
+    root->addChild(textNode);
+    m_viewer->setSecenNode(root);
+    m_pCameraHandler->setSceneBox(root->boundingBox());
+    update();
+}
+
 void OpenGLWidget::initializeGL()
 {
     m_viewer = new TRSViewer;
@@ -57,21 +83,6 @@ void OpenGLWidget::initializeGL()
     m_dispatcher = new TRSEventDispatcher;
     m_pCameraHandler = new TRSDefaultCameraHandler(m_viewer->getCamera());
     m_dispatcher->addEventHandler(m_pCameraHandler);
-
-    //// initialize some scene
-    //TRSCube* cube = new TRSCube;
-    //TRSMesh* mesh = cube->useShadedMesh();
-    //std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
-    //pNode->copyShadedMesh(mesh);
-    //pSS->getTexture()->createTexture("resources/textures/opengl.png");
-    //pSS->getTexture()->createTexture("resources/textures/cube.png");
-    //pSS->getShader()->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
-
-    //std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
-    //root->addChild(pNode);
-
-    //m_viewer->setSecenNode(root);
-    //m_pCameraHandler->setSceneBox(root->boundingBox());
 }
 
 void OpenGLWidget::resizeGL(int width, int height)

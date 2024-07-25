@@ -121,6 +121,7 @@ void TRSViewer::classify()
 
     for (TRSGeode* geode : nodes)
     {
+        geode->setActive();
         DrawItem item;
         item.geode = geode;
         for (RenderMode mode : renderModes)
@@ -154,7 +155,6 @@ void TRSViewer::drawScene()
             shader->setUniformMatrix4("model", modelMatrix);
             shader->setUniform4v("baseColor", geode->getColor());
 
-            geode->setActive();
             TRSTexture* pTexture = geode->getTexture();
             if (pTexture)
             {
@@ -213,6 +213,10 @@ TRSShader* TRSViewer::find2Shader(TRSGeode* geode, RenderMode mode)
         else if (hasNormal)
         {
             shader = getOrCreateShader(ShaderType::Phong);
+        }
+        else if (hasUV)
+        {
+            shader = getOrCreateShader(ShaderType::FontShader);
         }
         else
         {

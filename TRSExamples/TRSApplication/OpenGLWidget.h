@@ -18,6 +18,8 @@ public:
 
     void setScene(std::shared_ptr<TRSNode> sceneGroup);
 
+    void setupDemo();
+
 protected:
     void initializeGL() override;
     void resizeGL(int w, int h) override;

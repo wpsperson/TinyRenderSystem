@@ -139,7 +139,24 @@ int TRSMesh::getElementCount() const
 
 int TRSMesh::getMeshStruct() const
 {
-    return m_vertexStructType;
+    int meshStruct = 0;
+    if (!m_vertexs.empty())
+    {
+        meshStruct |= msVertex;
+    }
+    if (!m_normals.empty())
+    {
+        meshStruct |= msNormal;
+    }
+    if (!m_texCoords.empty())
+    {
+        meshStruct |= msUV;
+    }
+    if (!m_colors.empty())
+    {
+        meshStruct |= msColor;
+    }
+    return meshStruct;
 }
 
 DrawType TRSMesh::getDrawType()
@@ -248,7 +265,7 @@ void TRSMesh::upload()
     float* buffer = combineMeshData(bufferSize);
     m_vao->uploadVBO(buffer, bufferSize);
     delete[]buffer;
-    m_vao->setVertexAttrib(m_vertexStructType);
+    m_vao->setVertexAttrib(getMeshStruct());
     if (!m_indexs.empty())
     {
         unsigned int* indice = &(m_indexs[0]);
@@ -265,21 +282,9 @@ float * TRSMesh::combineMeshData(int& bufferSize)
     bool existNormal    = !m_normals.empty();
     bool existUV        = !m_texCoords.empty();
     bool existColor     = !m_colors.empty();
-    if (existNormal)
-    {
-        m_vertexStructType |= msNormal;
-    }
-    if (existUV)
-    {
-        m_vertexStructType |= msUV;
-    }
-    if (existColor)
-    {
-        m_vertexStructType |= msColor;
-    }
-
+    int meshStruct = getMeshStruct();
     // compute data size and allocate memory.
-    int unitSize = computeVertexAttribStride(m_vertexStructType);
+    int unitSize = computeVertexAttribStride(meshStruct);
     int ptNum = static_cast<int>(m_vertexs.size());
 
     bufferSize = ptNum * unitSize;

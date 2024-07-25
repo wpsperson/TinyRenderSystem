@@ -37,6 +37,7 @@ private:
 private slots:
     void onLoadStep();
     void onLoadSTL();
+    void onDemo();
     void onSwitchLanguage(QAction* action);
 
 private:

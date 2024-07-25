@@ -66,6 +66,7 @@ void MainWindow::createActions()
     m_loadStlAction = new QAction(this);
     connect(m_loadStlAction, SIGNAL(triggered()), this, SLOT(onLoadSTL()));
     m_demoAction = new QAction(this);
+    connect(m_demoAction, &QAction::triggered, this, &MainWindow::onDemo);
 }
 
 void MainWindow::createMenus()
@@ -73,6 +74,8 @@ void MainWindow::createMenus()
     m_fileMenu = new QMenu(this);
     m_fileMenu->addAction(m_loadStepAction);
     m_fileMenu->addAction(m_loadStlAction);
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_demoAction);
     menuBar()->addMenu(m_fileMenu);
 }
 
@@ -217,6 +220,11 @@ void MainWindow::onLoadSTL()
     std::shared_ptr<TRSNode> root(stepNode);
     m_canvas->setScene(root);
     updateStatus("Load scene successfully.");
+}
+
+void MainWindow::onDemo()
+{
+    m_canvas->setupDemo();
 }
 
 void MainWindow::onSwitchLanguage(QAction* action)
