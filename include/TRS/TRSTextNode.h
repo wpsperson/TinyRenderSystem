@@ -11,10 +11,17 @@ class TRS_EXPORT TRSTextNode : public TRSGeode
 public:
     TRSTextNode();
     ~TRSTextNode();
+
+    NodeType nodeType() const override;
+
     void setText(const std::wstring& strText);
+
     void setPos(const TRSVec3& textPos);
+
     void setDir(const TRSVec3& textDirection);
+
     void setUp(const TRSVec3& textUp);
+
     void setSize(float size);
 
     virtual void draw(RenderMode mode) override;

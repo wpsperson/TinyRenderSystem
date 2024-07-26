@@ -15,6 +15,11 @@ TRSGroup::~TRSGroup()
 
 }
 
+NodeType TRSGroup::nodeType() const
+{
+    return NodeType::ntGroup;
+}
+
 void TRSGroup::addChild(std::shared_ptr<TRSNode> ptr)
 {
     TRSGroup::insertChild(static_cast<int>(m_pChildren.size()), ptr);

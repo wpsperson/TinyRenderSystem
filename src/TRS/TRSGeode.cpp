@@ -28,6 +28,11 @@ TRSGeode::~TRSGeode()
     }
 }
 
+NodeType TRSGeode::nodeType() const
+{
+    return NodeType::ntGeode;
+}
+
 void TRSGeode::setActive()
 {
     if (hasComponent(RenderMode::Shaded))

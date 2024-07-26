@@ -18,6 +18,8 @@ public:
 
     ~TRSGeode();
 
+    NodeType nodeType() const override;
+
     virtual void setActive();
 
     virtual void draw(RenderMode mode);

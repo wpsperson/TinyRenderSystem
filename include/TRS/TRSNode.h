@@ -7,6 +7,7 @@
 #include "TRS/TRSExport.h"
 #include "TRS/TRSBox.h"
 #include "TRS/TRSMatrix.h"
+#include "TRS/TRSDefEnum.h"
 
 class NodeVisitor;
 class TRSNode;
@@ -19,13 +20,15 @@ public:
     TRSNode();
     ~TRSNode();
 
-    TRSMatrix getMatrix();
-
-    void setMatrix(const TRSMatrix& mat);
+    virtual NodeType nodeType() const;
 
     virtual void traverse(NodeVisitor& visitor);
 
     virtual TRSBox boundingBox() const;
+
+    TRSMatrix getMatrix();
+
+    void setMatrix(const TRSMatrix& mat);
 
     TRSVec4 getColor() const;
 

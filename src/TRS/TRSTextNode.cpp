@@ -13,17 +13,16 @@ TRSTextNode::TRSTextNode()
 {
     m_matColor = TRSVec4(0.5f, 1.0f, 0.5f, 1.0f);
     m_size = 0.1f;
-
-    // TODO
-    unsigned int textureID = TRSCharacterTexture::instance()->getTextureID();
-    TextureData texData(textureID, "all_unicode_texture", "ourTexture");
-    m_pTexture = std::make_shared<TRSTexture>();
-    m_pTexture->addSharedTexture(texData);
 }
 
 TRSTextNode::~TRSTextNode()
 {
 
+}
+
+NodeType TRSTextNode::nodeType() const
+{
+    return NodeType::ntTextNode;
 }
 
 void TRSTextNode::setText(const std::wstring& strText)

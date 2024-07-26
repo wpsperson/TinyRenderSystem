@@ -30,7 +30,7 @@ enum RenderMode : unsigned char
 };
 
 
-enum MeshStruct
+enum MeshStruct : unsigned char
 {
     msVertex = 1,
     msNormal = 2,
@@ -38,7 +38,7 @@ enum MeshStruct
     msColor = 8,
 };
 
-enum VertexAttributeIndex
+enum VertexAttributeIndex : unsigned char
 {
     VertexIndex = 0,
     NormalIndex = 1,
@@ -46,4 +46,13 @@ enum VertexAttributeIndex
     ColorIndex = 3,
     TextureCoordIndex1,
     TextureCoordIndex2,
+};
+
+enum class NodeType : unsigned char
+{
+    ntUnknow = 0,
+    ntGeode = 1,
+    ntGroup,
+    ntTextNode,
+    ntDynamicText,
 };

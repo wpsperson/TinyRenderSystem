@@ -14,6 +14,7 @@
 class TRSSettings;
 class TRSCamera;
 class TRSFontManager;
+class TRSTexture;
 class TRSNode;
 class TRSGeode;
 class TRSShader;
@@ -55,9 +56,12 @@ protected:
 
     TRSShader* getOrCreateShader(ShaderType type);
 
+    void processTexture(unsigned int program, TRSGeode *node);
+
 protected:
     TRSSettings* m_setting = nullptr;
     TRSFontManager* m_fontMgr = nullptr;
+    TRSTexture* m_unicodeTexture = nullptr;
     std::shared_ptr<TRSNode> m_pSceneNode;
     TRSVec4 m_BGColor;
     TRSCamera* m_pCamera;

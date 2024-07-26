@@ -29,11 +29,15 @@ TRSViewer::TRSViewer()
     m_pCamera = new TRSCamera;
     m_fontMgr = new TRSFontManager;
     m_cullor = new CullVisitor;
+    m_unicodeTexture = new TRSTexture;
 }
 
 TRSViewer::~TRSViewer()
 {
+    delete m_unicodeTexture;
     delete m_cullor;
+    delete m_fontMgr;
+    delete m_pCamera;
     delete m_polygonModeVisitor;
     delete m_setting;
 }
@@ -65,6 +69,10 @@ void TRSViewer::initialViewer()
     {
         std::cout << errorMsg << std::endl;
     }
+    unsigned int unicodeTexId = TRSCharacterTexture::instance()->getTextureID();
+    TextureData texData(unicodeTexId, "all_unicode_texture", "ourTexture");
+    m_unicodeTexture->addSharedTexture(texData);
+
     if (!m_fontMgr->loadAsciiCharInfo(errorMsg))
     {
         std::cout << errorMsg << std::endl;
@@ -155,11 +163,8 @@ void TRSViewer::drawScene()
             shader->setUniformMatrix4("model", modelMatrix);
             shader->setUniform4v("baseColor", geode->getColor());
 
-            TRSTexture* pTexture = geode->getTexture();
-            if (pTexture)
-            {
-                pTexture->activeAllTextures(shader->getProgramId());
-            }
+            processTexture(shader->getProgramId(), geode);
+
             if (geode->getUpdateCallBack())
             {
                 geode->getUpdateCallBack()(geode);
@@ -296,4 +301,19 @@ TRSShader* TRSViewer::getOrCreateShader(ShaderType type)
     }
     m_shaders.insert(std::make_pair(type, shader));
     return shader;
+}
+
+void TRSViewer::processTexture(unsigned int program, TRSGeode* geode)
+{
+    TRSTexture* texture = geode->getTexture();
+
+    if (!texture && NodeType::ntTextNode == geode->nodeType())
+    {
+        texture = m_unicodeTexture;
+    }
+    if (!texture)
+    {
+        return;
+    }
+    texture->activeAllTextures(program);
 }

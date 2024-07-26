@@ -15,6 +15,21 @@ TRSNode::~TRSNode()
 
 }
 
+NodeType TRSNode::nodeType() const
+{
+    return NodeType::ntUnknow;
+}
+
+void TRSNode::traverse(NodeVisitor& visitor)
+{
+
+}
+
+TRSBox TRSNode::boundingBox() const
+{
+    return TRSBox();
+}
+
 TRSMatrix TRSNode::getMatrix()
 {
     return m_mat;
@@ -53,16 +68,6 @@ void TRSNode::setName(const std::string& name)
 const std::string& TRSNode::name() const
 {
     return m_name;
-}
-
-void TRSNode::traverse(NodeVisitor& visitor)
-{
-
-}
-
-TRSBox TRSNode::boundingBox() const
-{
-    return TRSBox();
 }
 
 void TRSNode::setUpdateCallBack(NodeUpdateFunc func)
