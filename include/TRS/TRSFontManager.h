@@ -18,6 +18,8 @@ public:
 
     bool loadAsciiCharInfo(std::string& error) noexcept;
 
+    float textRelativeLength(const std::string& text);
+
 private:
     unsigned int m_textureID = 0;
     std::unordered_map<char, AsciiCharInfo> m_fonts;

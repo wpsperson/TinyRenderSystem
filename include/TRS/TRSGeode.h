@@ -10,6 +10,7 @@
 
 class TRSTexture;
 class TRSMesh;
+class TRSViewer;
 
 class TRS_EXPORT TRSGeode : public TRSNode
 {
@@ -20,7 +21,7 @@ public:
 
     NodeType nodeType() const override;
 
-    virtual void setActive();
+    virtual void initialize(TRSViewer *viewer);
 
     virtual void draw(RenderMode mode);
 

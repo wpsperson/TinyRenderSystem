@@ -116,3 +116,19 @@ bool TRSFontManager::loadAsciiCharInfo(std::string& error) noexcept
     FT_Done_FreeType(ft);
     return true;
 }
+
+float TRSFontManager::textRelativeLength(const std::string &text)
+{
+    float result = 0.0f;
+    for (char ch : text)
+    {
+        if (' ' == ch)
+        {
+            result += 1.0f;
+            continue;
+        }
+        const AsciiCharInfo* info = asciiChar(ch);
+        result += info->stride;
+    }
+    return result;
+}

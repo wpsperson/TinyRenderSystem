@@ -26,6 +26,10 @@ public:
 
     void setIndices(const std::vector<unsigned int>& indices);
 
+    void setNeedUpload();
+
+    void reset();
+
     void copyMesh(TRSMesh* rhs);
 
     void generateNormals();

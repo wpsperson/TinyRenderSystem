@@ -29,12 +29,14 @@ TRSViewer::TRSViewer()
     m_pCamera = new TRSCamera;
     m_fontMgr = new TRSFontManager;
     m_cullor = new CullVisitor;
+    m_asciiTexture = new TRSTexture;
     m_unicodeTexture = new TRSTexture;
 }
 
 TRSViewer::~TRSViewer()
 {
     delete m_unicodeTexture;
+    delete m_asciiTexture;
     delete m_cullor;
     delete m_fontMgr;
     delete m_pCamera;
@@ -69,14 +71,19 @@ void TRSViewer::initialViewer()
     {
         std::cout << errorMsg << std::endl;
     }
-    unsigned int unicodeTexId = TRSCharacterTexture::instance()->getTextureID();
-    TextureData texData(unicodeTexId, "all_unicode_texture", "ourTexture");
-    m_unicodeTexture->addSharedTexture(texData);
-
     if (!m_fontMgr->loadAsciiCharInfo(errorMsg))
     {
         std::cout << errorMsg << std::endl;
     }
+
+    unsigned int unicodeTexId = TRSCharacterTexture::instance()->getTextureID();
+    TextureData unicodeData(unicodeTexId, "global_unicode_texture", "ourTexture");
+    m_unicodeTexture->addSharedTexture(unicodeData);
+
+    unsigned int asciiTexId = m_fontMgr->fontTexutre();
+    TextureData asciiData(asciiTexId, "global_ascii_texture", "ourTexture");
+    m_asciiTexture->addSharedTexture(asciiData);
+
     m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
     glEnable(GL_DEPTH_TEST);
 }
@@ -86,7 +93,6 @@ void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
     m_pSceneNode = pSceneNode;
     m_polygonModeVisitor->setTargetNode(m_pSceneNode.get());
 }
-
 
 void TRSViewer::frame()
 {
@@ -129,7 +135,8 @@ void TRSViewer::classify()
 
     for (TRSGeode* geode : nodes)
     {
-        geode->setActive();
+        geode->initialize(this);
+
         DrawItem item;
         item.geode = geode;
         for (RenderMode mode : renderModes)
@@ -181,6 +188,11 @@ void TRSViewer::drawScene()
 TRSCamera* TRSViewer::getCamera() const
 {
     return m_pCamera;
+}
+
+TRSFontManager* TRSViewer::getFontMgr() const
+{
+    return m_fontMgr;
 }
 
 void TRSViewer::calcFrameTime()
@@ -310,6 +322,10 @@ void TRSViewer::processTexture(unsigned int program, TRSGeode* geode)
     if (!texture && NodeType::ntTextNode == geode->nodeType())
     {
         texture = m_unicodeTexture;
+    }
+    if (!texture && NodeType::ntDynamicText == geode->nodeType())
+    {
+        texture = m_asciiTexture;
     }
     if (!texture)
     {

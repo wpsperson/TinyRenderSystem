@@ -66,18 +66,7 @@ void TRSTextNode::setSize(float size)
     m_size = size;
 }
 
-void TRSTextNode::draw(RenderMode mode)
-{
-    if (RenderMode::Shaded != mode)
-    {
-        return;
-    }
-
-    m_shaded->bindMesh();
-    glDrawArrays(GL_TRIANGLES, 0, m_ptCount);
-}
-
-void TRSTextNode::setActive()
+void TRSTextNode::initialize(TRSViewer*)
 {
     if (m_dirty)
     {
@@ -85,6 +74,11 @@ void TRSTextNode::setActive()
         m_dirty = false;
     }
     m_shaded->uploadOnce();
+}
+
+void TRSTextNode::draw(RenderMode mode)
+{
+    TRSGeode::draw(mode);
 }
 
 std::string TRSTextNode::debugInfo()

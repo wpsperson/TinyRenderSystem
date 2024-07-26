@@ -24,9 +24,9 @@ public:
 
     void setSize(float size);
 
-    virtual void draw(RenderMode mode) override;
+    void initialize(TRSViewer* viewer) override;
 
-    void setActive() override;
+    virtual void draw(RenderMode mode) override;
 
     virtual std::string debugInfo() override;
 

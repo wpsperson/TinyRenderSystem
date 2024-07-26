@@ -33,7 +33,7 @@ NodeType TRSGeode::nodeType() const
     return NodeType::ntGeode;
 }
 
-void TRSGeode::setActive()
+void TRSGeode::initialize(TRSViewer*)
 {
     if (hasComponent(RenderMode::Shaded))
     {
