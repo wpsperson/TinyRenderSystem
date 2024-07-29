@@ -46,6 +46,7 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSSettings.h
     ${INCLUDE_DIR}/TRSFontManager.h
     ${INCLUDE_DIR}/TRSDynamicText.h
+    ${INCLUDE_DIR}/TRSAxis.h
     )
 
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/TRS)
@@ -82,6 +83,7 @@ set(Target_SRC_LIST
     ${SRC_DIR}/TRSSettings.cpp
     ${SRC_DIR}/TRSFontManager.cpp
     ${SRC_DIR}/TRSDynamicText.cpp
+    ${SRC_DIR}/TRSAxis.cpp
 )
 
 FILE(GLOB Target_SHADER_LIST ${PROJECT_SOURCE_DIR}/shaders/*.glsl)

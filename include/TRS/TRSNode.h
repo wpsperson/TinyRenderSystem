@@ -11,6 +11,7 @@
 
 class NodeVisitor;
 class TRSNode;
+class TRSViewer;
 
 typedef std::function<void(TRSNode*)> NodeUpdateFunc;
 
@@ -22,9 +23,11 @@ public:
 
     virtual NodeType nodeType() const;
 
-    virtual void traverse(NodeVisitor& visitor);
+    virtual void initialize(TRSViewer* viewer);
 
     virtual TRSBox boundingBox() const;
+
+    virtual void traverse(NodeVisitor& visitor);
 
     TRSMatrix getMatrix();
 

@@ -20,6 +20,14 @@ NodeType TRSGroup::nodeType() const
     return NodeType::ntGroup;
 }
 
+void TRSGroup::initialize(TRSViewer* viewer)
+{
+    for (std::shared_ptr<TRSNode> child : m_pChildren)
+    {
+        child->initialize(viewer);
+    }
+}
+
 void TRSGroup::addChild(std::shared_ptr<TRSNode> ptr)
 {
     TRSGroup::insertChild(static_cast<int>(m_pChildren.size()), ptr);

@@ -20,6 +20,10 @@ NodeType TRSNode::nodeType() const
     return NodeType::ntUnknow;
 }
 
+void TRSNode::initialize(TRSViewer* viewer)
+{
+}
+
 void TRSNode::traverse(NodeVisitor& visitor)
 {
 

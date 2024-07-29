@@ -21,7 +21,7 @@ public:
 
     NodeType nodeType() const override;
 
-    virtual void initialize(TRSViewer* viewer);
+    void initialize(TRSViewer* viewer) override;
 
     virtual void dynamicUpdate(TRSViewer* viewer);
 

@@ -12,6 +12,8 @@ public:
 
     NodeType nodeType() const override;
 
+    void initialize(TRSViewer* viewer) override;
+
     void addChild(std::shared_ptr<TRSNode> ptr);
 
     void removeChild(TRSNode* pNode);

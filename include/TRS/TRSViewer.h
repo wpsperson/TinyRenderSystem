@@ -50,8 +50,6 @@ public:
     TRSFontManager* getFontMgr() const;
 
 protected:
-    void initNode(TRSNode*node, int level);
-
     void calcFrameTime();
 
     TRSShader* find2Shader(TRSGeode* node, RenderMode mode);

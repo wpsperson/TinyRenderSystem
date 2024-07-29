@@ -27,6 +27,9 @@ static const char* s_TextUnitPrefix = "texture";
 
 
 constexpr double kMPI = 3.141592653589793;
+constexpr double kM2PI = 6.283185307179586;
+constexpr float kMPIf = 3.141592653589793f;
+constexpr float kM2PIf = 6.283185307179586f;
 
 
 

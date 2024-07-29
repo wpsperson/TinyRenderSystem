@@ -19,6 +19,7 @@
 #include "TRS/TRSTextNode.h"
 #include "TRS/TRSDynamicText.h"
 #include "TRS/TRSCube.h"
+#include "TRS/TRSAxis.h"
 
 
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
@@ -55,30 +56,33 @@ void OpenGLWidget::setScene(std::shared_ptr<TRSNode> sceneGroup)
 void OpenGLWidget::setupDemo()
 {
     // initialize some scene
-    TRSCube cube;
-    TRSMesh* mesh = cube.getMesh();
-    std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
-    pNode->copyShadedMesh(mesh);
-    pNode->setTexture(std::make_shared<TRSTexture>());
-    pNode->getTexture()->createTexture("resources/textures/opengl.png");
-    pNode->getTexture()->createTexture("resources/textures/cube.png");
+    //TRSCube cube;
+    //TRSMesh* mesh = cube.getMesh();
+    //std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
+    //pNode->copyShadedMesh(mesh);
+    //pNode->setTexture(std::make_shared<TRSTexture>());
+    //pNode->getTexture()->createTexture("resources/textures/opengl.png");
+    //pNode->getTexture()->createTexture("resources/textures/cube.png");
 
-    //std::wstring text(L"中"); // 华人民共和国
+    //std::wstring text(L"中华人民共和国");
     //std::shared_ptr<TRSTextNode> textNode = std::make_shared<TRSTextNode>();
     //textNode->setText(text);
     //textNode->setPos(G_ORIGIN);
     //textNode->setDir(G_XDIR);
 
-    std::shared_ptr <TRSDynamicText> dytext = std::make_shared<TRSDynamicText>();
-    dytext->setOrigin(TRSPoint(0.5f, 0.5f, 0.5f));
-    dytext->setFontSize(0.2f);
-    dytext->setText("ABCD");
+    //std::shared_ptr <TRSDynamicText> dytext = std::make_shared<TRSDynamicText>();
+    //dytext->setOrigin(TRSPoint(0.5f, 0.5f, 0.5f));
+    //dytext->setFontSize(0.2f);
+    //dytext->setText("ABCD");
+
+    std::shared_ptr<TRSAxis> axis = std::make_shared<TRSAxis>();
+    axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
 
     std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
-    root->addChild(pNode);
+    // root->addChild(pNode);
     // root->addChild(textNode);
-    root->addChild(dytext);
-    setScene(root);
+    // root->addChild(dytext);
+    setScene(axis);
     update();
 }
 
