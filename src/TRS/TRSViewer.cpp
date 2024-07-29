@@ -14,6 +14,8 @@
 #include "TRS/TRSShader.h"
 #include "TRS/TRSTexture.h"
 #include "TRS/TRSGeode.h"
+#include "TRS/TRSDynamicText.h"
+#include "TRS/TRSGroup.h"
 #include "TRS/TRSTexture.h"
 #include "TRS/TRSVisitors.h"
 #include "TRS/TRSMesh.h"
@@ -92,6 +94,10 @@ void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
 {
     m_pSceneNode = pSceneNode;
     m_polygonModeVisitor->setTargetNode(m_pSceneNode.get());
+
+    // initialized all nodes.
+    TRSNode* root = m_pSceneNode.get();
+    initNode(root, 0);
 }
 
 void TRSViewer::frame()
@@ -135,7 +141,7 @@ void TRSViewer::classify()
 
     for (TRSGeode* geode : nodes)
     {
-        geode->initialize(this);
+        geode->dynamicUpdate(this);
 
         DrawItem item;
         item.geode = geode;
@@ -193,6 +199,35 @@ TRSCamera* TRSViewer::getCamera() const
 TRSFontManager* TRSViewer::getFontMgr() const
 {
     return m_fontMgr;
+}
+
+void TRSViewer::initNode(TRSNode* node, int level)
+{
+    NodeType type = node->nodeType();
+    switch (type)
+    {
+    case NodeType::ntGroup:
+    {
+        TRSGroup* group = static_cast<TRSGroup*>(node);
+        std::size_t childCount =  group->childNum();
+        for (int idx = 0; idx < childCount; idx++)
+        {
+            TRSNode *node = group->child(idx).get();
+            initNode(node, level + 1);
+        }
+    }
+        break;
+    case NodeType::ntGeode:
+    case NodeType::ntTextNode:
+    case NodeType::ntDynamicText:
+    {
+        TRSGeode *geode = static_cast<TRSGeode*>(node);
+        geode->initialize(this);
+    }
+        break;
+    default:
+        break;
+    }
 }
 
 void TRSViewer::calcFrameTime()

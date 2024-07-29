@@ -41,6 +41,30 @@ void TRSDynamicText::setFontSize(float size)
 
 void TRSDynamicText::initialize(TRSViewer* viewer)
 {
+    dynamicUpdate(viewer);
+
+    // initialize bounding box
+    TRSFontManager* fontMgr = viewer->getFontMgr();
+    float relativeLen = fontMgr->textRelativeLength(m_text);
+    float extend = relativeLen * m_fontSize / 2;
+    m_box = TRSBox(m_origin, extend);
+}
+
+TRSBox TRSDynamicText::boundingBox() const
+{
+    TRSBox result;
+    result.mergeBox(m_box);
+    result.mergeBox(m_shaded->boundingBox());
+    return result;
+}
+
+void TRSDynamicText::draw(RenderMode mode)
+{
+    TRSGeode::draw(mode);
+}
+
+void TRSDynamicText::dynamicUpdate(TRSViewer* viewer)
+{
     TRSCamera* camera = viewer->getCamera();
     TRSFontManager* fontMgr = viewer->getFontMgr();
     bool changed = generateText(camera, fontMgr);
@@ -49,11 +73,6 @@ void TRSDynamicText::initialize(TRSViewer* viewer)
         m_shaded->setNeedUpload();
     }
     m_shaded->uploadOnce();
-}
-
-void TRSDynamicText::draw(RenderMode mode)
-{
-    TRSGeode::draw(mode);
 }
 
 void TRSDynamicText::preProcess(RenderMode mode)

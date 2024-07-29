@@ -26,7 +26,11 @@ public:
 
     void initialize(TRSViewer* viewer) override;
 
+    TRSBox boundingBox() const override;
+
     virtual void draw(RenderMode mode) override;
+
+    void dynamicUpdate(TRSViewer* viewer) override;
 
 protected:
     void preProcess(RenderMode mode) override;
@@ -44,4 +48,5 @@ protected:
     TRSVec3 m_up = G_YDIR;
     float m_fontSize = 1.0f;
     bool m_needRebuild = true;
+    TRSBox m_box;
 };

@@ -44,7 +44,9 @@ OpenGLWidget::~OpenGLWidget()
 
 void OpenGLWidget::setScene(std::shared_ptr<TRSNode> sceneGroup)
 {
+    makeCurrent();
     m_viewer->setSecenNode(sceneGroup);
+    doneCurrent();
     TRSBox box = sceneGroup->boundingBox();
     m_viewer->getCamera()->fitToBox(box);
     m_pCameraHandler->setSceneBox(box);

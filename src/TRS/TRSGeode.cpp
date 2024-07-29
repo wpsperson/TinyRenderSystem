@@ -49,6 +49,10 @@ void TRSGeode::initialize(TRSViewer*)
     }
 }
 
+void TRSGeode::dynamicUpdate(TRSViewer* viewer)
+{
+}
+
 void TRSGeode::preProcess(RenderMode mode)
 {
     if (RenderMode::Shaded == mode)

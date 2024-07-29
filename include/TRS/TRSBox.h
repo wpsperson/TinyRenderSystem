@@ -12,6 +12,8 @@ public:
 
     TRSBox(float x0, float x1, float y0, float y1, float z0, float z1);
 
+    TRSBox(const TRSPoint& center, float halfRange);
+
     ~TRSBox();
 
     void mergePoint(const TRSPoint& pt);

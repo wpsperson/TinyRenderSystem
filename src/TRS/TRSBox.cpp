@@ -27,6 +27,16 @@ TRSBox::TRSBox(float x0, float x1, float y0, float y1, float z0, float z1)
     maxz = z1;
 }
 
+TRSBox::TRSBox(const TRSPoint& center, float halfRange)
+{
+    minx = center[0] - halfRange;
+    maxx = center[0] + halfRange;
+    miny = center[1] - halfRange;
+    maxy = center[1] + halfRange;
+    minz = center[2] - halfRange;
+    maxz = center[2] + halfRange;
+}
+
 TRSBox::~TRSBox()
 {
 
