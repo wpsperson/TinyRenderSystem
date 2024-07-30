@@ -55,7 +55,7 @@ void AssimpLoader::recurseNode(aiNode* pNode, const aiScene* pScene)
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
         int index = pNode->mMeshes[i];
         aiMesh* pMesh = pScene->mMeshes[index];
-        std::shared_ptr<TRSNode> pNode = retrieveGeodeByMesh(pMesh, pScene);
+        TRSNode* pNode = retrieveGeodeByMesh(pMesh, pScene);
         m_pGroupNode->addChild(pNode);
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
@@ -65,7 +65,7 @@ void AssimpLoader::recurseNode(aiNode* pNode, const aiScene* pScene)
     }
 }
 
-std::shared_ptr<TRSNode> AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene)
+TRSNode* AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene)
 {
     unsigned int vertexCount = pMesh->mNumVertices;
     unsigned int indexCount = pMesh->mNumFaces * 3;
@@ -111,13 +111,12 @@ std::shared_ptr<TRSNode> AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const 
         for (unsigned int j = 0; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
-    std::shared_ptr<TRSGeode> pGeode = std::make_shared<TRSGeode>();
+    TRSGeode* pGeode = new TRSGeode;
     pGeode->setShadedVertice(points);
     pGeode->setShadedNormals(normals);
     pGeode->setShadedUVs(UVs);
     pGeode->setShadedIndice(indices);
-    std::shared_ptr<TRSTexture> pCurTexture = std::make_shared<TRSTexture>();
-    pGeode->setTexture(pCurTexture);
+    TRSTexture* pCurTexture = pGeode->useTexture();
 
     aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
     // current stage, we just focus on diffuse texture;

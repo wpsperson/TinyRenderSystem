@@ -12,7 +12,11 @@ TRSGroup::TRSGroup()
 
 TRSGroup::~TRSGroup()
 {
-
+    for (TRSNode* child : m_pChildren)
+    {
+        delete child;
+    }
+    m_pChildren.clear();
 }
 
 NodeType TRSGroup::nodeType() const
@@ -22,23 +26,23 @@ NodeType TRSGroup::nodeType() const
 
 void TRSGroup::initialize(TRSViewer* viewer)
 {
-    for (std::shared_ptr<TRSNode> child : m_pChildren)
+    for (TRSNode* child : m_pChildren)
     {
         child->initialize(viewer);
     }
 }
 
-void TRSGroup::addChild(std::shared_ptr<TRSNode> ptr)
+void TRSGroup::addChild(TRSNode* child)
 {
-    TRSGroup::insertChild(static_cast<int>(m_pChildren.size()), ptr);
+    TRSGroup::insertChild(static_cast<int>(m_pChildren.size()), child);
 }
 
 void TRSGroup::removeChild(TRSNode* pNode)
 {
-    std::vector<std::shared_ptr<TRSNode>>::iterator itr = m_pChildren.begin();
+    std::vector<TRSNode*>::iterator itr = m_pChildren.begin();
     for (; itr != m_pChildren.end();)
     {
-        TRSNode* curNode = (*itr).get();
+        TRSNode* curNode = *itr;
         if (curNode == pNode)
         {
             itr = m_pChildren.erase(itr);
@@ -57,7 +61,7 @@ size_t TRSGroup::childNum() const
 }
 
 
-std::shared_ptr<TRSNode> TRSGroup::child(int idx)
+TRSNode* TRSGroup::child(int idx)
 {
     if (idx < 0 || idx >= m_pChildren.size())
     {
@@ -68,17 +72,16 @@ std::shared_ptr<TRSNode> TRSGroup::child(int idx)
 
 void TRSGroup::traverse(NodeVisitor& visitor)
 {
-    std::vector<std::shared_ptr<TRSNode>>::iterator itr = m_pChildren.begin();
-    for (; itr!=m_pChildren.end(); itr++)
+    for (TRSNode* child : m_pChildren)
     {
-        visitor.visit((*itr).get());
+        visitor.visit(child);
     }
 }
 
 TRSBox TRSGroup::boundingBox() const
 {
     TRSBox box = TRSNode::boundingBox();
-    for (const std::shared_ptr<TRSNode>& node : m_pChildren)
+    for (TRSNode* node : m_pChildren)
     {
         TRSBox childBox = node->boundingBox();
         box.mergeBox(childBox);
@@ -89,16 +92,14 @@ TRSBox TRSGroup::boundingBox() const
 std::string TRSGroup::debugInfo()
 {
     std::string strDebugInfo;
-    std::vector<std::shared_ptr<TRSNode>>::iterator itr = m_pChildren.begin();
-    for (; itr != m_pChildren.end(); itr++)
+    for (TRSNode* child : m_pChildren)
     {
-        std::shared_ptr<TRSNode> child = *itr;
         strDebugInfo += child->debugInfo();
     }
     return strDebugInfo;
 }
 
-void TRSGroup::insertChild(int idx, std::shared_ptr<TRSNode> pChildNode)
+void TRSGroup::insertChild(int idx, TRSNode* pChildNode)
 {
     if (idx >= m_pChildren.size())
     {

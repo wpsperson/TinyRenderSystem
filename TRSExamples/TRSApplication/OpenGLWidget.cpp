@@ -43,7 +43,7 @@ OpenGLWidget::~OpenGLWidget()
     }
 }
 
-void OpenGLWidget::setScene(std::shared_ptr<TRSNode> sceneGroup)
+void OpenGLWidget::setScene(TRSNode* sceneGroup)
 {
     makeCurrent();
     m_viewer->setSecenNode(sceneGroup);
@@ -55,32 +55,31 @@ void OpenGLWidget::setScene(std::shared_ptr<TRSNode> sceneGroup)
 
 void OpenGLWidget::setupDemo()
 {
-    // initialize some scene
     //TRSCube cube;
     //TRSMesh* mesh = cube.getMesh();
-    //std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
+    //TRSGeode* pNode = new TRSGeode;
     //pNode->copyShadedMesh(mesh);
-    //pNode->setTexture(std::make_shared<TRSTexture>());
-    //pNode->getTexture()->createTexture("resources/textures/opengl.png");
-    //pNode->getTexture()->createTexture("resources/textures/cube.png");
+    //TRSTexture* texture = pNode->useTexture();
+    //texture->createTexture("resources/textures/opengl.png");
+    //texture->createTexture("resources/textures/cube.png");
 
     //std::wstring text(L"中华人民共和国");
-    //std::shared_ptr<TRSTextNode> textNode = std::make_shared<TRSTextNode>();
+    //TRSTextNode* textNode = new TRSTextNode;
     //textNode->setText(text);
     //textNode->setPos(G_ORIGIN);
     //textNode->setDir(G_XDIR);
 
-    //std::shared_ptr <TRSDynamicText> dytext = std::make_shared<TRSDynamicText>();
+    //TRSDynamicText* dytext = new TRSDynamicText;
     //dytext->setOrigin(TRSPoint(0.5f, 0.5f, 0.5f));
     //dytext->setFontSize(0.2f);
     //dytext->setText("ABCD");
 
-    std::shared_ptr<TRSAxis> axis = std::make_shared<TRSAxis>();
+    TRSAxis* axis = new TRSAxis;
     axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
 
-    std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
-    // root->addChild(pNode);
-    // root->addChild(textNode);
+    TRSGroup* root = new TRSGroup;
+     //root->addChild(pNode);
+     //root->addChild(textNode);
     // root->addChild(dytext);
     setScene(axis);
     update();

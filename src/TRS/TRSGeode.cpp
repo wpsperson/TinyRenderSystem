@@ -26,6 +26,10 @@ TRSGeode::~TRSGeode()
     {
         delete m_points;
     }
+    if (m_pTexture)
+    {
+        delete m_pTexture;
+    }
 }
 
 NodeType TRSGeode::nodeType() const
@@ -172,14 +176,18 @@ TRSMesh* TRSGeode::getComponentMesh(RenderMode mode) const
     }
 }
 
-void TRSGeode::setTexture(std::shared_ptr<TRSTexture> texture)
+TRSTexture* TRSGeode::useTexture()
 {
-    m_pTexture = texture;
+    if (!m_pTexture)
+    {
+        m_pTexture = new TRSTexture;
+    }
+    return m_pTexture;
 }
 
 TRSTexture* TRSGeode::getTexture() const
 {
-    return m_pTexture.get();
+    return m_pTexture;
 }
 
 void TRSGeode::setShadedVertice(const std::vector<TRSPoint>& vertexs)
@@ -258,9 +266,9 @@ bool TRSGeode::hasComponent(RenderMode mode) const
 std::string TRSGeode::debugInfo()
 {
     std::string strDebugInfo;
-    if (TRSTexture* pTexture = getTexture())
+    if (m_pTexture)
     {
-        strDebugInfo += pTexture->debugInfo();
+        strDebugInfo += m_pTexture->debugInfo();
     }
     return strDebugInfo;
 }

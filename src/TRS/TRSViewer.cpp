@@ -37,6 +37,7 @@ TRSViewer::TRSViewer()
 
 TRSViewer::~TRSViewer()
 {
+    delete m_root;
     delete m_unicodeTexture;
     delete m_asciiTexture;
     delete m_cullor;
@@ -90,14 +91,13 @@ void TRSViewer::initialViewer()
     glEnable(GL_DEPTH_TEST);
 }
 
-void TRSViewer::setSecenNode(std::shared_ptr<TRSNode> pSceneNode)
+void TRSViewer::setSecenNode(TRSNode* pSceneNode)
 {
-    m_pSceneNode = pSceneNode;
-    m_polygonModeVisitor->setTargetNode(m_pSceneNode.get());
+    m_root = pSceneNode;
+    m_polygonModeVisitor->setTargetNode(m_root);
 
     // initialized all nodes.
-    TRSNode* root = m_pSceneNode.get();
-    root->initialize(this);
+    m_root->initialize(this);
 }
 
 void TRSViewer::frame()
@@ -112,13 +112,12 @@ void TRSViewer::frame()
 
 void TRSViewer::cullScene()
 {
-    TRSNode* root = m_pSceneNode.get();
-    if (!root)
+    if (!m_root)
     {
         return;
     }
     m_cullor->clearUp();
-    m_cullor->visit(root);
+    m_cullor->visit(m_root);
 }
 
 void TRSViewer::classify()

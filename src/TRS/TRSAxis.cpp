@@ -2,6 +2,7 @@
 
 #include "TRS/TRSDefConst.h"
 #include "TRS/TRSGeode.h"
+#include "TRS/TRSDynamicText.h"
 #include "TRS/TRSMesh.h"
 
 constexpr int kAxisResolution = 16;
@@ -14,12 +15,12 @@ TRSAxis::TRSAxis()
     m_xCone = new TRSGeode;
     m_yCone = new TRSGeode;
     m_zCone = new TRSGeode;
-    addChild(std::shared_ptr<TRSNode>(m_xCylinder));
-    addChild(std::shared_ptr<TRSNode>(m_yCylinder));
-    addChild(std::shared_ptr<TRSNode>(m_zCylinder));
-    addChild(std::shared_ptr<TRSNode>(m_xCone));
-    addChild(std::shared_ptr<TRSNode>(m_yCone));
-    addChild(std::shared_ptr<TRSNode>(m_zCone));
+    addChild(m_xCylinder);
+    addChild(m_yCylinder);
+    addChild(m_zCylinder);
+    addChild(m_xCone);
+    addChild(m_yCone);
+    addChild(m_zCone);
 }
 
 TRSAxis::~TRSAxis()

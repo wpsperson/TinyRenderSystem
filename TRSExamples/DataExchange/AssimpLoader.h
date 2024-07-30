@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <string>
-#include <memory>
 
 class TRSGroup;
 class TRSNode;
@@ -28,7 +27,7 @@ public:
 
     void recurseNode(aiNode* pNode, const aiScene* pScene);
 
-    std::shared_ptr<TRSNode> retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene);
+    TRSNode* retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene);
 
 private:
     TRSGroup* m_pGroupNode;

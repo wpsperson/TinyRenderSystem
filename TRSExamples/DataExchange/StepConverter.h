@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-
 #include <Standard_Handle.hxx>
 #include <TopoDS_Shape.hxx>
 #include <Quantity_Color.hxx>

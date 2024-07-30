@@ -189,13 +189,12 @@ void MainWindow::onLoadStep()
     std::string errorMessage;
     std::string strStepFile = stepFile.toStdString();
     const char *fileName = strStepFile.c_str();
-    TRSNode* stepNode = ImportStep::readStepFile(fileName, errorMessage);
-    if (!stepNode)
+    TRSNode* root = ImportStep::readStepFile(fileName, errorMessage);
+    if (!root)
     {
         updateStatus(QString::fromStdString(errorMessage));
         return;
     }
-    std::shared_ptr<TRSNode> root(stepNode);
     m_canvas->setScene(root);
     updateStatus("Load scene successfully.");
 }
@@ -211,13 +210,12 @@ void MainWindow::onLoadSTL()
     std::string errorMessage;
     std::string strStepFile = stepFile.toStdString();
     const char* fileName = strStepFile.c_str();
-    TRSNode* stepNode = ImportStep::readSTLFile(fileName, errorMessage);
-    if (!stepNode)
+    TRSNode* root = ImportStep::readSTLFile(fileName, errorMessage);
+    if (!root)
     {
         updateStatus(QString::fromStdString(errorMessage));
         return;
     }
-    std::shared_ptr<TRSNode> root(stepNode);
     m_canvas->setScene(root);
     updateStatus("Load scene successfully.");
 }

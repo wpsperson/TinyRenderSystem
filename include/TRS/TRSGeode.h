@@ -43,7 +43,7 @@ public:
 
     TRSMesh* getComponentMesh(RenderMode mode) const;
 
-    void setTexture(std::shared_ptr<TRSTexture> texture);
+    TRSTexture* useTexture();
 
     TRSTexture* getTexture() const;
 
@@ -72,7 +72,7 @@ public:
 protected:
     int m_polygonMode;
     int m_renderMode = RenderMode::Shaded;
-    std::shared_ptr<TRSTexture> m_pTexture;
+    TRSTexture* m_pTexture = nullptr;
     TRSMesh* m_shaded = nullptr;
     TRSMesh* m_wireframe = nullptr;
     TRSMesh* m_points = nullptr;

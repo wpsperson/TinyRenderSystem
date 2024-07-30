@@ -93,7 +93,7 @@ TRSNode* StepConverter::readStepFile(const char* stepFile)
         TRSGroup* rootGroup = new TRSGroup;
         for (TRSNode* node : rootNodes)
         {
-            rootGroup->addChild(std::shared_ptr<TRSNode>(node));
+            rootGroup->addChild(node);
         }
         return rootGroup;
     }
@@ -142,7 +142,7 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
                 {
                     continue;
                 }
-                group->addChild(std::shared_ptr<TRSGroup>(subGroup));
+                group->addChild(subGroup);
             }
             else if(m_shapeTool->IsSimpleShape(referredShape))
             {
@@ -151,7 +151,7 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
                 {
                     continue;
                 }
-                group->addChild(std::shared_ptr<TRSGeode>(geode));
+                group->addChild(geode);
             }
             else
             {
@@ -165,7 +165,7 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
             {
                 continue;
             }
-            group->addChild(std::shared_ptr<TRSGroup>(subGroup));
+            group->addChild(subGroup);
         }
         else if(m_shapeTool->IsSimpleShape(childLabel))
         {
@@ -174,7 +174,7 @@ TRSGroup* StepConverter::createGroupNode(const TDF_Label& assembly, TopLoc_Locat
             {
                 continue;
             }
-            group->addChild(std::shared_ptr<TRSGeode>(geode));
+            group->addChild(geode);
         }
         else
         {

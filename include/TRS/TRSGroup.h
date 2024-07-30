@@ -2,7 +2,6 @@
 #include "TRS/TRSExport.h"
 #include "TRS/TRSNode.h"
 #include <vector>
-#include <memory>
 
 class TRS_EXPORT TRSGroup : public TRSNode
 {
@@ -14,23 +13,24 @@ public:
 
     void initialize(TRSViewer* viewer) override;
 
-    void addChild(std::shared_ptr<TRSNode> ptr);
+    void addChild(TRSNode* child);
 
     void removeChild(TRSNode* pNode);
 
     size_t childNum() const;
 
-    std::shared_ptr<TRSNode> child(int idx);
+    TRSNode* child(int idx);
 
     virtual void traverse(NodeVisitor& visitor) override;
 
     TRSBox boundingBox() const override;
 
     virtual std::string debugInfo() override;
-protected:
-    void insertChild(int idx, std::shared_ptr<TRSNode>);
 
 protected:
-    std::vector<std::shared_ptr<TRSNode>> m_pChildren;
+    void insertChild(int idx, TRSNode*child);
+
+protected:
+    std::vector<TRSNode *> m_pChildren;
 };
 

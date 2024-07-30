@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-
 #include <QtWidgets/QOpenGLWidget>
 
 class TRSNode;
@@ -16,7 +14,7 @@ public:
     OpenGLWidget(QWidget *parent = nullptr);
     ~OpenGLWidget();
 
-    void setScene(std::shared_ptr<TRSNode> sceneGroup);
+    void setScene(TRSNode* sceneGroup);
 
     void setupDemo();
 

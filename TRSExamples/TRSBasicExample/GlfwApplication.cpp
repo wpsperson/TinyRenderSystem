@@ -78,13 +78,13 @@ bool GlfwApplication::onInitial()
 
     TRSCube cube;
     TRSMesh* mesh = cube.getMesh();
-    std::shared_ptr<TRSGeode> pNode = std::make_shared<TRSGeode>();
+    TRSGeode* pNode = new TRSGeode;
     pNode->copyShadedMesh(mesh);
-    pNode->setTexture(std::make_shared<TRSTexture>());
-    pNode->getTexture()->createTexture("resources/textures/opengl.png");
-    pNode->getTexture()->createTexture("resources/textures/cube.png");
+    TRSTexture* texture = pNode->useTexture();
+    texture->createTexture("resources/textures/opengl.png");
+    texture->createTexture("resources/textures/cube.png");
 
-    std::shared_ptr<TRSGroup> root = std::make_shared<TRSGroup>();
+    TRSGroup* root = new TRSGroup;
     root->addChild(pNode);
 
     m_viewer->setSecenNode(root);

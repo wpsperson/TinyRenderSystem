@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <memory>
 #include <string>
 #include <functional>
 
@@ -19,7 +18,8 @@ class TRS_EXPORT TRSNode
 {
 public:
     TRSNode();
-    ~TRSNode();
+
+    virtual ~TRSNode();
 
     virtual NodeType nodeType() const;
 

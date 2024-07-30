@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <chrono>
-#include <memory>
 #include <map>
 #include <vector>
 #include <unordered_map>
@@ -35,7 +34,7 @@ public:
 
     void initialViewer();
 
-    void setSecenNode(std::shared_ptr<TRSNode> pSceneNode);
+    void setSecenNode(TRSNode* pSceneNode);
 
     void frame();
 
@@ -65,10 +64,10 @@ protected:
     TRSFontManager* m_fontMgr = nullptr;
     TRSTexture* m_unicodeTexture = nullptr;
     TRSTexture* m_asciiTexture = nullptr;
-    std::shared_ptr<TRSNode> m_pSceneNode;
+    TRSNode* m_root = nullptr;
+    TRSCamera* m_pCamera = nullptr;
+    CullVisitor* m_cullor = nullptr;
     TRSVec4 m_BGColor;
-    TRSCamera* m_pCamera;
-    CullVisitor* m_cullor;
     std::unordered_map<TRSShader*, std::vector<DrawItem> > m_drawItems;
     std::map<ShaderType, TRSShader*> m_shaders;
     PolygonModeVisitor* m_polygonModeVisitor;
