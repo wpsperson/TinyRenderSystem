@@ -12,6 +12,7 @@
 #include "TRS/TRSNode.h"
 #include "TRS/CullVisitor.h"
 #include "TRS/TRSShader.h"
+#include "TRS/TRSPrograms.h"
 #include "TRS/TRSTexture.h"
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSDynamicText.h"
@@ -27,23 +28,25 @@ TRSViewer::TRSViewer()
     : m_BGColor(s_DefaultBGColor)
 {
     m_setting = new TRSSettings;
-    m_polygonModeVisitor = new PolygonModeVisitor;
-    m_pCamera = new TRSCamera;
+    m_programs = new TRSPrograms;
+    m_camera = new TRSCamera;
     m_fontMgr = new TRSFontManager;
     m_cullor = new CullVisitor;
     m_asciiTexture = new TRSTexture;
     m_unicodeTexture = new TRSTexture;
+    m_polygonModeVisitor = new PolygonModeVisitor;
 }
 
 TRSViewer::~TRSViewer()
 {
     delete m_root;
+    delete m_polygonModeVisitor;
     delete m_unicodeTexture;
     delete m_asciiTexture;
     delete m_cullor;
     delete m_fontMgr;
-    delete m_pCamera;
-    delete m_polygonModeVisitor;
+    delete m_camera;
+    delete m_programs;
     delete m_setting;
 }
 
@@ -112,7 +115,7 @@ void TRSViewer::frame()
 
 TRSCamera* TRSViewer::getCamera() const
 {
-    return m_pCamera;
+    return m_camera;
 }
 
 TRSFontManager* TRSViewer::getFontMgr() const
@@ -159,7 +162,7 @@ void TRSViewer::classify()
             if (geode->hasRenderMode(mode))
             {
                 item.mode = mode;
-                TRSShader * shader = find2Shader(geode, mode);
+                TRSShader * shader = m_programs->find2Shader(geode, mode);
                 m_drawItems[shader].emplace_back(item);
             }
         }
@@ -171,12 +174,12 @@ void TRSViewer::drawScene()
     for (const auto& [shader, items] : m_drawItems)
     {
         shader->use();
-        TRSMatrix viewMatrix = m_pCamera->getViewMatrix();
-        TRSMatrix projectMatrix = m_pCamera->getProjectMatrix();
+        TRSMatrix viewMatrix = m_camera->getViewMatrix();
+        TRSMatrix projectMatrix = m_camera->getProjectMatrix();
         shader->setUniformMatrix4("view", viewMatrix);
         shader->setUniformMatrix4("projection", projectMatrix);
-        shader->setUniform3v("viewPos", m_pCamera->getPosition());
-        shader->setUniform3v("lightPos", m_pCamera->getPosition()); // s_DefaultLightPos
+        shader->setUniform3v("viewPos", m_camera->getPosition());
+        shader->setUniform3v("lightPos", m_camera->getPosition()); // s_DefaultLightPos
         for (const DrawItem &item : items)
         {
             TRSGeode* geode = item.geode;
@@ -196,7 +199,6 @@ void TRSViewer::drawScene()
             geode->draw(mode);
             geode->postProcess(mode);
         }
-
     }
 }
 
@@ -211,114 +213,6 @@ void TRSViewer::calcFrameTime()
         //Sleep(15 - timeDiff); Window API
     }
     m_fLastTime = m_fCurTime;
-}
-
-TRSShader* TRSViewer::find2Shader(TRSGeode* geode, RenderMode mode)
-{
-    TRSMesh* mesh = geode->getComponentMesh(mode);
-    int meshStruct = mesh->getMeshStruct();
-    bool hasNormal = (meshStruct & msNormal);
-    bool hasUV = (meshStruct & msUV);
-
-    TRSShader* shader = nullptr;
-    if (RenderMode::Shaded == mode)
-    {
-        TRSTexture* texture = geode->getTexture();
-        if (hasUV && texture && texture->count() == 2)
-        {
-            shader = getOrCreateShader(ShaderType::DualTexture);
-        }
-        else if (hasUV && texture && hasNormal)
-        {
-            shader = getOrCreateShader(ShaderType::PhongTexture);
-        }
-        else if (hasNormal)
-        {
-            shader = getOrCreateShader(ShaderType::Phong);
-        }
-        else if (hasUV)
-        {
-            shader = getOrCreateShader(ShaderType::FontShader);
-        }
-        else
-        {
-            shader = getOrCreateShader(ShaderType::Default);
-        }
-    }
-    else
-    {
-        if (hasNormal)
-        {
-            shader = getOrCreateShader(ShaderType::Phong);
-        }
-        else
-        {
-            shader = getOrCreateShader(ShaderType::Default);
-        }
-    }
-    return shader;
-}
-
-TRSShader* TRSViewer::findShader(TRSGeode* node)
-{
-    TRSMesh* mesh = node->useShadedMesh();
-    TRSTexture* texture = nullptr;
-    texture = node->getTexture();
-    int meshStruct =  mesh->getMeshStruct();
-    bool hasNormal = (meshStruct && msNormal);
-    bool hasUV = (meshStruct && msUV);
-
-    TRSShader* shader = nullptr;
-    if (hasUV && texture && texture->count() == 2)
-    {
-        shader = getOrCreateShader(ShaderType::DualTexture);
-    }
-    else if (hasUV && texture && hasNormal)
-    {
-        shader = getOrCreateShader(ShaderType::PhongTexture);
-    }
-    else if(hasNormal)
-    {
-        shader = getOrCreateShader(ShaderType::Phong);
-    }
-    else
-    {
-        shader = getOrCreateShader(ShaderType::Default);
-    }
-    return shader;
-}
-
-TRSShader* TRSViewer::getOrCreateShader(ShaderType type)
-{
-    if (m_shaders.count(type))
-    {
-        return m_shaders.at(type);
-    }
-
-    TRSShader* shader = new TRSShader;
-    if (ShaderType::Default == type)
-    {
-        shader->createProgram("shaders/DefaultVertex.glsl", "shaders/DefaultFragment.glsl");
-    }
-    else if (ShaderType::Phong == type)
-    {
-        shader->createProgram("shaders/PhongVertex.glsl", "shaders/PhongFragment.glsl");
-    }
-    else if (ShaderType::PhongTexture == type)
-    {
-        shader->createProgram("shaders/PosNormTexVertex.glsl", "shaders/PosNormTexFragment.glsl");
-    }
-    else if (ShaderType::DualTexture == type)
-    {
-        shader->createProgram("shaders/PosColorTexMVPVertex.glsl", "shaders/MultiTextureFragment.glsl");
-    }
-    else if (ShaderType::FontShader == type)
-    {
-        shader->createProgram("shaders/FontsVertex.glsl", "shaders/FontsFragment .glsl");
-    }
-    shader->setType(type);
-    m_shaders.insert(std::make_pair(type, shader));
-    return shader;
 }
 
 void TRSViewer::processTexture(unsigned int program, TRSGeode* geode)

@@ -1,0 +1,29 @@
+#pragma once
+
+#include <unordered_map>
+
+#include "TRS/TRSExport.h"
+#include "TRS/TRSDefEnum.h"
+
+
+class TRSShader;
+class TRSGeode;
+
+class TRS_EXPORT TRSPrograms
+{
+public:
+    TRSPrograms();
+
+    ~TRSPrograms();
+
+    TRSShader* find2Shader(TRSGeode* node, RenderMode mode);
+
+    void useProgram(ShaderType type);
+
+private:
+    TRSShader* getOrCreateShader(ShaderType type);
+
+private:
+    std::unordered_map<ShaderType, TRSShader*> m_shaders;
+    TRSShader* m_active = nullptr;
+};
