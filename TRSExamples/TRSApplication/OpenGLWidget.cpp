@@ -77,9 +77,9 @@ void OpenGLWidget::setupDemo()
     TRSAxis* axis = new TRSAxis;
     axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
 
-    TRSGroup* root = new TRSGroup;
-     //root->addChild(pNode);
-     //root->addChild(textNode);
+    // TRSGroup* root = new TRSGroup;
+    // root->addChild(pNode);
+    // root->addChild(textNode);
     // root->addChild(dytext);
     setScene(axis);
     update();

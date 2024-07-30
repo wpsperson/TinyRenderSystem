@@ -15,30 +15,27 @@ TRSAxis::TRSAxis()
     m_xCone = new TRSGeode;
     m_yCone = new TRSGeode;
     m_zCone = new TRSGeode;
+    m_xlabel = new TRSDynamicText;
+    m_ylabel = new TRSDynamicText;
+    m_zlabel = new TRSDynamicText;
     addChild(m_xCylinder);
     addChild(m_yCylinder);
     addChild(m_zCylinder);
     addChild(m_xCone);
     addChild(m_yCone);
     addChild(m_zCone);
+    addChild(m_xlabel);
+    addChild(m_ylabel);
+    addChild(m_zlabel);
 }
 
 TRSAxis::~TRSAxis()
 {
-    // delete m_zCylinder;
+
 }
 
 void TRSAxis::initialize(TRSViewer* viewer)
 {
-    TRSVec4 red(1.0f, 0.0f, 0.0f, 1.0f);
-    TRSVec4 green(0.0f, 1.0f, 0.0f, 1.0f);
-    TRSVec4 blue(0.0f, 0.0f, 1.0f, 1.0f);
-    m_xCylinder->setColor(red);
-    m_yCylinder->setColor(green);
-    m_zCylinder->setColor(blue);
-    m_xCone->setColor(red);
-    m_yCone->setColor(green);
-    m_zCone->setColor(blue);
     TRSMesh* mesh0 = m_xCylinder->useShadedMesh();
     TRSMesh* mesh1 = m_yCylinder->useShadedMesh();
     TRSMesh* mesh2 = m_zCylinder->useShadedMesh();
@@ -51,6 +48,31 @@ void TRSAxis::initialize(TRSViewer* viewer)
     buildConeMesh(G_YDIR, G_ZDIR, mesh3);
     buildConeMesh(-G_XDIR, G_ZDIR, mesh4);
     buildConeMesh(G_XDIR, G_YDIR, mesh5);
+    m_xlabel->setText("X");
+    m_ylabel->setText("Y");
+    m_zlabel->setText("Z");
+    float fontSize = m_conelen / 2;
+    float coord = m_cylen + m_conelen + fontSize;
+    m_xlabel->setOrigin(TRSPoint(coord, 0.0f, 0.0f));
+    m_ylabel->setOrigin(TRSPoint(0.0f, coord, 0.0f));
+    m_zlabel->setOrigin(TRSPoint(0.0f, 0.0f, coord));
+    m_xlabel->setFontSize(fontSize);
+    m_ylabel->setFontSize(fontSize);
+    m_zlabel->setFontSize(fontSize);
+
+
+    TRSVec4 red(1.0f, 0.0f, 0.0f, 1.0f);
+    TRSVec4 green(0.0f, 1.0f, 0.0f, 1.0f);
+    TRSVec4 blue(0.0f, 0.0f, 1.0f, 1.0f);
+    m_xCylinder->setColor(red);
+    m_yCylinder->setColor(green);
+    m_zCylinder->setColor(blue);
+    m_xCone->setColor(red);
+    m_yCone->setColor(green);
+    m_zCone->setColor(blue);
+    m_xlabel->setColor(red);
+    m_ylabel->setColor(green);
+    m_zlabel->setColor(blue);
 
     TRSGroup::initialize(viewer);
 }
