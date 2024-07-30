@@ -15,11 +15,13 @@ enum class DrawType : unsigned char
 
 enum class ShaderType : unsigned char
 {
-    Default = 0,    // only has vertex
+    None = 0,
+    Default,        // only has vertex
     Phong,          // vertex and normal
     PhongTexture,   // vertex normal uv, texture
     DualTexture,    // vertex uv, tex1 tex2
-    FontShader
+    FontShader,
+    CustomShader,
 };
 
 enum RenderMode : unsigned char

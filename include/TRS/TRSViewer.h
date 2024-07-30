@@ -38,17 +38,17 @@ public:
 
     void frame();
 
+    TRSCamera* getCamera() const;
+
+    TRSFontManager* getFontMgr() const;
+
+protected:
     void cullScene();
 
     void classify();
 
     void drawScene();
 
-    TRSCamera* getCamera() const;
-
-    TRSFontManager* getFontMgr() const;
-
-protected:
     void calcFrameTime();
 
     TRSShader* find2Shader(TRSGeode* node, RenderMode mode);
@@ -62,15 +62,16 @@ protected:
 protected:
     TRSSettings* m_setting = nullptr;
     TRSFontManager* m_fontMgr = nullptr;
+    TRSCamera* m_pCamera = nullptr;
+    TRSNode* m_root = nullptr;
+    CullVisitor* m_cullor = nullptr;
     TRSTexture* m_unicodeTexture = nullptr;
     TRSTexture* m_asciiTexture = nullptr;
-    TRSNode* m_root = nullptr;
-    TRSCamera* m_pCamera = nullptr;
-    CullVisitor* m_cullor = nullptr;
-    TRSVec4 m_BGColor;
-    std::unordered_map<TRSShader*, std::vector<DrawItem> > m_drawItems;
+
     std::map<ShaderType, TRSShader*> m_shaders;
+    std::unordered_map<TRSShader*, std::vector<DrawItem> > m_drawItems;
     PolygonModeVisitor* m_polygonModeVisitor;
+    TRSVec4 m_BGColor;
     std::chrono::steady_clock::time_point m_fLastTime;
     std::chrono::steady_clock::time_point m_fCurTime;
 };

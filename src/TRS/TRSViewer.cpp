@@ -110,6 +110,16 @@ void TRSViewer::frame()
     drawScene();
 }
 
+TRSCamera* TRSViewer::getCamera() const
+{
+    return m_pCamera;
+}
+
+TRSFontManager* TRSViewer::getFontMgr() const
+{
+    return m_fontMgr;
+}
+
 void TRSViewer::cullScene()
 {
     if (!m_root)
@@ -188,16 +198,6 @@ void TRSViewer::drawScene()
         }
 
     }
-}
-
-TRSCamera* TRSViewer::getCamera() const
-{
-    return m_pCamera;
-}
-
-TRSFontManager* TRSViewer::getFontMgr() const
-{
-    return m_fontMgr;
 }
 
 void TRSViewer::calcFrameTime()
@@ -316,6 +316,7 @@ TRSShader* TRSViewer::getOrCreateShader(ShaderType type)
     {
         shader->createProgram("shaders/FontsVertex.glsl", "shaders/FontsFragment .glsl");
     }
+    shader->setType(type);
     m_shaders.insert(std::make_pair(type, shader));
     return shader;
 }

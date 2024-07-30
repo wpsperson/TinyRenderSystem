@@ -51,15 +51,14 @@ void TRSAxis::initialize(TRSViewer* viewer)
     m_xlabel->setText("X");
     m_ylabel->setText("Y");
     m_zlabel->setText("Z");
-    float fontSize = m_conelen / 2;
-    float coord = m_cylen + m_conelen + fontSize;
+    float fontSize = m_conelen;
+    float coord = m_cylen + m_conelen + fontSize / 2;
     m_xlabel->setOrigin(TRSPoint(coord, 0.0f, 0.0f));
     m_ylabel->setOrigin(TRSPoint(0.0f, coord, 0.0f));
     m_zlabel->setOrigin(TRSPoint(0.0f, 0.0f, coord));
     m_xlabel->setFontSize(fontSize);
     m_ylabel->setFontSize(fontSize);
     m_zlabel->setFontSize(fontSize);
-
 
     TRSVec4 red(1.0f, 0.0f, 0.0f, 1.0f);
     TRSVec4 green(0.0f, 1.0f, 0.0f, 1.0f);

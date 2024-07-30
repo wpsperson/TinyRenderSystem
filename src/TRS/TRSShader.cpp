@@ -18,6 +18,11 @@ TRSShader::~TRSShader()
     freeShaderProgram();
 }
 
+void TRSShader::setType(ShaderType type)
+{
+    m_type = type;
+}
+
 void TRSShader::createVertexShader(const char* vShaderFile)
 {
     vShader = createShader(vShaderFile, GL_VERTEX_SHADER);

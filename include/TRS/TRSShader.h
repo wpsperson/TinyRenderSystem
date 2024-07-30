@@ -3,6 +3,7 @@
 #include <string>
 
 #include "TRS/TRSExport.h"
+#include "TRS/TRSDefEnum.h"
 #include "TRS/TRSVector.h"
 #include "TRS/TRSMatrix.h"
 
@@ -11,6 +12,8 @@ class TRS_EXPORT TRSShader
 public:
     TRSShader();
     ~TRSShader();
+
+    void setType(ShaderType type);
 
     void createVertexShader(const char* vShaderFile);
 
@@ -47,6 +50,7 @@ private:
     void freeShaderProgram();
 
 public:
+    ShaderType m_type = ShaderType::None;
     unsigned int program;
     unsigned int vShader;
     unsigned int fShader;
