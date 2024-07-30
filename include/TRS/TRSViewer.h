@@ -19,6 +19,7 @@ class TRSShader;
 class TRSPrograms;
 class CullVisitor;
 class PolygonModeVisitor;
+class TRSAxis;
 
 using LoadGLAddress = void* (*)(const char* name);
 
@@ -38,9 +39,17 @@ public:
 
     void frame();
 
+    void overlay();
+
+    TRSPrograms* getPrograms() const;
+
     TRSCamera* getCamera() const;
 
     TRSFontManager* getFontMgr() const;
+
+    void processTexture(unsigned int program, TRSGeode* node);
+
+    void setDisplayAxis(bool dis);
 
 protected:
     void cullScene();
@@ -50,8 +59,6 @@ protected:
     void drawScene();
 
     void calcFrameTime();
-
-    void processTexture(unsigned int program, TRSGeode *node);
 
 protected:
     TRSSettings* m_setting = nullptr;
@@ -63,6 +70,8 @@ protected:
     TRSTexture* m_asciiTexture = nullptr;
     TRSTexture* m_unicodeTexture = nullptr;
     PolygonModeVisitor* m_polygonModeVisitor = nullptr;
+    TRSAxis* m_axis = nullptr;
+    bool m_displayAxis = false;
 
     TRSVec4 m_BGColor;
     std::unordered_map<TRSShader*, std::vector<DrawItem> > m_drawItems;

@@ -22,6 +22,7 @@
 #include "TRS/TRSMesh.h"
 #include "TRS/TRSCharacterTexture.h"
 #include "TRS/TRSFontManager.h"
+#include "TRS/TRSAxis.h"
 
 
 TRSViewer::TRSViewer()
@@ -35,10 +36,12 @@ TRSViewer::TRSViewer()
     m_asciiTexture = new TRSTexture;
     m_unicodeTexture = new TRSTexture;
     m_polygonModeVisitor = new PolygonModeVisitor;
+    m_axis = new TRSAxis;
 }
 
 TRSViewer::~TRSViewer()
 {
+    delete m_axis;
     delete m_root;
     delete m_polygonModeVisitor;
     delete m_unicodeTexture;
@@ -90,6 +93,12 @@ void TRSViewer::initialViewer()
     TextureData asciiData(asciiTexId, "global_ascii_texture", "ourTexture");
     m_asciiTexture->addSharedTexture(asciiData);
 
+    m_axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
+    m_axis->initialize(this);
+    TRSBox box = m_axis->boundingBox();
+    m_camera->fitToBox(box);
+    // m_pCameraHandler->setSceneBox(box);
+
     m_fCurTime = m_fLastTime = std::chrono::steady_clock::now();
     glEnable(GL_DEPTH_TEST);
 }
@@ -111,6 +120,27 @@ void TRSViewer::frame()
     cullScene();
     classify();
     drawScene();
+
+    if (m_displayAxis)
+    {
+        overlay();
+    }
+}
+
+void TRSViewer::overlay()
+{
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glViewport(0, 0, 200, 200);
+    m_axis->customDraw(this);
+    int width = m_camera->getWindowWidth();
+    int height = m_camera->getWindowHeight();
+    glViewport(0, 0, width, height);
+}
+
+TRSPrograms* TRSViewer::getPrograms() const
+{
+    return m_programs;
 }
 
 TRSCamera* TRSViewer::getCamera() const
@@ -121,6 +151,30 @@ TRSCamera* TRSViewer::getCamera() const
 TRSFontManager* TRSViewer::getFontMgr() const
 {
     return m_fontMgr;
+}
+
+void TRSViewer::processTexture(unsigned int program, TRSGeode* geode)
+{
+    TRSTexture* texture = geode->getTexture();
+
+    if (!texture && NodeType::ntTextNode == geode->nodeType())
+    {
+        texture = m_unicodeTexture;
+    }
+    if (!texture && NodeType::ntDynamicText == geode->nodeType())
+    {
+        texture = m_asciiTexture;
+    }
+    if (!texture)
+    {
+        return;
+    }
+    texture->activeAllTextures(program);
+}
+
+void TRSViewer::setDisplayAxis(bool dis)
+{
+    m_displayAxis = dis;
 }
 
 void TRSViewer::cullScene()
@@ -213,23 +267,4 @@ void TRSViewer::calcFrameTime()
         //Sleep(15 - timeDiff); Window API
     }
     m_fLastTime = m_fCurTime;
-}
-
-void TRSViewer::processTexture(unsigned int program, TRSGeode* geode)
-{
-    TRSTexture* texture = geode->getTexture();
-
-    if (!texture && NodeType::ntTextNode == geode->nodeType())
-    {
-        texture = m_unicodeTexture;
-    }
-    if (!texture && NodeType::ntDynamicText == geode->nodeType())
-    {
-        texture = m_asciiTexture;
-    }
-    if (!texture)
-    {
-        return;
-    }
-    texture->activeAllTextures(program);
 }

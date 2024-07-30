@@ -55,13 +55,13 @@ void OpenGLWidget::setScene(TRSNode* sceneGroup)
 
 void OpenGLWidget::setupDemo()
 {
-    //TRSCube cube;
-    //TRSMesh* mesh = cube.getMesh();
-    //TRSGeode* pNode = new TRSGeode;
-    //pNode->copyShadedMesh(mesh);
-    //TRSTexture* texture = pNode->useTexture();
-    //texture->createTexture("resources/textures/opengl.png");
-    //texture->createTexture("resources/textures/cube.png");
+    TRSCube cube;
+    TRSMesh* mesh = cube.getMesh();
+    TRSGeode* pNode = new TRSGeode;
+    pNode->copyShadedMesh(mesh);
+    TRSTexture* texture = pNode->useTexture();
+    texture->createTexture("resources/textures/opengl.png");
+    texture->createTexture("resources/textures/cube.png");
 
     //std::wstring text(L"中华人民共和国");
     //TRSTextNode* textNode = new TRSTextNode;
@@ -74,14 +74,15 @@ void OpenGLWidget::setupDemo()
     //dytext->setFontSize(0.2f);
     //dytext->setText("ABCD");
 
-    TRSAxis* axis = new TRSAxis;
-    axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
+    //TRSAxis* axis = new TRSAxis;
+    //axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
 
     // TRSGroup* root = new TRSGroup;
     // root->addChild(pNode);
     // root->addChild(textNode);
     // root->addChild(dytext);
-    setScene(axis);
+    m_viewer->setDisplayAxis(true);
+    setScene(pNode);
     update();
 }
 

@@ -8,6 +8,7 @@
 class TRSGeode;
 class TRSDynamicText;
 class TRSMesh;
+
 class TRS_EXPORT TRSAxis : public TRSGroup
 {
 public:
@@ -20,6 +21,8 @@ public:
     TRSBox boundingBox() const override;
 
     void setSizeInfo(float cylen, float cyRadius, float conelen, float coneRadius);
+
+    void customDraw(TRSViewer* viewer);
 
 private:
     void buildCylinderMesh(const TRSVec3 &dirx, const TRSVec3& diry, TRSMesh *mesh);

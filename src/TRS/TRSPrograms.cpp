@@ -1,5 +1,6 @@
 #include "TRS/TRSPrograms.h"
 
+#include "TRS/TRSDefGL.h"
 #include "TRS/TRSShader.h"
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSMesh.h"
@@ -64,6 +65,11 @@ void TRSPrograms::useProgram(ShaderType type)
     TRSShader* shader = getOrCreateShader(type);
     shader->use();
     m_active = shader;
+}
+
+void TRSPrograms::endProgram()
+{
+    glUseProgram(0);
 }
 
 TRSShader* TRSPrograms::getOrCreateShader(ShaderType type)

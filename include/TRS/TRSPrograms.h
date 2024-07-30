@@ -20,6 +20,8 @@ public:
 
     void useProgram(ShaderType type);
 
+    void endProgram();
+
 private:
     TRSShader* getOrCreateShader(ShaderType type);
 

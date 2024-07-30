@@ -32,10 +32,11 @@ public:
 
     void dynamicUpdate(TRSViewer* viewer) override;
 
-protected:
     void preProcess(RenderMode mode) override;
 
     void postProcess(RenderMode mode) override;
+
+protected:
 
     bool generateText(TRSCamera* camera, TRSFontManager* fontMgr);
 

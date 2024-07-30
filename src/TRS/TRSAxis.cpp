@@ -4,8 +4,14 @@
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSDynamicText.h"
 #include "TRS/TRSMesh.h"
+#include "TRS/TRSViewer.h"
+#include "TRS/TRSPrograms.h"
+#include "TRS/TRSCamera.h"
+#include "TRS/TRSShader.h"
+
 
 constexpr int kAxisResolution = 16;
+constexpr float kAxisMargin = 1.3f;
 
 TRSAxis::TRSAxis()
 {
@@ -88,6 +94,64 @@ void TRSAxis::setSizeInfo(float cylen, float cyRadius, float conelen, float cone
     m_cyRadius = cyRadius;
     m_conelen = conelen;
     m_coneRadius = coneRadius;
+}
+
+void TRSAxis::customDraw(TRSViewer* viewer)
+{
+    RenderMode mode = RenderMode::Shaded;
+    TRSPrograms* programs = viewer->getPrograms();
+    TRSCamera* camera = viewer->getCamera();
+
+    TRSPoint origin = G_ORIGIN;
+    TRSVec3 front = camera->getFront();
+    const TRSVec3& up = camera->getUp();
+    float fontSize = m_conelen;
+    float half = (m_cylen + m_conelen + fontSize) * kAxisMargin;
+
+    TRSMatrix viewMatrix;
+    viewMatrix.makeLookat(origin, front, up);
+    TRSMatrix projMatrix;
+    projMatrix.makeOtho(-half, half, -half, half, -half, half);
+    TRSPoint lightPos = origin - front * half;
+
+    TRSShader* shader = programs->find2Shader(m_xCylinder, mode);
+    shader->use();
+    TRSMatrix identity;
+    TRSVec4 red(1.0f, 0.0f, 0.0f, 1.0f);
+    TRSVec4 green(0.0f, 1.0f, 0.0f, 1.0f);
+    TRSVec4 blue(0.0f, 0.0f, 1.0f, 1.0f);
+    shader->setUniformMatrix4("model", identity);
+    shader->setUniformMatrix4("view", viewMatrix);
+    shader->setUniformMatrix4("projection", projMatrix);
+    shader->setUniform3v("viewPos", origin);
+    shader->setUniform3v("lightPos", lightPos);
+    shader->setUniform4v("baseColor", red);
+    m_xCylinder->draw(mode);
+    m_xCone->draw(mode);
+    shader->setUniform4v("baseColor", green);
+    m_yCylinder->draw(mode);
+    m_yCone->draw(mode);
+    shader->setUniform4v("baseColor", blue);
+    m_zCylinder->draw(mode);
+    m_zCone->draw(mode);
+
+    m_xlabel->dynamicUpdate(viewer);
+    m_ylabel->dynamicUpdate(viewer);
+    m_zlabel->dynamicUpdate(viewer);
+    shader = programs->find2Shader(m_xlabel, mode);
+    shader->use();
+    shader->setUniformMatrix4("model", identity);
+    shader->setUniformMatrix4("view", viewMatrix);
+    shader->setUniformMatrix4("projection", projMatrix);
+    viewer->processTexture(shader->getProgramId(), m_xlabel);
+    m_xlabel->preProcess(mode);
+    shader->setUniform4v("baseColor", red);
+    m_xlabel->draw(mode);
+    shader->setUniform4v("baseColor", green);
+    m_ylabel->draw(mode);
+    shader->setUniform4v("baseColor", blue);
+    m_zlabel->draw(mode);
+    m_xlabel->postProcess(mode);
 }
 
 void TRSAxis::buildCylinderMesh(const TRSVec3& dirx, const TRSVec3& diry, TRSMesh* mesh)
