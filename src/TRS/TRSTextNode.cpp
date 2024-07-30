@@ -112,7 +112,8 @@ void TRSTextNode::generateText()
     int size = static_cast<int>(m_text.size());
     std::vector<TRSPoint> vertices;
     std::vector<TRSVec2> UVs;
-    //float* vertexArray = new float[size * 6 * 5]; // each character need 6 point(2 triangle), each point need 5 float(3 coordinate and 2 texture coordinate)
+    std::vector<unsigned int> indices;
+    unsigned int offset = 0;
     for (int i = 0; i < size; i++)
     {
         wchar_t c = m_text[i];
@@ -121,7 +122,7 @@ void TRSTextNode::generateText()
         float upOffset = -(unichar.h - unichar.top) * scale;
         // four point in quad
         TRSVec3 leftBtm = curPos + right * rightOffset + up * upOffset;
-        TRSVec3 leftTop = leftBtm + up*(unichar.h *scale);
+        TRSVec3 leftTop = leftBtm + up * (unichar.h *scale);
         TRSVec3 rightBtm = leftBtm + right * (unichar.w * scale);
         TRSVec3 rightTop = leftBtm + right * (unichar.w * scale) + up*(unichar.h *scale);
         // texture coordinate
@@ -129,17 +130,27 @@ void TRSTextNode::generateText()
         float topTC = float(unichar.y) / textureDimension;
         float rightTC = float(unichar.x + unichar.w) / textureDimension;
         float btmTC = float(unichar.y + unichar.h) / textureDimension;
-        vertices.push_back(TRSPoint(leftBtm[0], leftBtm[1], leftBtm[2])); UVs.push_back(TRSVec2(leftTC, btmTC));
-        vertices.push_back(TRSPoint(rightBtm[0], rightBtm[1], rightBtm[2])); UVs.push_back(TRSVec2(rightTC, btmTC));
-        vertices.push_back(TRSPoint(leftTop[0], leftTop[1], leftTop[2])); UVs.push_back(TRSVec2(leftTC, topTC));
-
-        vertices.push_back(TRSPoint(leftTop[0], leftTop[1], leftTop[2])); UVs.push_back(TRSVec2(leftTC, topTC));
-        vertices.push_back(TRSPoint(rightBtm[0], rightBtm[1], rightBtm[2])); UVs.push_back(TRSVec2(rightTC, btmTC));
-        vertices.push_back(TRSPoint(rightTop[0], rightTop[1], rightTop[2])); UVs.push_back(TRSVec2(rightTC, topTC));
+        vertices.push_back(leftBtm);
+        vertices.push_back(rightBtm);
+        vertices.push_back(rightTop);
+        vertices.push_back(leftTop);
+        UVs.push_back(TRSVec2(leftTC, btmTC));
+        UVs.push_back(TRSVec2(rightTC, btmTC));
+        UVs.push_back(TRSVec2(rightTC, topTC));
+        UVs.push_back(TRSVec2(leftTC, topTC));
         curPos += right * static_cast<float>(unichar.left + unichar.w) * scale;
+
+        indices.emplace_back(offset + 0);
+        indices.emplace_back(offset + 1);
+        indices.emplace_back(offset + 2);
+        indices.emplace_back(offset + 2);
+        indices.emplace_back(offset + 3);
+        indices.emplace_back(offset + 0);
+        offset += 4;
     }
     // to do ,this snippet should before draw()
     m_ptCount = size * 6;
     m_shaded->setVertex(vertices);
     m_shaded->setUV(UVs);
+    m_shaded->setIndices(indices);
 }
