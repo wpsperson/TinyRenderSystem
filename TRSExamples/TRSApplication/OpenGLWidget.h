@@ -4,6 +4,7 @@
 
 class TRSNode;
 class TRSViewer;
+class TRSSettings;
 class TRSEventDispatcher;
 class TRSDefaultCameraHandler;
 class TRSShortcutKeyHandler;
@@ -17,6 +18,8 @@ public:
     void setScene(TRSNode* sceneGroup);
 
     void setupDemo();
+
+    TRSSettings* getSettings() const;
 
 protected:
     void initializeGL() override;

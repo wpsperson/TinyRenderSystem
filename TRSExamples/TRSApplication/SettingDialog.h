@@ -1,7 +1,10 @@
 #pragma once
 
 #include <QtWidgets/QDialog>
-class Setting;
+
+
+class TRSSettings;
+class OpenGLWidget;
 class QLabel;
 class QPushButton;
 class QTreeWidgetItem;
@@ -15,18 +18,22 @@ class AuxiliarySettingPage;
 class SettingDialog : public  QDialog
 {
 public:
-    SettingDialog(QWidget* parent = nullptr);
+    SettingDialog(TRSSettings* data, OpenGLWidget* canvas, QWidget* parent = nullptr);
 
     ~SettingDialog();
-
-    void setData(Setting *data);
 
     void setupUi();
 
     void retranslateUi();
 
+    TRSSettings* getSettings() const;
+
+    void updateCanvas();
+
 protected:
     void changeEvent(QEvent* eve) override;
+
+    void showEvent(QShowEvent* eve) override;
 
     void loadStackedWidget();
 
@@ -36,12 +43,12 @@ protected:
 
     void onCancelButton();
 
-    void onApplyButton();
-
     void onCurrentPageChange();
 
 private:
-    Setting* m_data = nullptr;
+    TRSSettings* m_data = nullptr;
+    TRSSettings* m_copy = nullptr;
+    OpenGLWidget* m_canvas = nullptr;
     UiSettingDialog* m_ui = nullptr;
     int m_pageIndex = 0;
     ColorSettingPage* m_colorPage = nullptr;
@@ -53,13 +60,16 @@ private:
 class ColorSettingPage : public QWidget
 {
 public:
-    ColorSettingPage(QWidget* parent = nullptr);
+    ColorSettingPage(SettingDialog* settingDialog);
 
     void retranslateUi();
+
+    void updateUiFromData();
 
     void onBGColorCustomMenu(const QPoint& pos);
 
 private:
+    SettingDialog* m_settingDialog = nullptr;
     QLabel* m_bgLabel = nullptr;
     QPushButton* m_bgButton = nullptr;
     QColorDialog* m_colorDialog = nullptr;
@@ -70,11 +80,16 @@ class QRadioButton;
 class CameraSettingPage : public QWidget
 {
 public:
-    CameraSettingPage(QWidget* parent = nullptr);
+    CameraSettingPage(SettingDialog* settingDialog);
 
     void retranslateUi();
 
+    void updateUiFromData();
+
+    void onSwitchProjection();
+
 private:
+    SettingDialog* m_settingDialog = nullptr;
     QButtonGroup* m_projections = nullptr;
     QRadioButton* m_parallel = nullptr;
     QRadioButton* m_perspective = nullptr;
@@ -84,11 +99,16 @@ private:
 class AuxiliarySettingPage : public QWidget
 {
 public:
-    AuxiliarySettingPage(QWidget* parent = nullptr);
+    AuxiliarySettingPage(SettingDialog* settingDialog);
 
     void retranslateUi();
 
+    void updateUiFromData();
+
+    void onDisplayAxis(int dis);
+
 private:
+    SettingDialog* m_settingDialog = nullptr;
     QCheckBox* m_displayAxis = nullptr;
 };
 

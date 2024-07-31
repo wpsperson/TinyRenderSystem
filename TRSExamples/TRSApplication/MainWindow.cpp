@@ -247,9 +247,10 @@ void MainWindow::onSwitchLanguage(QAction* action)
 
 void MainWindow::onSetting()
 {
-    if (!m_setting)
+    if (!m_settingDialog)
     {
-        m_setting = new SettingDialog(this);
+        TRSSettings* settings = m_canvas->getSettings();
+        m_settingDialog = new SettingDialog(settings, m_canvas, this);
     }
-    m_setting->exec();
+    m_settingDialog->exec();
 }

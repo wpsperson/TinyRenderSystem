@@ -3,12 +3,9 @@
 #include "TRS/TRSMatrix.h"
 #include "TRS/TRSVector.h"
 #include "TRS/TRSMatrix.h"
+#include "TRS/TRSDefEnum.h"
 
-enum class ProjectionMode : unsigned char
-{
-    Parallel = 0,
-    Perspective = 1,
-};
+
 
 class TRSBox;
 class TRS_EXPORT TRSCamera

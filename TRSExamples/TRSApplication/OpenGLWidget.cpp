@@ -81,9 +81,13 @@ void OpenGLWidget::setupDemo()
     // root->addChild(pNode);
     // root->addChild(textNode);
     // root->addChild(dytext);
-    m_viewer->setDisplayAxis(true);
     setScene(pNode);
     update();
+}
+
+TRSSettings* OpenGLWidget::getSettings() const
+{
+    return m_viewer->getSettings();
 }
 
 void OpenGLWidget::initializeGL()

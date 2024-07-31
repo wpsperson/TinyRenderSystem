@@ -41,6 +41,8 @@ public:
 
     void overlay();
 
+    TRSSettings* getSettings() const;
+
     TRSPrograms* getPrograms() const;
 
     TRSCamera* getCamera() const;
@@ -48,8 +50,6 @@ public:
     TRSFontManager* getFontMgr() const;
 
     void processTexture(unsigned int program, TRSGeode* node);
-
-    void setDisplayAxis(bool dis);
 
 protected:
     void cullScene();
@@ -71,9 +71,7 @@ protected:
     TRSTexture* m_unicodeTexture = nullptr;
     PolygonModeVisitor* m_polygonModeVisitor = nullptr;
     TRSAxis* m_axis = nullptr;
-    bool m_displayAxis = false;
 
-    TRSVec4 m_BGColor;
     std::unordered_map<TRSShader*, std::vector<DrawItem> > m_drawItems;
     std::chrono::steady_clock::time_point m_fLastTime;
     std::chrono::steady_clock::time_point m_fCurTime;

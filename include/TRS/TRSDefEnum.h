@@ -58,3 +58,9 @@ enum class NodeType : unsigned char
     ntTextNode,
     ntDynamicText,
 };
+
+enum class ProjectionMode : unsigned char
+{
+    Parallel = 0,
+    Perspective = 1,
+};

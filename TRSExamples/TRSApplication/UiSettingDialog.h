@@ -28,7 +28,6 @@ public:
     // 3
     QPushButton* okBtn = nullptr;
     QPushButton* cancelBtn = nullptr;
-    QPushButton* applyBtn = nullptr;
 
 public:
     void SetupUi(QDialog* dialog)
@@ -40,7 +39,7 @@ public:
         QHBoxLayout* topLayout = new QHBoxLayout;
         {
             categoryGBox = new QGroupBox;
-            categoryGBox->setFixedWidth(150);
+            categoryGBox->setMaximumWidth(200);
             {
                 QVBoxLayout* gboxLayout = new QVBoxLayout;
                 treeWidget = new QTreeWidget;
@@ -83,14 +82,11 @@ public:
         {
             okBtn = new QPushButton;
             cancelBtn = new QPushButton;
-            applyBtn = new QPushButton;
             QSpacerItem* horiSpacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
             okBtn->setDefault(false);
             cancelBtn->setDefault(false);
-            applyBtn->setDefault(false);
             bottomLayout->addWidget(okBtn);
             bottomLayout->addWidget(cancelBtn);
-            bottomLayout->addWidget(applyBtn);
             bottomLayout->addItem(horiSpacer);
         }
         verticalLayout->addLayout(bottomLayout);

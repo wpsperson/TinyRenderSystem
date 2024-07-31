@@ -95,10 +95,6 @@
         <translation>取消</translation>
     </message>
     <message>
-        <source>Apply</source>
-        <translation>应用</translation>
-    </message>
-    <message>
         <source>Background Color</source>
         <translation>背景颜色</translation>
     </message>

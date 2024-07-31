@@ -1,5 +1,4 @@
 #include "SettingDialog.h"
-#include "UiSettingDialog.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtWidgets/QLabel>
@@ -8,23 +7,25 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QColorDialog>
+#include <QtWidgets/QAbstractButton>
 
-SettingDialog::SettingDialog(QWidget* parent) : QDialog(parent)
+#include "TRS/TRSSettings.h"
+#include "UiSettingDialog.h"
+#include "OpenGLWidget.h"
+
+
+SettingDialog::SettingDialog(TRSSettings* data, OpenGLWidget* canvas, QWidget* parent) : QDialog(parent), m_data(data), m_canvas(canvas)
 {
     Qt::WindowFlags flags = Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint | Qt::Window;
     setWindowFlags(flags);
-
+    m_copy = new TRSSettings;
     setupUi();
 }
 
 SettingDialog::~SettingDialog()
 {
     delete m_ui;
-}
-
-void SettingDialog::setData(Setting* data)
-{
-    m_data = data;
+    delete m_copy;
 }
 
 void SettingDialog::setupUi()
@@ -47,7 +48,16 @@ void SettingDialog::retranslateUi()
 
     m_ui->okBtn->setText(QCoreApplication::translate("SettingDialog", "OK"));
     m_ui->cancelBtn->setText(QCoreApplication::translate("SettingDialog", "Cancel"));
-    m_ui->applyBtn->setText(QCoreApplication::translate("SettingDialog", "Apply"));
+}
+
+TRSSettings* SettingDialog::getSettings() const
+{
+    return m_data;
+}
+
+void SettingDialog::updateCanvas()
+{
+    m_canvas->update();
 }
 
 void SettingDialog::changeEvent(QEvent* eve)
@@ -60,6 +70,15 @@ void SettingDialog::changeEvent(QEvent* eve)
         m_auxiPage->retranslateUi();
     }
     QDialog::changeEvent(eve);
+}
+
+void SettingDialog::showEvent(QShowEvent* eve)
+{
+    *m_copy = *m_data;
+    m_colorPage->updateUiFromData();
+    m_cameraPage->updateUiFromData();
+    m_auxiPage->updateUiFromData();
+    QDialog::showEvent(eve);
 }
 
 void SettingDialog::loadStackedWidget()
@@ -80,21 +99,19 @@ void SettingDialog::connectUi()
 {
     connect(m_ui->okBtn, &QAbstractButton::pressed, this, &SettingDialog::onOkButton);
     connect(m_ui->cancelBtn, &QAbstractButton::pressed, this, &SettingDialog::onCancelButton);
-    connect(m_ui->applyBtn, &QAbstractButton::pressed, this, &SettingDialog::onApplyButton);
 
     connect(m_ui->treeWidget, &QTreeWidget::itemSelectionChanged, this, &SettingDialog::onCurrentPageChange);
 }
 
 void SettingDialog::onOkButton()
 {
+    this->accept();
 }
 
 void SettingDialog::onCancelButton()
 {
-}
-
-void SettingDialog::onApplyButton()
-{
+    *m_data = *m_copy; // restore all data.
+    this->reject();
 }
 
 void SettingDialog::onCurrentPageChange()
@@ -110,8 +127,7 @@ void SettingDialog::onCurrentPageChange()
 }
 
 
-
-ColorSettingPage::ColorSettingPage(QWidget* parent) : QWidget(parent)
+ColorSettingPage::ColorSettingPage(SettingDialog* settingDialog) : QWidget(nullptr), m_settingDialog(settingDialog)
 {
     QVBoxLayout* vertLayout = new QVBoxLayout;
     QHBoxLayout* horiLayout = new QHBoxLayout;
@@ -141,6 +157,15 @@ void ColorSettingPage::retranslateUi()
     m_bgLabel->setText(QCoreApplication::translate("SettingDialog", "Background Color"));
 }
 
+void ColorSettingPage::updateUiFromData()
+{
+    TRSSettings* settings = m_settingDialog->getSettings();
+    const TRSColor& clr = settings->backgroundColor();
+    QColor color(int(clr[0] * 255), int(clr[1] * 255), int(clr[2] * 255));
+    m_colorDialog->setCurrentColor(color);
+    m_bgButton->setStyleSheet(QString("QPushButton{ background: %1; }").arg(color.name()));
+}
+
 void ColorSettingPage::onBGColorCustomMenu(const QPoint& pos)
 {
     QPoint globalPos = m_bgButton->mapToGlobal(pos);
@@ -150,11 +175,18 @@ void ColorSettingPage::onBGColorCustomMenu(const QPoint& pos)
     {
         QColor color = m_colorDialog->currentColor();
         m_bgButton->setStyleSheet(QString("QPushButton{ background: %1; }").arg(color.name()));
+        TRSColor bgColor;
+        bgColor[0] = color.red() / 255.0f;
+        bgColor[1] = color.green() / 255.0f;
+        bgColor[2] = color.blue() / 255.0f;
+        TRSSettings* settings = m_settingDialog->getSettings();
+        settings->setBGColor(bgColor);
+        m_settingDialog->updateCanvas();
     }
 }
 
 
-CameraSettingPage::CameraSettingPage(QWidget* parent) : QWidget(parent)
+CameraSettingPage::CameraSettingPage(SettingDialog* settingDialog) : QWidget(nullptr), m_settingDialog(settingDialog)
 {
     QVBoxLayout* vertLayout = new QVBoxLayout;
     m_parallel = new QRadioButton;
@@ -168,6 +200,9 @@ CameraSettingPage::CameraSettingPage(QWidget* parent) : QWidget(parent)
     QSpacerItem* vertSpacer = new QSpacerItem(10, 10, QSizePolicy::Fixed, QSizePolicy::Expanding);
     vertLayout->addItem(vertSpacer);
     setLayout(vertLayout);
+
+    connect(m_parallel, &QAbstractButton::toggled, this, &CameraSettingPage::onSwitchProjection);
+    connect(m_perspective, &QAbstractButton::toggled, this, &CameraSettingPage::onSwitchProjection);
 }
 
 void CameraSettingPage::retranslateUi()
@@ -176,7 +211,30 @@ void CameraSettingPage::retranslateUi()
     m_perspective->setText(QCoreApplication::translate("SettingDialog", "Perspective Projection"));
 }
 
-AuxiliarySettingPage::AuxiliarySettingPage(QWidget* parent) : QWidget(parent)
+void CameraSettingPage::updateUiFromData()
+{
+    TRSSettings* settings = m_settingDialog->getSettings();
+    ProjectionMode mode = settings->projMode();
+    if (ProjectionMode::Parallel == mode)
+    {
+        m_parallel->setChecked(true);
+    }
+    else
+    {
+        m_perspective->setChecked(true);
+    }
+}
+
+void CameraSettingPage::onSwitchProjection()
+{
+    QAbstractButton* button = m_projections->checkedButton();
+    ProjectionMode mode = (button == m_parallel) ? ProjectionMode::Parallel : ProjectionMode::Perspective;
+    TRSSettings* settings = m_settingDialog->getSettings();
+    settings->setProjMode(mode);
+    m_settingDialog->updateCanvas();
+}
+
+AuxiliarySettingPage::AuxiliarySettingPage(SettingDialog* settingDialog) : QWidget(nullptr), m_settingDialog(settingDialog)
 {
     QVBoxLayout* vertLayout = new QVBoxLayout;
     m_displayAxis = new QCheckBox;
@@ -184,9 +242,25 @@ AuxiliarySettingPage::AuxiliarySettingPage(QWidget* parent) : QWidget(parent)
     QSpacerItem* vertSpacer = new QSpacerItem(10, 10, QSizePolicy::Fixed, QSizePolicy::Expanding);
     vertLayout->addItem(vertSpacer);
     setLayout(vertLayout);
+
+    connect(m_displayAxis, &QCheckBox::stateChanged, this, &AuxiliarySettingPage::onDisplayAxis);
 }
 
 void AuxiliarySettingPage::retranslateUi()
 {
     m_displayAxis->setText(QCoreApplication::translate("SettingDialog", "Display Navigate Axis"));
+}
+
+void AuxiliarySettingPage::updateUiFromData()
+{
+    TRSSettings* settings = m_settingDialog->getSettings();
+    bool display = settings->displayAxis();
+    m_displayAxis->setChecked(display);
+}
+
+void AuxiliarySettingPage::onDisplayAxis(int dis)
+{
+    TRSSettings* settings = m_settingDialog->getSettings();
+    settings->setDisplayAxis(dis!=0);
+    m_settingDialog->updateCanvas();
 }

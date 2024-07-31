@@ -26,7 +26,6 @@
 
 
 TRSViewer::TRSViewer()
-    : m_BGColor(s_DefaultBGColor)
 {
     m_setting = new TRSSettings;
     m_programs = new TRSPrograms;
@@ -114,14 +113,19 @@ void TRSViewer::setSecenNode(TRSNode* pSceneNode)
 
 void TRSViewer::frame()
 {
-    glClearColor(m_BGColor[0], m_BGColor[1], m_BGColor[2], m_BGColor[3]);
+    const TRSColor& color = m_setting->backgroundColor();
+    glClearColor(color[0], color[1], color[2], 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if (m_camera->projectionMode() != m_setting->projMode())
+    {
+        m_camera->setProjectionMode(m_setting->projMode());
+    }
     calcFrameTime();
     cullScene();
     classify();
     drawScene();
 
-    if (m_displayAxis)
+    if (m_setting->displayAxis())
     {
         overlay();
     }
@@ -136,6 +140,11 @@ void TRSViewer::overlay()
     int width = m_camera->getWindowWidth();
     int height = m_camera->getWindowHeight();
     glViewport(0, 0, width, height);
+}
+
+TRSSettings* TRSViewer::getSettings() const
+{
+    return m_setting;
 }
 
 TRSPrograms* TRSViewer::getPrograms() const
@@ -170,11 +179,6 @@ void TRSViewer::processTexture(unsigned int program, TRSGeode* geode)
         return;
     }
     texture->activeAllTextures(program);
-}
-
-void TRSViewer::setDisplayAxis(bool dis)
-{
-    m_displayAxis = dis;
 }
 
 void TRSViewer::cullScene()

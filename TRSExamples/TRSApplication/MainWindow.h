@@ -50,7 +50,7 @@ private:
     QMenu* m_toolsMenu = nullptr;
     QAction* m_settingAction = nullptr;
     OpenGLWidget* m_canvas = nullptr;
-    SettingDialog* m_setting = nullptr;
+    SettingDialog* m_settingDialog = nullptr;
     QLabel* m_status = nullptr;
 
     QDockWidget* m_naviDock = nullptr;
