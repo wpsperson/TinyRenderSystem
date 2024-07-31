@@ -15,6 +15,10 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenGLWidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ImportStep.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ImportStep.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SettingDialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/SettingDialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/UiSettingDialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/AppConst.h
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     )
 

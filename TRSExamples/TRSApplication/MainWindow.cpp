@@ -13,6 +13,7 @@
 #include <QtWidgets/QListWidget>
 
 #include "OpenGLWidget.h"
+#include "SettingDialog.h"
 #include "ImportStep.h"
 
 MainWindow::MainWindow(QWidget *parent /*= nullptr*/)
@@ -67,6 +68,9 @@ void MainWindow::createActions()
     connect(m_loadStlAction, SIGNAL(triggered()), this, SLOT(onLoadSTL()));
     m_demoAction = new QAction(this);
     connect(m_demoAction, &QAction::triggered, this, &MainWindow::onDemo);
+
+    m_settingAction = new QAction(this);
+    connect(m_settingAction, &QAction::triggered, this, &MainWindow::onSetting);
 }
 
 void MainWindow::createMenus()
@@ -77,6 +81,11 @@ void MainWindow::createMenus()
     m_fileMenu->addSeparator();
     m_fileMenu->addAction(m_demoAction);
     menuBar()->addMenu(m_fileMenu);
+
+    m_toolsMenu = new QMenu(this);
+    m_toolsMenu->addAction(m_settingAction);
+    menuBar()->addMenu(m_toolsMenu);
+
 }
 
 void MainWindow::createDockWidgets()
@@ -111,6 +120,8 @@ void MainWindow::retranslateUi()
     m_loadStepAction->setText(QCoreApplication::translate("MainWindow", "Import Step"));
     m_loadStlAction->setText(QCoreApplication::translate("MainWindow", "Import STL"));
     m_demoAction->setText(QCoreApplication::translate("MainWindow", "Demo"));
+    m_toolsMenu->setTitle(QCoreApplication::translate("MainWindow", "Tools"));
+    m_settingAction->setText(QCoreApplication::translate("MainWindow", "Setting"));
 
     languageMenu->setTitle(QCoreApplication::translate("MainWindow", "Language"));
 
@@ -232,4 +243,13 @@ void MainWindow::onSwitchLanguage(QAction* action)
     switchTranslator(locale);
 
     retranslateUi();
+}
+
+void MainWindow::onSetting()
+{
+    if (!m_setting)
+    {
+        m_setting = new SettingDialog(this);
+    }
+    m_setting->exec();
 }

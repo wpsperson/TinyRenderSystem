@@ -4,6 +4,7 @@
 class QAction;
 class QLabel;
 class OpenGLWidget;
+class SettingDialog;
 class QDockWidget;
 class QTranslator;
 
@@ -39,13 +40,17 @@ private slots:
     void onLoadSTL();
     void onDemo();
     void onSwitchLanguage(QAction* action);
+    void onSetting();
 
 private:
     QMenu *m_fileMenu = nullptr;
     QAction* m_loadStepAction = nullptr;
     QAction* m_loadStlAction = nullptr;
     QAction* m_demoAction = nullptr;
+    QMenu* m_toolsMenu = nullptr;
+    QAction* m_settingAction = nullptr;
     OpenGLWidget* m_canvas = nullptr;
+    SettingDialog* m_setting = nullptr;
     QLabel* m_status = nullptr;
 
     QDockWidget* m_naviDock = nullptr;
