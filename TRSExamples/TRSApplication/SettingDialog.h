@@ -11,7 +11,7 @@ class QTreeWidgetItem;
 class QCheckBox;
 class QColorDialog;
 class UiSettingDialog;
-class ColorSettingPage;
+class BasicSettingPage;
 class CameraSettingPage;
 class AuxiliarySettingPage;
 
@@ -51,16 +51,16 @@ private:
     OpenGLWidget* m_canvas = nullptr;
     UiSettingDialog* m_ui = nullptr;
     int m_pageIndex = 0;
-    ColorSettingPage* m_colorPage = nullptr;
+    BasicSettingPage* m_basicPage = nullptr;
     CameraSettingPage* m_cameraPage = nullptr;
     AuxiliarySettingPage* m_auxiPage = nullptr;
 };
 
 
-class ColorSettingPage : public QWidget
+class BasicSettingPage : public QWidget
 {
 public:
-    ColorSettingPage(SettingDialog* settingDialog);
+    BasicSettingPage(SettingDialog* settingDialog);
 
     void retranslateUi();
 
@@ -68,11 +68,16 @@ public:
 
     void onBGColorCustomMenu(const QPoint& pos);
 
+    void onChangeRenderMode();
+
 private:
     SettingDialog* m_settingDialog = nullptr;
     QLabel* m_bgLabel = nullptr;
     QPushButton* m_bgButton = nullptr;
     QColorDialog* m_colorDialog = nullptr;
+    QCheckBox* m_shadedMode = nullptr;
+    QCheckBox* m_wireframeMode = nullptr;
+    QCheckBox* m_pointsMode = nullptr;
 };
 
 class QButtonGroup;

@@ -42,7 +42,7 @@ void SettingDialog::retranslateUi()
     setWindowTitle(QCoreApplication::translate("SettingDialog", "Setting"));
     m_ui->categoryGBox->setTitle(QCoreApplication::translate("SettingDialog", "Category"));
     m_ui->itemApperance->setText(0, QCoreApplication::translate("SettingDialog", "Appearance"));
-    m_ui->itemColor->setText(0, QCoreApplication::translate("SettingDialog", "Color"));
+    m_ui->itemBasic->setText(0, QCoreApplication::translate("SettingDialog", "Basic"));
     m_ui->itemCamera->setText(0, QCoreApplication::translate("SettingDialog", "Camera"));
     m_ui->itemAuxi->setText(0, QCoreApplication::translate("SettingDialog", "Auxiliary"));
 
@@ -65,7 +65,7 @@ void SettingDialog::changeEvent(QEvent* eve)
     if (QEvent::LanguageChange == eve->type())
     {
         retranslateUi();
-        m_colorPage->retranslateUi();
+        m_basicPage->retranslateUi();
         m_cameraPage->retranslateUi();
         m_auxiPage->retranslateUi();
     }
@@ -75,7 +75,7 @@ void SettingDialog::changeEvent(QEvent* eve)
 void SettingDialog::showEvent(QShowEvent* eve)
 {
     *m_copy = *m_data;
-    m_colorPage->updateUiFromData();
+    m_basicPage->updateUiFromData();
     m_cameraPage->updateUiFromData();
     m_auxiPage->updateUiFromData();
     QDialog::showEvent(eve);
@@ -83,14 +83,14 @@ void SettingDialog::showEvent(QShowEvent* eve)
 
 void SettingDialog::loadStackedWidget()
 {
-    m_colorPage = new ColorSettingPage(this);
+    m_basicPage = new BasicSettingPage(this);
     m_cameraPage = new CameraSettingPage(this);
     m_auxiPage = new AuxiliarySettingPage(this);
     QStackedWidget* stackWidget = m_ui->stackedWidget;
-    stackWidget->insertWidget(kPageColor, m_colorPage);
+    stackWidget->insertWidget(kPageBasic, m_basicPage);
     stackWidget->insertWidget(kPageCamera, m_cameraPage);
     stackWidget->insertWidget(kPageAuxi, m_auxiPage);
-    m_colorPage->retranslateUi();
+    m_basicPage->retranslateUi();
     m_cameraPage->retranslateUi();
     m_auxiPage->retranslateUi();
 }
@@ -127,9 +127,10 @@ void SettingDialog::onCurrentPageChange()
 }
 
 
-ColorSettingPage::ColorSettingPage(SettingDialog* settingDialog) : QWidget(nullptr), m_settingDialog(settingDialog)
+BasicSettingPage::BasicSettingPage(SettingDialog* settingDialog) : QWidget(nullptr), m_settingDialog(settingDialog)
 {
     QVBoxLayout* vertLayout = new QVBoxLayout;
+    // first row
     QHBoxLayout* horiLayout = new QHBoxLayout;
     {
         m_bgLabel = new QLabel;
@@ -142,6 +143,14 @@ ColorSettingPage::ColorSettingPage(SettingDialog* settingDialog) : QWidget(nullp
         horiLayout->addItem(spacer);
     }
     vertLayout->addLayout(horiLayout);
+    // render mode
+    m_shadedMode = new QCheckBox;
+    m_wireframeMode = new QCheckBox;
+    m_pointsMode = new QCheckBox;
+    vertLayout->addWidget(m_shadedMode);
+    vertLayout->addWidget(m_wireframeMode);
+    vertLayout->addWidget(m_pointsMode);
+
     QSpacerItem* vertSpacer = new QSpacerItem(10, 10, QSizePolicy::Fixed, QSizePolicy::Expanding);
     vertLayout->addItem(vertSpacer);
     setLayout(vertLayout);
@@ -149,24 +158,33 @@ ColorSettingPage::ColorSettingPage(SettingDialog* settingDialog) : QWidget(nullp
     m_colorDialog = new QColorDialog(this);
 
     m_bgButton->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_bgButton, &QWidget::customContextMenuRequested, this, &ColorSettingPage::onBGColorCustomMenu);
+    connect(m_bgButton, &QWidget::customContextMenuRequested, this, &BasicSettingPage::onBGColorCustomMenu);
+    connect(m_shadedMode, &QCheckBox::toggled, this, &BasicSettingPage::onChangeRenderMode);
+    connect(m_wireframeMode, &QCheckBox::toggled, this, &BasicSettingPage::onChangeRenderMode);
+    connect(m_pointsMode, &QCheckBox::toggled, this, &BasicSettingPage::onChangeRenderMode);
 }
 
-void ColorSettingPage::retranslateUi()
+void BasicSettingPage::retranslateUi()
 {
     m_bgLabel->setText(QCoreApplication::translate("SettingDialog", "Background Color"));
+    m_shadedMode->setText(QCoreApplication::translate("SettingDialog", "Shaded Mode"));
+    m_wireframeMode->setText(QCoreApplication::translate("SettingDialog", "Wireframe Mode"));
+    m_pointsMode->setText(QCoreApplication::translate("SettingDialog", "Point Mode"));
 }
 
-void ColorSettingPage::updateUiFromData()
+void BasicSettingPage::updateUiFromData()
 {
     TRSSettings* settings = m_settingDialog->getSettings();
     const TRSColor& clr = settings->backgroundColor();
     QColor color(int(clr[0] * 255), int(clr[1] * 255), int(clr[2] * 255));
     m_colorDialog->setCurrentColor(color);
     m_bgButton->setStyleSheet(QString("QPushButton{ background: %1; }").arg(color.name()));
+    m_shadedMode->setChecked(settings->displayShaded());
+    m_wireframeMode->setChecked(settings->displayWireframe());
+    m_pointsMode->setChecked(settings->displayPoints());
 }
 
-void ColorSettingPage::onBGColorCustomMenu(const QPoint& pos)
+void BasicSettingPage::onBGColorCustomMenu(const QPoint& pos)
 {
     QPoint globalPos = m_bgButton->mapToGlobal(pos);
     m_colorDialog->move(globalPos);
@@ -183,6 +201,27 @@ void ColorSettingPage::onBGColorCustomMenu(const QPoint& pos)
         settings->setBGColor(bgColor);
         m_settingDialog->updateCanvas();
     }
+}
+
+void BasicSettingPage::onChangeRenderMode()
+{
+    QObject* obj = sender();
+    QCheckBox* sender = dynamic_cast<QCheckBox*>(obj);
+
+    TRSSettings* settings = m_settingDialog->getSettings();
+    if (sender == m_shadedMode)
+    {
+        settings->setShaded(sender->isChecked());
+    }
+    else if (sender == m_wireframeMode)
+    {
+        settings->setWireframe(sender->isChecked());
+    }
+    else
+    {
+        settings->setPoints(sender->isChecked());
+    }
+    m_settingDialog->updateCanvas();
 }
 
 

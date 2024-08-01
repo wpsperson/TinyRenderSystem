@@ -75,10 +75,6 @@
         <translation>样式</translation>
     </message>
     <message>
-        <source>Color</source>
-        <translation>颜色</translation>
-    </message>
-    <message>
         <source>Camera</source>
         <translation>相机</translation>
     </message>
@@ -109,6 +105,22 @@
     <message>
         <source>Display Navigate Axis</source>
         <translation>显示导航坐标轴</translation>
+    </message>
+    <message>
+        <source>Basic</source>
+        <translation>常规</translation>
+    </message>
+    <message>
+        <source>Shaded Mode</source>
+        <translation>实体模式</translation>
+    </message>
+    <message>
+        <source>Wireframe Mode</source>
+        <translation>线框模式</translation>
+    </message>
+    <message>
+        <source>Point Mode</source>
+        <translation>顶点模式</translation>
     </message>
 </context>
 </TS>

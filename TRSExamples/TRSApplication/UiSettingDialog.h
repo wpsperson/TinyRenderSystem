@@ -17,7 +17,7 @@ public:
     QGroupBox* categoryGBox = nullptr;
     QTreeWidget* treeWidget = nullptr;
     QTreeWidgetItem* itemApperance = nullptr;
-    QTreeWidgetItem* itemColor = nullptr;
+    QTreeWidgetItem* itemBasic = nullptr;
     QTreeWidgetItem* itemCamera = nullptr;
     QTreeWidgetItem* itemAuxi = nullptr;
     // 1.2
@@ -45,10 +45,10 @@ public:
                 treeWidget = new QTreeWidget;
                 {
                     itemApperance = new QTreeWidgetItem(treeWidget);
-                    itemColor = new QTreeWidgetItem(itemApperance);
+                    itemBasic = new QTreeWidgetItem(itemApperance);
                     itemCamera = new QTreeWidgetItem(itemApperance);
                     itemAuxi = new QTreeWidgetItem(treeWidget);
-                    itemColor->setData(0, Qt::UserRole, kPageColor);
+                    itemBasic->setData(0, Qt::UserRole, kPageBasic);
                     itemCamera->setData(0, Qt::UserRole, kPageCamera);
                     itemAuxi->setData(0, Qt::UserRole, kPageAuxi);
                     itemApperance->setExpanded(true);
