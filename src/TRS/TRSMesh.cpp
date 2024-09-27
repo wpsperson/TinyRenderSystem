@@ -51,6 +51,31 @@ void TRSMesh::setIndices(const std::vector<unsigned int>& indices)
     m_needUpload = true;
 }
 
+std::vector<TRSVec3>& TRSMesh::getVertices()
+{
+    return m_vertexs;
+}
+
+std::vector<TRSVec3>& TRSMesh::getNormals()
+{
+    return m_normals;
+}
+
+std::vector<TRSVec3>& TRSMesh::getColors()
+{
+    return m_colors;
+}
+
+std::vector<TRSVec2>& TRSMesh::getUVs()
+{
+    return m_texCoords;
+}
+
+std::vector<unsigned int>& TRSMesh::getIndices()
+{
+    return m_indexs;
+}
+
 void TRSMesh::setNeedUpload()
 {
     m_needUpload = true;

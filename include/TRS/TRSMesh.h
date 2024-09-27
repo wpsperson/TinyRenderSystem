@@ -26,6 +26,16 @@ public:
 
     void setIndices(const std::vector<unsigned int>& indices);
 
+    std::vector<TRSVec3>& getVertices();
+
+    std::vector<TRSVec3>& getNormals();
+
+    std::vector<TRSVec3>& getColors();
+
+    std::vector<TRSVec2>& getUVs();
+
+    std::vector<unsigned int>& getIndices();
+
     void setNeedUpload();
 
     void reset();
@@ -82,7 +92,6 @@ private:
     DrawType m_nDrawType;
     int m_nPatchParam = 0;
 };
-#pragma once
 
 
 

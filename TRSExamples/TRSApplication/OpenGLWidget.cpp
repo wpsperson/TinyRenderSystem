@@ -8,6 +8,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QApplication>
 
 #include "TRS/TRSViewer.h"
 #include "TRS/TRSEventDispatcher.h"
@@ -20,6 +21,7 @@
 #include "TRS/TRSDynamicText.h"
 #include "TRS/TRSCube.h"
 #include "TRS/TRSAxis.h"
+#include "TRS/TRSMeshBuilder.h"
 
 
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
@@ -55,34 +57,61 @@ void OpenGLWidget::setScene(TRSNode* sceneGroup)
 
 void OpenGLWidget::setupDemo()
 {
-    TRSCube cube;
-    TRSMesh* mesh = cube.getMesh();
-    TRSGeode* pNode = new TRSGeode;
-    pNode->copyShadedMesh(mesh);
-    TRSTexture* texture = pNode->useTexture();
-    texture->createTexture("resources/textures/opengl.png");
-    texture->createTexture("resources/textures/cube.png");
 
-    //std::wstring text(L"中华人民共和国");
-    //TRSTextNode* textNode = new TRSTextNode;
-    //textNode->setText(text);
-    //textNode->setPos(G_ORIGIN);
-    //textNode->setDir(G_XDIR);
+    QString firstArgument;
+    QStringList arguments = QCoreApplication::arguments();
+    if (arguments.size() == 2)
+    {
+        firstArgument = arguments.at(1);
+    }
 
-    //TRSDynamicText* dytext = new TRSDynamicText;
-    //dytext->setOrigin(TRSPoint(0.5f, 0.5f, 0.5f));
-    //dytext->setFontSize(0.2f);
-    //dytext->setText("ABCD");
-
-    //TRSAxis* axis = new TRSAxis;
-    //axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
-
-    // TRSGroup* root = new TRSGroup;
-    // root->addChild(pNode);
-    // root->addChild(textNode);
-    // root->addChild(dytext);
-    setScene(pNode);
+    TRSNode* sceneNode = nullptr;
+    if ("TriangulateSphere" == firstArgument)
+    {
+        TRSGeode* pNode = new TRSGeode;
+        TRSMesh* mesh = pNode->useShadedMesh();
+        TRSMeshBuilder builder;
+        builder.setDivideLevel(3);
+        builder.buildSphere(G_ORIGIN, 1.0f, mesh);
+        sceneNode = pNode;
+    }
+    else if ("TRSTextNode" == firstArgument)
+    {
+        std::wstring text(L"中华人民共和国");
+        TRSTextNode* textNode = new TRSTextNode;
+        textNode->setText(text);
+        textNode->setPos(G_ORIGIN);
+        textNode->setDir(G_XDIR);
+        sceneNode = textNode;
+    }
+    else if ("TRSDynamicText" == firstArgument)
+    {
+        TRSDynamicText* dytext = new TRSDynamicText;
+        dytext->setOrigin(TRSPoint(0.5f, 0.5f, 0.5f));
+        dytext->setFontSize(0.2f);
+        dytext->setText("ABCD");
+        sceneNode = dytext;
+    }
+    else if ("TRSAxis" == firstArgument)
+    {
+        TRSAxis* axis = new TRSAxis;
+        axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
+        sceneNode = axis;
+    }
+    else // default
+    {
+        TRSCube cube;
+        TRSMesh* mesh = cube.getMesh();
+        TRSGeode* pNode = new TRSGeode;
+        pNode->copyShadedMesh(mesh);
+        TRSTexture* texture = pNode->useTexture();
+        texture->createTexture("resources/textures/opengl.png");
+        texture->createTexture("resources/textures/cube.png");
+        sceneNode = pNode;
+    }
+    setScene(sceneNode);
     update();
+
 }
 
 TRSSettings* OpenGLWidget::getSettings() const
