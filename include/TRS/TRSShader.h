@@ -25,7 +25,9 @@ public:
 
     unsigned int createProgram();
 
-    unsigned int createProgram(const char* vShaderFile, const char* fShaderFile);
+    unsigned int createProgramBySource(const char* vSource, const char* fSource);
+
+    unsigned int createProgramByFiles(const char* vShaderFile, const char* fShaderFile);
 
     void use();
 
@@ -45,7 +47,7 @@ public:
 
 private:
     //return 0 when failure
-    unsigned int createShader(const char* vShaderFile, unsigned int EnShaderType);
+    unsigned int createShader(unsigned int EnShaderType, const char* shaderSource);
 
     void freeShaderProgram();
 

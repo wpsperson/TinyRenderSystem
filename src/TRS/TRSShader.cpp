@@ -25,22 +25,30 @@ void TRSShader::setType(ShaderType type)
 
 void TRSShader::createVertexShader(const char* vShaderFile)
 {
-    vShader = createShader(vShaderFile, GL_VERTEX_SHADER);
+    const char* source = readTextContent(vShaderFile);
+    vShader = createShader(GL_VERTEX_SHADER, source);
+    delete[] source;
 }
 
 void TRSShader::createFragmentShader(const char* fShaderFile)
 {
-    fShader = createShader(fShaderFile, GL_FRAGMENT_SHADER);
+    const char* source = readTextContent(fShaderFile);
+    fShader = createShader(GL_FRAGMENT_SHADER, source);
+    delete[] source;
 }
 
 void TRSShader::createTessControlShader(const char* tescShaderFile)
 {
-    tescShader = createShader(tescShaderFile, GL_TESS_CONTROL_SHADER);
+    const char* source = readTextContent(tescShaderFile);
+    tescShader = createShader(GL_TESS_CONTROL_SHADER, source);
+    delete[] source;
 }
 
 void TRSShader::createTessEvaluateShader(const char* teseShaderFile)
 {
-    teseShader = createShader(teseShaderFile, GL_TESS_EVALUATION_SHADER);
+    const char* source = readTextContent(teseShaderFile);
+    teseShader = createShader(GL_TESS_EVALUATION_SHADER, source);
+    delete[] source;
 }
 
 unsigned int TRSShader::createProgram()
@@ -70,7 +78,14 @@ unsigned int TRSShader::createProgram()
     return program;
 }
 
-unsigned int TRSShader::createProgram(const char* vShaderFile, const char* fShaderFile)
+unsigned int TRSShader::createProgramBySource(const char* vSource, const char* fSource)
+{
+    vShader = createShader(GL_VERTEX_SHADER, vSource);
+    fShader = createShader(GL_FRAGMENT_SHADER, fSource);
+    return createProgram();
+}
+
+unsigned int TRSShader::createProgramByFiles(const char* vShaderFile, const char* fShaderFile)
 {
     createVertexShader(vShaderFile);
     createFragmentShader(fShaderFile);
@@ -127,10 +142,9 @@ void TRSShader::setUniformMatrix4(const char* uniformName, TRSMatrix mat)
     }
 }
 
-unsigned int TRSShader::createShader(const char* vShaderFile, unsigned int EnShaderType)
+unsigned int TRSShader::createShader(unsigned int EnShaderType, const char* source)
 {
     unsigned int shader = glCreateShader(EnShaderType);
-    const char* source = readTextContent(vShaderFile);
     glShaderSource(shader, 1, &source, nullptr);
     glCompileShader(shader);
     int ret;
@@ -142,7 +156,6 @@ unsigned int TRSShader::createShader(const char* vShaderFile, unsigned int EnSha
         std::cout << "ERROR::SHADER::COMPILE: " << info << std::endl;
         return 0;
     }
-    delete[] source;
     return shader;
 }
 

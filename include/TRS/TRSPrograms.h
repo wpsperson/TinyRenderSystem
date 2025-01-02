@@ -25,6 +25,8 @@ public:
 private:
     TRSShader* getOrCreateShader(ShaderType type);
 
+    void generateGLSL(int meshStruct, std::string& vertexSource, std::string& fragmentSource);
+
 private:
     std::unordered_map<ShaderType, TRSShader*> m_shaders;
     TRSShader* m_active = nullptr;

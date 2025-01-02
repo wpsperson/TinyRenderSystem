@@ -49,6 +49,7 @@ set(Target_INCLUDE_LIST
     ${INCLUDE_DIR}/TRSDynamicText.h
     ${INCLUDE_DIR}/TRSAxis.h
     ${INCLUDE_DIR}/TRSMeshBuilder.h
+    ${INCLUDE_DIR}/TRSGLSL.h
     )
 
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/TRS)
