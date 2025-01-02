@@ -293,13 +293,25 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* me
     int triLen = 0;
     for (faceExplorer.Init(occShape, TopAbs_FACE); faceExplorer.More(); faceExplorer.Next())
     {
+        const TopoDS_Shape &face_shape = faceExplorer.Current();
         TopLoc_Location faceLocation;
-        TopoDS_Face aFace = TopoDS::Face(faceExplorer.Current());
+        TopoDS_Face aFace = TopoDS::Face(face_shape);
         Handle_Poly_Triangulation triFace = BRep_Tool::Triangulation(aFace, faceLocation);
         TopLoc_Location localLocation =  parentLocation * faceLocation;
         if (triFace.IsNull())
         {
             continue;
+        }
+
+        TRSVec3 color(DefaultColor[0], DefaultColor[1], DefaultColor[2]);
+        Quantity_Color aColor;
+        bool hasColor = (m_colorTool->GetColor(face_shape, XCAFDoc_ColorGen, aColor) ||
+            m_colorTool->GetColor(face_shape, XCAFDoc_ColorSurf, aColor) ||
+            m_colorTool->GetColor(face_shape, XCAFDoc_ColorCurv, aColor));
+        if (hasColor)
+        {
+            TRSVec4 vec = toTRSVec4(aColor);
+            color = TRSVec3(vec[0], vec[1], vec[2]);
         }
 
         int  nNodes = triFace->NbNodes();
@@ -320,6 +332,7 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* me
                 gp_Pnt2d uv = triFace->UVNode(i);
                 UVs.emplace_back(toTRSVec2(uv));
             }
+            colors.emplace_back(color);
         }
 
         TopAbs_Orientation orientation = aFace.Orientation();
@@ -347,6 +360,7 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* me
         triLen += nTriangles;
     }
     mesh->setVertex(meshVertexs);
+    mesh->setColor(colors);
     // mesh->setUV(UVs); // do not use UV now
     mesh->setIndices(meshIndexs);
     if (normals.empty())
