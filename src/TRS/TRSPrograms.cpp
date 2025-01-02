@@ -19,6 +19,7 @@ TRSShader* TRSPrograms::find2Shader(TRSGeode* geode, RenderMode mode)
     TRSMesh* mesh = geode->getComponentMesh(mode);
     int meshStruct = mesh->getMeshStruct();
     bool hasNormal = (meshStruct & msNormal);
+    bool hasColor = (meshStruct & msColor);
     bool hasUV = (meshStruct & msUV);
 
     TRSShader* shader = nullptr;
@@ -32,6 +33,10 @@ TRSShader* TRSPrograms::find2Shader(TRSGeode* geode, RenderMode mode)
         else if (hasUV && texture && hasNormal)
         {
             shader = getOrCreateShader(ShaderType::PhongTexture);
+        }
+        else if (hasColor && hasNormal)
+        {
+            shader = getOrCreateShader(ShaderType::PhongColor);
         }
         else if (hasNormal)
         {
@@ -91,6 +96,10 @@ TRSShader* TRSPrograms::getOrCreateShader(ShaderType type)
     else if (ShaderType::PhongTexture == type)
     {
         shader->createProgram("shaders/PosNormTexVertex.glsl", "shaders/PosNormTexFragment.glsl");
+    }
+    else if (ShaderType::PhongColor == type)
+    {
+        shader->createProgram("shaders/PhongColorVertex.glsl", "shaders/PhongColorFragment.glsl");
     }
     else if (ShaderType::DualTexture == type)
     {

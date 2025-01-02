@@ -18,7 +18,8 @@ enum class ShaderType : unsigned char
     None = 0,
     Default,        // only has vertex
     Phong,          // vertex and normal
-    PhongTexture,   // vertex normal uv, texture
+    PhongColor,     // vertex normal, color
+    PhongTexture,   // vertex normal, texture
     DualTexture,    // vertex uv, tex1 tex2
     FontShader,
     CustomShader,
