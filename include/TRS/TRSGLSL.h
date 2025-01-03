@@ -6,6 +6,8 @@ namespace GLSL
     // common shader
     const std::string header_version = "#version 330 core";
     const std::string endline = "\n";
+    const std::string tokenColor = "#COLOR#";
+    const std::string tokenIndex = "#INDEX#";
 
 
     // vertex shader
@@ -21,8 +23,8 @@ namespace GLSL
     const std::string def_uniform_model = "uniform mat4 model;";
     const std::string def_uniform_viewproj = "uniform mat4 view_proj;";
 
-    const std::string main_begin = "void main()\n{";
-    const std::string main_end = "}";
+    const std::string main_begin = "void main()\n{\n";
+    const std::string main_end = "}\n";
 
     const std::string calc_gl_position1 = "gl_Position = vec4(aPos, 1.0);";
     const std::string calc_gl_position2 = "gl_Position = view_proj * model *  vec4(aPos, 1.0);";
@@ -34,29 +36,45 @@ namespace GLSL
     // fragment shader
     const std::string out_fragcolor = "out vec4 FragColor;";
     const std::string in_normal = "in vec3 Normal;";
-    const std::string in_uv = "in vec3 UV;";
+    const std::string in_uv = "in vec2 UV;";
     const std::string in_color = "in vec3 Color;";
     const std::string in_fragpos = "in vec3 FragPos;";
 
-    const std::string def_uniform_basecolor = "uniform mat4 baseColor;";
-    const std::string def_uniform_viewpos = "uniform mat4 viewPos;";
-    const std::string def_uniform_lightpos = "uniform mat4 lightPos;";
-    const std::string def_uniform_sampler2d = "uniform sampler2D texture_diffuse;";
+    const std::string def_uniform_basecolor = "uniform vec4 baseColor;";
+    const std::string def_uniform_viewpos = "uniform vec3 viewPos;";
+    const std::string def_uniform_lightpos = "uniform vec3 lightPos;";
+    const std::string def_uniform_texture = "uniform sampler2D texture#INDEX#;";
 
-    const std::string calc_ambient = "vec3 ambient = vec3(Color) * 0.2;";
+    const std::string calc_ambient = "vec3 ambient = vec3(#COLOR#) * 0.2;";
     const std::string calc_diffuse_part1 = "vec3 norm = normalize(Normal);";
     const std::string calc_diffuse_part2 = "vec3 lightDir = normalize(FragPos - lightPos);"; // direction of light go forward.
     const std::string calc_diffuse_part3 = "float diff = max(dot(norm, -lightDir), 0.0);";
-    const std::string calc_diffuse_part4 = "vec3 diffuse = diff * vec3(Color) * 0.5;";
+    const std::string calc_diffuse_part4 = "vec3 diffuse = diff * vec3(#COLOR#) * 0.5;";
     const std::string calc_specular_part1 = "vec3 fragToCameraDir = normalize(viewPos - FragPos);";
     const std::string calc_specular_part2 = "vec3 reflectDir = reflect(lightDir, norm);";
     const std::string calc_specular_part3 = "float spec = pow(max(dot(fragToCameraDir, reflectDir), 0.0), 32);";
     const std::string calc_specular_part4 = "vec3 specular = (spec * vec3(1.0,1.0,1.0)) * 0.3;";
 
+    const std::string calc_texture0 = "vec4 color0 = texture(texture0, UV);";
+    const std::string calc_texture1 = "vec4 color1 = texture(texture1, UV);";
+    const std::string calc_special_alpha =
+                                            "if(color0.a == 0.0)\n"
+                                            "{\n"
+                                            "    FragColor = color1;\n"
+                                            "    return;\n"
+                                            "}\n"
+                                            "else if(color1.a== 0.0)\n"
+                                            "{\n"
+                                            "    FragColor = color0;\n"
+                                            "    return;\n"
+                                            "}";
+
+
     const std::string calc_fragcolor1 = "FragColor = baseColor;";
     const std::string calc_fragcolor2 = "FragColor =  vec4(ambient + diffuse + specular, 1.0);";
-    const std::string calc_fragcolor3 = "FragColor = texture(texture_diffuse, UV);";
-    const std::string calc_fragcolor4 = "FragColor = vec4(baseColor.xyz, texture(texture_diffuse, UV).r);";
+    const std::string calc_fragcolor3 = "FragColor = texture(texture0, UV);";
+    const std::string calc_fragcolor3_mix = "FragColor = mix(color0, color1, 0.5);";
+    const std::string calc_fragcolor4 = "FragColor = vec4(baseColor.xyz, texture(texture0, UV).r);";
 
 }
 

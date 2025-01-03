@@ -120,7 +120,7 @@ TRSNode* AssimpLoader::retrieveGeodeByMesh(aiMesh *pMesh, const aiScene *pScene)
 
     aiMaterial* material = pScene->mMaterials[pMesh->mMaterialIndex];
     // current stage, we just focus on diffuse texture;
-    std::string strSampleName = "texture_diffuse";
+    std::string strSampleName = "texture0";
     int nTypeTexCount = material->GetTextureCount(aiTextureType_DIFFUSE);
     for (int i = 0; i < nTypeTexCount; i++)
     {

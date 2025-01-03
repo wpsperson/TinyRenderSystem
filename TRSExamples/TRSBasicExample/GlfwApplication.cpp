@@ -8,6 +8,7 @@
 #include "TRS/TRSGeode.h"
 #include "TRS/TRSGroup.h"
 #include "TRS/TRSMathUtil.h"
+#include "TRS/TRSMesh.h"
 #include "TRS/TRSCube.h"
 #include "TRS/TRSCamera.h"
 #include "TRS/TRSEventDispatcher.h"
@@ -83,6 +84,18 @@ bool GlfwApplication::onInitial()
     TRSTexture* texture = pNode->useTexture();
     texture->createTexture("resources/textures/opengl.png");
     texture->createTexture("resources/textures/cube.png");
+
+    //TRSMesh* pMesh = pNode->useShadedMesh();
+    //std::vector<TRSVec3> vertexs = { TRSVec3(0,0,0),TRSVec3(1,0,0),TRSVec3(1,1,0) };
+    //std::vector<TRSVec3> normals = { TRSVec3(0,0,1),TRSVec3(0,0,1),TRSVec3(0,0,1) };
+    //std::vector<TRSVec2> uvs = { TRSVec2(0,0), TRSVec2(1,0), TRSVec2(1,1) };
+    //std::vector<TRSVec3> colors = { TRSVec3(1,0,0),TRSVec3(0,1,0),TRSVec3(0,0,1) };
+    //std::vector<unsigned int> indices = { 0,1,2 };
+    //pMesh->setVertex(vertexs);
+    //pMesh->setNormal(normals);
+    //// pMesh->setColor(colors);
+    //pMesh->setUV(uvs);
+    //pMesh->setIndices(indices);
 
     TRSGroup* root = new TRSGroup;
     root->addChild(pNode);

@@ -85,11 +85,11 @@ void TRSViewer::initialViewer()
     }
 
     unsigned int unicodeTexId = TRSCharacterTexture::instance()->getTextureID();
-    TextureData unicodeData(unicodeTexId, "global_unicode_texture", "ourTexture");
+    TextureData unicodeData(unicodeTexId, "global_unicode_texture", "texture0");
     m_unicodeTexture->addSharedTexture(unicodeData);
 
     unsigned int asciiTexId = m_fontMgr->fontTexutre();
-    TextureData asciiData(asciiTexId, "global_ascii_texture", "ourTexture");
+    TextureData asciiData(asciiTexId, "global_ascii_texture", "texture0");
     m_asciiTexture->addSharedTexture(asciiData);
 
     m_axis->setSizeInfo(1.0f, 0.05f, 0.3f, 0.125f);
@@ -220,7 +220,8 @@ void TRSViewer::classify()
             if (geode->hasRenderMode(mode))
             {
                 item.mode = mode;
-                TRSShader * shader = m_programs->find2Shader(geode, mode);
+                ShaderConfig config = TRSPrograms::toConfig(geode, mode);
+                TRSShader * shader = m_programs->getShader(config);
                 m_drawItems[shader].emplace_back(item);
             }
         }
@@ -234,8 +235,8 @@ void TRSViewer::drawScene()
         shader->use();
         TRSMatrix viewMatrix = m_camera->getViewMatrix();
         TRSMatrix projectMatrix = m_camera->getProjectMatrix();
-        shader->setUniformMatrix4("view", viewMatrix);
-        shader->setUniformMatrix4("projection", projectMatrix);
+        TRSMatrix viewProj = projectMatrix * viewMatrix;
+        shader->setUniformMatrix4("view_proj", viewProj);
         shader->setUniform3v("viewPos", m_camera->getPosition());
         shader->setUniform3v("lightPos", m_camera->getPosition()); // s_DefaultLightPos
         for (const DrawItem &item : items)

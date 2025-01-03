@@ -60,6 +60,13 @@ enum class NodeType : unsigned char
     ntDynamicText,
 };
 
+enum class LightType : unsigned char
+{
+    PointLight = 0,
+    DirectLight,
+    SpotLight,
+};
+
 enum class ProjectionMode : unsigned char
 {
     Parallel = 0,

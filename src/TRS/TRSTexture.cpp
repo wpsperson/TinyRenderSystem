@@ -77,6 +77,11 @@ void TRSTexture::activeAllTextures(unsigned int program)
         glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + i));
         std::string sampleName = m_sSampleNames[i];
         int loc = glGetUniformLocation(program, sampleName.c_str());
+        if (loc < 0)
+        {
+            std::cout << "WARNING::unifom sampler2D not found: " << sampleName << std::endl;
+            continue;
+        }
         glUniform1i(loc, static_cast<GLenum>(i));
         glBindTexture(GL_TEXTURE_2D, m_nTextures[i]);
     }
