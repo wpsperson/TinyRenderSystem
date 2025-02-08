@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Standard_Handle.hxx>
+#include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
 #include <Quantity_Color.hxx>
 
@@ -9,6 +10,7 @@
 class TDF_Label;
 class XCAFDoc_ShapeTool;
 class XCAFDoc_ColorTool;
+class Poly_Triangulation;
 
 class TRSMesh;
 class TRSNode;
@@ -39,6 +41,10 @@ private:
     static void populateWireframeMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
 
     static void populatePointsMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
+
+    opencascade::handle<Poly_Triangulation> faceTriangulation(const TopoDS_Face &face);
+
+    void processInfiniteParameter(double& p1, double& p2);
 
     static TRSVec3 toTRSVec(const gp_Pnt& pt);
 

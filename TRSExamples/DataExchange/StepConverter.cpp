@@ -12,6 +12,8 @@
 #include <TDataStd_Name.hxx>
 #include <Quantity_Color.hxx>
 #include <XCAFDoc_ColorTool.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
@@ -296,11 +298,15 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* me
         const TopoDS_Shape &face_shape = faceExplorer.Current();
         TopLoc_Location faceLocation;
         TopoDS_Face aFace = TopoDS::Face(face_shape);
-        Handle_Poly_Triangulation triFace = BRep_Tool::Triangulation(aFace, faceLocation);
+        opencascade::handle<Poly_Triangulation> triFace = BRep_Tool::Triangulation(aFace, faceLocation);
         TopLoc_Location localLocation =  parentLocation * faceLocation;
         if (triFace.IsNull())
         {
-            continue;
+            triFace = faceTriangulation(aFace);
+            if (triFace.IsNull())
+            {
+                continue;
+            }
         }
 
         TRSVec3 color(DefaultColor[0], DefaultColor[1], DefaultColor[2]);
@@ -436,6 +442,55 @@ void StepConverter::populatePointsMesh(const TopoDS_Shape& occShape, TRSMesh* me
     }
     mesh->setVertex(vertices);
     mesh->setIndices(indices);
+}
+
+opencascade::handle<Poly_Triangulation> StepConverter::faceTriangulation(const TopoDS_Face& face)
+{
+    TopLoc_Location loc;
+    opencascade::handle<Poly_Triangulation> mesh = BRep_Tool::Triangulation(face, loc);
+    if (!mesh.IsNull())
+    {
+        return mesh;
+    }
+    double u1 = 0.0, u2 = 0.0, v1 = 0.0, v2 = 0.0;
+    try
+    {
+        BRepAdaptor_Surface adapt(face);
+        u1 = adapt.FirstUParameter();
+        u2 = adapt.LastUParameter();
+        v1 = adapt.FirstVParameter();
+        v2 = adapt.LastVParameter();
+    }
+    catch (const Standard_Failure&)
+    {
+        return nullptr;
+    }
+
+    processInfiniteParameter(u1, u2);
+    processInfiniteParameter(v1, v2);
+    Handle(Geom_Surface) surface = BRep_Tool::Surface(face);
+    BRepBuilderAPI_MakeFace mkBuilder(surface, u1, u2, v1, v2, Precision::Confusion());
+    TopoDS_Shape new_shape = mkBuilder.Shape();
+    new_shape.Location(loc);
+    BRepMesh_IncrementalMesh incrementalMesh(new_shape, GlobalLineDeflection, Standard_True, 0.5, Standard_True);
+    return BRep_Tool::Triangulation(TopoDS::Face(new_shape), loc);
+}
+
+void StepConverter::processInfiniteParameter(double& p1, double& p2)
+{
+    if (Precision::IsInfinite(p1) && Precision::IsInfinite(p2))
+    {
+        p1 = -50.0;
+        p2 = 50.0;
+    }
+    else if (Precision::IsInfinite(p1))
+    {
+        p1 = p2 - 100.0;
+    }
+    else if (Precision::IsInfinite(p2))
+    {
+        p2 = p1 + 100.0;
+    }
 }
 
 TRSVec3 StepConverter::toTRSVec(const gp_Pnt& pt)
