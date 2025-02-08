@@ -36,6 +36,8 @@ private:
 
     bool referToAssembly(const TDF_Label& Label, TDF_Label &referredShape);
 
+    bool hasMesh(const TopoDS_Shape& topo_shape);
+
     void populateShadedMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
 
     static void populateWireframeMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);

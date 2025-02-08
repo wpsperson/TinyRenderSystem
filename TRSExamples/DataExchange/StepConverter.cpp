@@ -200,6 +200,10 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
     {
         return nullptr;
     }
+    if (!hasMesh(occShape))
+    {
+        return nullptr;
+    }
 
     // get name
     std::string name;
@@ -284,6 +288,16 @@ bool StepConverter::referToAssembly(const TDF_Label& Label, TDF_Label& referredS
         }
     }
     return false;
+}
+
+bool StepConverter::hasMesh(const TopoDS_Shape& topo_shape)
+{
+    TopExp_Explorer faceExplorer(topo_shape, TopAbs_FACE);
+    if (!faceExplorer.More())
+    {
+        return false;
+    }
+    return true;
 }
 
 void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* mesh, TopLoc_Location parentLocation)
