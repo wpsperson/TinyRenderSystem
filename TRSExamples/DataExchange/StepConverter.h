@@ -42,6 +42,8 @@ private:
 
     static void populatePointsMesh(const TopoDS_Shape& topo_shape, TRSMesh* mesh, TopLoc_Location parentLocation);
 
+    bool hasColorArray(const TopoDS_Shape& topo_shape, std::vector<TRSVec3>& colors);
+
     opencascade::handle<Poly_Triangulation> faceTriangulation(const TopoDS_Face &face);
 
     void processInfiniteParameter(double& p1, double& p2);
@@ -52,7 +54,7 @@ private:
 
     static TRSVec2 toTRSVec2(const gp_Pnt2d& pt2d);
 
-    static TRSVec4 toTRSVec4(const Quantity_Color& occColor);
+    static TRSVec3 toTRSColor(const Quantity_Color& occColor);
 
 private:
     opencascade::handle<XCAFDoc_ShapeTool> m_shapeTool;

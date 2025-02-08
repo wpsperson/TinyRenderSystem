@@ -28,6 +28,7 @@
 
 constexpr double GlobalLineDeflection = 0.002;
 static const TRSVec4 DefaultColor(0.8f, 0.8f, 0.8f, 1.0f);
+static const TRSVec3 DefaultColor3(0.8f, 0.8f, 0.8f);
 
 StepConverter::StepConverter()
 {
@@ -220,7 +221,10 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
     Quantity_Color occColor;
     if (findNodeColor(shapeLabel, occShape, occColor))
     {
-        color = toTRSVec4(occColor);
+        TRSVec3 col = toTRSColor(occColor);
+        color[0] = col[0];
+        color[1] = col[1];
+        color[2] = col[2];
     }
 
     // generate Geode and fill the mesh
@@ -290,10 +294,13 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* me
     std::vector<TRSVec3> normals;
     std::vector<TRSVec2> UVs;
     std::vector<TRSVec3> colors;
+    std::vector<TRSVec3> faceColors; // colors indexed by face index.
+    bool hasColor = hasColorArray(occShape, faceColors);
     std::vector<unsigned int> meshIndexs;
     int nodeLen = 0;
     int triLen = 0;
-    for (faceExplorer.Init(occShape, TopAbs_FACE); faceExplorer.More(); faceExplorer.Next())
+    int faceIdx = 0;
+    for (faceExplorer.Init(occShape, TopAbs_FACE); faceExplorer.More(); faceExplorer.Next(), faceIdx ++)
     {
         const TopoDS_Shape &face_shape = faceExplorer.Current();
         TopLoc_Location faceLocation;
@@ -307,17 +314,6 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* me
             {
                 continue;
             }
-        }
-
-        TRSVec3 color(DefaultColor[0], DefaultColor[1], DefaultColor[2]);
-        Quantity_Color aColor;
-        bool hasColor = (m_colorTool->GetColor(face_shape, XCAFDoc_ColorGen, aColor) ||
-            m_colorTool->GetColor(face_shape, XCAFDoc_ColorSurf, aColor) ||
-            m_colorTool->GetColor(face_shape, XCAFDoc_ColorCurv, aColor));
-        if (hasColor)
-        {
-            TRSVec4 vec = toTRSVec4(aColor);
-            color = TRSVec3(vec[0], vec[1], vec[2]);
         }
 
         int  nNodes = triFace->NbNodes();
@@ -338,7 +334,10 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* me
                 gp_Pnt2d uv = triFace->UVNode(i);
                 UVs.emplace_back(toTRSVec2(uv));
             }
-            colors.emplace_back(color);
+            if (hasColor)
+            {
+                colors.emplace_back(faceColors[faceIdx]);
+            }
         }
 
         TopAbs_Orientation orientation = aFace.Orientation();
@@ -366,7 +365,10 @@ void StepConverter::populateShadedMesh(const TopoDS_Shape& occShape, TRSMesh* me
         triLen += nTriangles;
     }
     mesh->setVertex(meshVertexs);
-    mesh->setColor(colors);
+    if (hasColor)
+    {
+        mesh->setColor(colors);
+    }
     // mesh->setUV(UVs); // do not use UV now
     mesh->setIndices(meshIndexs);
     if (normals.empty())
@@ -444,6 +446,36 @@ void StepConverter::populatePointsMesh(const TopoDS_Shape& occShape, TRSMesh* me
     mesh->setIndices(indices);
 }
 
+bool StepConverter::hasColorArray(const TopoDS_Shape& topo_shape, std::vector<TRSVec3>& colors)
+{
+    std::vector<TRSVec3> temp;
+    bool hasColorArray = false;
+    Quantity_Color occ_color;
+    TopExp_Explorer faceExplorer;
+    for (faceExplorer.Init(topo_shape, TopAbs_FACE); faceExplorer.More(); faceExplorer.Next())
+    {
+        TopoDS_Face face = TopoDS::Face(faceExplorer.Current());
+        bool ret = m_colorTool->GetColor(face, XCAFDoc_ColorGen, occ_color) 
+            || m_colorTool->GetColor(face, XCAFDoc_ColorSurf, occ_color) 
+            || m_colorTool->GetColor(face, XCAFDoc_ColorCurv, occ_color);
+        if (ret)
+        {
+            TRSVec3 color = toTRSColor(occ_color);
+            temp.emplace_back(color);
+            hasColorArray = true;
+        }
+        else
+        {
+            temp.emplace_back(DefaultColor3);
+        }
+    }
+    if (hasColorArray)
+    {
+        colors = temp;
+    }
+    return hasColorArray;
+}
+
 opencascade::handle<Poly_Triangulation> StepConverter::faceTriangulation(const TopoDS_Face& face)
 {
     TopLoc_Location loc;
@@ -508,11 +540,11 @@ TRSVec2 StepConverter::toTRSVec2(const gp_Pnt2d& pt2d)
     return TRSVec2(static_cast<float>(pt2d.X()), static_cast<float>(pt2d.Y()));
 }
 
-TRSVec4 StepConverter::toTRSVec4(const Quantity_Color& occColor)
+TRSVec3 StepConverter::toTRSColor(const Quantity_Color& occColor)
 {
     float red = static_cast<float>(occColor.Red());
     float green = static_cast<float>(occColor.Green());
     float blue = static_cast<float>(occColor.Blue());
-    return TRSVec4(red, green, blue, 1.0f);
+    return TRSVec3(red, green, blue);
 }
 
