@@ -245,6 +245,11 @@ TRSGeode* StepConverter::createGeodeNode(const TDF_Label& shapeLabel, TopLoc_Loc
     populateWireframeMesh(occShape, wireMesh, localLocation);
     TRSMesh* pointMesh = geode->usePointsMesh();
     populatePointsMesh(occShape, pointMesh, localLocation);
+    if (shadedMesh->getVertices().empty())
+    {
+        delete geode;
+        return nullptr;
+    }
     return geode;
 }
 
