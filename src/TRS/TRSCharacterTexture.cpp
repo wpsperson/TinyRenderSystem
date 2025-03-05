@@ -7,6 +7,11 @@
 
 #include "TRS/TRSDefGL.h"
 
+#if _WIN32
+static const std::string kLocalAsciiFont = std::getenv("SystemRoot") + std::string("/Fonts/") + std::string("Arial.ttf");
+#else
+static const std::string kLocalAsciiFont = std::string("usr/share/fonts/liberation/") + std::string("LiberationSans-Regular.ttf");
+#endif
 
 TRSCharacterTexture* TRSCharacterTexture::m_instance = nullptr;
 
